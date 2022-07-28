@@ -2,9 +2,6 @@
 hs_err_pid*# Compiled class file
 *.class
 
-# Log file
-*.log
-
 # BlueJ files
 *.ctxt
 
