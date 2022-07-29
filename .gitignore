@@ -5,6 +5,10 @@ hs_err_pid*# Compiled class file
 # BlueJ files
 *.ctxt
 
+# asset(png, jpg, avi, mp4, txt, etc..)
+public/asset/
+asset/
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
@@ -68,3 +72,5 @@ bower_components
 psd
 thumb
 sketch
+
+
