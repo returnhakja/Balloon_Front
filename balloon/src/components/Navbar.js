@@ -3,6 +3,7 @@
 
 import styles from '../css/Navbar.module.css';
 import { Link } from 'react-router-dom';
+import { Box } from '@mui/system';
 
 function Navbar() {
   return (
@@ -27,9 +28,14 @@ function Navbar() {
             <div className={styles.ulll}>
               <ul className={styles.ulmarginn}>
                 <Link to={'/box'}>
-                  <li className={styles.lii}>결재관리</li>
+                  <Box className={styles.lii}>
+                    {/* <li className={styles.lii}>결재관리</li> */}
+                    결재관리
+                  </Box>
                 </Link>
-                <li className={styles.lii}>캘린더</li>
+                <Link to={'/calendar'}>
+                  <li className={styles.lii}>캘린더</li>
+                </Link>
                 <li className={styles.lii}>메신저</li>
               </ul>
             </div>

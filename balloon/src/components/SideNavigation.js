@@ -11,7 +11,6 @@ import {
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Navbar from './Navbar';
 import '../css/Sidebar.css';
 import 'react-pro-sidebar/dist/css/styles.css';
 import '../css/SidebarCustom.scss';
@@ -56,15 +55,15 @@ const SideNavigation = ({ children }) => {
 
             <SubMenu title="진행중" icon={<FaThList />}>
               <Menuitem>
-                <Link to={'/boxx/dd'}>상신된</Link>
+                <Link to={'/box/dd'}>상신한</Link>
               </Menuitem>
 
               <MenuItem>
-                <Link to={'/box/ds'}>저장된</Link>
+                <Link to={'/box/dc'}>완료된</Link>
               </MenuItem>
 
               <MenuItem>
-                <Link to={'/box/dc'}>완료된</Link>
+                <Link to={'/box/ds'}>저장된</Link>
               </MenuItem>
 
               <MenuItem>
