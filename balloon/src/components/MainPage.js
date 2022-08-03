@@ -17,7 +17,9 @@ function MainPage() {
           <p className={styles.pbottom}>
             오신것을 환영합니다. 먼저 로그인을 하세요.
           </p>
+
           <Link to={'/LoginPage'}>
+
             <button className={styles.btn}> 로그인하러가기</button>
           </Link>
         </div>
