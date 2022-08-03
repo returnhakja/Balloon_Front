@@ -144,6 +144,7 @@ function Report() {
             </tr>
           </tbody>
         </table>
+        {openModal && <Modal closeModal={setOpenModal} />}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
           <button
@@ -156,7 +157,6 @@ function Report() {
             결재선설정
           </button>
         </div>
-        {openModal && <Modal closeModal={setOpenModal} />}
         <hr />
         <br />
         <Card

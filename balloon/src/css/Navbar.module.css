@@ -15,10 +15,6 @@
   justify-content: space-between;
 }
 
-* {
-  font-family: 'Noto Sans KR';
-}
-
 .ul {
   display: flex;
   list-style: none;
@@ -42,7 +38,7 @@
 }
 
 .lii {
-  margin-left: 3vw;
+  margin-left: 30px;
 }
 
 .Link {
@@ -159,4 +155,34 @@
 
 .pbottom {
   margin-top: 10px;
+}
+@media screen and (max-width: 960px) {
+  .contents {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-top: 1px solid #fff;
+    position: absolute;
+    top: 80px;
+    left: -110%;
+
+    transition: all 0.5s ease;
+  }
+
+  .ballon {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-100%, 60%);
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #ffdd40;
+  }
+  .ull {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
 }
