@@ -2,7 +2,7 @@
   left: 0;
   top: 0;
   width: 100%;
-  height: 80px;
+  height: 5vw;
   background-color: white;
 }
 
@@ -15,22 +15,18 @@
   justify-content: space-between;
 }
 
-* {
-  font-family: 'Noto Sans KR';
-}
-
 .ul {
   display: flex;
   list-style: none;
   text-align: left;
-  margin-right: 500px;
+  margin-right: 50vh;
 }
 
 .ulll {
   display: flex;
   list-style: none;
   text-align: left;
-  margin-right: 500px;
+  margin-right: 50vh;
 }
 
 .ulmarginn {
@@ -38,7 +34,7 @@
   display: flex;
   list-style: none;
   text-align: left;
-  margin-right: 500px;
+  margin-right: 50vh;
 }
 
 .lii {
@@ -52,7 +48,7 @@
 
 .ballonfont {
   color: black;
-  font-size: 20px;
+  font-size: 2vw;
 }
 .oofont {
   color: #00aaff;
@@ -145,8 +141,8 @@
 }
 
 .ballon {
-  width: 40px;
-  height: 40px;
+  width: 2vw;
+  height: 4vh;
 }
 
 .lii:hover {
@@ -159,4 +155,34 @@
 
 .pbottom {
   margin-top: 10px;
+}
+@media screen and (max-width: 960px) {
+  .contents {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-top: 1px solid #fff;
+    position: absolute;
+    top: 80px;
+    left: -110%;
+
+    transition: all 0.5s ease;
+  }
+
+  .ballon {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-100%, 60%);
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #ffdd40;
+  }
+  .ull {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
 }
