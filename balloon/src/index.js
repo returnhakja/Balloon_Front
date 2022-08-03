@@ -38,7 +38,7 @@ root.render(
         <Route path="/unit">
           <Route index element={<Organization />} />
         </Route>
-        <Route path="/login" element={<Login />} />
+
         {/* 캘린더 */}
         <Route path="/calendar" element={<Calendar />} />
         {/* 결재관리 */}

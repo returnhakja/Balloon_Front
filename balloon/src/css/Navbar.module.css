@@ -2,13 +2,9 @@
   left: 0;
   top: 0;
   width: 100%;
-<<<<<<< HEAD
 
   height: 5vw;
 
-=======
-  height: 5vw;
->>>>>>> 1ba0230fa6120c4cda526bf95a7a617e72e6c12c
   background-color: white;
 }
 
@@ -21,34 +17,20 @@
   justify-content: space-between;
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 1ba0230fa6120c4cda526bf95a7a617e72e6c12c
 .ul {
   display: flex;
   list-style: none;
   text-align: left;
-<<<<<<< HEAD
 
   margin-right: 50vh;
-
-=======
-  margin-right: 50vh;
->>>>>>> 1ba0230fa6120c4cda526bf95a7a617e72e6c12c
 }
 
 .ulll {
   display: flex;
   list-style: none;
   text-align: left;
-<<<<<<< HEAD
 
   margin-right: 50vh;
-
-=======
-  margin-right: 50vh;
->>>>>>> 1ba0230fa6120c4cda526bf95a7a617e72e6c12c
 }
 
 .ulmarginn {
@@ -56,13 +38,8 @@
   display: flex;
   list-style: none;
   text-align: left;
-<<<<<<< HEAD
 
   margin-right: 50vh;
-
-=======
-  margin-right: 50vh;
->>>>>>> 1ba0230fa6120c4cda526bf95a7a617e72e6c12c
 }
 
 .lii {
@@ -76,13 +53,8 @@
 
 .ballonfont {
   color: black;
-<<<<<<< HEAD
 
   font-size: 2vw;
-
-=======
-  font-size: 2vw;
->>>>>>> 1ba0230fa6120c4cda526bf95a7a617e72e6c12c
 }
 .oofont {
   color: #00aaff;
@@ -175,15 +147,8 @@
 }
 
 .ballon {
-<<<<<<< HEAD
-
   width: 2vw;
   height: 4vh;
-
-=======
-  width: 2vw;
-  height: 4vh;
->>>>>>> 1ba0230fa6120c4cda526bf95a7a617e72e6c12c
 }
 
 .lii:hover {
@@ -228,4 +193,3 @@
     width: 100%;
   }
 }
-
