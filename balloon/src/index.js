@@ -33,10 +33,12 @@ root.render(
       <Route path="/" element={<App />}>
         <Route index element={<MainPage />} />
         {/* 로그인 */}
+
         <Route path="/loginpage" element={<LoginPage />} />
         <Route path="/unit">
           <Route index element={<Organization />} />
         </Route>
+        <Route path="/login" element={<Login />} />
         {/* 캘린더 */}
         <Route path="/calendar" element={<Calendar />} />
         {/* 결재관리 */}
@@ -57,7 +59,6 @@ root.render(
         <Route path="/dratf/pa" element={<Persnelappointment />} />
         {/* 조직도 */}
         <Route path="/organization" element={<OrganizationChart />} />
-        {/* <Route path="*" element={<NotFound />} /> */}
       </Route>
     </Routes>
   </BrowserRouter>

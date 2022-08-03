@@ -3,6 +3,7 @@
 
 import styles from '../css/Navbar.module.css';
 import { Link } from 'react-router-dom';
+import { Box } from '@mui/system';
 
 import { Box } from '@mui/system';
 
@@ -51,7 +52,6 @@ function Navbar() {
           <div className="text-end"></div>
         </div>
       </header>
-
     </div>
   );
 }
