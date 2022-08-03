@@ -35,7 +35,7 @@ root.render(
         {/* 로그인 */}
 
         <Route path="/loginpage" element={<LoginPage />} />
-        <Route path="/unit">
+        <Route path="/organization">
           <Route index element={<Organization />} />
         </Route>
 
@@ -57,8 +57,6 @@ root.render(
         <Route path="/dratf/br" element={<Businessreport />} />
         <Route path="/dratf/bt" element={<Businesstrip />} />
         <Route path="/dratf/pa" element={<Persnelappointment />} />
-        {/* 조직도 */}
-        <Route path="/organization" element={<OrganizationChart />} />
       </Route>
     </Routes>
   </BrowserRouter>
