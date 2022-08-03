@@ -10,7 +10,7 @@ import MainPage from './components/MainPage';
 import Boxs from './pages/Boxs';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
-import OrganizationChart from './pages/OrganizationChart';
+import Organization from './pages/Organization';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -20,7 +20,7 @@ root.render(
         <Route index element={<MainPage />} />
         <Route path="/loginPage" element={<LoginPage />} />
         <Route path="/unit">
-          <Route index element={<OrganizationChart />} />
+          <Route index element={<Organization />} />
         </Route>
         <Route path="/box" element={<Boxs />} />
         <Route path="/dratf/form" element={<Dashboard />} />

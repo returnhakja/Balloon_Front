@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { findUnitList } from '../context/UnitAxios';
 import { ChildUnits } from '../context/UnixtFunc';
 
-function OrganizationChart() {
+function Organization() {
   const [units, setUnits] = useState([]);
 
   useEffect(() => {
@@ -27,4 +27,4 @@ function OrganizationChart() {
   );
 }
 
-export default OrganizationChart;
+export default Organization;
