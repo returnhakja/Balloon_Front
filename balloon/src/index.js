@@ -24,10 +24,7 @@ import DocumentList from './components/DocumentList';
 import OrganizationChart from './components/OrganizationChart';
 import LoginPage from './pages/LoginPage';
 
-
-
 import Organization from './pages/Organization';
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -60,8 +57,7 @@ root.render(
         <Route path="/dratf/pa" element={<Persnelappointment />} />
         {/* 조직도 */}
         <Route path="/organization" element={<OrganizationChart />} />
-        <Route path="*" element={<NotFound />} />
-
+        {/* <Route path="*" element={<NotFound />} /> */}
       </Route>
     </Routes>
   </BrowserRouter>
