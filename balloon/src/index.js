@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Login from './components/Login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MainPage from './components/MainPage';
 
@@ -23,6 +22,12 @@ import ApprovalComplete from './components/ApprovalComplete';
 import ApprovalRefuse from './components/ApprovalRefuse';
 import DocumentList from './components/DocumentList';
 import OrganizationChart from './components/OrganizationChart';
+import LoginPage from './pages/LoginPage';
+
+
+
+import Organization from './pages/Organization';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -31,7 +36,10 @@ root.render(
       <Route path="/" element={<App />}>
         <Route index element={<MainPage />} />
         {/* 로그인 */}
-        <Route path="/login" element={<Login />} />
+        <Route path="/loginpage" element={<LoginPage />} />
+        <Route path="/unit">
+          <Route index element={<Organization />} />
+        </Route>
         {/* 캘린더 */}
         <Route path="/calendar" element={<Calendar />} />
         {/* 결재관리 */}
@@ -52,6 +60,8 @@ root.render(
         <Route path="/dratf/pa" element={<Persnelappointment />} />
         {/* 조직도 */}
         <Route path="/organization" element={<OrganizationChart />} />
+        <Route path="*" element={<NotFound />} />
+
       </Route>
     </Routes>
   </BrowserRouter>
