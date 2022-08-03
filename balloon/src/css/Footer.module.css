@@ -1,0 +1,31 @@
+.footer {
+  background-color: #00aaff;
+  overflow: hidden;
+  bottom: 0vw;
+  width: 100vw;
+  /* position: absolute; */
+}
+
+.contents {
+  max-width: 1100px;
+  height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0 auto;
+  margin-top: 2%;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 20px;
+  text-align: center;
+}
+
+.team_member {
+  width: 50px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
