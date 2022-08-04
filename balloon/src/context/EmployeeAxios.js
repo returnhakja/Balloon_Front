@@ -1,22 +1,5 @@
 import axios from 'axios';
 
-// 로그인
-export const login = async (empId, password) => {
-  const header = { 'Content-Type': 'application/json' };
-  const url = '/auth/login';
-  const inputLogin = {
-    empId: empId,
-    password: password,
-  };
-  const loginToken = await axios
-    .post(url, inputLogin, header)
-    .catch((error) => console.log(error));
-
-  console.log(loginToken.data);
-
-  window.location.href = '/';
-};
-
 // export const
 
 // 전체 사원 출력 (페이징)
