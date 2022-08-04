@@ -8,7 +8,7 @@ function MainPage() {
       <header className={styles.header}>
         <img
           src={`${process.env.PUBLIC_URL}/asset/mainimg.png`}
-          alt="안들어가냐고"
+          alt="BALLOON"
           className={styles.img}></img>
       </header>
       <div className={styles.logingo}>
@@ -19,7 +19,6 @@ function MainPage() {
           </p>
 
           <Link to={'/LoginPage'}>
-
             <button className={styles.btn}> 로그인하러가기</button>
           </Link>
         </div>
