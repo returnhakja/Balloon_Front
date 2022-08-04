@@ -10,14 +10,13 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import React from 'react';
+import { login } from '../context/EmployeeAxios';
 
 const handleSubmit = (event) => {
   event.preventDefault();
   const data = new FormData(event.currentTarget);
-  console.log({
-    email: data.get('email'),
-    password: data.get('password'),
-  });
+
+  login(data.get('empId'), data.get('password'));
 };
 
 function LoginPage() {
