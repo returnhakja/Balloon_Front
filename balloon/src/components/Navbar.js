@@ -27,21 +27,18 @@ function Navbar() {
           <div className={styles.ulll}>
             <ul className={styles.ulmarginn}>
               <Link to={'/box'}>
-                <Box className={styles.lii}>
-                  {/* <li className={styles.lii}>결재관리</li> */}
-                  결재관리
-                </Box>
+                <Box className={styles.lii}>결재관리</Box>
               </Link>
               <Link to={'/calendar'}>
-                <li className={styles.lii}>캘린더</li>
+                <Box className={styles.lii}>캘린더</Box>
               </Link>
-              <li className={styles.lii}>메신저</li>
+              <Box className={styles.lii}>메신저</Box>
               <Link to={'/organization'}>
-                <li className={styles.lii}>조직도</li>
+                <Box className={styles.lii}>조직도</Box>
               </Link>
             </ul>
           </div>
-          <Link to={'/login'}>
+          <Link to={'/loginpage'}>
             <button type="button" className={styles.btnnav}>
               Login
             </button>
