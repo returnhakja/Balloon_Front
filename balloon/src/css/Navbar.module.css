@@ -39,7 +39,7 @@
   list-style: none;
   text-align: left;
 
-  margin-right: 50vh;
+  /* margin-right: 50vh; */
 }
 
 .lii {
@@ -163,7 +163,7 @@
   margin-top: 10px;
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 990px) {
   .contents {
     display: flex;
     flex-direction: column;
@@ -179,6 +179,8 @@
   .ballon {
     display: block;
     position: absolute;
+    width: 50%;
+    height: 50%;
     top: 0;
     right: 0;
     transform: translate(-100%, 60%);
@@ -186,10 +188,14 @@
     cursor: pointer;
     color: #ffdd40;
   }
-  .ull {
+  .ulll {
     display: none;
     flex-direction: column;
     align-items: center;
     width: 100%;
+  }
+  .lii {
+    font-size: 15px;
+    display: flex;
   }
 }

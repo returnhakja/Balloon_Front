@@ -6,22 +6,22 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MainPage from './components/MainPage';
 
-import Boxs from './components/Boxs';
-import Dashboard from './components/Dashboard';
-import Declare from './components/Declare';
-import Complete from './components/Complete';
-import Save from './components/Save';
-import Refuese from './components/Refuese';
-import ApprovalBefore from './components/ApprovalBefore';
-import Calendar from './components/Calendar';
-import Businessreport from './components/Businessreport';
-import Businesstrip from './components/Businesstrip';
-import Persnelappointment from './components/Persnelappointment';
-import ApprovalOngoing from './components/ApprovalOngoing';
-import ApprovalComplete from './components/ApprovalComplete';
-import ApprovalRefuse from './components/ApprovalRefuse';
-import DocumentList from './components/DocumentList';
-import OrganizationChart from './components/OrganizationChart';
+import Boxs from './pages/Boxs';
+import Dashboard from './pages/Dashboard';
+import Declare from './pages/Declare';
+import Complete from './pages/Complete';
+import Save from './pages/Save';
+import Refuese from './pages/Refuese';
+import ApprovalBefore from './pages/ApprovalBefore';
+import Calendar from './pages/Calendar';
+import Businessreport from './pages/Businessreport';
+import Businesstrip from './pages/Businesstrip';
+import Persnelappointment from './pages/Persnelappointment';
+import ApprovalOngoing from './pages/ApprovalOngoing';
+import ApprovalComplete from './pages/ApprovalComplete';
+import ApprovalRefuse from './pages/ApprovalRefuse';
+import DocumentList from './pages/DocumentList';
+
 import LoginPage from './pages/LoginPage';
 
 import Organization from './pages/Organization';
@@ -33,12 +33,11 @@ root.render(
       <Route path="/" element={<App />}>
         <Route index element={<MainPage />} />
         {/* 로그인 */}
-
         <Route path="/loginpage" element={<LoginPage />} />
+        {/* 조직도 */}
         <Route path="/organization">
           <Route index element={<Organization />} />
         </Route>
-
         {/* 캘린더 */}
         <Route path="/calendar" element={<Calendar />} />
         {/* 결재관리 */}
