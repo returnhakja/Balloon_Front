@@ -23,7 +23,7 @@ const handleSubmit = (event) => {
 function LoginPage() {
   return (
     <div>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" sx={{ marginBottom: 25 }}>
         <Box
           sx={{
             marginTop: 9,
