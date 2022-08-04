@@ -4,8 +4,26 @@
 import styles from '../css/Navbar.module.css';
 import { Link } from 'react-router-dom';
 import { Box } from '@mui/system';
+import { getMe, logout } from '../context/AuthFunc';
+import Cookies from 'universal-cookie';
+import { useEffect, useState } from 'react';
 
 function Navbar() {
+  const cookies = new Cookies();
+  const [accessCookie, setAccessCookie] = useState('');
+  const [empId, setEmpId] = useState('');
+  const [empName, setEmpName] = useState('');
+  const [position, setposition] = useState('');
+
+  useEffect(() => {
+    cookies.get('accessToken');
+    if (cookies.cookies.accessToken) {
+      setAccessCookie(cookies.cookies.accessToken);
+
+      getMe(setEmpId, setEmpName, setposition);
+    }
+  }, [accessCookie]);
+
   return (
     <div className={styles.main}>
       <header className={styles.header}>
@@ -38,11 +56,23 @@ function Navbar() {
               </Link>
             </ul>
           </div>
-          <Link to={'/loginpage'}>
-            <button type="button" className={styles.btnnav}>
-              Login
-            </button>
-          </Link>
+          {accessCookie ? (
+            <div>
+              <span>
+                {' '}
+                {empName} {position}{' '}
+              </span>
+              <button type="button" className={styles.btnnav} onClick={logout}>
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link to={'/loginpage'}>
+              <button type="button" className={styles.btnnav}>
+                Login
+              </button>
+            </Link>
+          )}
 
           <div className="text-end"></div>
         </div>

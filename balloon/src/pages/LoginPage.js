@@ -10,17 +10,9 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import React from 'react';
+import { handleSubmit } from '../context/AuthFunc';
 
-const handleSubmit = (event) => {
-  event.preventDefault();
-  const data = new FormData(event.currentTarget);
-  console.log({
-    email: data.get('email'),
-    password: data.get('password'),
-  });
-};
-
-function LoginPage() {
+function LoginPage({ empId, setEmpId }) {
   return (
     <div>
       <Container component="main" sx={{ marginBottom: 25 }}>

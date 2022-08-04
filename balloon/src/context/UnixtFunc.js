@@ -1,6 +1,8 @@
 import React from 'react';
 
 export const ChildUnits = (unit) => {
+  console.log(unit);
+
   return (
     <div style={{ border: '1px solid blue', margin: '5px' }}>
       {unit.childUnits.map((unit) => {

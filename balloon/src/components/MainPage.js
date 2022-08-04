@@ -2,6 +2,7 @@
 import styles from '../css/Navbar.module.css';
 import { Link } from 'react-router-dom';
 import React from 'react';
+
 function MainPage() {
   return (
     <div>
@@ -17,7 +18,6 @@ function MainPage() {
           <p className={styles.pbottom}>
             오신것을 환영합니다. 먼저 로그인을 하세요.
           </p>
-
           <Link to={'/LoginPage'}>
             <button className={styles.btn}> 로그인하러가기</button>
           </Link>
