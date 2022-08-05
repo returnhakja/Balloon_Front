@@ -27,15 +27,15 @@ export const plusPage = async (page, setPage) => {
 };
 
 // 사번으로 사원 검색
-export const selectEmployeeByEmpId = async (empId, setEmp) => {
-  // const urlStr = process.env.REACT_APP_URL_EMP + '/' + empId;
-  // await axios
-  //   .get(urlStr)
-  //   .then((response) => response.data)
-  //   .then((data) => {
-  //     setBoard(data);
-  //   })
-  //   .catch((error) => console.log(error));
+export const selectEmployeeByEmpId = async (empId, setEmpInfo) => {
+  const urlStr = '/api/emp/' + empId;
+  await axios
+    .get(urlStr)
+    .then((response) => response.data)
+    .then((data) => {
+      setEmpInfo(data);
+    })
+    .catch((error) => console.log(error));
 };
 
 // 사원 추가
