@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { findUnitList } from '../context/UnitAxios';
-import { ChildUnits } from '../context/UnixtFunc';
+import { ChildUnits } from '../context/UnitFunc';
 
 function Organization() {
   const [units, setUnits] = useState([]);

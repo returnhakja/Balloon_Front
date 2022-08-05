@@ -5,6 +5,7 @@ import React from 'react';
 
 function MainPage() {
   const [empInfo, setEmpInfo] = useOutletContext();
+
   return (
     <div>
       <header className={styles.header}>

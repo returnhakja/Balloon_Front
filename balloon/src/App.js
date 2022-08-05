@@ -18,7 +18,6 @@ function App() {
 
   return (
     <>
-      {/* <Headers /> */}
       <Navbar setEmpId={setEmpId} empInfo={empInfo} />
       <Outlet context={[empInfo, setEmpInfo]} />
       <Footer />
