@@ -97,14 +97,14 @@ function Modal({ closeModal }) {
     <div className="modalBackground">
       <Container>
         <div className="modalContainer">
-          <div className="titleCloseBtn">
+          {/* <div className="titleCloseBtn">
             <button
               onClick={() => {
                 closeModal(false);
               }}>
               X
             </button>
-          </div>
+          </div> */}
           <div className="title">
             <h1>결재선 설정</h1>
             <br />

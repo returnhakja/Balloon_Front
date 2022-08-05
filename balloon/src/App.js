@@ -9,10 +9,16 @@ import { selectEmployeeByEmpId } from './context/EmployeeAxios';
 function App() {
   const [empId, setEmpId] = useState('');
   const [empInfo, setEmpInfo] = useState([]);
+  const [isLogin, setLogin] = useState(false);
 
   useEffect(() => {
-    if (empId.length !== 0) {
-      selectEmployeeByEmpId(empId, setEmpInfo);
+    if (!!empId) {
+      if (empId.length !== 0) {
+        selectEmployeeByEmpId(empId, setEmpInfo);
+      }
+    } else {
+      setLogin(false);
+      console.log(isLogin);
     }
   }, [empId]);
 
