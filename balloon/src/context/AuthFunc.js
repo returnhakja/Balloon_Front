@@ -46,7 +46,7 @@ export const getCookie = () => {
 };
 
 // 사원 이름, 직위, id 가져오기
-export const getMe = async (setEmpId, setEmpName, setposition) => {
+export const getMe = async (setEmpId) => {
   cookies.get('accessToken');
   const config = {
     headers: {
@@ -60,8 +60,6 @@ export const getMe = async (setEmpId, setEmpName, setposition) => {
     .get(url, config)
     .then((data) => {
       setEmpId(data.data.empId);
-      setEmpName(data.data.empName);
-      setposition(data.data.position);
     })
     .catch((error) => console.log(error));
 };

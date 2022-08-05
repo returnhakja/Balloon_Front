@@ -1,18 +1,26 @@
 import './App.css';
+import React from 'react';
 import Navbar from './components/Navbar';
 import { Outlet } from 'react-router-dom';
 import Footer from './components/Footer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { selectEmployeeByEmpId } from './context/EmployeeAxios';
 
 function App() {
   const [empId, setEmpId] = useState('');
+  const [empInfo, setEmpInfo] = useState([]);
+
+  useEffect(() => {
+    if (empId.length !== 0) {
+      selectEmployeeByEmpId(empId, setEmpInfo);
+    }
+  }, [empId]);
+
   return (
     <>
       {/* <Headers /> */}
-      <Navbar empId={empId} setEmpId={setEmpId} />
-
-      <Outlet empId={empId} setEmpId={setEmpId}></Outlet>
-
+      <Navbar setEmpId={setEmpId} empInfo={empInfo} />
+      <Outlet context={[empInfo, setEmpInfo]} />
       <Footer />
     </>
   );

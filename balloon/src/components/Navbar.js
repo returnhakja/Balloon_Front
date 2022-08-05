@@ -8,19 +8,16 @@ import { getMe, logout } from '../context/AuthFunc';
 import Cookies from 'universal-cookie';
 import { useEffect, useState } from 'react';
 
-function Navbar() {
+function Navbar({ setEmpId, empInfo }) {
   const cookies = new Cookies();
   const [accessCookie, setAccessCookie] = useState('');
-  const [empId, setEmpId] = useState('');
-  const [empName, setEmpName] = useState('');
-  const [position, setposition] = useState('');
 
   useEffect(() => {
     cookies.get('accessToken');
     if (cookies.cookies.accessToken) {
       setAccessCookie(cookies.cookies.accessToken);
 
-      getMe(setEmpId, setEmpName, setposition);
+      getMe(setEmpId);
     }
   }, [accessCookie]);
 
@@ -60,7 +57,7 @@ function Navbar() {
             <div>
               <span>
                 {' '}
-                {empName} {position}{' '}
+                {empInfo.empName} {empInfo.position}{' '}
               </span>
               <button type="button" className={styles.btnnav} onClick={logout}>
                 Logout
