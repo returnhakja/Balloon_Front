@@ -24,7 +24,6 @@ const Menuitem = styled(MenuItem)`
 `;
 
 const SideNavigation = ({ children }) => {
-  console.log(children);
   const [collapsed, setCollapsed] = useState(false);
   const styles = {
     sideBarHeight: {
