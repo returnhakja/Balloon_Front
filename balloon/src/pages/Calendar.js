@@ -5,18 +5,244 @@ import React from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interaction from '@fullcalendar/interaction';
-import { Container } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  Modal,
+  TextField,
+  Typography,
+} from '@mui/material';
 import '../css/Celendar.css';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import styles from '../css/Component.module.css';
+import ModalInsert from './ModalInsert';
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  textAlign: 'center',
+};
 const Calendar = () => {
   const handleDateClick = (e) => {
     console.log(e);
   };
-
+  const [open, setOpen] = React.useState(false);
+  const [open1, setOpen1] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleOpen1 = () => setOpen1(true);
+  const handleClose1 = () => setOpen1(false);
+  // 날짜 관련
+  const [startValue, setStartValue] = useState(null);
+  const [endvalue, setEndValue] = useState(null);
   return (
     <div class="container">
       <Container maxWidth="xl">
         {/* 모달 */}
+
+        <Button onClick={handleOpen} sx={{ fontSize: 30 }}>
+          일정 등록
+        </Button>
+        <Button onClick={handleOpen1} sx={{ fontSize: 30 }}>
+          일정 수정
+        </Button>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description">
+          <Box sx={style}>
+            <Typography
+              id="modal-modal-title"
+              variant="h4"
+              component="h2"
+              sx={{ mb: 2, mt: 2, color: 'red' }}>
+              일정 제목
+            </Typography>
+            <TextField
+              required
+              id="outlined-required"
+              label="일정 제목을 입력하세요"
+              sx={{ width: '100%' }}
+            />
+            <Typography
+              id="modal-modal-title"
+              variant="h4"
+              component="h2"
+              sx={{ mb: 2, mt: 2 }}>
+              일정
+            </Typography>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="시작일"
+                value={startValue}
+                type=" date"
+                inputFormat={'yyyy-MM-dd'}
+                onChange={(newValue) => {
+                  setStartValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+
+            <span className={styles.centerfont}> : </span>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="끝나는일"
+                value={endvalue}
+                inputFormat={'yyyy-MM-dd'}
+                onChange={(newValue) => {
+                  setEndValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              같은부서 사원을 찾을 수 있는 그걸 만들어야하는데 몰라서 일딴
+              텍스트
+            </Typography>
+
+            <Typography
+              id="modal-modal-description"
+              variant="h4"
+              sx={{ mt: 2, mb: 2 }}>
+              MEMO
+            </Typography>
+
+            <TextField
+              required
+              id="outlined-required1"
+              label="메모 입력"
+              sx={{ width: '100%' }}
+            />
+
+            <Typography
+              id="modal-modal-description"
+              variant="h4"
+              sx={{ mt: 2, mb: 2 }}>
+              장소
+            </Typography>
+            <TextField
+              required
+              id="outlined-required2"
+              label="장소 입력"
+              sx={{ mt: 1, width: '100%' }}
+            />
+            <Button
+              onClick={handleClose}
+              sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>
+              취소
+            </Button>
+            <Button
+              onClick={handleClose}
+              sx={{ fontSize: 30, border: 1, mt: 1 }}>
+              등록
+            </Button>
+          </Box>
+        </Modal>
+        <Modal
+          open={open1}
+          onClose={handleClose1}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description">
+          <Box sx={style}>
+            <Typography
+              id="modal-modal-title"
+              variant="h4"
+              component="h2"
+              sx={{ mb: 2, mt: 2, color: 'red' }}>
+              일정 제목
+            </Typography>
+            <TextField
+              required
+              id="outlined-required"
+              label="일정 제목을 입력하세요"
+              sx={{ width: '100%' }}
+            />
+            <Typography
+              id="modal-modal-title"
+              variant="h4"
+              component="h2"
+              sx={{ mb: 2, mt: 2 }}>
+              일정
+            </Typography>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="시작일"
+                value={startValue}
+                type=" date"
+                inputFormat={'yyyy-MM-dd'}
+                onChange={(newValue) => {
+                  setStartValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+
+            <span className={styles.centerfont}> : </span>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="끝나는일"
+                value={endvalue}
+                inputFormat={'yyyy-MM-dd'}
+                onChange={(newValue) => {
+                  setEndValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              같은부서 사원을 찾을 수 있는 그걸 만들어야하는데 몰라서 일딴
+              텍스트
+            </Typography>
+
+            <Typography
+              id="modal-modal-description"
+              variant="h4"
+              sx={{ mt: 2, mb: 2 }}>
+              MEMO
+            </Typography>
+
+            <TextField
+              required
+              id="outlined-required1"
+              label="메모 입력"
+              sx={{ width: '100%' }}
+            />
+
+            <Typography
+              id="modal-modal-description"
+              variant="h4"
+              sx={{ mt: 2, mb: 2 }}>
+              장소
+            </Typography>
+            <TextField
+              required
+              id="outlined-required2"
+              label="장소 입력"
+              sx={{ mt: 1, width: '100%' }}
+            />
+            <Button
+              onClick={handleClose1}
+              sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>
+              취소
+            </Button>
+            <Button
+              onClick={handleClose1}
+              sx={{ fontSize: 30, border: 1, mt: 1 }}>
+              수정
+            </Button>
+          </Box>
+        </Modal>
         <FullCalendar
           handleWindowResize="50vw"
           plugins={[dayGridPlugin, interaction]}
