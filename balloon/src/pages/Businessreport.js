@@ -28,6 +28,7 @@ import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import { styled } from '@mui/material/styles';
 import Modal from './Modal';
 import '../css/Modal.css';
+import { useOutletContext } from 'react-router-dom';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   '& .MuiToggleButtonGroup-grouped': {
@@ -62,7 +63,9 @@ function Report() {
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
-
+  // 사원 정보 context
+  const [empInfo, setEmpInfo] = useOutletContext();
+  console.log(empInfo);
   const card = (
     <React.Fragment>
       <CardContent>
@@ -80,7 +83,7 @@ function Report() {
           variant="h5"
           component="div"
           textAlign="center">
-          살려줘어(asdj)
+          {empInfo.empName}
         </Typography>
       </CardContent>
     </React.Fragment>
@@ -125,7 +128,10 @@ function Report() {
             </tr>
             <tr align="center" bgcolor="white">
               <td className={styles.tdleft}>기안자</td>
-              <td className={styles.td}>살려주라제발(askdla)</td>
+              <td className={styles.td}>
+                {' '}
+                {empInfo.empName}({empInfo.empId})
+              </td>
               <td className={styles.tdright}>기안부서</td>
               <th className={styles.th}>
                 <Box sx={{ minWidth: 150 }}>
