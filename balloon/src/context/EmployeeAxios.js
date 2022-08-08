@@ -1,6 +1,8 @@
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
-// export const
+// 쿠키를 사용할 수 있게 해주기
+const cookies = new Cookies();
 
 // 전체 사원 출력 (페이징)
 export const selectEmployeeList = async () =>
@@ -34,6 +36,44 @@ export const selectEmployeeByEmpId = async (empId, setEmpInfo) => {
     .then((response) => response.data)
     .then((data) => {
       setEmpInfo(data);
+    })
+    .catch((error) => console.log(error));
+};
+
+// accessToken으로 이름, 직위, id 가져오기
+export const getMe = async (setEmpId) => {
+  cookies.get('accessToken');
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + cookies.cookies.accessToken,
+    },
+  };
+  const url = '/api/emp/me';
+
+  await axios
+    .get(url, config)
+    .then((data) => {
+      setEmpId(data.data.empId);
+    })
+    .catch((error) => console.log(error));
+};
+
+// 결재선 사원들 출력
+export const getEmpListByUnitCode = async () => {
+  cookies.get('accessToken');
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + cookies.cookies.accessToken,
+    },
+  };
+  const url = '/api/approval/line/00030000';
+
+  await axios
+    .get(url, config)
+    .then((data) => {
+      console.log(data);
     })
     .catch((error) => console.log(error));
 };

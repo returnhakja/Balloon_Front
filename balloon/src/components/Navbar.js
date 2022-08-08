@@ -4,8 +4,9 @@
 import styles from '../css/Navbar.module.css';
 import { Link } from 'react-router-dom';
 import { Box } from '@mui/system';
-import { getMe, logout } from '../context/AuthFunc';
 import Cookies from 'universal-cookie';
+import { logout } from '../context/AuthFunc';
+import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
 
 function Navbar({ setEmpId, empInfo }) {

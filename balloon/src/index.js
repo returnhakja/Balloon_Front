@@ -25,6 +25,7 @@ import DocumentList from './pages/DocumentList';
 import LoginPage from './pages/LoginPage';
 
 import Organization from './pages/Organization';
+import PrivateRoute from './components/PrivateRoute';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

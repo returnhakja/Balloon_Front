@@ -1,6 +1,7 @@
 // import './App.css';
 import styles from '../css/Navbar.module.css';
 import { Link, useOutletContext } from 'react-router-dom';
+import { getEmpListByUnitCode } from '../context/EmployeeAxios';
 import React from 'react';
 
 function MainPage() {
@@ -18,9 +19,12 @@ function MainPage() {
         <div className={styles.logcon}>
           <h1 className={styles.h1}>BALLOON</h1>
           {empInfo.empName ? (
-            <p className={styles.pbottom}>
-              {empInfo.empName}님 오신것을 환영합니다. 일을 하세요.
-            </p>
+            <>
+              <p className={styles.pbottom}>
+                {empInfo.empName}님 오신것을 환영합니다. 일을 하세요.
+              </p>
+              <button onClick={getEmpListByUnitCode}>테스트용</button>
+            </>
           ) : (
             <>
               <p className={styles.pbottom}>
