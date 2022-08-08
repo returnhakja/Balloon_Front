@@ -30,23 +30,44 @@ function Calendar() {
   };
   const [open, setOpen] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
+  const [list, setList] = useState([]);
   const handleOpen1 = () => setOpenUpdate(true);
 
   const [empInfo, setEmpInfo] = useOutletContext();
   //
 
   useEffect(() => {
-    console.log(empInfo);
-    const data = async () => {
-      const response = await axios
-        .get(`http://localhost:8080/api/cal/` + empInfo.empId)
-        .then((response) => {
-          console.log(response.data);
+    // console.log(list[1].scheduleTitle);
+    // const data = () => {
+    axios
+      .get(`/api/cal/` + empInfo.empId)
+      .then((response) => {
+        console.log(response.data);
+        const arr = [];
+        // response.data;
+        response.data.map((data) => {
+          arr.push({
+            title: data.scheduleTitle,
+            start: data.scheduleStart,
+            end: data.scheduleEnd,
+            allDay: true,
+          });
         });
-    };
-    data();
-  }, []);
-
+        setList(arr);
+      })
+      .catch((err) => console.log(err));
+    // .then((data) => {
+    //   // data &&
+    //   //   data.map((data) => {
+    //   //     return list.push(data);
+    //   //   });
+    //   console.log(data);
+    //   setList(data);
+    // });
+    // };
+    // data();
+  }, [empInfo]);
+  // console.log(list);
   //모달
   return (
     <div class="container">
@@ -73,14 +94,33 @@ function Calendar() {
             setOpenUpdate={setOpenUpdate}
           />
         )}
+        <div>
+          {list.length != 0 && (
+            <FullCalendar
+              handleWindowResize="50vw"
+              plugins={[dayGridPlugin, interaction]}
+              dateClick={handleDateClick}
+              height="70vh"
+              locale="ko"
+              // events={[
+              //   {
+              //     title: '집에갈래',
+              //     allDay: true,
+              //     start: '2022-08-29',
+              //     end: '2022-08-30',
+              //   },
+              //   {
+              //     title: '의진바보',
+              //     allDay: true,
+              //     start: '2022-08-08',
+              //     end: '2020-08-09',
+              //   },
+              // ]}
 
-        <FullCalendar
-          handleWindowResize="50vw"
-          plugins={[dayGridPlugin, interaction]}
-          dateClick={handleDateClick}
-          height="70vh"
-          locale="ko"
-        />
+              events={list}
+            />
+          )}
+        </div>
       </Container>
     </div>
   );
