@@ -41,7 +41,9 @@ root.render(
           <Route index element={<Organization />} />
         </Route>
         {/* 캘린더 */}
-        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/calendar">
+          <Route path=":empId" element={<Calendar />}></Route>
+        </Route>
         {/* 결재관리 */}
         <Route path="/box" element={<Boxs />} />
         <Route path="/box/dd" element={<Declare />} />

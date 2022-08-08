@@ -32,6 +32,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import '../css/Modal.css';
 import Modal from './Modal';
+import { useOutletContext } from 'react-router-dom';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   '& .MuiToggleButtonGroup-grouped': {
@@ -73,6 +74,9 @@ function Pointment() {
   // 모달
   const [openModal, setOpenModal] = useState(false);
 
+  // 사원 정보 context
+  const [empInfo, setEmpInfo] = useOutletContext();
+
   const card = (
     <React.Fragment>
       <CardContent>
@@ -90,7 +94,7 @@ function Pointment() {
           variant="h5"
           component="div"
           textAlign="center">
-          살려줘어(asdj)
+          {empInfo.empName}
         </Typography>
       </CardContent>
     </React.Fragment>
@@ -133,7 +137,9 @@ function Pointment() {
             </tr>
             <tr align="center" bgcolor="white">
               <td className={styles.tdleft}>기안자</td>
-              <td className={styles.td}>살려주라제발(askdla)</td>
+              <td className={styles.td}>
+                {empInfo.empName}({empInfo.empId})
+              </td>
               <td className={styles.tdright}>기안부서</td>
               <th className={styles.th}>
                 <Box sx={{ minWidth: 150 }}>
