@@ -20,6 +20,7 @@ function intersection(a, b) {
   return a.filter((value) => b.indexOf(value) !== -1);
 }
 function Modal({ closeModal }) {
+  console.log(closeModal);
   const [checked, setChecked] = useState([]);
   const [left, setLeft] = useState([0, 1, 2, 3]);
   const [right, setRight] = useState([]);

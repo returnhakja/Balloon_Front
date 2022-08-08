@@ -44,7 +44,7 @@ function Navbar({ setEmpId, empInfo }) {
               <Link to={'/box'}>
                 <Box className={styles.lii}>결재관리</Box>
               </Link>
-              <Link to={'/calendar'}>
+              <Link to={'/calendar/{empId}'}>
                 <Box className={styles.lii}>캘린더</Box>
               </Link>
               <Box className={styles.lii}>메신저</Box>
