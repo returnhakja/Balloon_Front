@@ -27,6 +27,10 @@ import LoginPage from './pages/LoginPage';
 import Organization from './pages/Organization';
 import PrivateRoute from './components/PrivateRoute';
 
+import Chat from './pages/Chat/Chat';
+import ChatRoom from './pages/Chat/ChatRoom';
+import CreateRoom from './pages/Chat/CreateRoom';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -60,6 +64,10 @@ root.render(
         <Route path="/dratf/br" element={<Businessreport />} />
         <Route path="/dratf/bt" element={<Businesstrip />} />
         <Route path="/dratf/pa" element={<Persnelappointment />} />
+        {/* 메신저 */}
+        <Route path="/chatroom" element={<ChatRoom />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/createroom" element={<CreateRoom />} />
       </Route>
     </Routes>
   </BrowserRouter>

@@ -48,7 +48,9 @@ function Navbar({ setEmpId, empInfo }) {
               <Link to={'/calendar/{empId}'}>
                 <Box className={styles.lii}>캘린더</Box>
               </Link>
-              <Box className={styles.lii}>메신저</Box>
+              <Link to={'/chatroom'}>
+                <Box className={styles.lii}>메신저</Box>
+              </Link>
               <Link to={'/organization'}>
                 <Box className={styles.lii}>조직도</Box>
               </Link>
