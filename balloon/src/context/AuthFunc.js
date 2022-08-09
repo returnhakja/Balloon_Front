@@ -28,7 +28,6 @@ export const login = async (empId, password) => {
     });
 
   // setEmpId(loginToken.data.partitionKey);
-
   window.location.href = '/';
   //   alert('아이디 혹은 비밀번호가 틀립니다.');
 };

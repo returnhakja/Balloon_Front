@@ -1,11 +1,11 @@
 import React from 'react';
 import { Card, CardContent, Container, Typography } from '@mui/material';
+import SideNavigation from '../../components/SideNavigation';
 import Tab from '@mui/material/Tab';
 import { Box } from '@mui/system';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import SideNavigation from './SideNavigation';
 
 const card = (
   <React.Fragment>

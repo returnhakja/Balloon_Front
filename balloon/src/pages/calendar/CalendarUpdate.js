@@ -1,12 +1,62 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import styles from '../../css/Component.module.css';
+import axios from 'axios';
+import { deletehandle } from '../../context/CalendarAxios';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import styles from '../css/Component.module.css';
-function CelendarUpdate({ style, openUpdate, setOpenUpdate }) {
+
+function CalendarUpdate({ style, openUpdate, setOpenUpdate, list, setList }) {
   const handleClose = () => setOpenUpdate(false);
+
   const [startValue, setStartValue] = useState(null);
   const [endvalue, setEndValue] = useState(null);
+  useEffect(() => {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    const data = async (list) => {
+      console.log(list);
+      const response = await axios
+        .get(`http://localhost:8080/api/calall/` + list[0], headers)
+        .then((response) => {
+          setList(response.data);
+        });
+    };
+
+    data();
+  }, [list]);
+
+  //업데이트
+  const updateHandle = () => {
+    const scheduletitle = document.getElementById('scheduletitle').value;
+    const CalendarContent = document.getElementById('CalendarContent').value;
+    const CalendarLocation = document.getElementById('CalendarLocation').value;
+
+    const inputdata = {
+      scheduleTitle: scheduletitle,
+      scheduleStart: startValue,
+      scheduleEnd: endvalue,
+      scheduleMemo: CalendarContent,
+      scheduleLocation: CalendarLocation,
+    };
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    const data = async () => {
+      const response = await axios.put(
+        `http://localhost:8080/api/cal/update`,
+        inputdata,
+        {
+          headers,
+        }
+      );
+      setOpenUpdate(false);
+      window.location.href = '/calendar';
+    };
+    data();
+  };
 
   return (
     <Modal
@@ -26,6 +76,7 @@ function CelendarUpdate({ style, openUpdate, setOpenUpdate }) {
           required
           id="outlined-required"
           label="일정 제목을 입력하세요"
+          // defaultValue={}
           sx={{ width: '100%' }}
         />
         <Typography
@@ -95,12 +146,19 @@ function CelendarUpdate({ style, openUpdate, setOpenUpdate }) {
           sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>
           취소
         </Button>
-        <Button onClick={handleClose} sx={{ fontSize: 30, border: 1, mt: 1 }}>
+        <Button
+          onClick={updateHandle}
+          sx={{ fontSize: 30, border: 1, mr: 3, mt: 1 }}>
           수정
+        </Button>
+        <Button
+          onClick={() => deletehandle('scheduleId', handleClose)}
+          sx={{ fontSize: 30, border: 1, mt: 1 }}>
+          삭제
         </Button>
       </Box>
     </Modal>
   );
 }
 
-export default CelendarUpdate;
+export default CalendarUpdate;

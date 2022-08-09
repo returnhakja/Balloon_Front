@@ -1,12 +1,7 @@
-import { Container } from '@mui/system';
 import React, { useState } from 'react';
-import SideNavigation from './SideNavigation';
+import SideNavigation from '../../components/SideNavigation';
+import styles from '../../css/Component.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import TextField from '@mui/material/TextField';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import styles from '../css/Component.module.css';
 import {
   Box,
   Button,
@@ -15,8 +10,13 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
+import { Container } from '@mui/system';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import TextField from '@mui/material/TextField';
 
-function ApprovalOngoing() {
+function Declare() {
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
   const [endvalue, setEndValue] = useState(null);
@@ -32,7 +32,7 @@ function ApprovalOngoing() {
     <>
       <SideNavigation>
         <Container>
-          <p className={styles.sasinfont}>진행중</p>
+          <p className={styles.sasinfont}>상신한</p>
           <br />
           <hr />
 
@@ -125,4 +125,4 @@ function ApprovalOngoing() {
   );
 }
 
-export default ApprovalOngoing;
+export default Declare;

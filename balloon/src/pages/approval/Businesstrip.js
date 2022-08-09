@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import SideNavigation from './SideNavigation';
-import styles from '../css/Report.module.css';
+import { useOutletContext } from 'react-router-dom';
+import SideNavigation from '../../components/SideNavigation';
+import styles from '../../css/Report.module.css';
+import '../../css/Modal.css';
+import Modal from './Modal';
 import {
   Card,
   CardContent,
@@ -30,9 +33,6 @@ import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import '../css/Modal.css';
-import Modal from './Modal';
-import { useOutletContext } from 'react-router-dom';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   '& .MuiToggleButtonGroup-grouped': {

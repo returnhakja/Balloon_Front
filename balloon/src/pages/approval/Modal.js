@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import '../css/Modal.css';
-import { Container } from '@mui/system';
+import '../../css/Modal.css';
 import {
   Button,
   Checkbox,
@@ -11,6 +10,7 @@ import {
   ListItemText,
   Paper,
 } from '@mui/material';
+import { Container } from '@mui/system';
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
