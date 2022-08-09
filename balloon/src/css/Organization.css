@@ -1,33 +1,17 @@
 /* MAIN STYLES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .thisflex {
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   margin: 5px;
-  display: flex;
+  /* display: flex; */
+  margin-top: 5%;
 }
 
-.con {
-  margin-top: 3%;
-}
-.item {
-  display: flex;
-}
-.plus {
-  font-size: 4rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 21px 40px;
-}
-.plus:hover {
-  cursor: pointer;
-  color: #f27c8d;
-}
 :root {
-  /* --level-1: #8dccad; */
+  --level-1: #aff3fc;
   --level-2: #f5cc7f;
   --level-3: #7b9fe0;
-  --level-4: #f27c8d;
+  --level-4: #faa7b3;
   --black: black;
 }
 .rectangle {
@@ -41,7 +25,7 @@
 .level-1 {
   text-align: center;
   list-style: none;
-  width: 50%;
+  width: 70%;
   margin: 0 auto 40px;
   /* margin: 0 21px 40px 400px; */
   background: var(--level-1);
@@ -64,9 +48,10 @@
   text-align: center;
   list-style: none;
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* display: grid;
+  grid-template-columns: repeat(3, 1fr); */
 }
+
 .level-2-wrapper::before {
   content: '';
   position: absolute;
@@ -74,7 +59,7 @@
   left: 15.5%;
   width: 68%;
   height: 2px;
-  background: var(--black);
+  /* background: var(--black); */
 }
 .level-2-wrapper::after {
   display: none;
@@ -133,11 +118,12 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .level-3-wrapper {
   list-style: none;
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 20px;
-  width: 90%;
+  /* position: relative; */
+  display: flex;
+  /* display: grid;
+  grid-template-columns: repeat(2, 1fr); */
+  /* grid-column-gap: 20px; */
+  /* width: 50%; */
   margin: 0 auto;
 }
 .level-3-wrapper::before {
@@ -152,6 +138,7 @@
 .level-3-wrapper > li::before {
   content: '';
   position: absolute;
+
   top: 0;
   left: 50%;
   -webkit-transform: translate(-50%, -100%);
@@ -187,6 +174,7 @@
 }
 .level-4 {
   font-weight: normal;
+
   background: var(--level-4);
 }
 .level-4::before {
@@ -198,7 +186,7 @@
   transform: translate(-100%, -50%);
   width: 20px;
   height: 2px;
-  background: var(--black);
+  /* background: var(--black); */
 }
 @media screen and (max-width: 700px) {
   .rectangle {

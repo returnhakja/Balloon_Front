@@ -35,12 +35,13 @@ function Calendar() {
 
   const [empInfo, setEmpInfo] = useOutletContext();
   //
+  console.log(empInfo);
 
   useEffect(() => {
     // console.log(list[1].scheduleTitle);
     // const data = () => {
     axios
-      .get(`/api/cal/` + empInfo.empId)
+      .get(`http://localhost:8080/api/cal/` + empInfo.empId)
       .then((response) => {
         console.log(response.data);
         const arr = [];

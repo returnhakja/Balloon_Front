@@ -13,10 +13,10 @@ function Organization() {
   return (
     <div>
       {units.length !== 0 && units ? (
-        <div style={{ border: '1px solid black', margin: '20px' }}>
+        <div class="thisflex">
           {/* <ol style={{ border: '1px solid green', margin: '10px' }}> */}
           <ol class="level-1 rectangle">
-            <li class="level-1 rectangle"> {units.unitName}</li>
+            <h1 class="level-1 rectangle"> {units.unitName}</h1>
             {/* <li class="level-2 rectangle">{units.bell}</li> */}
             <br /> {/* 구분자 br */}
             <li>{units.childUnits !== 0 && ChildUnits(units)}</li>
