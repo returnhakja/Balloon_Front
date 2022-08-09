@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import SideNavigation from './SideNavigation';
-import styles from '../css/Report.module.css';
+import { useOutletContext } from 'react-router-dom';
+import SideNavigation from '../../components/SideNavigation';
+import styles from '../../css/Report.module.css';
+import '../../css/Modal.css';
+import Modal from './Modal';
 import {
   Card,
   CardContent,
@@ -10,7 +13,6 @@ import {
   MenuItem,
   Paper,
   Select,
-  TextField,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -27,12 +29,6 @@ import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import { styled } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import '../css/Modal.css';
-import Modal from './Modal';
-import { useOutletContext } from 'react-router-dom';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   '& .MuiToggleButtonGroup-grouped': {
@@ -50,7 +46,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   },
 }));
 
-function Pointment() {
+function Report() {
   const [form, setForm] = useState('');
 
   const handleChange = (event) => {
@@ -67,16 +63,9 @@ function Pointment() {
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
-
-  // 날짜 관련
-  const [startValue, setStartValue] = useState(null);
-
-  // 모달
-  const [openModal, setOpenModal] = useState(false);
-
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
-
+  console.log(empInfo);
   const card = (
     <React.Fragment>
       <CardContent>
@@ -100,16 +89,18 @@ function Pointment() {
     </React.Fragment>
   );
 
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <SideNavigation>
       <Container>
-        <p className={styles.maintitle}>인사명령</p>
+        <p className={styles.maintitle}>업무기안</p>
 
         <table className={styles.table}>
           <thead>
             <tr align="center" bgcolor="white">
               <td className={styles.tdleft}>기안양식</td>
-              <td className={styles.td}>인사명령</td>
+              <td className={styles.td}>업무기안</td>
               <td className={styles.tdright}>문서번호</td>
               <th className={styles.th}>-</th>
             </tr>
@@ -138,6 +129,7 @@ function Pointment() {
             <tr align="center" bgcolor="white">
               <td className={styles.tdleft}>기안자</td>
               <td className={styles.td}>
+                {' '}
                 {empInfo.empName}({empInfo.empId})
               </td>
               <td className={styles.tdright}>기안부서</td>
@@ -158,6 +150,7 @@ function Pointment() {
             </tr>
           </tbody>
         </table>
+        {openModal && <Modal closeModal={setOpenModal} />}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
           <button
@@ -170,7 +163,6 @@ function Pointment() {
             결재선설정
           </button>
         </div>
-        {openModal && <Modal closeModal={setOpenModal} />}
         <hr />
         <br />
         <Card
@@ -188,7 +180,7 @@ function Pointment() {
               className={styles.icon}
             />{' '}
             안내
-            <p>인사명령을 작성하세요.</p>
+            <p>출장계획서를 작성하세요.</p>
           </div>
         </div>
 
@@ -221,79 +213,6 @@ function Pointment() {
               </td>
             </tr>
           </thead>
-        </table>
-        <br />
-        {/* 여기부터는 상세내용 */}
-        {/* <p className={styles.giantitle}>상세내용</p> */}
-        <table className={styles.tableborder}>
-          <thead>
-            <tr className={styles.trcon}>
-              <td className={styles.titlename}>인사명령일</td>
-              <td className={styles.titlename} colSpan={4}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    label="일자 선택"
-                    value={startValue}
-                    type=" date"
-                    inputFormat={'yyyy-MM-dd'}
-                    onChange={(newValue) => {
-                      setStartValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-              </td>
-            </tr>
-          </thead>
-          <tbody className={styles.tbodyin}>
-            <tr className={styles.trcolor}>
-              <td className={styles.tdreaui}>구성원명</td>
-              <td className={styles.tdreaui}>발령구분</td>
-              <td className={styles.tdreaui}>발령부서</td>
-              <td className={styles.tdreaui}>발령직급</td>
-            </tr>
-
-            <tr>
-              <td className={styles.tdreaui}>
-                <input
-                  type="text"
-                  name="title"
-                  placeholder="구성원명을 입력하세요."
-                  className={styles.inputtext}
-                />
-              </td>
-              <td className={styles.tdreaui}>
-                <form>
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder="발령구분 입력하세요"
-                    className={styles.inputtext}
-                  />
-                </form>
-              </td>
-              <td className={styles.tdreaui}>
-                <form>
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder="발령부서를 입력하세요"
-                    className={styles.inputtext}
-                  />
-                </form>
-              </td>
-              <td className={styles.tdreaui}>
-                <form>
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder=" 발령직급을 입력하세요"
-                    className={styles.inputtext}
-                  />
-                </form>
-              </td>
-            </tr>
-          </tbody>
         </table>
 
         <div className={styles.fonttext}>
@@ -357,4 +276,4 @@ function Pointment() {
   );
 }
 
-export default Pointment;
+export default Report;

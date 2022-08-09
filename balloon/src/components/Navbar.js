@@ -4,8 +4,9 @@
 import styles from '../css/Navbar.module.css';
 import { Link } from 'react-router-dom';
 import { Box } from '@mui/system';
-import { getMe, logout } from '../context/AuthFunc';
 import Cookies from 'universal-cookie';
+import { logout } from '../context/AuthFunc';
+import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
 
 function Navbar({ setEmpId, empInfo }) {
@@ -44,14 +45,29 @@ function Navbar({ setEmpId, empInfo }) {
               <Link to={'/box'}>
                 <Box className={styles.lii}>결재관리</Box>
               </Link>
+<<<<<<< HEAD
               {/* <Link to={'/calendar/{empId}'}> */}
+=======
+>>>>>>> c6e9db9dcd634db5d561f82409229ed25a2e8a13
               <Link to={'/calendar'}>
                 <Box className={styles.lii}>캘린더</Box>
               </Link>
-              <Box className={styles.lii}>메신저</Box>
+              <Link to={'/chatroom'}>
+                <Box className={styles.lii}>메신저</Box>
+              </Link>
               <Link to={'/organization'}>
                 <Box className={styles.lii}>조직도</Box>
               </Link>
+              {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+                <Link to={'/management/unit'}>
+                  <Box className={styles.lii}>조직관리</Box>
+                </Link>
+              ) : null}
+              {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+                <Link to={'/management/employee'}>
+                  <Box className={styles.lii}>사원관리</Box>
+                </Link>
+              ) : null}
             </ul>
           </div>
           {accessCookie ? (

@@ -1,21 +1,60 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+<<<<<<< HEAD:balloon/src/pages/CelendarUpdate.js
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import styles from '../css/Component.module.css';
 import axios from 'axios';
-import { useOutletContext } from 'react-router-dom';
-import { ko } from 'date-fns/esm/locale';
+function CelendarUpdate({ style, openUpdate, setOpenUpdate }) {
+=======
+import styles from '../../css/Component.module.css';
+import axios from 'axios';
+import { deletehandle } from '../../context/CalendarAxios';
+import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-function CelendarInsert({ style, open, setOpen }) {
-  const [empInfo, setEmpInfo] = useOutletContext();
+function CalendarUpdate({ style, openUpdate, setOpenUpdate, list, setList }) {
+>>>>>>> c6e9db9dcd634db5d561f82409229ed25a2e8a13:balloon/src/pages/calendar/CalendarUpdate.js
+  const handleClose = () => setOpenUpdate(false);
 
-  console.log(empInfo);
-  const handleClose = () => setOpen(false);
-  const [startValue, setStartValue] = useState(new Date());
-  const [endvalue, setEndValue] = useState(new Date());
+  const [startValue, setStartValue] = useState(null);
+  const [endvalue, setEndValue] = useState(null);
+<<<<<<< HEAD:balloon/src/pages/CelendarUpdate.js
+  const [list, setList] = useState([]);
 
-  const insertHandle = () => {
+=======
+>>>>>>> c6e9db9dcd634db5d561f82409229ed25a2e8a13:balloon/src/pages/calendar/CalendarUpdate.js
+  useEffect(() => {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+<<<<<<< HEAD:balloon/src/pages/CelendarUpdate.js
+    const data = async (scheduleId) => {
+      const response = await axios
+        .get(`http://localhost:8080/api/calall/` + scheduleId, headers)
+=======
+    const data = async (list) => {
+      console.log(list);
+      const response = await axios
+        .get(`http://localhost:8080/api/calall/` + list[0], headers)
+>>>>>>> c6e9db9dcd634db5d561f82409229ed25a2e8a13:balloon/src/pages/calendar/CalendarUpdate.js
+        .then((response) => {
+          setList(response.data);
+        });
+    };
+<<<<<<< HEAD:balloon/src/pages/CelendarUpdate.js
+    data();
+  }, []);
+  console.log(list.data);
+=======
+
+    data();
+  }, [list]);
+
+>>>>>>> c6e9db9dcd634db5d561f82409229ed25a2e8a13:balloon/src/pages/calendar/CalendarUpdate.js
+  //업데이트
+  const updateHandle = () => {
     const scheduletitle = document.getElementById('scheduletitle').value;
     const CalendarContent = document.getElementById('CalendarContent').value;
     const CalendarLocation = document.getElementById('CalendarLocation').value;
@@ -24,32 +63,47 @@ function CelendarInsert({ style, open, setOpen }) {
       scheduleTitle: scheduletitle,
       scheduleStart: startValue,
       scheduleEnd: endvalue,
-      empName: empInfo.empName,
       scheduleMemo: CalendarContent,
       scheduleLocation: CalendarLocation,
-      emp: { empId: empInfo.empId },
     };
     const headers = {
       'Content-Type': 'application/json',
     };
 
     const data = async () => {
-      const response = await axios.post(
-        `http://localhost:8080/api/cal/insert`,
+      const response = await axios.put(
+        `http://localhost:8080/api/cal/update`,
         inputdata,
         {
           headers,
         }
       );
-      setOpen(false);
+      setOpenUpdate(false);
       window.location.href = '/calendar';
     };
     data();
   };
+<<<<<<< HEAD:balloon/src/pages/CelendarUpdate.js
+
+  //삭제
+  const deletehandle = (scheduleId) => {
+    const data = async () => {
+      const response = await axios
+        .delete(`http://localhost:8080/cal/delete/${scheduleId}`)
+
+        .then(() => {
+          handleClose(false);
+          window.location.href = '/calendar';
+        });
+    };
+    data();
+  };
+=======
+>>>>>>> c6e9db9dcd634db5d561f82409229ed25a2e8a13:balloon/src/pages/calendar/CalendarUpdate.js
 
   return (
     <Modal
-      open={open}
+      open={openUpdate}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description">
@@ -63,8 +117,9 @@ function CelendarInsert({ style, open, setOpen }) {
         </Typography>
         <TextField
           required
-          id="scheduletitle"
+          id="outlined-required"
           label="일정 제목을 입력하세요"
+          // defaultValue={}
           sx={{ width: '100%' }}
         />
         <Typography
@@ -77,10 +132,9 @@ function CelendarInsert({ style, open, setOpen }) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
             label="시작일"
-            value={startValue + 1}
+            value={startValue}
             type=" date"
             inputFormat={'yyyy-MM-dd'}
-            locale={ko}
             onChange={(newValue) => {
               setStartValue(newValue);
             }}
@@ -94,7 +148,6 @@ function CelendarInsert({ style, open, setOpen }) {
             label="끝나는일"
             value={endvalue}
             inputFormat={'yyyy-MM-dd'}
-            locale={ko}
             onChange={(newValue) => {
               setEndValue(newValue);
             }}
@@ -114,7 +167,7 @@ function CelendarInsert({ style, open, setOpen }) {
 
         <TextField
           required
-          id="CalendarContent"
+          id="outlined-required1"
           label="메모 입력"
           sx={{ width: '100%' }}
         />
@@ -127,7 +180,7 @@ function CelendarInsert({ style, open, setOpen }) {
         </Typography>
         <TextField
           required
-          id="CalendarLocation"
+          id="outlined-required2"
           label="장소 입력"
           sx={{ mt: 1, width: '100%' }}
         />
@@ -136,12 +189,23 @@ function CelendarInsert({ style, open, setOpen }) {
           sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>
           취소
         </Button>
-        <Button onClick={insertHandle} sx={{ fontSize: 30, border: 1, mt: 1 }}>
-          등록
+        <Button
+          onClick={updateHandle}
+          sx={{ fontSize: 30, border: 1, mr: 3, mt: 1 }}>
+          수정
+        </Button>
+<<<<<<< HEAD:balloon/src/pages/CelendarUpdate.js
+        <Button onClick={deletehandle} sx={{ fontSize: 30, border: 1, mt: 1 }}>
+=======
+        <Button
+          onClick={() => deletehandle('scheduleId', handleClose)}
+          sx={{ fontSize: 30, border: 1, mt: 1 }}>
+>>>>>>> c6e9db9dcd634db5d561f82409229ed25a2e8a13:balloon/src/pages/calendar/CalendarUpdate.js
+          삭제
         </Button>
       </Box>
     </Modal>
   );
 }
 
-export default CelendarInsert;
+export default CalendarUpdate;

@@ -1,3 +1,5 @@
+import React from 'react';
+import { handleSubmit } from '../../context/AuthFunc';
 import {
   Container,
   Button,
@@ -9,8 +11,6 @@ import {
   Box,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import React from 'react';
-import { handleSubmit } from '../context/AuthFunc';
 
 function LoginPage({ empId, setEmpId }) {
   return (
