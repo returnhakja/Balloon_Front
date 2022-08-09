@@ -52,6 +52,16 @@ function Navbar({ setEmpId, empInfo }) {
               <Link to={'/organization'}>
                 <Box className={styles.lii}>조직도</Box>
               </Link>
+              {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+                <Link to={'/management/unit'}>
+                  <Box className={styles.lii}>조직관리</Box>
+                </Link>
+              ) : null}
+              {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+                <Link to={'/management/employee'}>
+                  <Box className={styles.lii}>사원관리</Box>
+                </Link>
+              ) : null}
             </ul>
           </div>
           {accessCookie ? (

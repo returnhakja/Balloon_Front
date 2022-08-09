@@ -26,6 +26,8 @@ import LoginPage from './pages/LoginPage';
 import Home from './components/Home';
 import Organization from './pages/Organization';
 import PrivateRoutes from './components/PrivateRoutes';
+import ManagementUnit from './pages/ManagementUnit';
+import ManagementEmployee from './pages/ManagementEmployee';
 
 function App() {
   const [empId, setEmpId] = useState('');
@@ -62,7 +64,7 @@ function App() {
           <Route path="/organization">
             <Route index element={<Organization />} />
           </Route>
-          {/* 캘린더 */}
+          {/* Private Routes */}
 
           <Route
             element={
@@ -73,6 +75,7 @@ function App() {
                 setEmpInfo={setEmpInfo}
               />
             }>
+            {/* 캘린더 */}
             <Route element={<Calendar />} path="/calendar" exact />
             {/* 결재관리 */}
             <Route path="/box" element={<Boxs />} />
@@ -90,6 +93,13 @@ function App() {
             <Route path="/dratf/br" element={<Businessreport />} />
             <Route path="/dratf/bt" element={<Businesstrip />} />
             <Route path="/dratf/pa" element={<Persnelappointment />} />
+            {/* 조직관리 */}
+            <Route path="/management/unit" element={<ManagementUnit />} />
+            {/* 사원관리 */}
+            <Route
+              path="/management/employee"
+              element={<ManagementEmployee />}
+            />
           </Route>
         </Route>
       </Routes>
