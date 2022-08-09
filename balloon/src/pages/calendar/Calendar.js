@@ -39,7 +39,7 @@ function Calendar() {
     if (!!empInfo.empId) {
       getScheduleByEmp(empInfo.empId, list, setList);
     }
-  }, []);
+  }, [list]);
 
   //모달
   return (
