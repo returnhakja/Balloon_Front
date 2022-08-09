@@ -26,6 +26,10 @@ import reportWebVitals from './reportWebVitals';
 
 // import Organization from './pages/Organization';
 
+import Chat from './pages/Chat/Chat';
+import ChatRoom from './pages/Chat/ChatRoom';
+import CreateRoom from './pages/Chat/CreateRoom';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(<App />);
