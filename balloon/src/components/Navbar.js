@@ -4,8 +4,9 @@
 import styles from '../css/Navbar.module.css';
 import { Link } from 'react-router-dom';
 import { Box } from '@mui/system';
-import { getMe, logout } from '../context/AuthFunc';
 import Cookies from 'universal-cookie';
+import { logout } from '../context/AuthFunc';
+import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
 
 function Navbar({ setEmpId, empInfo }) {
@@ -44,7 +45,7 @@ function Navbar({ setEmpId, empInfo }) {
               <Link to={'/box'}>
                 <Box className={styles.lii}>결재관리</Box>
               </Link>
-              {/* <Link to={'/calendar/{empId}'}> */}
+
               <Link to={'/calendar'}>
                 <Box className={styles.lii}>캘린더</Box>
               </Link>
@@ -52,6 +53,16 @@ function Navbar({ setEmpId, empInfo }) {
               <Link to={'/organization'}>
                 <Box className={styles.lii}>조직도</Box>
               </Link>
+              {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+                <Link to={'/management/unit'}>
+                  <Box className={styles.lii}>조직관리</Box>
+                </Link>
+              ) : null}
+              {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+                <Link to={'/management/employee'}>
+                  <Box className={styles.lii}>사원관리</Box>
+                </Link>
+              ) : null}
             </ul>
           </div>
           {accessCookie ? (

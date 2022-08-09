@@ -3,6 +3,7 @@ import Cookies from 'universal-cookie';
 
 // 쿠키를 사용할 수 있게 해주기
 const cookies = new Cookies();
+
 // 로그인 form에서 submit으로 id, pass를 login() 이동해줌
 export const handleSubmit = (event) => {
   event.preventDefault();
@@ -27,7 +28,6 @@ export const login = async (empId, password) => {
     });
 
   // setEmpId(loginToken.data.partitionKey);
-
   window.location.href = '/';
   //   alert('아이디 혹은 비밀번호가 틀립니다.');
 };
@@ -43,23 +43,4 @@ export const logout = () => {
 // 쿠키 가져오기
 export const getCookie = () => {
   return Cookies.get('accessToken');
-};
-
-// 사원 이름, 직위, id 가져오기
-export const getMe = async (setEmpId) => {
-  cookies.get('accessToken');
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + cookies.cookies.accessToken,
-    },
-  };
-  const url = '/api/emp/me';
-
-  await axios
-    .get(url, config)
-    .then((data) => {
-      setEmpId(data.data.empId);
-    })
-    .catch((error) => console.log(error));
 };
