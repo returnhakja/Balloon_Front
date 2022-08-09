@@ -28,46 +28,7 @@ import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-<<<<<<< HEAD
-root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<App />}>
-        <Route index element={<MainPage />} />
-        {/* 로그인 */}
-        <Route path="/loginpage" element={<LoginPage />} />
-        {/* 조직도 */}
-        <Route path="/organization">
-          <Route index element={<Organization />} />
-        </Route>
-        {/* 캘린더 */}
-        <Route path="/calendar" element={<Calendar />} />
-        {/* <Route path=":empId" element={<Calendar />}></Route> */}
-        {/* <Route path=":empId" element={<Calendar />}></Route>
-        </Route>
-        {/* 결재관리 */}
-        <Route path="/box" element={<Boxs />} />
-        <Route path="/box/dd" element={<Declare />} />
-        <Route path="/box/dc" element={<Complete />} />
-        <Route path="/box/ds" element={<Save />} />
-        <Route path="/box/dr" element={<Refuese />} />
-        <Route path="/box/ab" element={<ApprovalBefore />} />
-        <Route path="/box/ao" element={<ApprovalOngoing />} />
-        <Route path="/box/ac" element={<ApprovalComplete />} />
-        <Route path="/box/ar" element={<ApprovalRefuse />} />
-        <Route path="/box/dl" element={<DocumentList />} />
-        {/* 기안작성 */}
-        <Route path="/dratf/form" element={<Dashboard />} />
-        <Route path="/dratf/br" element={<Businessreport />} />
-        <Route path="/dratf/bt" element={<Businesstrip />} />
-        <Route path="/dratf/pa" element={<Persnelappointment />} />
-      </Route>
-    </Routes>
-  </BrowserRouter>
-);
-=======
 root.render(<App />);
->>>>>>> c6e9db9dcd634db5d561f82409229ed25a2e8a13
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

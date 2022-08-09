@@ -45,10 +45,6 @@ function Navbar({ setEmpId, empInfo }) {
               <Link to={'/box'}>
                 <Box className={styles.lii}>결재관리</Box>
               </Link>
-<<<<<<< HEAD
-              {/* <Link to={'/calendar/{empId}'}> */}
-=======
->>>>>>> c6e9db9dcd634db5d561f82409229ed25a2e8a13
               <Link to={'/calendar'}>
                 <Box className={styles.lii}>캘린더</Box>
               </Link>
