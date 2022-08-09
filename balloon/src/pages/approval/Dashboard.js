@@ -1,8 +1,8 @@
-import { Card, CardContent, Container, Typography } from '@mui/material';
-import { Box } from '@mui/system';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import SideNavigation from './SideNavigation';
+import SideNavigation from '../../components/SideNavigation';
+import { Card, CardContent, Container, Typography } from '@mui/material';
+import { Box } from '@mui/system';
 
 const card = (
   <Link to={'/dratf/br'}>

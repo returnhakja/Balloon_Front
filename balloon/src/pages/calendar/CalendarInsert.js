@@ -1,16 +1,55 @@
 import { useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
+import axios from 'axios';
+import styles from '../../css/Component.module.css';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import styles from '../css/Component.module.css';
-function CelendarUpdate({ style, openUpdate, setOpenUpdate }) {
-  const handleClose = () => setOpenUpdate(false);
-  const [startValue, setStartValue] = useState(null);
-  const [endvalue, setEndValue] = useState(null);
+import { ko } from 'date-fns/esm/locale';
+
+function CalendarInsert({ style, open, setOpen }) {
+  const [empInfo, setEmpInfo] = useOutletContext();
+
+  console.log(empInfo);
+  const handleClose = () => setOpen(false);
+  const [startValue, setStartValue] = useState(new Date());
+  const [endvalue, setEndValue] = useState(new Date());
+
+  const insertHandle = () => {
+    const scheduletitle = document.getElementById('scheduletitle').value;
+    const CalendarContent = document.getElementById('CalendarContent').value;
+    const CalendarLocation = document.getElementById('CalendarLocation').value;
+
+    const inputdata = {
+      scheduleTitle: scheduletitle,
+      scheduleStart: startValue,
+      scheduleEnd: endvalue,
+      empName: empInfo.empName,
+      scheduleMemo: CalendarContent,
+      scheduleLocation: CalendarLocation,
+      emp: { empId: empInfo.empId },
+    };
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    const data = async () => {
+      const response = await axios.post(
+        `http://localhost:8080/api/cal/insert`,
+        inputdata,
+        {
+          headers,
+        }
+      );
+      setOpen(false);
+      window.location.href = '/calendar';
+    };
+    data();
+  };
 
   return (
     <Modal
-      open={openUpdate}
+      open={open}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description">
@@ -24,7 +63,7 @@ function CelendarUpdate({ style, openUpdate, setOpenUpdate }) {
         </Typography>
         <TextField
           required
-          id="outlined-required"
+          id="scheduletitle"
           label="일정 제목을 입력하세요"
           sx={{ width: '100%' }}
         />
@@ -38,9 +77,10 @@ function CelendarUpdate({ style, openUpdate, setOpenUpdate }) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
             label="시작일"
-            value={startValue}
+            value={startValue + 1}
             type=" date"
             inputFormat={'yyyy-MM-dd'}
+            locale={ko}
             onChange={(newValue) => {
               setStartValue(newValue);
             }}
@@ -54,6 +94,7 @@ function CelendarUpdate({ style, openUpdate, setOpenUpdate }) {
             label="끝나는일"
             value={endvalue}
             inputFormat={'yyyy-MM-dd'}
+            locale={ko}
             onChange={(newValue) => {
               setEndValue(newValue);
             }}
@@ -73,7 +114,7 @@ function CelendarUpdate({ style, openUpdate, setOpenUpdate }) {
 
         <TextField
           required
-          id="outlined-required1"
+          id="CalendarContent"
           label="메모 입력"
           sx={{ width: '100%' }}
         />
@@ -86,7 +127,7 @@ function CelendarUpdate({ style, openUpdate, setOpenUpdate }) {
         </Typography>
         <TextField
           required
-          id="outlined-required2"
+          id="CalendarLocation"
           label="장소 입력"
           sx={{ mt: 1, width: '100%' }}
         />
@@ -95,12 +136,12 @@ function CelendarUpdate({ style, openUpdate, setOpenUpdate }) {
           sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>
           취소
         </Button>
-        <Button onClick={handleClose} sx={{ fontSize: 30, border: 1, mt: 1 }}>
-          수정
+        <Button onClick={insertHandle} sx={{ fontSize: 30, border: 1, mt: 1 }}>
+          등록
         </Button>
       </Box>
     </Modal>
   );
 }
 
-export default CelendarUpdate;
+export default CalendarInsert;

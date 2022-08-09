@@ -7,13 +7,16 @@ import Cookies from 'universal-cookie';
 function PrivateRoutes({ empId, setEmpId, empInfo, setEmpInfo }) {
   const cookies = new Cookies();
   const [cookie, setCookie] = useState({});
+
   useEffect(() => {
     cookies.get('accessToken');
     setCookie(cookies.cookies);
+    console.log(cookie);
+    console.log(!!cookie);
   }, []);
 
-  return !!cookie ? (
-    <Outlet context={(setEmpId, empInfo, setEmpInfo)} />
+  return cookie ? (
+    <Outlet context={[setEmpId, empInfo, setEmpInfo]} />
   ) : (
     <Navigate to="/loginpage" />
   );

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import {
   selectEmployeeList,
   minusPage,
   plusPage,
-} from '../context/EmployeeAxios';
-import styled from 'styled-components';
+} from '../../context/EmployeeAxios';
 
 const PaginationSpan = styled.span`
   &[aria-current] {

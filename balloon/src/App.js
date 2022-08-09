@@ -1,33 +1,41 @@
 import './App.css';
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
 import { selectEmployeeByEmpId } from './context/EmployeeAxios';
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import MainPage from './components/MainPage';
-
-import Boxs from './pages/Boxs';
-import Dashboard from './pages/Dashboard';
-import Declare from './pages/Declare';
-import Complete from './pages/Complete';
-import Save from './pages/Save';
-import Refuese from './pages/Refuese';
-import ApprovalBefore from './pages/ApprovalBefore';
-import Calendar from './pages/Calendar';
-import Businessreport from './pages/Businessreport';
-import Businesstrip from './pages/Businesstrip';
-import Persnelappointment from './pages/Persnelappointment';
-import ApprovalOngoing from './pages/ApprovalOngoing';
-import ApprovalComplete from './pages/ApprovalComplete';
-import ApprovalRefuse from './pages/ApprovalRefuse';
-import DocumentList from './pages/DocumentList';
-
-import LoginPage from './pages/LoginPage';
 import Home from './components/Home';
-import Organization from './pages/Organization';
+import MainPage from './components/MainPage';
 import PrivateRoutes from './components/PrivateRoutes';
-import ManagementUnit from './pages/ManagementUnit';
-import ManagementEmployee from './pages/ManagementEmployee';
+
+import Boxs from './pages/approval/Boxs';
+import Dashboard from './pages/approval/Dashboard';
+import Declare from './pages/approval/Declare';
+import Complete from './pages/approval/Complete';
+import Save from './pages/approval/Save';
+import Refuese from './pages/approval/Refuese';
+import ApprovalBefore from './pages/approval/ApprovalBefore';
+import Businessreport from './pages/approval/Businessreport';
+import Businesstrip from './pages/approval/Businesstrip';
+import Persnelappointment from './pages/approval/Persnelappointment';
+import ApprovalOngoing from './pages/approval/ApprovalOngoing';
+import ApprovalComplete from './pages/approval/ApprovalComplete';
+import ApprovalRefuse from './pages/approval/ApprovalRefuse';
+import DocumentList from './pages/approval/DocumentList';
+
+import Calendar from './pages/calendar/Calendar';
+
+import LoginPage from './pages/login/LoginPage';
+
+import ManagementUnit from './pages/personnelManagement/ManagementUnit';
+import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
+
+import Chat from './pages/chat/Chat';
+import ChatRoom from './pages/chat/ChatRoom';
+import CreateRoom from './pages/chat/CreateRoom';
+
+import Organization from './pages/Organization';
 
 function App() {
   const [empId, setEmpId] = useState('');
@@ -93,6 +101,10 @@ function App() {
             <Route path="/dratf/br" element={<Businessreport />} />
             <Route path="/dratf/bt" element={<Businesstrip />} />
             <Route path="/dratf/pa" element={<Persnelappointment />} />
+            {/* 메신저 */}
+            <Route path="/chatroom" element={<ChatRoom />} />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/createroom" element={<CreateRoom />} />
             {/* 조직관리 */}
             <Route path="/management/unit" element={<ManagementUnit />} />
             {/* 사원관리 */}
