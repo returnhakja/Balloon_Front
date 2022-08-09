@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+import Input from '@mui/material/Input';
+import { Container } from '@mui/system';
+import Button from '@mui/material/Button';
+
 function CreateChatroom() {
   const [roomId, setRoomId] = useState();
   const onCreateChatroom = () => {
@@ -19,26 +23,26 @@ function CreateChatroom() {
   };
   return (
     <div>
-      <div>
+      <Container maxWidth="sm" border="1px dashed blue" width="50%">
         <h3>채팅방 만들기</h3>
         <br />
-        <input id="chatroomName" placeholder="채팅방 이름을 입력하세요" />
+        <Input id="chatroomName" placeholder="채팅방 이름을 입력하세요" />
         <br />
-        <input id="headCount" placeholder="인원수를 입력하세요" />
+        <Input id="headCount" placeholder="인원수를 입력하세요" />
         <br />
-        <button
+        <Button
+          variant="text"
           onClick={() => {
             onCreateChatroom();
           }}>
           등록
-        </button>
-
+        </Button>
         <Link to={`/chat?room=${roomId}`}>
-          <button>
+          <Button variant="text">
             <div>채팅하기</div>
-          </button>
+          </Button>
         </Link>
-      </div>
+      </Container>
     </div>
   );
 }
