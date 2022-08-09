@@ -5,13 +5,15 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import styles from '../css/Component.module.css';
 import axios from 'axios';
 import { useOutletContext } from 'react-router-dom';
+import { ko } from 'date-fns/esm/locale';
+
 function CelendarInsert({ style, open, setOpen }) {
   const [empInfo, setEmpInfo] = useOutletContext();
 
   console.log(empInfo);
   const handleClose = () => setOpen(false);
-  const [startValue, setStartValue] = useState(null);
-  const [endvalue, setEndValue] = useState(null);
+  const [startValue, setStartValue] = useState(new Date());
+  const [endvalue, setEndValue] = useState(new Date());
 
   const insertHandle = () => {
     const scheduletitle = document.getElementById('scheduletitle').value;
@@ -40,6 +42,7 @@ function CelendarInsert({ style, open, setOpen }) {
         }
       );
       setOpen(false);
+      window.location.href = '/calendar';
     };
     data();
   };
@@ -74,9 +77,10 @@ function CelendarInsert({ style, open, setOpen }) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
             label="시작일"
-            value={startValue}
+            value={startValue + 1}
             type=" date"
             inputFormat={'yyyy-MM-dd'}
+            locale={ko}
             onChange={(newValue) => {
               setStartValue(newValue);
             }}
@@ -90,6 +94,7 @@ function CelendarInsert({ style, open, setOpen }) {
             label="끝나는일"
             value={endvalue}
             inputFormat={'yyyy-MM-dd'}
+            locale={ko}
             onChange={(newValue) => {
               setEndValue(newValue);
             }}
