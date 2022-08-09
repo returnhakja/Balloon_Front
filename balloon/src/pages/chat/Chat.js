@@ -9,8 +9,7 @@ import axios from 'axios';
 
 function Chat() {
   // login할때 empId를 가져옴 -> 채팅방생성/채팅 시 사용가능
-  const [empInfo, setEmpInfo, empId] = useOutletContext();
-  console.log(empId);
+  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
 
   //실시간 시간 가져오기
   const nowTime = moment().format('HH:mm');
@@ -44,7 +43,7 @@ function Chat() {
       {},
       JSON.stringify({
         chatroomId: chatroomId,
-        writer: empId,
+        writer: empInfo.empId,
         chatContent: inputRef.current.value,
       })
     );
@@ -106,7 +105,7 @@ function Chat() {
         {chatting.map((msg, index) => {
           return (
             <div key={index}>
-              {msg.employee.empId == empId ? (
+              {msg.employee.empId == empInfo.empId ? (
                 <div className={styles.message}>
                   {msg.chatTime}
                   {msg.chatContent}
@@ -129,7 +128,7 @@ function Chat() {
               console.log(chat);
               return (
                 <div key={chat.writer + index}>
-                  {empId == chat.writer ? (
+                  {empInfo.empId == chat.writer ? (
                     <div className={styles.message}>
                       {nowTime}
                       {chat.chatContent}

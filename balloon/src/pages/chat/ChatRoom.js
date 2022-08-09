@@ -15,15 +15,16 @@ import { Container } from '@mui/system';
 
 function ChatRoom() {
   const [chatroom, setChatroom] = useState([]);
-  const [empInfo, setEmpInfo, empId] = useOutletContext();
-  console.log(empId);
+  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
 
   useEffect(() => {
     const onChatroom = (setChatroom) => {
-      axios.get(`http://localhost:8080/allChat/${empId}`).then((response) => {
-        setChatroom(response.data);
-        console.log(response.data);
-      });
+      axios
+        .get(`http://localhost:8080/allChat/${empInfo.empId}`)
+        .then((response) => {
+          setChatroom(response.data);
+          console.log(response.data);
+        });
     };
     onChatroom(setChatroom);
   }, []);
