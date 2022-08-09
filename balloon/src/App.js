@@ -25,7 +25,7 @@ function App() {
   return (
     <>
       <Navbar setEmpId={setEmpId} empInfo={empInfo} />
-      <Outlet context={[empInfo, setEmpInfo]} />
+      <Outlet context={[empInfo, setEmpInfo, empId]} />
       <Footer />
     </>
   );
