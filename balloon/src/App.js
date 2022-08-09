@@ -2,7 +2,7 @@ import './App.css';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
+import Cookies from 'universal-cookie';
 import { selectEmployeeByEmpId } from './context/EmployeeAxios';
 
 import Home from './components/Home';
@@ -41,9 +41,12 @@ function App() {
   const [empId, setEmpId] = useState('');
   const [empInfo, setEmpInfo] = useState([]);
   const [isLogin, setLogin] = useState(false);
-
+  const cookies = new Cookies();
+  const [cookie, setCookie] = useState();
   useEffect(() => {
     if (!!empId) {
+      cookies.get('accessToken');
+      setCookie(cookies.cookies.accessToken);
       if (empId.length !== 0) {
         selectEmployeeByEmpId(empId, setEmpInfo);
       }
@@ -81,6 +84,7 @@ function App() {
                 setEmpId={setEmpId}
                 empInfo={empInfo}
                 setEmpInfo={setEmpInfo}
+                cookie={cookie}
               />
             }>
             {/* 캘린더 */}

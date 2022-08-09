@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import axios from 'axios';
+import { getScheduleByEmp } from '../../context/CalendarAxios';
 import '../../css/Calender.scss';
 import '../../css/Celendar.css';
 import { Button, Container } from '@mui/material';
@@ -35,44 +35,15 @@ function Calendar() {
 
   const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
 
-  console.log(empInfo);
-
-  useEffect(async () => {
-    // console.log(list[1].scheduleTitle);
-    // const data = () => {
-    await axios
-      .get(`/api/cal/` + empInfo.empId)
-      .then((response) => {
-        console.log(response.data);
-        const arr = [];
-        // response.data;
-        response.data.map((data) => {
-          arr.push({
-            title: data.scheduleTitle,
-            start: data.scheduleStart,
-            end: data.scheduleEnd,
-            allDay: true,
-          });
-        });
-        setList(arr);
-      })
-      .catch((err) => console.log(err));
-    // .then((data) => {
-    //   // data &&
-    //   //   data.map((data) => {
-    //   //     return list.push(data);
-    //   //   });
-    //   console.log(data);
-    //   setList(data);
-    // });
-    // };
-    // data();
+  useEffect(() => {
+    if (!!empInfo.empId) {
+      getScheduleByEmp(empInfo.empId, list, setList);
+    }
   }, []);
-  // console.log(list);
 
   //모달
   return (
-    <div class="container">
+    <div className="container">
       <Container maxWidth="xl">
         {/* 모달 */}
 
@@ -87,18 +58,33 @@ function Calendar() {
           일정 수정
         </Button>
         {/* 등록 */}
-        {open && <CalendarInsert style={style} open={open} setOpen={setOpen} />}
+        {open && (
+          <CalendarInsert
+            style={style}
+            open={open}
+            setOpen={setOpen}
+            empInfo={empInfo}
+          />
+        )}
         {/* 수정 */}
         {openUpdate && (
           <CalendarUpdate
             style={style}
             openUpdate={openUpdate}
             setOpenUpdate={setOpenUpdate}
+            empInfo={empInfo}
+            list={list}
+            setList={setList}
           />
         )}
         <div>
           <FullCalendar
             handleWindowResize="50vw"
+            headerToolbar={{
+              left: 'title', // will normally be on the left. if RTL, will be on the right
+              right: 'prevYear prev next nextYear',
+              // right: 'today prev,next', // will normally be on the right. if RTL, will be on the left
+            }}
             plugins={[dayGridPlugin, interaction]}
             dateClick={handleDateClick}
             height="70vh"

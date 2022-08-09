@@ -1,16 +1,13 @@
 import { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import axios from 'axios';
+import { insertSchedule } from '../../context/CalendarAxios';
 import styles from '../../css/Component.module.css';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ko } from 'date-fns/esm/locale';
 
-function CalendarInsert({ style, open, setOpen }) {
-  const [empInfo, setEmpInfo] = useOutletContext();
-
-  console.log(empInfo);
+function CalendarInsert({ style, open, setOpen, empInfo }) {
   const handleClose = () => setOpen(false);
   const [startValue, setStartValue] = useState(new Date());
   const [endvalue, setEndValue] = useState(new Date());
@@ -27,24 +24,11 @@ function CalendarInsert({ style, open, setOpen }) {
       empName: empInfo.empName,
       scheduleMemo: CalendarContent,
       scheduleLocation: CalendarLocation,
-      emp: { empId: empInfo.empId },
-    };
-    const headers = {
-      'Content-Type': 'application/json',
+      employee: { empId: empInfo.empId },
     };
 
-    const data = async () => {
-      const response = await axios.post(
-        `http://localhost:8080/api/cal/insert`,
-        inputdata,
-        {
-          headers,
-        }
-      );
-      setOpen(false);
-      window.location.href = '/calendar';
-    };
-    data();
+    insertSchedule(inputdata, setOpen);
+    window.location.href = '/calendar';
   };
 
   return (
