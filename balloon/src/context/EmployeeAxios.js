@@ -5,19 +5,18 @@ import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
 // 전체 사원 출력 (페이징)
-export const selectEmployeeList = async () =>
+export const selectEmployeeList = async (setEmpList) =>
   // setEmps
-
   {
-    //   const url = "api/emp/emps";
-    //   const str = url + "?page=" + 1 + "&size=" + 10;
-    //   await axios
-    //     .get(str)
-    //     .then((response) => response.data)
-    //     .then((data) => {
-    //       setEmps(data);
-    //     })
-    //     .catch((error) => console.log(error));
+    const url = '/api/emp/list';
+    const str = url + '?page=' + 1 + '&size=' + 10;
+    await axios
+      .get(str)
+      .then((response) => response.data)
+      .then((data) => {
+        setEmpList(data);
+      })
+      .catch((error) => console.log(error));
   };
 // 페이징 이전 버튼
 export const minusPage = async (page, setPage) => {

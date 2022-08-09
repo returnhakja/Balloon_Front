@@ -32,7 +32,8 @@ function Calendar() {
   const [openUpdate, setOpenUpdate] = useState(false);
   const handleOpen1 = () => setOpenUpdate(true);
 
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const empInfo = useOutletContext();
+  const setEmpInfo = useOutletContext();
   //
 
   useEffect(() => {

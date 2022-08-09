@@ -1,12 +1,10 @@
-// import './App.css';
 import styles from '../css/Navbar.module.css';
 import { Link, useOutletContext } from 'react-router-dom';
 import { getEmpListByUnitCode } from '../context/EmployeeAxios';
 import React from 'react';
 
 function MainPage() {
-  const [empInfo, setEmpInfo] = useOutletContext();
-
+  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
   return (
     <div>
       <header className={styles.header}>
