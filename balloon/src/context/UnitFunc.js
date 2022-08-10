@@ -7,15 +7,17 @@ export const ChildUnits = (unit) => {
     <div class="thisflex">
       {unit.childUnits.map((unit) => {
         return (
-          <ol
-            style={{ border: '1px solid red', margin: '2px' }}
-            key={unit.unitCode}
-            class="level-3-wrapper">
-            <li class="level-3 rectangle">{unit.unitName}</li>
-            {/* <li>{unit.bell}</li> */}
-            <br /> {/* 구분자 br */}
-            {unit.childUnits.length !== 0 && ChildUnits(unit)}
-          </ol>
+          <>
+            <ol key={unit.unitCode} class="level-3-wrapper">
+              <h3 class="level-4 rectangle">{unit.unitName}</h3>
+              {/* <li>{unit.bell}</li> */}
+              <br /> {/* 구분자 br */}
+            </ol>
+
+            <h3 class="level-4">
+              {unit.childUnits.length !== 0 && ChildUnits(unit)}
+            </h3>
+          </>
         );
       })}
     </div>

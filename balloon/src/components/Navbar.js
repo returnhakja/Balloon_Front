@@ -53,6 +53,7 @@ function Navbar({ setEmpId, empInfo }) {
             <ul className={styles.ulmarginn}>
               <NavLink to={'/box'} style={activeStyle}>
                 <Box className={styles.lii}>결재관리</Box>
+
               </NavLink>
               <NavLink to={'/calendar'} style={activeStyle}>
                 <Box className={styles.lii}>캘린더</Box>
