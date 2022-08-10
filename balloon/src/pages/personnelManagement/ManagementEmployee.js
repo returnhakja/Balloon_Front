@@ -1,133 +1,154 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
-  selectEmployeeList,
+  selectEmployees,
   minusPage,
   plusPage,
 } from '../../context/EmployeeAxios';
 
+//ant Desing table
+import { Space, Table, Button, Pagination } from 'antd';
+// import 'antd/dist/antd.css';
+import { Container } from '@mui/system';
+import './Test.css';
+// 여기까지
 const PaginationSpan = styled.span`
   &[aria-current] {
     background-color: black;
     color: white;
   }
 `;
-
 function ManagementEmployee() {
   const [empList, setEmpList] = useState([]);
-  const [page, setPage] = useState(1);
+  const [totalPages, settotalPage] = useState();
+  const [loading, setLoading] = useState(false);
 
+  console.log(empList);
+
+  // setLoading(true);
   useEffect(() => {
-    selectEmployeeList(setEmpList);
+    selectEmployees(setEmpList);
+    // settotalPage(empList.totalPages);
   }, []);
-
+  const [bottomcenter, setBottomCenter] = useState('bottomcenter');
+  const data = [
+    {
+      title: '사원번호',
+      dataIndex: 'empId',
+      key: 'empId',
+      render: (empId) => {
+        return <a href="/">{empId}</a>;
+      },
+    },
+    {
+      title: '이름',
+      dataIndex: 'empName',
+      key: 'empName',
+    },
+    {
+      title: '직위',
+      dataIndex: 'position',
+      key: 'position',
+    },
+    {
+      title: '직책',
+      key: 'responsibility',
+      dataIndex: 'responsibility',
+    },
+    {
+      title: '월급',
+      key: 'salary',
+      dataIndex: 'salary',
+      sorter: (a, b) => a.salary - b.salary,
+    },
+    {
+      title: '상여금',
+      key: 'commission',
+      dataIndex: 'commission',
+    },
+    {
+      title: '고용일자',
+      key: 'hiredate',
+      dataIndex: 'hiredate',
+    },
+    {
+      title: '부서 이름',
+      key: 'unitName',
+      dataIndex: ['unit', 'unitName'],
+    },
+    {
+      title: '사내전화번호',
+      key: 'empBell',
+      dataIndex: 'empBell',
+    },
+    {
+      title: '개인 이메일',
+      key: 'empMail',
+      dataIndex: 'empMail',
+    },
+    {
+      title: '전화번호',
+      key: 'mobile',
+      dataIndex: 'mobile',
+    },
+    {
+      title: '사원 권한',
+      key: 'userRoleGrade',
+      dataIndex: 'userRoleGrade',
+    },
+    {
+      title: '생일',
+      key: 'birthday',
+      dataIndex: 'birthday',
+    },
+    {
+      title: '집주소',
+      key: 'address',
+      dataIndex: 'address',
+    },
+    {
+      title: '차량 번호',
+      key: 'licensePlate',
+      dataIndex: 'licensePlate',
+    },
+    {
+      title: '사진',
+      key: 'photo',
+      dataIndex: 'photo',
+    },
+    {
+      title: '수정',
+      render: () => {
+        return <Button>수정</Button>;
+      },
+    },
+    {
+      title: '삭제',
+      render: () => {
+        return <Button>삭제</Button>;
+      },
+    },
+  ];
   return (
-    <div>
-      <h2>사원</h2>
-      <br />
-      <div id="empAllList">
-        {empList.dtoList && empList.dtoList.length !== 0 ? (
-          <table>
-            <thead>
-              <tr>
-                <td>사원번호</td>
-                <td>이 름</td>
-                <td>직위</td>
-                <td>직책</td>
-                <td>월급</td>
-                <td>상여금</td>
-                <td>고용일자</td>
-                <td>부서 이름</td>
-                <td>사내번호</td>
-                <td>개인 이메일</td>
-                <td>전화번호</td>
-                <td>사원 권한</td>
-                <td>생일</td>
-                <td>집 주소</td>
-                <td>차량 번호</td>
-                <td>사진</td>
-                <td>UPDATE</td>
-                <td>DELETE</td>
-              </tr>
-            </thead>
-            <tbody>
-              {empList.dtoList.map((data) => {
-                console.log(data);
-                return (
-                  <tr key={data.empId}>
-                    <td>{data.empId}</td>
-                    <td>{data.empName}</td>
-                    <td>{data.position}</td>
-                    <td>{data.responsibility}</td>
-                    <td>{data.salary}</td>
-                    <td>{data.commission}</td>
-                    <td>{data.hiredate}</td>
-                    <td>{data.unit.unitName}</td>
-                    <td>{data.empBell}</td>
-                    <td>{data.empMail}</td>
-                    <td>{data.mobile}</td>
-                    <td>{data.userRoleGrade}</td>
-                    <td>{data.birthday}</td>
-                    <td>{data.licensePlate}</td>
-                    <td>{data.photo}</td>
-                    <td>
-                      <input
-                        type="button"
-                        value="수정"
-                        onClick={() => {
-                          // moveUpdate(data.deptno);
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="button"
-                        value="삭제"
-                        onClick={async () => {
-                          // await deleteByDeptno(
-                          //   data.deptno,
-                          //   deleteCheck,
-                          //   setDeleteCheck
-                          // );
-                        }}
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        ) : (
-          <p>테이블이 없습니다.</p>
-        )}
-        <div>
-          {empList.prev && (
-            <button
-              onClick={() => {
-                minusPage(page, setPage);
-              }}>
-              prev
-            </button>
-          )}
-          {empList.pageList &&
-            empList.pageList.map((number) => {
-              return (
-                <PaginationSpan
-                  key={number}
-                  onClick={(e) => {
-                    setPage(e.target.id);
-                  }}
-                  aria-current={page == number ? 'page' : null}>
-                  {number} <span> </span>
-                </PaginationSpan>
-              );
-            })}
-          {empList.next && (
-            <button onClick={() => plusPage(page, setPage)}>next</button>
-          )}
-        </div>
-      </div>
-    </div>
+    <Container maxWidth="xl">
+      <Space>
+        <Button type="primary" dataIndex="Update">
+          추가
+        </Button>
+      </Space>
+      <Table
+        columns={data}
+        dataSource={empList}
+        pagination={{
+          position: [bottomcenter],
+          pageSize: 10,
+          total: totalPages,
+        }}
+        // pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}}
+      />
+    </Container>
+
+    //  </div>
   );
 }
 

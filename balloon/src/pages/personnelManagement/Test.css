@@ -1,0 +1,14 @@
+.ant-table-thead {
+  font-size: 15px;
+  padding-right: 50px;
+}
+.ant-table-cell {
+  /* border: 2px solid red; */
+  /* width: 500px; */
+}
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td,
+.ant-table tfoot > tr > th,
+.ant-table tfoot > tr > td {
+  padding: 10px 10px 30px 10px;
+}
