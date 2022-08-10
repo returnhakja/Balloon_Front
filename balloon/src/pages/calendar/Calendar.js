@@ -28,18 +28,18 @@ function Calendar() {
   const handleDateClick = (e) => {
     console.log(e);
   };
-  const [open, setOpen] = useState(false);
+  const [openInsert, setOpenInsert] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [list, setList] = useState([]);
-  const handleOpen1 = () => setOpenUpdate(true);
 
   const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
 
   useEffect(() => {
+    console.log(empInfo);
     if (!!empInfo.empId) {
       getScheduleByEmp(empInfo.empId, list, setList);
     }
-  }, []);
+  }, [openInsert]);
 
   //모달
   return (
@@ -49,20 +49,18 @@ function Calendar() {
 
         <Button
           onClick={() => {
-            setOpen(!open);
+            setOpenInsert(!openInsert);
           }}
           sx={{ fontSize: 30 }}>
           일정 등록
         </Button>
-        <Button onClick={handleOpen1} sx={{ fontSize: 30 }}>
-          일정 수정
-        </Button>
+
         {/* 등록 */}
-        {open && (
+        {openInsert && (
           <CalendarInsert
             style={style}
-            open={open}
-            setOpen={setOpen}
+            open={openInsert}
+            setOpen={setOpenInsert}
             empInfo={empInfo}
           />
         )}
@@ -81,16 +79,15 @@ function Calendar() {
           <FullCalendar
             handleWindowResize="50vw"
             headerToolbar={{
-              left: 'title', // will normally be on the left. if RTL, will be on the right
+              left: 'title',
               right: 'prevYear prev next nextYear',
-              // right: 'today prev,next', // will normally be on the right. if RTL, will be on the left
             }}
             plugins={[dayGridPlugin, interaction]}
             dateClick={handleDateClick}
             height="70vh"
             locale="ko"
             events={list}
-            eventClick={handleOpen1}
+            eventClick={() => setOpenUpdate(true)}
           />
         </div>
       </Container>
