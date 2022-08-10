@@ -21,7 +21,7 @@ const Footer = () => {
           <b>
             <p>서의진</p>
             <a
-              href="https://github.com/SJHeon"
+              href="https://github.com/kki45"
               target="_blank"
               rel="noopener noreferrer">
               {' '}
