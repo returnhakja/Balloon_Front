@@ -1,49 +1,33 @@
 /* MAIN STYLES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-.thisflex {
-  border: 1px solid blue;
-  margin: 5px;
-  display: flex;
+.textnone {
 }
-
 .con {
-  margin-top: 3%;
-}
-.item {
-  display: flex;
-}
-.plus {
-  font-size: 4rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 21px 40px;
-}
-.plus:hover {
-  cursor: pointer;
-  color: #f27c8d;
+  margin-top: 10%;
+  margin-bottom: 10%;
+  text-align: center;
 }
 :root {
-  /* --level-1: #8dccad; */
+  --level-1: #8dccad;
   --level-2: #f5cc7f;
   --level-3: #7b9fe0;
+  --level-3-1: #7b9fe0;
   --level-4: #f27c8d;
   --black: black;
 }
 .rectangle {
+  text-align: center;
   position: relative;
   padding: 20px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 /* LEVEL-1 STYLES
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
 .level-1 {
-  text-align: center;
   list-style: none;
   width: 50%;
   margin: 0 auto 40px;
-  /* margin: 0 21px 40px 400px; */
   background: var(--level-1);
 }
 .level-1::before {
@@ -55,13 +39,12 @@
   transform: translateX(-50%);
   width: 2px;
   height: 20px;
-  /* background: var(--black); */
+  background: var(--black);
 }
 
 /* LEVEL-2 STYLES
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
 .level-2-wrapper {
-  text-align: center;
   list-style: none;
   position: relative;
   display: grid;
@@ -71,8 +54,8 @@
   content: '';
   position: absolute;
   top: -20px;
-  left: 15.5%;
-  width: 68%;
+  left: 16.7%;
+  width: 66.7%;
   height: 2px;
   background: var(--black);
 }
@@ -84,7 +67,8 @@
   bottom: -20px;
   width: calc(100% + 20px);
   height: 2px;
-  /* background: var(--black); */
+
+  background: var(--black);
 }
 .level-2-wrapper li {
   position: relative;
@@ -98,12 +82,12 @@
   transform: translateX(-50%);
   width: 2px;
   height: 20px;
-  /* background: var(--black); */
+  background: var(--black);
 }
 .level-2 {
   width: 70%;
   margin: 0 auto 40px;
-  /* background: var(--level-2); */
+  background: var(--level-2);
 }
 .level-2::before {
   content: '';
@@ -114,7 +98,7 @@
   transform: translateX(-50%);
   width: 2px;
   height: 20px;
-  /* background: var(--black); */
+  background: var(--black);
 }
 .level-2::after {
   display: none;
@@ -126,12 +110,21 @@
   transform: translate(-100%, -50%);
   width: 20px;
   height: 2px;
-  /* background: var(--black); */
+  background: var(--black);
 }
 
 /* LEVEL-3 STYLES
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
 .level-3-wrapper {
+  list-style: none;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-column-gap: 20px;
+  width: 90%;
+  margin: 0 auto;
+}
+.level-3-1-wrapper {
   list-style: none;
   position: relative;
   display: grid;
@@ -140,6 +133,7 @@
   width: 90%;
   margin: 0 auto;
 }
+
 .level-3-wrapper::before {
   content: '';
   position: absolute;
@@ -148,6 +142,15 @@
   width: calc(50% + 10px);
   height: 2px;
   /* background: var(--black); */
+}
+.level-3-1-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: calc(25% - 5px);
+  width: calc(50% + 10px);
+  height: 2px;
+  background: var(--black);
 }
 .level-3-wrapper > li::before {
   content: '';
@@ -158,15 +161,30 @@
   transform: translate(-50%, -100%);
   width: 2px;
   height: 20px;
-  /* background: var(--black); */
+  background: var(--black);
+}
+.level-3-1-wrapper > li::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  -webkit-transform: translate(-50%, -100%);
+  transform: translate(-50%, -100%);
+  width: 2px;
+  height: 20px;
+  background: var(--black);
 }
 .level-3 {
   margin-bottom: 20px;
   background: var(--level-3);
 }
+.level-3-1 {
+  margin-bottom: 20px;
+  background: var(--level-3);
+}
 
 /* LEVEL-4 STYLES
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
 .level-4-wrapper {
   list-style: none;
   position: relative;
@@ -187,6 +205,7 @@
 }
 .level-4 {
   font-weight: normal;
+
   background: var(--level-4);
 }
 .level-4::before {
@@ -200,6 +219,7 @@
   height: 2px;
   background: var(--black);
 }
+
 @media screen and (max-width: 700px) {
   .rectangle {
     padding: 20px 10px;
