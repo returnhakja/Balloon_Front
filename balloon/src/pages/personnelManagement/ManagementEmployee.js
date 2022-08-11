@@ -8,8 +8,9 @@ import {
 
 //ant Desing table
 import { Space, Table, Button, Pagination } from 'antd';
-// import 'antd/dist/antd.css';
+import 'antd/dist/antd.css';
 import { Container } from '@mui/system';
+
 import 'antd/dist/antd.css';
 import './Test.css';
 
