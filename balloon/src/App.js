@@ -36,15 +36,27 @@ import ChatRoom from './pages/chat/ChatRoom';
 import CreateRoom from './pages/chat/CreateRoom';
 
 import Organization from './pages/Organization';
+import ChatEmpList from './pages/chat/ChatEmpList';
 
 function App() {
   const [empId, setEmpId] = useState('');
   const [empInfo, setEmpInfo] = useState([]);
-  const [isLogin, setLogin] = useState(false);
   const cookies = new Cookies();
   const [cookie, setCookie] = useState();
+  const [isLogin, setLogin] = useState(null);
+
+  // useEffect(() => {
+  //   const logged = localStorage.getItem('isLogin');
+  //   logged && JSON.parse(logged) ? setLogin(true) : setLogin(false);
+  // });
+
+  // useEffect(() => {
+  //   localStorage.setItem('isLogin', isLogin);
+  // }, [isLogin]);
+
   useEffect(() => {
     if (!!empId) {
+      // setLogin(true);
       cookies.get('accessToken');
       setCookie(cookies.cookies.accessToken);
       if (empId.length !== 0) {
@@ -57,7 +69,6 @@ function App() {
   }, [empId]);
 
   return (
-
     <Router>
       <Routes>
         <Route
@@ -67,6 +78,7 @@ function App() {
               setEmpId={setEmpId}
               empInfo={empInfo}
               setEmpInfo={setEmpInfo}
+              // setLogin={setLogin}
             />
           }>
           <Route index element={<MainPage />} />
@@ -90,8 +102,10 @@ function App() {
             }>
             {/* 캘린더 */}
             <Route element={<Calendar />} path="/calendar" exact />
+
             {/* 결재관리 */}
-            <Route path="/box" element={<Boxs />} />
+            <Route path="/boxs" element={<Boxs />} />
+            {/* <Route index  /> */}
             <Route path="/box/dd" element={<Declare />} />
             <Route path="/box/dc" element={<Complete />} />
             <Route path="/box/ds" element={<Save />} />
@@ -101,12 +115,14 @@ function App() {
             <Route path="/box/ac" element={<ApprovalComplete />} />
             <Route path="/box/ar" element={<ApprovalRefuse />} />
             <Route path="/box/dl" element={<DocumentList />} />
+            {/* </Route> */}
             {/* 기안작성 */}
             <Route path="/dratf/form" element={<Dashboard />} />
             <Route path="/dratf/br" element={<Businessreport />} />
             <Route path="/dratf/bt" element={<Businesstrip />} />
             <Route path="/dratf/pa" element={<Persnelappointment />} />
             {/* 메신저 */}
+            <Route path="/chatemplist" element={<ChatEmpList />} />
             <Route path="/chatroom" element={<ChatRoom />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/createroom" element={<CreateRoom />} />
@@ -121,7 +137,6 @@ function App() {
         </Route>
       </Routes>
     </Router>
-
   );
 }
 

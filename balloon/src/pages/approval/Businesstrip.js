@@ -76,8 +76,10 @@ function Trip() {
   const [openModal, setOpenModal] = useState(false);
 
   // 사원 정보 context
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+
   console.log(empInfo);
+
   const card = (
     <React.Fragment>
       <CardContent>

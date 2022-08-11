@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { getScheduleByEmp } from '../../context/CalendarAxios';
@@ -8,8 +8,10 @@ import { Button, Container } from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interaction from '@fullcalendar/interaction';
+import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import CalendarInsert from './CalendarInsert';
 import CalendarUpdate from './CalendarUpdate';
+import { getDate } from 'date-fns';
 
 const style = {
   position: 'absolute',
@@ -35,12 +37,23 @@ function Calendar() {
   const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
 
   useEffect(() => {
-    console.log(empInfo);
     if (!!empInfo.empId) {
       getScheduleByEmp(empInfo.empId, list, setList);
     }
   }, [openInsert]);
 
+  function getDate(dayString) {
+    const today = new Date();
+    const year = today.getFullYear().toString();
+    let month = (today.getMonth() + 1).toString();
+
+    if (month.length === 1) {
+      month = '0' + month;
+    }
+    // function getTitle()
+
+    return dayString.replace('YEAR', year).replace('MONTH', month);
+  }
   //모달
   return (
     <div className="container">
@@ -75,21 +88,43 @@ function Calendar() {
             setList={setList}
           />
         )}
-        <div>
-          <FullCalendar
-            handleWindowResize="50vw"
-            headerToolbar={{
-              left: 'title',
-              right: 'prevYear prev next nextYear',
-            }}
-            plugins={[dayGridPlugin, interaction]}
-            dateClick={handleDateClick}
-            height="70vh"
-            locale="ko"
-            events={list}
-            eventClick={() => setOpenUpdate(true)}
-          />
-        </div>
+
+        <FullCalendar
+          locale="ko"
+          height="70vh"
+          handleWindowResize="50vw"
+          headerToolbar={{
+            left: 'title',
+            center: 'dayGridDay dayGridWeek dayGridMonth',
+            right: 'today prevYear prev next nextYear',
+          }}
+          plugins={[dayGridPlugin, interaction]}
+          // plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
+          googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
+
+          eventSources={{
+            googleCalendarId:
+              'ko.south_korea#holiday@group.v.calendar.google.com',
+            // className: '대한민국 휴일', // Option
+            color: 'red',
+          }}
+          eventBackgroundColor={'red'}
+          eventSourceSuccess={() => console.log('됨?')}
+          eventSourceFailure={() => console.log('안됨?')}
+          dateClick={(e) => handleDateClick(e)}
+          // events={{
+          //   events: events,
+          //   // eventSources: {
+          //   //   googleCalendarId:
+          //   //     'ko.south_korea#holiday@group.v.calendar.google.com',
+          //   //   // className: '대한민국 휴일', // Option
+          //   //   color: 'red',
+          //   // },
+          // }}
+          events={list}
+          eventClick={() => setOpenUpdate(true)}
+          // rerenderDelay={5000}
+        />
       </Container>
     </div>
   );

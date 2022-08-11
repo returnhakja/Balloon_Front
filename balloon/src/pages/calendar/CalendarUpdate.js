@@ -11,14 +11,17 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate, list, setList }) {
 
   const [startValue, setStartValue] = useState(null);
   const [endvalue, setEndValue] = useState(null);
+
   useEffect(() => {
     const headers = {
       'Content-Type': 'application/json',
     };
+
     const data = async (list) => {
       console.log(list);
       const response = await axios
         .get(`http://localhost:8080/api/calall/` + list[0], headers)
+
         .then((response) => {
           setList(response.data);
         });

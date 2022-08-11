@@ -27,6 +27,20 @@ export const plusPage = async (page, setPage) => {
   await setPage(parseInt(page) + 1);
 };
 
+// 전체 사원 출력 (페이징)
+export const selectEmployees = async (setEmpList) =>
+  // setEmps
+  {
+    const url = '/api/emp/emps';
+    await axios
+      .get(url)
+      .then((response) => response.data)
+      .then((data) => {
+        setEmpList(data);
+      })
+      .catch((error) => console.log(error));
+  };
+
 // 사번으로 사원 검색
 export const selectEmployeeByEmpId = async (empId, setEmpInfo) => {
   const urlStr = '/api/emp/' + empId;
@@ -73,6 +87,19 @@ export const getEmpListByUnitCode = async () => {
     .get(url, config)
     .then((data) => {
       console.log(data);
+    })
+    .catch((error) => console.log(error));
+};
+
+// 같은 부서내 사원 출력(자신 제외)
+export const getEmpListInSameUnit = async (empId, setCEList) => {
+  const url = '/api/emp/unit/list/';
+  const urlStr = url + empId;
+  await axios
+    .get(urlStr)
+    .then((response) => response.data)
+    .then((data) => {
+      setCEList(data);
     })
     .catch((error) => console.log(error));
 };

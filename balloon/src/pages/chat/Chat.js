@@ -3,7 +3,7 @@ import './Header.css';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import styles from './Chat.module.css';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import moment from 'moment';
 import axios from 'axios';
 
@@ -109,6 +109,7 @@ function Chat() {
       <div className="header-title-container">
         <h3>채팅방이름</h3>
       </div>
+      <br />
       <div>
         <input id="empId" placeholder="초대할 사원의 사번을 입력하세요" />
         <button onClick={onUserAdd}>사원초대하기</button>
@@ -132,10 +133,20 @@ function Chat() {
           defaultValue={chatting[0] && chatting.headCount}
         />
         <br />
+
         <button onClick={onUserUpdate}>수정하기</button>
       </div> */}
 
       <div>
+
+        <button onClick={onUserAdd}>수정하기</button>
+      </div>
+      <br />
+      <Link to={'/chatroom'}>채팅목록 이동</Link>
+      <br />
+      <br />
+      <div style={{ border: '1px solid black', margin: '5px' }}>
+
         {/* 채팅기록을 가져옴 */}
         {chatting.map((msg, index) => {
           return (

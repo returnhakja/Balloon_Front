@@ -20,23 +20,23 @@ export const login = async (empId, password) => {
     empId: empId,
     password: password,
   };
-  await axios
+  const loggi = await axios
     .post(url, inputLogin, header)
     // .then((data) => setEmpId(data.data.partitionKey))
     .catch((error) => {
       console.log(error);
     });
 
+  loggi
+    ? (window.location.href = '/')
+    : alert('아이디 혹은 비밀번호가 틀립니다.');
   // setEmpId(loginToken.data.partitionKey);
-  window.location.href = '/';
-  //   alert('아이디 혹은 비밀번호가 틀립니다.');
 };
 
 // 로그아웃
 export const logout = () => {
   window.localStorage.setItem('logout', Date.now);
   cookies.remove('accessToken');
-
   window.location.href = '/';
 };
 

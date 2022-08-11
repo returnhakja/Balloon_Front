@@ -45,6 +45,9 @@ function ChatRoom() {
 
         {/* 채팅방 만들기 버튼 */}
         <div>
+          <Link to={'/chatemplist'}>사원리스트 이동</Link>
+          <br />
+          <br />
           <Grid container justifyContent="flex-end">
             <Button className="chatIcon">
               <Link to={'/createroom'}>
