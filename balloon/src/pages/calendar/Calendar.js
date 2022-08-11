@@ -88,6 +88,7 @@ function Calendar() {
           // plugins={[dayGridPlugin, interaction]}
           plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
           googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
+          // initialView={list}
           eventSources={{
             googleCalendarId:
               'ko.south_korea#holiday@group.v.calendar.google.com',
