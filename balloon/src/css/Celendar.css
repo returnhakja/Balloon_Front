@@ -73,3 +73,7 @@ body {
 .MuiInputBase-adornedEnd {
   width: 200px;
 }
+
+.fc-day-today {
+  background-color: #ffffff !important;
+}

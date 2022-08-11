@@ -94,6 +94,7 @@ function Calendar() {
             // className: '대한민국 휴일', // Option
             color: 'red',
           }}
+          eventBackgroundColor={'red'}
           eventSourceSuccess={() => console.log('됨?')}
           eventSourceFailure={() => console.log('안됨?')}
           dateClick={(e) => handleDateClick(e)}
