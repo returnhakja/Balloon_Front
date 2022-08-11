@@ -43,7 +43,7 @@
 }
 
 .lii {
-  /* margin-left: 30px; */
+  margin-left: 30px;
   justify-content: space-between;
 }
 
@@ -148,8 +148,23 @@
 }
 
 .ballon {
-  width: 2vw;
-  height: 4vh;
+  max-width: 36px;
+  max-height: 26px;
+  /* display: block;
+  left: 50px;
+  margin-top: 0.5%;
+  max-width: 1vw;
+  max-width: 3vh; */
+  /* width: 10%; */
+
+  /* height: auto; */
+
+  /* max-width: 150px; */
+
+  /* display: block; */
+  /* height: auto !important; */
+
+  /* margin: 0 auto; */
 }
 
 .lii:hover {
@@ -164,10 +179,15 @@
   margin-top: 10px;
 }
 
-.css-1nuo49t-MuiButtonBase-root-MuiTab-root {
-  color: red;
+.text {
+  padding: 10px;
 }
+
 @media screen and (max-width: 990px) {
+  .ballon {
+    overflow: hidden;
+    /* width: 10px; */
+  }
   .contents {
     display: flex;
     flex-direction: column;
