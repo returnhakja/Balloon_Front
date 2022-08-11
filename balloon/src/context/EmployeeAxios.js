@@ -91,6 +91,19 @@ export const getEmpListByUnitCode = async () => {
     .catch((error) => console.log(error));
 };
 
+// 같은 부서내 사원 출력(자신 제외)
+export const getEmpListInSameUnit = async (empId, setCEList) => {
+  const url = '/api/emp/unit/list/';
+  const urlStr = url + empId;
+  await axios
+    .get(urlStr)
+    .then((response) => response.data)
+    .then((data) => {
+      setCEList(data);
+    })
+    .catch((error) => console.log(error));
+};
+
 // 사원 추가
 export const InsertEmployee = async (
   empId
