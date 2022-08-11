@@ -8,10 +8,11 @@ import {
 
 //ant Desing table
 import { Space, Table, Button, Pagination } from 'antd';
-// import 'antd/dist/antd.css';
-import { Container } from '@mui/system';
 import 'antd/dist/antd.css';
-import './Test.css';
+import { Container } from '@mui/system';
+import { Link } from 'react-router-dom';
+
+// import './Test.css';
 
 // 여기까지
 const PaginationSpan = styled.span`

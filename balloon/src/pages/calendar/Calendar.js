@@ -101,13 +101,14 @@ function Calendar() {
           plugins={[dayGridPlugin, interaction]}
           // plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
           googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
-          // eventSources={{
-          //   resourceId: 'a',
-          //   googleCalendarId:
-          //     'ko.south_korea#holiday@group.v.calendar.google.com',
-          //   // className: '대한민국 휴일', // Option
-          //   color: 'red',
-          // }}
+
+          eventSources={{
+            googleCalendarId:
+              'ko.south_korea#holiday@group.v.calendar.google.com',
+            // className: '대한민국 휴일', // Option
+            color: 'red',
+          }}
+          eventBackgroundColor={'red'}
           eventSourceSuccess={() => console.log('됨?')}
           eventSourceFailure={() => console.log('안됨?')}
           dateClick={(e) => handleDateClick(e)}

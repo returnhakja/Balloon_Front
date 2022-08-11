@@ -6,6 +6,25 @@ import { logout } from '../context/AuthFunc';
 import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
 
+//여기부터
+import { Menu, Button } from 'antd';
+import styled from 'styled-components';
+import { BrowserView, MobileView } from 'react-device-detect';
+import { MenuOutlined, MenuFoldOutlined } from '@ant-design/icons';
+import { Container, Typography } from '@mui/material';
+const MenuList = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const NavTop = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  button {
+    background: black;
+    border: none;
+  }
+`;
 function Navbar({ setEmpId, empInfo, setLogin }) {
   const cookies = new Cookies();
   const [accessCookie, setAccessCookie] = useState('');
@@ -27,6 +46,21 @@ function Navbar({ setEmpId, empInfo, setLogin }) {
       getMe(setEmpId);
     }
   }, [accessCookie]);
+
+  //여기부터
+
+  const [toggleMenu, setToggleMenu] = useState(false);
+  const [toggleBar, setToggleBar] = useState(true);
+
+  const toggleChange = () => {
+    setToggleMenu(!toggleMenu);
+    setToggleBar(!toggleBar);
+  };
+
+  const onMenuClick = () => {
+    setToggleMenu(!toggleMenu);
+    setToggleBar(!toggleBar);
+  };
 
   return (
     <div className={styles.main}>
@@ -51,49 +85,59 @@ function Navbar({ setEmpId, empInfo, setLogin }) {
               <NavLink to={'/boxs'} style={activeStyle}>
                 <Box className={styles.lii}>결재관리</Box>
               </NavLink>
+            </Menu.Item>
+
+            <Menu.Item key="product">
               <NavLink to={'/calendar'} style={activeStyle}>
-                <Box className={styles.lii}>캘린더</Box>
+                캘린더
               </NavLink>
+            </Menu.Item>
+
+            <Menu.Item key="ms">
               <NavLink to={'/chatemplist'} style={activeStyle}>
-                <Box className={styles.lii}>메신저</Box>
+                메신저
               </NavLink>
+            </Menu.Item>
+
+            <Menu.Item key="Or">
               <NavLink to={'/organization'} style={activeStyle}>
-                <Box className={styles.lii}>조직도</Box>
+                조직도
               </NavLink>
-              {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+            </Menu.Item>
+            {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+              <Menu.Item key="Mani">
                 <NavLink to={'/management/unit'} style={activeStyle}>
-                  <Box className={styles.lii}>조직관리</Box>
+                  조직관리
                 </NavLink>
-              ) : null}
-              {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+              </Menu.Item>
+            ) : null}
+            {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+              <Menu.Item key="ment">
                 <NavLink to={'/management/employee'} style={activeStyle}>
-                  <Box className={styles.lii}>사원관리</Box>
+                  사원관리
                 </NavLink>
-              ) : null}
-            </ul>
-          </div>
+              </Menu.Item>
+            ) : null}
+          </Menu>
+
           {accessCookie ? (
-            <div>
-              <span>
-                {' '}
-                {empInfo.empName} {empInfo.position}{' '}
-              </span>
-              <button type="button" className={styles.btnnav} onClick={logout}>
-                Logout
-              </button>
-            </div>
+            <Typography variant="h6" align="center" className={styles.text}>
+              {empInfo.empName} {empInfo.position}{' '}
+              <Button onClick={logout}>Logout</Button>
+            </Typography>
           ) : (
             <Link to={'/loginpage'}>
-              <button type="button" className={styles.btnnav}>
-                Login
-              </button>
+              <Button>Login</Button>
             </Link>
           )}
-
-          <div className="text-end"></div>
-        </div>
-      </header>
-    </div>
+          {/* <Menu mode="horizontal">
+            <Menu.Item key="signin">
+              <Link to="/loginpage">로그인</Link>
+            </Menu.Item>
+          </Menu> */}
+        </MenuList>
+      </BrowserView>
+    </Container>
   );
 }
 
