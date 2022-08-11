@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-function LoginPage({ empId, setEmpId }) {
+function LoginPage({ setLogin }) {
   return (
     <div>
       <Container component="main" sx={{ marginBottom: 25 }}>
@@ -61,9 +61,7 @@ function LoginPage({ empId, setEmpId }) {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 4, mb: 2 }}
-              // onClick={}
-            >
+              sx={{ mt: 4, mb: 2 }}>
               Login{' '}
             </Button>
           </Box>

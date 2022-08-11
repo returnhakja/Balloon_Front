@@ -65,3 +65,11 @@ body {
 .fc-day-sun {
   color: red;
 }
+
+.fc-day-sat {
+  color: blue;
+}
+
+.MuiInputBase-adornedEnd {
+  width: 200px;
+}

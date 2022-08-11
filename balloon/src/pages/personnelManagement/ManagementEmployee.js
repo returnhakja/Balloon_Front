@@ -11,6 +11,9 @@ import { Space, Table, Button, Pagination } from 'antd';
 import 'antd/dist/antd.css';
 import { Container } from '@mui/system';
 
+import 'antd/dist/antd.css';
+import './Test.css';
+
 // 여기까지
 const PaginationSpan = styled.span`
   &[aria-current] {
@@ -36,9 +39,6 @@ function ManagementEmployee() {
       title: '사원번호',
       dataIndex: 'empId',
       key: 'empId',
-      render: (empId) => {
-        return <a href="/">{empId}</a>;
-      },
     },
     {
       title: '이름',

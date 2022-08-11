@@ -56,21 +56,16 @@ function Organization() {
               <h3 class="level-3-1 rectangle">기획팀</h3>
             </li>
             <li>
-              <h3 class="level-3-1 rectangle">개발팀</h3>
-              <ol class="level-4-wrapper">
-                <li>
-                  <h4 class="level-4 rectangle">개발1팀</h4>
-                </li>
-                <li>
-                  <h4 class="level-4 rectangle">개발2팀</h4>
-                </li>
-                <li>
-                  <h4 class="level-4 rectangle">개발3팀</h4>
-                </li>
-                <li>
-                  <h4 class="level-4 rectangle">개발4팀</h4>
-                </li>
-              </ol>
+              <h3 class="level-3-1 rectangle">기획팀</h3>
+            </li>
+            <li>
+              <h3 class="level-3-1 rectangle">기획팀</h3>
+            </li>
+            <li>
+              <h3 class="level-3-1 rectangle">기획팀</h3>
+            </li>
+            <li>
+              <h3 class="level-3-1 rectangle">기획팀</h3>
             </li>
           </ol>
         </li>

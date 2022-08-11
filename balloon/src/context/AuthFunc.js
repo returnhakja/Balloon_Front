@@ -27,8 +27,8 @@ export const login = async (empId, password) => {
       console.log(error);
     });
 
-  // setEmpId(loginToken.data.partitionKey);
   window.location.href = '/';
+  // setEmpId(loginToken.data.partitionKey);
   //   alert('아이디 혹은 비밀번호가 틀립니다.');
 };
 
@@ -36,7 +36,6 @@ export const login = async (empId, password) => {
 export const logout = () => {
   window.localStorage.setItem('logout', Date.now);
   cookies.remove('accessToken');
-
   window.location.href = '/';
 };
 

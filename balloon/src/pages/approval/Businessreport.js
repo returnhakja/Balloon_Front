@@ -67,6 +67,7 @@ function Report() {
   const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
 
   console.log(empInfo);
+
   const card = (
     <React.Fragment>
       <CardContent>
