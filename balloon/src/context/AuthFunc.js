@@ -36,7 +36,6 @@ export const login = async (empId, password) => {
 export const logout = () => {
   window.localStorage.setItem('logout', Date.now);
   cookies.remove('accessToken');
-
   window.location.href = '/';
 };
 

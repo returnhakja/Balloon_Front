@@ -1,6 +1,3 @@
-// import logo from '%PUBLIC_URL%/asset/logo.png';
-// import logo from {\\`${process.env.PUBLIC_URL}/asset/logo.png`};
-
 import styles from '../css/Navbar.module.css';
 import { Link, NavLink } from 'react-router-dom';
 import { Box } from '@mui/system';
@@ -9,7 +6,7 @@ import { logout } from '../context/AuthFunc';
 import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
 
-function Navbar({ setEmpId, empInfo }) {
+function Navbar({ setEmpId, empInfo, setLogin }) {
   const cookies = new Cookies();
   const [accessCookie, setAccessCookie] = useState('');
 
@@ -53,12 +50,11 @@ function Navbar({ setEmpId, empInfo }) {
             <ul className={styles.ulmarginn}>
               <NavLink to={'/box'} style={activeStyle}>
                 <Box className={styles.lii}>결재관리</Box>
-
               </NavLink>
               <NavLink to={'/calendar'} style={activeStyle}>
                 <Box className={styles.lii}>캘린더</Box>
               </NavLink>
-              <NavLink to={'/chatroom'} style={activeStyle}>
+              <NavLink to={'/chatemplist'} style={activeStyle}>
                 <Box className={styles.lii}>메신저</Box>
               </NavLink>
               <NavLink to={'/organization'} style={activeStyle}>

@@ -64,8 +64,7 @@ function Report() {
     setAlignment(newAlignment);
   };
   // 사원 정보 context
-  const [empInfo, setEmpInfo] = useOutletContext();
-  console.log(empInfo);
+  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
   const card = (
     <React.Fragment>
       <CardContent>
