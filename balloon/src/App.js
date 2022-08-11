@@ -104,7 +104,8 @@ function App() {
             <Route element={<Calendar />} path="/calendar" exact />
 
             {/* 결재관리 */}
-            <Route path="/box" element={<Boxs />} />
+            <Route path="/boxs" element={<Boxs />} />
+            {/* <Route index  /> */}
             <Route path="/box/dd" element={<Declare />} />
             <Route path="/box/dc" element={<Complete />} />
             <Route path="/box/ds" element={<Save />} />
@@ -114,6 +115,7 @@ function App() {
             <Route path="/box/ac" element={<ApprovalComplete />} />
             <Route path="/box/ar" element={<ApprovalRefuse />} />
             <Route path="/box/dl" element={<DocumentList />} />
+            {/* </Route> */}
             {/* 기안작성 */}
             <Route path="/dratf/form" element={<Dashboard />} />
             <Route path="/dratf/br" element={<Businessreport />} />

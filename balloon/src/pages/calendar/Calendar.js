@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { getScheduleByEmp } from '../../context/CalendarAxios';
@@ -11,6 +11,7 @@ import interaction from '@fullcalendar/interaction';
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import CalendarInsert from './CalendarInsert';
 import CalendarUpdate from './CalendarUpdate';
+import { getDate } from 'date-fns';
 
 const style = {
   position: 'absolute',
@@ -41,6 +42,18 @@ function Calendar() {
     }
   }, [openInsert]);
 
+  function getDate(dayString) {
+    const today = new Date();
+    const year = today.getFullYear().toString();
+    let month = (today.getMonth() + 1).toString();
+
+    if (month.length === 1) {
+      month = '0' + month;
+    }
+    // function getTitle()
+
+    return dayString.replace('YEAR', year).replace('MONTH', month);
+  }
   //모달
   return (
     <div className="container">
@@ -85,9 +98,10 @@ function Calendar() {
             center: 'dayGridDay dayGridWeek dayGridMonth',
             right: 'today prevYear prev next nextYear',
           }}
-          // plugins={[dayGridPlugin, interaction]}
-          plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
+          plugins={[dayGridPlugin, interaction]}
+          // plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
           googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
+
           eventSources={{
             googleCalendarId:
               'ko.south_korea#holiday@group.v.calendar.google.com',
@@ -98,8 +112,18 @@ function Calendar() {
           eventSourceSuccess={() => console.log('됨?')}
           eventSourceFailure={() => console.log('안됨?')}
           dateClick={(e) => handleDateClick(e)}
+          // events={{
+          //   events: events,
+          //   // eventSources: {
+          //   //   googleCalendarId:
+          //   //     'ko.south_korea#holiday@group.v.calendar.google.com',
+          //   //   // className: '대한민국 휴일', // Option
+          //   //   color: 'red',
+          //   // },
+          // }}
           events={list}
           eventClick={() => setOpenUpdate(true)}
+          // rerenderDelay={5000}
         />
       </Container>
     </div>
