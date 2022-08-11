@@ -80,7 +80,8 @@ function Calendar() {
             handleWindowResize="50vw"
             headerToolbar={{
               left: 'title',
-              right: 'prevYear prev next nextYear',
+              right:
+                'prevYear prev next nextYear dayGridDay dayGridWeek dayGridMonth',
             }}
             plugins={[dayGridPlugin, interaction]}
             dateClick={handleDateClick}

@@ -43,7 +43,8 @@
 }
 
 .lii {
-  margin-left: 30px;
+  /* margin-left: 30px; */
+  justify-content: space-between;
 }
 
 .Link {
@@ -163,6 +164,9 @@
   margin-top: 10px;
 }
 
+.css-1nuo49t-MuiButtonBase-root-MuiTab-root {
+  color: red;
+}
 @media screen and (max-width: 990px) {
   .contents {
     display: flex;

@@ -8,7 +8,6 @@ import Cookies from 'universal-cookie';
 import { logout } from '../context/AuthFunc';
 import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
-
 function Navbar({ setEmpId, empInfo }) {
   const cookies = new Cookies();
   const [accessCookie, setAccessCookie] = useState('');
