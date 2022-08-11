@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './Header.css';
-import './ChatRoom.css';
 import { useOutletContext } from 'react-router-dom';
 
 import Box from '@mui/material/Box';

@@ -63,25 +63,26 @@ function Navbar({ setEmpId, empInfo, setLogin }) {
   };
 
   return (
-    <div className={styles.main}>
-      <header className={styles.header}>
-        <div className={styles.contents}>
-          <Link to={'/'} className={styles.Link}>
-            <div>
-              <img
-                src={`${process.env.PUBLIC_URL}/asset/logo.png`}
-                alt="풍선"
-                className={styles.ballon}
-              />
-              <strong className={styles.ballonfont}>
-                {' '}
-                BALL<span className={styles.oofont}>OO</span>N{' '}
-              </strong>
-            </div>
-          </Link>
+<Container maxWidth={'xl'}>
+      {/* web */}
+      <BrowserView>
+        <MenuList>
+          <Menu selectedKeys="mail" mode="horizontal">
+            <Box>
+              <Link to={'/'}>
+                {/* <img
+                  src={`${process.env.PUBLIC_URL}/asset/logo.png`}
+                  alt="풍선"
+                  className={styles.ballon}
+                /> */}
+                <strong className={styles.ballonfont}>
+                  {' '}
+                  BALL<span className={styles.oofont}>OO</span>N{' '}
+                </strong>
+              </Link>
+            </Box>
 
-          <div className={styles.ulll}>
-            <ul className={styles.ulmarginn}>
+           <Menu.Item key="subs">
               <NavLink to={'/boxs'} style={activeStyle}>
                 <Box className={styles.lii}>결재관리</Box>
               </NavLink>
