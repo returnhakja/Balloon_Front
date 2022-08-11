@@ -7,7 +7,7 @@ import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
 
 //여기부터
-import { Menu, Button } from 'antd';
+import { Menu, Button, MenuProps } from 'antd';
 import styled from 'styled-components';
 import { BrowserView, MobileView } from 'react-device-detect';
 import { MenuOutlined, MenuFoldOutlined } from '@ant-design/icons';
@@ -17,14 +17,6 @@ const MenuList = styled.div`
   justify-content: space-between;
 `;
 
-const NavTop = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  button {
-    background: black;
-    border: none;
-  }
-`;
 function Navbar({ setEmpId, empInfo, setLogin }) {
   const cookies = new Cookies();
   const [accessCookie, setAccessCookie] = useState('');
@@ -38,6 +30,65 @@ function Navbar({ setEmpId, empInfo, setLogin }) {
     };
   }
 
+  const MenuItems = [
+    {
+      key: 'subs',
+      label: (
+        <NavLink to={'/boxs'} style={activeStyle}>
+          <Box className={styles.lii}>결재관리</Box>
+        </NavLink>
+      ),
+    },
+    {
+      key: 'product',
+      label: (
+        <NavLink to={'/calendar'} style={activeStyle}>
+          <Box className={styles.lii}>캘린더</Box>
+        </NavLink>
+      ),
+    },
+    {
+      key: 'ms',
+      label: (
+        <NavLink to={'/chatemplist'} style={activeStyle}>
+          <Box className={styles.lii}>메신저</Box>
+        </NavLink>
+      ),
+    },
+    {
+      key: 'Or',
+      label: (
+        <NavLink to={'/organization'} style={activeStyle}>
+          <Box className={styles.lii}>조직도</Box>
+        </NavLink>
+      ),
+    },
+    {
+      key: 'Mani',
+      label: (
+        <>
+          {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+            <NavLink to={'/management/unit'} style={activeStyle}>
+              <Box className={styles.lii}>조직관리</Box>
+            </NavLink>
+          ) : null}
+        </>
+      ),
+    },
+    {
+      key: 'ment',
+      label: (
+        <>
+          {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+            <NavLink to={'/management/employee'} style={activeStyle}>
+              <Box className={styles.lii}>사원관리</Box>
+            </NavLink>
+          ) : null}
+        </>
+      ),
+    },
+  ];
+
   useEffect(() => {
     cookies.get('accessToken');
     if (cookies.cookies.accessToken) {
@@ -46,8 +97,6 @@ function Navbar({ setEmpId, empInfo, setLogin }) {
       getMe(setEmpId);
     }
   }, [accessCookie]);
-
-  //여기부터
 
   const [toggleMenu, setToggleMenu] = useState(false);
   const [toggleBar, setToggleBar] = useState(true);
@@ -63,26 +112,27 @@ function Navbar({ setEmpId, empInfo, setLogin }) {
   };
 
   return (
-<Container maxWidth={'xl'}>
+    <Container maxWidth={'xl'}>
       {/* web */}
       <BrowserView>
         <MenuList>
-          <Menu selectedKeys="mail" mode="horizontal">
-            <Box>
-              <Link to={'/'}>
-                {/* <img
-                  src={`${process.env.PUBLIC_URL}/asset/logo.png`}
-                  alt="풍선"
-                  className={styles.ballon}
-                /> */}
-                <strong className={styles.ballonfont}>
-                  {' '}
-                  BALL<span className={styles.oofont}>OO</span>N{' '}
-                </strong>
-              </Link>
-            </Box>
+          <Box>
+            <Link to={'/'}>
+              <strong className={styles.ballonfont}>
+                {' '}
+                BALL<span className={styles.oofont}>OO</span>N{' '}
+              </strong>
+            </Link>
+          </Box>
 
-           <Menu.Item key="subs">
+          {/* <Menu
+            selectedKeys="mail"
+            mode="horizontal"
+            items={MenuItems}
+            style={{ display: 'display' }}> */}
+
+          {/* 
+            <Menu.Item key="subs">
               <NavLink to={'/boxs'} style={activeStyle}>
                 <Box className={styles.lii}>결재관리</Box>
               </NavLink>
@@ -118,24 +168,23 @@ function Navbar({ setEmpId, empInfo, setLogin }) {
                   사원관리
                 </NavLink>
               </Menu.Item>
-            ) : null}
-          </Menu>
-
+            ) : null} */}
+          {/* </Menu> */}
+          {MenuItems.map((menu, index) => {
+            return <div key={index}>{menu.label}</div>;
+          })}
           {accessCookie ? (
             <Typography variant="h6" align="center" className={styles.text}>
               {empInfo.empName} {empInfo.position}{' '}
               <Button onClick={logout}>Logout</Button>
             </Typography>
           ) : (
-            <Link to={'/loginpage'}>
-              <Button>Login</Button>
-            </Link>
+            <Typography variant="h6" align="center" className={styles.text}>
+              <Link to={'/loginpage'}>
+                <Button>Login</Button>
+              </Link>
+            </Typography>
           )}
-          {/* <Menu mode="horizontal">
-            <Menu.Item key="signin">
-              <Link to="/loginpage">로그인</Link>
-            </Menu.Item>
-          </Menu> */}
         </MenuList>
       </BrowserView>
     </Container>

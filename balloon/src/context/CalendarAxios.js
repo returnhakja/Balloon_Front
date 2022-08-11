@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-export const getScheduleByEmp = async (empId, list, setList) => {
+export const getScheduleByEmp = async (empId) => {
   const url = '/api/cal/';
   const str = url + empId;
-  await axios
+  const list = await axios
     .get(str)
     .then((response) => {
       const arr = [];
@@ -17,9 +17,11 @@ export const getScheduleByEmp = async (empId, list, setList) => {
           empId: data.employee.empId,
         });
       });
-      setList(arr);
+      return arr;
     })
     .catch((err) => console.log(err));
+
+  return list;
 };
 
 export const insertSchedule = async (inputdata, setOpen) => {

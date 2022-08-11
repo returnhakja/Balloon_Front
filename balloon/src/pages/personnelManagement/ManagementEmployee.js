@@ -8,11 +8,8 @@ import {
 
 //ant Desing table
 import { Space, Table, Button, Pagination } from 'antd';
-import 'antd/dist/antd.css';
 import { Container } from '@mui/system';
 import { Link } from 'react-router-dom';
-
-// import './Test.css';
 
 // 여기까지
 const PaginationSpan = styled.span`
@@ -24,31 +21,29 @@ const PaginationSpan = styled.span`
 function ManagementEmployee() {
   const [empList, setEmpList] = useState([]);
   const [totalPages, settotalPage] = useState();
-  const [loading, setLoading] = useState(false);
+  const [bottomcenter, setBottomCenter] = useState('bottomcenter');
 
-  console.log(empList);
+  // console.log(empList);
 
-  // setLoading(true);
   useEffect(() => {
     selectEmployees(setEmpList);
-    // settotalPage(empList.totalPages);
   }, []);
-  const [bottomcenter, setBottomCenter] = useState('bottomcenter');
+
   const data = [
     {
       title: '사원번호',
-      dataIndex: 'empId',
       key: 'empId',
+      dataIndex: 'empId',
     },
     {
       title: '이름',
-      dataIndex: 'empName',
       key: 'empName',
+      dataIndex: 'empName',
     },
     {
       title: '직위',
-      dataIndex: 'position',
       key: 'position',
+      dataIndex: 'position',
     },
     {
       title: '직책',
@@ -118,25 +113,29 @@ function ManagementEmployee() {
     },
     {
       title: '수정',
+      key: 'update',
       render: () => {
         return <Button>수정</Button>;
       },
     },
     {
       title: '삭제',
+      key: 'delete',
       render: () => {
         return <Button>삭제</Button>;
       },
     },
   ];
+
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="maxWidth">
       <Space>
-        <Button type="primary" dataIndex="Update">
+        <Button type="primary" dataindex="Insert">
           추가
         </Button>
       </Space>
       <Table
+        key={data[0].dataIndex}
         columns={data}
         dataSource={empList}
         pagination={{
@@ -144,11 +143,8 @@ function ManagementEmployee() {
           pageSize: 10,
           total: totalPages,
         }}
-        // pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '30']}}
       />
     </Container>
-
-    //  </div>
   );
 }
 
