@@ -95,6 +95,8 @@ function Navbar({ setEmpId, empInfo, setLogin }) {
       setAccessCookie(cookies.cookies.accessToken);
 
       getMe(setEmpId);
+
+      console.log(cookies);
     }
   }, [accessCookie]);
 
