@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 function ChatEmpList() {
   const [chatEmpList, setCEList] = useState([]);
@@ -12,6 +12,9 @@ function ChatEmpList() {
 
   return (
     <div>
+      <Link to={'/chatroom'}>채팅목록 이동</Link>
+      <br />
+      <br />
       <ol>
         {chatEmpList.map((ce, index) => {
           return (
