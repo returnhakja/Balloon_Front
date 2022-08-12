@@ -3,7 +3,7 @@ import { Link, useOutletContext } from 'react-router-dom';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 function ChatEmpList() {
   const [chatEmpList, setCEList] = useState([]);
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
 
   useEffect(() => {
     getEmpListInSameUnit(empInfo.empId, setCEList);

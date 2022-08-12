@@ -30,7 +30,7 @@ const SaveButton = styled(Button)(({ theme }) => ({
 
 function Report() {
   // 사원 정보 context
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
 
   console.log(empInfo);
 

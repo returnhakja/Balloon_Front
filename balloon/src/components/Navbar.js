@@ -1,18 +1,15 @@
-// import logo from '%PUBLIC_URL%/asset/logo.png';
-// import logo from {\\`${process.env.PUBLIC_URL}/asset/logo.png`};
-
 import styles from '../css/Navbar.module.css';
 import { Link, NavLink } from 'react-router-dom';
-import { Box } from '@mui/system';
 import Cookies from 'universal-cookie';
-import { logout } from '../context/AuthFunc';
+import { logoutFunc, getCookie } from '../context/AuthFunc';
 import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
+
 import { Button, Container, TextField } from '@mui/material';
 
-function Navbar({ setEmpId, empInfo }) {
+
+function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   const cookies = new Cookies();
-  const [accessCookie, setAccessCookie] = useState('');
 
   function activeStyle({ isActive }) {
     return {
@@ -24,13 +21,17 @@ function Navbar({ setEmpId, empInfo }) {
   }
 
   useEffect(() => {
-    cookies.get('accessToken');
-    if (cookies.cookies.accessToken) {
-      setAccessCookie(cookies.cookies.accessToken);
+    if (isLogin === true) {
+      getCookie(cookies);
 
-      getMe(setEmpId);
+      if (cookies.cookies.accessToken) {
+        getMe(setEmpInfo);
+      } else {
+        logoutFunc(logout);
+        localStorage.setItem('logged', false);
+      }
     }
-  }, [accessCookie]);
+  }, [isLogin]);
 
   return (
     <header className={styles.header}>
@@ -67,19 +68,22 @@ function Navbar({ setEmpId, empInfo }) {
           ) : null}
         </ul>
 
-        {accessCookie ? (
-          <ul className={styles.namediv}>
-            <li className={styles.nameli}>
-              {' '}
-              {empInfo.empName} {empInfo.position}
-            </li>
 
+        {isLogin ? (
+           <ul className={styles.namediv}>
             <li className={styles.nameli}>
-              <Button onClick={logout} variant="outlined">
-                Logout
-              </Button>
-            </li>
+            {' '}
+            {empInfo.empName} {empInfo.position}{' '}
+            <Button
+              type="button"
+              variant="outlined"
+              className={styles.btnnav}
+              onClick={() => logoutFunc(logout)}>
+              Logout
+            </Button>
+             </li>
           </ul>
+
         ) : (
           <ul className={styles.namediv}>
             <Link to={'/loginpage'}>

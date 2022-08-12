@@ -9,7 +9,7 @@ import axios from 'axios';
 
 function Chat() {
   // login할때 empId를 가져옴 -> 채팅방생성/채팅 시 사용가능
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
   console.log(empId);
   //실시간 시간 가져오기
@@ -138,7 +138,6 @@ function Chat() {
       </div> */}
 
       <div>
-
         <button onClick={onUserAdd}>수정하기</button>
       </div>
       <br />
@@ -146,7 +145,6 @@ function Chat() {
       <br />
       <br />
       <div style={{ border: '1px solid black', margin: '5px' }}>
-
         {/* 채팅기록을 가져옴 */}
         {chatting.map((msg, index) => {
           return (

@@ -14,7 +14,7 @@ import { Container } from '@mui/system';
 
 function ChatRoom() {
   const [chatroom, setChatroom] = useState([]);
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
 
   useEffect(() => {
     const onChatroom = (setChatroom) => {

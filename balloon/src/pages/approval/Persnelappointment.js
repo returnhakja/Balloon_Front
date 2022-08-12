@@ -37,7 +37,7 @@ function Pointment() {
   const [openModal, setOpenModal] = useState(false);
 
   // 사원 정보 context
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
 
   const card = (
     <React.Fragment>
