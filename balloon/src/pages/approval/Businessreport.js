@@ -65,7 +65,7 @@ function Report() {
     setAlignment(newAlignment);
   };
   // 사원 정보 context
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
 
   console.log(empInfo);
 

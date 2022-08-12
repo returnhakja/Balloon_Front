@@ -1,10 +1,9 @@
 import styles from '../css/Navbar.module.css';
 import { Link, useOutletContext } from 'react-router-dom';
-import { getEmpListByUnitCode } from '../context/EmployeeAxios';
 import React from 'react';
 
 function MainPage() {
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
   return (
     <div>
       <header className={styles.header}>
@@ -21,7 +20,6 @@ function MainPage() {
               <p className={styles.pbottom}>
                 {empInfo.empName}님 오신것을 환영합니다. 일을 하세요.
               </p>
-              <button onClick={getEmpListByUnitCode}>테스트용</button>
             </>
           ) : (
             <>

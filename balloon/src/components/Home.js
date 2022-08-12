@@ -3,11 +3,16 @@ import Navbar from './Navbar';
 import { Outlet } from 'react-router-dom';
 import Footer from './Footer';
 
-function Home({ setEmpId, empInfo, setEmpInfo }) {
+function Home({ empInfo, setEmpInfo, logout, isLogin }) {
   return (
     <>
-      <Navbar setEmpId={setEmpId} empInfo={empInfo} />
-      <Outlet context={[setEmpId, empInfo, setEmpInfo]} />
+      <Navbar
+        empInfo={empInfo}
+        setEmpInfo={setEmpInfo}
+        logout={logout}
+        isLogin={isLogin}
+      />
+      <Outlet context={[empInfo, setEmpInfo]} />
       <Footer />
     </>
   );
