@@ -1,0 +1,185 @@
+.table {
+  /* border: 1px solid red; */
+  width: 100%;
+  border-top: 1px solid #444444;
+  border-collapse: collapse;
+}
+
+.th {
+  border-bottom: 1px solid #444444;
+  border-left: 1px solid #444444;
+  padding: 10px;
+}
+
+.td {
+  border: 1px solid black;
+  border-bottom: 1px solid #444444;
+  padding: 10px;
+}
+
+.maintitle {
+  font-size: 2rem;
+  margin-bottom: 1%;
+  margin-left: 2%;
+}
+
+.subtitle {
+  font-size: 2rem;
+  margin-top: 5%;
+
+  margin-left: 2%;
+}
+
+.btnnav {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 400;
+
+  text-decoration: none;
+
+  border: none;
+  border-radius: 4px;
+  margin-left: 75%;
+  width: auto;
+
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  cursor: pointer;
+  margin-top: 6%;
+  margin-bottom: 20px;
+  transition: 0.5s;
+}
+
+.body1 {
+  display: flex;
+}
+
+.hrmargins {
+  margin-top: 1%;
+}
+
+.bodycontent {
+  background-color: #f6faff;
+  /* width: 20%;
+  margin: 0 auto;
+  height: 20%;
+  margin: 30px 20% 30px 20%; */
+
+  /*수정*/
+  display: table;
+  width: 70%;
+  height: 10%;
+  padding: 30px;
+  background-color: #f6faff;
+  text-align: center;
+  margin-left: 15%;
+  margin-top: 2%;
+  margin-bottom: 5%;
+}
+
+.bodycontentC {
+  display: table-cell;
+  text-align: center;
+  background-color: #f6faff;
+}
+
+.icon {
+  text-align: center;
+}
+
+.filetd {
+  height: 70px;
+  border-left: none;
+}
+
+.trcon {
+  padding: 20px 30px;
+
+  text-align: center;
+}
+
+.inputtext {
+  width: 80%;
+  text-align: left;
+}
+
+.giantitle {
+  font-size: 2rem;
+  margin-bottom: 2%;
+  margin-top: 2%;
+}
+
+.tdright {
+  border: 1px solid black;
+  border-right: none;
+  padding: 10px;
+}
+.tdleft {
+  border: 1px solid black;
+  border-left: none;
+  padding: 10px;
+}
+
+.fonttext {
+  margin-top: 5%;
+}
+
+.maininput {
+  width: 100%;
+  height: 200px;
+  letter-spacing: 2px;
+  font-size: 16px;
+  outline: 1px solid #ececec;
+}
+
+.savebutton {
+  text-align: center;
+}
+
+.tableredios {
+  border-radius: 6px;
+}
+
+.tableborder {
+  width: 100%;
+  min-height: 20%;
+  background-color: white;
+  border-collapse: collapse;
+  border-radius: 10px;
+  border-style: hidden;
+  box-shadow: 0 0 0 1px #000;
+}
+
+.tbodyin {
+  background-color: white;
+}
+.tdreaui {
+  border-radius: 10px;
+  text-align: center;
+  height: 70px;
+  border-left: 1px solid rgb(184, 184, 184);
+}
+
+.trcolor {
+  background-color: #f1ebeb;
+  text-align: center;
+}
+
+.tdmargin {
+  text-align: left;
+  font-size: 20px;
+  border-bottom: 5px solid white;
+}
+
+.titlename {
+  /* border-right: 1px solid black; */
+  border-bottom: 1px solid black;
+  padding: 2%;
+}
+
+.centerfont {
+  align-content: center;
+  font-size: 2rem;
+}
