@@ -25,26 +25,27 @@ const style = {
 };
 
 function Calendar() {
-  const handleDateClick = (e) => {
-    console.log(e);
-  };
   const [openInsert, setOpenInsert] = useState(false);
   const [openUpdate, setOpenUpdate] = useState({
     state: false,
     scheduleId: null,
   });
-  // const [list, setList] = useState([]);
+  const handleDateClick = (e) => {
+    console.log(e);
+  };
+  const handleEventClick = (e) => {
+    const scheduleId = e.event._def.extendedProps.scheduleId;
+    setOpenInsert(false);
+    setOpenUpdate({
+      state: true,
+      scheduleId: scheduleId,
+    });
+    console.log(scheduleId);
+  };
 
   const [empInfo, setEmpInfo] = useOutletContext();
 
   const list = getScheduleByEmp(empInfo.empId);
-
-  // useEffect(() => {
-  //   // if (!!empInfo.empId) {
-  //   //   getScheduleByEmp(empInfo.empId, list, setList);
-  //   // }
-  //   // console.log(list);
-  // }, [openInsert]);
 
   //모달
   return (
@@ -54,7 +55,7 @@ function Calendar() {
 
         <Button
           onClick={() => {
-            setOpenInsert(!openInsert);
+            setOpenInsert(true);
           }}
           sx={{ fontSize: 30 }}>
           일정 등록
@@ -64,8 +65,8 @@ function Calendar() {
         {openInsert && (
           <CalendarInsert
             style={style}
-            open={openInsert}
-            setOpen={setOpenInsert}
+            openInsert={openInsert}
+            setOpenInsert={setOpenInsert}
             empInfo={empInfo}
           />
         )}
@@ -101,7 +102,8 @@ function Calendar() {
           eventSourceFailure={() => console.log('Failure EventSource')}
           dateClick={(e) => handleDateClick(e)}
           events={() => list}
-          eventClick={() => setOpenUpdate(true, 'dd')}
+          eventClick={(e) => handleEventClick(e)}
+          event
         />
       </Container>
     </div>

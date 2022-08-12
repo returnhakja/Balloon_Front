@@ -7,8 +7,8 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ko } from 'date-fns/esm/locale';
 
-function CalendarInsert({ style, open, setOpen, empInfo }) {
-  const handleClose = () => setOpen(false);
+function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
+  const handleClose = () => setOpenInsert(false);
   const [startValue, setStartValue] = useState(new Date());
   const [endvalue, setEndValue] = useState(new Date());
 
@@ -27,12 +27,12 @@ function CalendarInsert({ style, open, setOpen, empInfo }) {
       employee: { empId: empInfo.empId },
     };
 
-    insertSchedule(inputdata, setOpen);
+    insertSchedule(inputdata, setOpenInsert);
   };
 
   return (
     <Modal
-      open={open}
+      open={openInsert}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description">

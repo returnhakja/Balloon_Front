@@ -56,18 +56,18 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
       'Content-Type': 'application/json',
     };
 
-    const data = async () => {
-      const response = await axios.put(
-        `http://localhost:8080/api/cal/update`,
-        inputdata,
-        {
-          headers,
-        }
-      );
-      setOpenUpdate(false);
-      window.location.href = '/calendar';
-    };
-    data();
+    // const data = async () => {
+    //   const response = await axios.put(
+    //     `http://localhost:8080/api/cal/update`,
+    //     inputdata,
+    //     {
+    //       headers,
+    //     }
+    //   );
+    //   setOpenUpdate(false);
+    //   window.location.href = '/calendar';
+    // };
+    // data();
   };
 
   return (

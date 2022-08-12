@@ -4,6 +4,7 @@ import Cookies from 'universal-cookie';
 import { logoutFunc, getCookie } from '../context/AuthFunc';
 import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
+import { Button } from '@mui/material';
 
 import { Button, Container, TextField } from '@mui/material';
 
@@ -26,6 +27,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
 
       if (cookies.cookies.accessToken) {
         getMe(setEmpInfo);
+        console.log(empInfo);
       } else {
         logoutFunc(logout);
         localStorage.setItem('logged', false);
@@ -70,18 +72,18 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
 
 
         {isLogin ? (
-           <ul className={styles.namediv}>
+          <ul className={styles.namediv}>
             <li className={styles.nameli}>
-            {' '}
-            {empInfo.empName} {empInfo.position}{' '}
-            <Button
-              type="button"
-              variant="outlined"
-              className={styles.btnnav}
-              onClick={() => logoutFunc(logout)}>
-              Logout
-            </Button>
-             </li>
+              {' '}
+              {empInfo.empName} {empInfo.position}{' '}
+              <Button
+                type="button"
+                variant="outlined"
+                className={styles.btnnav}
+                onClick={() => logoutFunc(logout)}>
+                Logout
+              </Button>
+            </li>
           </ul>
 
         ) : (
