@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const getDocsByEmp = async (empId, docStatus, setdocList) => {
-  const url = '/api/box/empdocs/';
+  const url = '/api/boxes/empdocs/';
   const str = url + empId + '/' + docStatus;
   await axios.get(str).then((res) => {
     console.log(res.data);
@@ -10,7 +10,7 @@ export const getDocsByEmp = async (empId, docStatus, setdocList) => {
 };
 
 export const getDocsByUnit = async (unitCode, setdocList) => {
-  const url = '/api/box/unitdocs/';
+  const url = '/api/boxes/unitdocs/';
   const str = url + unitCode;
   await axios.get(str).then((res) => {
     console.log(res.data);

@@ -4,8 +4,7 @@ import Cookies from 'universal-cookie';
 import { logoutFunc, getCookie } from '../context/AuthFunc';
 import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
-
-import { Button, Container, TextField } from '@mui/material';
+import { Button } from '@mui/material';
 
 function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   const cookies = new Cookies();
@@ -25,6 +24,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
 
       if (cookies.cookies.accessToken) {
         getMe(setEmpInfo);
+        console.log(empInfo);
       } else {
         logoutFunc(logout);
         localStorage.setItem('logged', false);
