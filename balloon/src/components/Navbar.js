@@ -44,7 +44,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
           </Link>
         </div>
         <ul className={styles.ulmarginn}>
-          <NavLink to={'/boxs'} style={activeStyle}>
+          <NavLink to={'/boxes'} style={activeStyle}>
             <li className={styles.lii}>결재관리</li>
           </NavLink>
           <NavLink to={'/calendar'} style={activeStyle}>
