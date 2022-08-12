@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { getScheduleByEmp } from '../../context/CalendarAxios';
-import '../../css/Calender.scss';
 import '../../css/Celendar.css';
 import { Button, Container } from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
@@ -11,8 +10,7 @@ import interaction from '@fullcalendar/interaction';
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import CalendarInsert from './CalendarInsert';
 import CalendarUpdate from './CalendarUpdate';
-import { getDate } from 'date-fns';
-
+import axios from 'axios';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -31,29 +29,23 @@ function Calendar() {
     console.log(e);
   };
   const [openInsert, setOpenInsert] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
-  const [list, setList] = useState([]);
+  const [openUpdate, setOpenUpdate] = useState({
+    state: false,
+    scheduleId: null,
+  });
+  // const [list, setList] = useState([]);
 
   const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
 
-  useEffect(() => {
-    if (!!empInfo.empId) {
-      getScheduleByEmp(empInfo.empId, list, setList);
-    }
-  }, [openInsert]);
+  const list = getScheduleByEmp(empInfo.empId);
 
-  function getDate(dayString) {
-    const today = new Date();
-    const year = today.getFullYear().toString();
-    let month = (today.getMonth() + 1).toString();
+  // useEffect(() => {
+  //   // if (!!empInfo.empId) {
+  //   //   getScheduleByEmp(empInfo.empId, list, setList);
+  //   // }
+  //   // console.log(list);
+  // }, [openInsert]);
 
-    if (month.length === 1) {
-      month = '0' + month;
-    }
-    // function getTitle()
-
-    return dayString.replace('YEAR', year).replace('MONTH', month);
-  }
   //모달
   return (
     <div className="container">
@@ -78,14 +70,12 @@ function Calendar() {
           />
         )}
         {/* 수정 */}
-        {openUpdate && (
+        {openUpdate.state && (
           <CalendarUpdate
             style={style}
             openUpdate={openUpdate}
             setOpenUpdate={setOpenUpdate}
             empInfo={empInfo}
-            list={list}
-            setList={setList}
           />
         )}
 
@@ -93,37 +83,25 @@ function Calendar() {
           locale="ko"
           height="70vh"
           handleWindowResize="50vw"
+          plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
           headerToolbar={{
             left: 'title',
             center: 'dayGridDay dayGridWeek dayGridMonth',
             right: 'today prevYear prev next nextYear',
           }}
-          plugins={[dayGridPlugin, interaction]}
-          // plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
           googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
-
           eventSources={{
             googleCalendarId:
               'ko.south_korea#holiday@group.v.calendar.google.com',
-            // className: '대한민국 휴일', // Option
-            color: 'red',
+            className: '대한민국 휴일',
+            color: 'orange',
           }}
-          eventBackgroundColor={'red'}
-          eventSourceSuccess={() => console.log('됨?')}
-          eventSourceFailure={() => console.log('안됨?')}
+          eventBackgroundColor={'black'}
+          eventSourceSuccess={() => console.log('Success EventSource')}
+          eventSourceFailure={() => console.log('Failure EventSource')}
           dateClick={(e) => handleDateClick(e)}
-          // events={{
-          //   events: events,
-          //   // eventSources: {
-          //   //   googleCalendarId:
-          //   //     'ko.south_korea#holiday@group.v.calendar.google.com',
-          //   //   // className: '대한민국 휴일', // Option
-          //   //   color: 'red',
-          //   // },
-          // }}
-          events={list}
-          eventClick={() => setOpenUpdate(true)}
-          // rerenderDelay={5000}
+          events={() => list}
+          eventClick={() => setOpenUpdate(true, 'dd')}
         />
       </Container>
     </div>

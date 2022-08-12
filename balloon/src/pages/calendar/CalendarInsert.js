@@ -28,7 +28,6 @@ function CalendarInsert({ style, open, setOpen, empInfo }) {
     };
 
     insertSchedule(inputdata, setOpen);
-    // window.location.href = '/calendar';
   };
 
   return (

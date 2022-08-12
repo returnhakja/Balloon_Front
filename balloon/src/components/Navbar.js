@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { TextField } from '@mui/material';
 
 function Navbar({ setEmpId, empInfo }) {
+
   const cookies = new Cookies();
   const [accessCookie, setAccessCookie] = useState('');
 
@@ -29,6 +30,8 @@ function Navbar({ setEmpId, empInfo }) {
       setAccessCookie(cookies.cookies.accessToken);
 
       getMe(setEmpId);
+
+      console.log(cookies);
     }
   }, [accessCookie]);
 
