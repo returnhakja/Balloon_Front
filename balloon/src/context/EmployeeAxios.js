@@ -120,6 +120,7 @@ export const getEmpListInSameUnit = async (empId, setCEList) => {
     .then((response) => response.data)
     .then((data) => {
       setCEList(data);
+      console.log(data);
     })
     .catch((error) => console.log(error));
 };

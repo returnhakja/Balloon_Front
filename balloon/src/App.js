@@ -40,10 +40,24 @@ function App() {
   const [empInfo, setEmpInfo] = useState([]);
   const [isLogin, setLogin] = useState(null);
 
+
+  // 채팅방 초대하기
+  const [invite, setInvite] = useState([]);
+
+  // useEffect(() => {
+  //   const logged = localStorage.getItem('isLogin');
+  //   logged && JSON.parse(logged) ? setLogin(true) : setLogin(false);
+  // });
+
+  // useEffect(() => {
+  //   localStorage.setItem('isLogin', isLogin);
+  // }, [isLogin]);
+
   useEffect(() => {
     const l = localStorage.getItem('logged');
     l && JSON.parse(l) ? setLogin(true) : setLogin(false);
   }, []);
+
 
   useEffect(() => {
     localStorage.setItem('logged', isLogin);
@@ -90,6 +104,7 @@ function App() {
           {/* 캘린더 */}
           <Route element={<Calendar />} path="/calendar" exact />
 
+
           {/* 결재관리 */}
           <Route path="/boxes" element={<Boxes />} />
           {/* <Route index  /> */}
@@ -117,6 +132,7 @@ function App() {
           <Route path="/management/unit" element={<ManagementUnit />} />
           {/* 사원관리 */}
           <Route path="/management/employee" element={<ManagementEmployee />} />
+
         </Route>
       </Route>
     </Routes>

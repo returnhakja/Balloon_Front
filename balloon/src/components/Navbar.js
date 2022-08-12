@@ -33,6 +33,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   }, [isLogin]);
 
   return (
+
     <header className={styles.header}>
       <div className={styles.contents}>
         <div className={styles.imgflex}>
@@ -71,6 +72,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
           <ul className={styles.namediv}>
             <li className={styles.nameli}>
               {' '}
+
               {empInfo.empName} {empInfo.position}{' '}
               <Button
                 type="button"
