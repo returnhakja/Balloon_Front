@@ -27,6 +27,20 @@ export const plusPage = async (page, setPage) => {
   await setPage(parseInt(page) + 1);
 };
 
+// 전체 사원 출력 (페이징)
+export const selectEmployees = async (setEmpList) =>
+  // setEmps
+  {
+    const url = '/api/emp/emps';
+    await axios
+      .get(url)
+      .then((response) => response.data)
+      .then((data) => {
+        setEmpList(data);
+      })
+      .catch((error) => console.log(error));
+  };
+
 // 사번으로 사원 검색
 export const selectEmployeeByEmpId = async (empId, setEmpInfo) => {
   const urlStr = '/api/emp/' + empId;
