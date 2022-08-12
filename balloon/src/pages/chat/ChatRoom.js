@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './Header.css';
-import './ChatRoom.css';
 import { useOutletContext } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -15,7 +14,7 @@ import { Container } from '@mui/system';
 
 function ChatRoom() {
   const [chatroom, setChatroom] = useState([]);
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
 
   useEffect(() => {
     const onChatroom = (setChatroom) => {
@@ -46,6 +45,9 @@ function ChatRoom() {
 
         {/* 채팅방 만들기 버튼 */}
         <div>
+          <Link to={'/chatemplist'}>사원리스트 이동</Link>
+          <br />
+          <br />
           <Grid container justifyContent="flex-end">
             <Button className="chatIcon">
               <Link to={'/createroom'}>

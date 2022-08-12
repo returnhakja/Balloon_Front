@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { getScheduleByEmp } from '../../context/CalendarAxios';
-import '../../css/Calender.scss';
 import '../../css/Celendar.css';
 import { Button, Container } from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interaction from '@fullcalendar/interaction';
+import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import CalendarInsert from './CalendarInsert';
 import CalendarUpdate from './CalendarUpdate';
-
+import axios from 'axios';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -29,17 +29,22 @@ function Calendar() {
     console.log(e);
   };
   const [openInsert, setOpenInsert] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
-  const [list, setList] = useState([]);
+  const [openUpdate, setOpenUpdate] = useState({
+    state: false,
+    scheduleId: null,
+  });
+  // const [list, setList] = useState([]);
 
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
 
-  useEffect(() => {
-    console.log(empInfo);
-    if (!!empInfo.empId) {
-      getScheduleByEmp(empInfo.empId, list, setList);
-    }
-  }, [openInsert]);
+  const list = getScheduleByEmp(empInfo.empId);
+
+  // useEffect(() => {
+  //   // if (!!empInfo.empId) {
+  //   //   getScheduleByEmp(empInfo.empId, list, setList);
+  //   // }
+  //   // console.log(list);
+  // }, [openInsert]);
 
   //모달
   return (
@@ -65,31 +70,39 @@ function Calendar() {
           />
         )}
         {/* 수정 */}
-        {openUpdate && (
+        {openUpdate.state && (
           <CalendarUpdate
             style={style}
             openUpdate={openUpdate}
             setOpenUpdate={setOpenUpdate}
             empInfo={empInfo}
-            list={list}
-            setList={setList}
           />
         )}
-        <div>
-          <FullCalendar
-            handleWindowResize="50vw"
-            headerToolbar={{
-              left: 'title',
-              right: 'prevYear prev next nextYear',
-            }}
-            plugins={[dayGridPlugin, interaction]}
-            dateClick={handleDateClick}
-            height="70vh"
-            locale="ko"
-            events={list}
-            eventClick={() => setOpenUpdate(true)}
-          />
-        </div>
+
+        <FullCalendar
+          locale="ko"
+          height="70vh"
+          handleWindowResize="50vw"
+          plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
+          headerToolbar={{
+            left: 'title',
+            center: 'dayGridDay dayGridWeek dayGridMonth',
+            right: 'today prevYear prev next nextYear',
+          }}
+          googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
+          eventSources={{
+            googleCalendarId:
+              'ko.south_korea#holiday@group.v.calendar.google.com',
+            className: '대한민국 휴일',
+            color: 'orange',
+          }}
+          eventBackgroundColor={'black'}
+          eventSourceSuccess={() => console.log('Success EventSource')}
+          eventSourceFailure={() => console.log('Failure EventSource')}
+          dateClick={(e) => handleDateClick(e)}
+          events={() => list}
+          eventClick={() => setOpenUpdate(true, 'dd')}
+        />
       </Container>
     </div>
   );

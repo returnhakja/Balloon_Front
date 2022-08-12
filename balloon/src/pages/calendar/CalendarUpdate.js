@@ -6,29 +6,38 @@ import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-function CalendarUpdate({ style, openUpdate, setOpenUpdate, list, setList }) {
+function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
+  console.log('sssss');
+  console.log(style);
+  console.log(openUpdate);
+  console.log(setOpenUpdate);
   const handleClose = () => setOpenUpdate(false);
 
   const [startValue, setStartValue] = useState(null);
   const [endvalue, setEndValue] = useState(null);
 
-  useEffect(() => {
-    const headers = {
-      'Content-Type': 'application/json',
-    };
+  useEffect(
+    () => {
+      const headers = {
+        'Content-Type': 'application/json',
+      };
 
-    const data = async (list) => {
-      console.log(list);
-      const response = await axios
-        .get(`http://localhost:8080/api/calall/` + list[0], headers)
+      // console.log(list);
+      // const data = async (list) => {
+      //   console.log(list);
+      //   const response = await axios
+      //     .get(`http://localhost:8080/api/calall/` + list[0], headers)
 
-        .then((response) => {
-          setList(response.data);
-        });
-    };
+      //     .then((response) => {
+      //       setList(response.data);
+      //     });
+      // };
 
-    data();
-  }, [list]);
+      // data();
+    },
+    []
+    //  [list]
+  );
 
   //업데이트
   const updateHandle = () => {

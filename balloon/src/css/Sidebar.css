@@ -55,12 +55,6 @@ main {
   transition: all 0.5s;
 }
 
-/*선택된 항목*/
-.active {
-  background: lightskyblue;
-  color: #000;
-}
-
 .icon,
 .link_text {
   font-size: 20px;
@@ -74,3 +68,9 @@ main {
 .side {
   background: #0b7c9c !important;
 }
+
+/*선택된 항목*/
+/* .active {
+  background: lightskyblue;
+  color: #000;
+} */

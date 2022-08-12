@@ -3,17 +3,17 @@ import './Header.css';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import styles from './Chat.module.css';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import moment from 'moment';
 import axios from 'axios';
 
 function Chat() {
   // login할때 empId를 가져옴 -> 채팅방생성/채팅 시 사용가능
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
-
+  const [empInfo, setEmpInfo] = useOutletContext();
+  const empId = empInfo.empId;
+  console.log(empId);
   //실시간 시간 가져오기
   const nowTime = moment().format('HH:mm');
-  console.log(nowTime);
 
   const chatroomId = new URL(document.location).searchParams.get('room');
   // input에 저장해야하는것은 채팅내용과 작성자를 객체형태로 만들어서 배열로 저장
@@ -64,48 +64,92 @@ function Chat() {
     onChatroomList(setChatting);
   }, []);
 
-  //채팅방에 사람추가하는 기능 - 수정
+  //채팅방 인원수 & 이름수정
+  // const onUserUpdate = () => {
+  //   const chatroomName = document.getElementById('chatroomName');
+  //   const headCount = document.getElementById('headCount');
+  //   axios
+  //     .put(`http://localhost:8080/updateroomName/${chatroomId}`, {
+  //       chatroomName: chatroomName.value,
+  //       headCount: headCount.value,
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     });
+  // };
+
+  //사원초대
   const onUserAdd = () => {
-    const chatroomName = document.getElementById('chatroomName');
-    const headCount = document.getElementById('headCount');
+    const employee = document.getElementById('empId');
+    console.log(chatroomId);
+    console.log(employee.value);
     axios
-      .put(`http://localhost:8080/updateroomName/${chatroomId}`, {
-        chatroomName: chatroomName.value,
-        headCount: headCount.value,
+      .post(`http://localhost:8080/insertChatEmp/${chatroomId}`, {
+        empId: {
+          empId: employee.value,
+        },
       })
       .then((response) => {
         console.log(response.data);
       });
   };
 
+  //채팅방 나가기
+  const onExitRoom = () => {
+    console.log(chatroomId);
+    console.log(empId);
+    axios
+      .delete(`http://localhost:8080/deleteroom/${chatroomId}/${empId}`)
+      .then((response) => {
+        console.log(response.data);
+      });
+  };
   return (
     <>
       <div className="header-title-container">
-        {/* <h3>{chatting[0].chatroom.chatroomName}</h3> */}
         <h3>채팅방이름</h3>
       </div>
+      <br />
       <div>
+        <input id="empId" placeholder="초대할 사원의 사번을 입력하세요" />
+        <button onClick={onUserAdd}>사원초대하기</button>
+      </div>
+      {/* 채팅방 나가기 */}
+      <div>
+        <button onClick={() => onExitRoom(chatroomId, empId)}>나가기</button>
+      </div>
+      {/* 채팅방 인원수 & 이름수정 */}
+      {/* <div>
+        <hr />
         <input
           id="chatroomName"
           placeholder="수정할 채팅방의 이름을 입력하세요"
-          // defaultValue={chatting[0].chatroom.chatroomName}
+          defaultValue={chatting[0].chatroom.chatroomName}
         />
         <br />
         <input
           id="headCount"
           placeholder="수정할 인원수 입력하세요"
-          // defaultValue={chatting[0] && chatting.headCount}
+          defaultValue={chatting[0] && chatting.headCount}
         />
         <br />
-        <button onClick={onUserAdd}>수정하기</button>
-      </div>
+
+        <button onClick={onUserUpdate}>수정하기</button>
+      </div> */}
 
       <div>
+        <button onClick={onUserAdd}>수정하기</button>
+      </div>
+      <br />
+      <Link to={'/chatroom'}>채팅목록 이동</Link>
+      <br />
+      <br />
+      <div style={{ border: '1px solid black', margin: '5px' }}>
         {/* 채팅기록을 가져옴 */}
         {chatting.map((msg, index) => {
           return (
             <div key={index}>
-              {msg.employee.empId == empInfo.empId ? (
+              {msg.employee.empId === empInfo.empId ? (
                 <div className={styles.message}>
                   {msg.chatTime}
                   {msg.chatContent}
@@ -123,12 +167,12 @@ function Chat() {
       <div className={styles.scroll}>
         <div className={styles.contain}>
           {/* chatting내용 사용자에 따라 배치 */}
-          {input.length != 0 &&
+          {input.length !== 0 &&
             input.map((chat, index) => {
               console.log(chat);
               return (
                 <div key={chat.writer + index}>
-                  {empInfo.empId == chat.writer ? (
+                  {empInfo.empId === chat.writer ? (
                     <div className={styles.message}>
                       {nowTime}
                       {chat.chatContent}
