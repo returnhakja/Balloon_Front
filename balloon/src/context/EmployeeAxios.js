@@ -86,6 +86,7 @@ export const getMe = async (setEmpInfo) => {
 
 // 사번으로 사원 검색
 export const selectEmployeeByEmpId = async (empId, setEmpInfo) => {
+  console.log(empId);
   const urlStr = '/api/emp/' + empId;
   await axios
     .get(urlStr)

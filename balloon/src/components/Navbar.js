@@ -4,6 +4,7 @@ import Cookies from 'universal-cookie';
 import { logoutFunc, getCookie } from '../context/AuthFunc';
 import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
+import { Button } from '@mui/material';
 
 function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   const cookies = new Cookies();
@@ -23,6 +24,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
 
       if (cookies.cookies.accessToken) {
         getMe(setEmpInfo);
+        console.log(empInfo);
       } else {
         logoutFunc(logout);
         localStorage.setItem('logged', false);
@@ -41,7 +43,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
           </Link>
         </div>
         <ul className={styles.ulmarginn}>
-          <NavLink to={'/boxs'} style={activeStyle}>
+          <NavLink to={'/boxes'} style={activeStyle}>
             <li className={styles.lii}>결재관리</li>
           </NavLink>
           <NavLink to={'/calendar'} style={activeStyle}>
@@ -66,22 +68,29 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
         </ul>
 
         {isLogin ? (
-          <div className="imgflex">
-            {' '}
-            {empInfo.empName} {empInfo.position}{' '}
-            <button
-              type="button"
-              className={styles.btnnav}
-              onClick={() => logoutFunc(logout)}>
-              Logout
-            </button>
-          </div>
+          <ul className={styles.namediv}>
+            <li className={styles.nameli}>
+              {' '}
+              {empInfo.empName} {empInfo.position}{' '}
+              <Button
+                type="button"
+                variant="outlined"
+                className={styles.btnnav}
+                onClick={() => logoutFunc(logout)}>
+                Logout
+              </Button>
+            </li>
+          </ul>
         ) : (
-          <Link to={'/loginpage'}>
-            <button type="button" className={styles.btnnav}>
-              Login
-            </button>
-          </Link>
+          <ul className={styles.namediv}>
+            <Link to={'/loginpage'}>
+              <li className={styles.nameli}>
+                <Button className={styles.btnnav} variant="contained">
+                  Login
+                </Button>
+              </li>
+            </Link>
+          </ul>
         )}
       </div>
     </header>
