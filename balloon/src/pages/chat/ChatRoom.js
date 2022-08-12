@@ -13,10 +13,8 @@ import { Container } from '@mui/system';
 function ChatRoom() {
   const [chatroom, setChatroom] = useState([]);
 
-  const empId = empInfo.empId;
-
   const [empInfo, setEmpInfo] = useOutletContext();
-
+  const empId = empInfo.empId;
 
   useEffect(() => {
     const onChatroom = (setChatroom) => {

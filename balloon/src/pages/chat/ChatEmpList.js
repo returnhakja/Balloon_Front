@@ -9,11 +9,9 @@ import ChatIcon from '@mui/icons-material/Chat';
 function ChatEmpList({ invite, setInvite }) {
   const [chatEmpList, setCEList] = useState([]);
 
-
-  const empId = empInfo.empId;
-
   const [empInfo, setEmpInfo] = useOutletContext();
 
+  const empId = empInfo.empId;
 
   // 사원list 출력하기
   useEffect(() => {
