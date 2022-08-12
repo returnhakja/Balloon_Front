@@ -10,7 +10,7 @@ function CreateChatroom({ invite }) {
   const [roomId, setRoomId] = useState();
   const chatroomId = roomId;
 
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
 
   //채팅방만들때 사원 초대하기
@@ -29,7 +29,6 @@ function CreateChatroom({ invite }) {
       });
   };
 
-  console.log(invite);
   //chatroomEmployee T에 초대할 사람과 초대한 사람 넣어주기
   const onUserInvite = () => {
     invite &&

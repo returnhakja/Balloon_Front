@@ -33,7 +33,6 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   }, [isLogin]);
 
   return (
-
     <header className={styles.header}>
       <div className={styles.contents}>
         <div className={styles.imgflex}>
@@ -50,7 +49,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
           <NavLink to={'/calendar'} style={activeStyle}>
             <li className={styles.lii}>캘린더</li>
           </NavLink>
-          <NavLink to={'/chatroom'} style={activeStyle}>
+          <NavLink to={'/chatemplist'} style={activeStyle}>
             <li className={styles.lii}>메신저</li>
           </NavLink>
           <NavLink to={'/organization'} style={activeStyle}>
@@ -72,7 +71,6 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
           <ul className={styles.namediv}>
             <li className={styles.nameli}>
               {' '}
-
               {empInfo.empName} {empInfo.position}{' '}
               <Button
                 type="button"
