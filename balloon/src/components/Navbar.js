@@ -5,6 +5,9 @@ import { logoutFunc, getCookie } from '../context/AuthFunc';
 import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
 
+import { Button, Container, TextField } from '@mui/material';
+
+
 function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   const cookies = new Cookies();
 
@@ -65,23 +68,32 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
           ) : null}
         </ul>
 
+
         {isLogin ? (
-          <div className="imgflex">
+           <ul className={styles.namediv}>
+            <li className={styles.nameli}>
             {' '}
             {empInfo.empName} {empInfo.position}{' '}
-            <button
+            <Button
               type="button"
+              variant="outlined"
               className={styles.btnnav}
               onClick={() => logoutFunc(logout)}>
               Logout
-            </button>
-          </div>
+            </Button>
+             </li>
+          </ul>
+
         ) : (
-          <Link to={'/loginpage'}>
-            <button type="button" className={styles.btnnav}>
-              Login
-            </button>
-          </Link>
+          <ul className={styles.namediv}>
+            <Link to={'/loginpage'}>
+              <li className={styles.nameli}>
+                <Button className={styles.btnnav} variant="contained">
+                  Login
+                </Button>
+              </li>
+            </Link>
+          </ul>
         )}
       </div>
     </header>
