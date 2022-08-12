@@ -68,20 +68,12 @@ function Navbar({ setEmpId, empInfo }) {
         </ul>
 
         {accessCookie ? (
-          // <div className="fonttest">
-
-          // <span>
-          // <div>
           <ul className={styles.namediv}>
             <li className={styles.nameli}>
               {' '}
               {empInfo.empName} {empInfo.position}
             </li>
 
-            {/* </span> */}
-            {/* <button type="button" className={styles.btnnav} onClick={logout}>
-              Logout
-            </button> */}
             <li className={styles.nameli}>
               <Button onClick={logout} variant="outlined">
                 Logout
@@ -91,9 +83,6 @@ function Navbar({ setEmpId, empInfo }) {
         ) : (
           <ul className={styles.namediv}>
             <Link to={'/loginpage'}>
-              {/* <button type="button" className={styles.btnnav}>
-              Login
-            </button> */}
               <li className={styles.nameli}>
                 <Button className={styles.btnnav} variant="contained">
                   Login
@@ -101,7 +90,6 @@ function Navbar({ setEmpId, empInfo }) {
               </li>
             </Link>
           </ul>
-          /* </div> */
         )}
       </div>
     </header>
