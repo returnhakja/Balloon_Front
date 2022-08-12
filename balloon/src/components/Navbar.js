@@ -6,9 +6,6 @@ import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 
-import { Button, Container, TextField } from '@mui/material';
-
-
 function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   const cookies = new Cookies();
 
@@ -70,7 +67,6 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
           ) : null}
         </ul>
 
-
         {isLogin ? (
           <ul className={styles.namediv}>
             <li className={styles.nameli}>
@@ -85,7 +81,6 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
               </Button>
             </li>
           </ul>
-
         ) : (
           <ul className={styles.namediv}>
             <Link to={'/loginpage'}>
