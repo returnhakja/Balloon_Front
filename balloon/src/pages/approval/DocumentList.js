@@ -22,7 +22,7 @@ import { Space, Table, Pagination } from 'antd';
 import 'antd/dist/antd.css';
 
 function DocList() {
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
 
   const [docList, setDocList] = useState([]);
 

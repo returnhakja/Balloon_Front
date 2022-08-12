@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 
 import { Button, Container, TextField } from '@mui/material';
 
-
 function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   const cookies = new Cookies();
 
@@ -44,7 +43,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
           </Link>
         </div>
         <ul className={styles.ulmarginn}>
-          <NavLink to={'/boxs'} style={activeStyle}>
+          <NavLink to={'/boxes'} style={activeStyle}>
             <li className={styles.lii}>결재관리</li>
           </NavLink>
           <NavLink to={'/calendar'} style={activeStyle}>
@@ -68,22 +67,20 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
           ) : null}
         </ul>
 
-
         {isLogin ? (
-           <ul className={styles.namediv}>
+          <ul className={styles.namediv}>
             <li className={styles.nameli}>
-            {' '}
-            {empInfo.empName} {empInfo.position}{' '}
-            <Button
-              type="button"
-              variant="outlined"
-              className={styles.btnnav}
-              onClick={() => logoutFunc(logout)}>
-              Logout
-            </Button>
-             </li>
+              {' '}
+              {empInfo.empName} {empInfo.position}{' '}
+              <Button
+                type="button"
+                variant="outlined"
+                className={styles.btnnav}
+                onClick={() => logoutFunc(logout)}>
+                Logout
+              </Button>
+            </li>
           </ul>
-
         ) : (
           <ul className={styles.namediv}>
             <Link to={'/loginpage'}>

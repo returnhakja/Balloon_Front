@@ -7,7 +7,7 @@ import Home from './components/Home';
 import MainPage from './components/MainPage';
 import PrivateRoutes from './components/PrivateRoutes';
 
-import Boxs from './pages/approval/Boxs';
+import Boxes from './pages/approval/Boxes';
 import Dashboard from './pages/approval/Dashboard';
 import Declare from './pages/approval/Declare';
 import Complete from './pages/approval/Complete';
@@ -91,17 +91,17 @@ function App() {
           <Route element={<Calendar />} path="/calendar" exact />
 
           {/* 결재관리 */}
-          <Route path="/boxs" element={<Boxs />} />
+          <Route path="/boxes" element={<Boxes />} />
           {/* <Route index  /> */}
-          <Route path="/boxs/dd" element={<Declare />} />
-          <Route path="/boxs/dc" element={<Complete />} />
-          <Route path="/boxs/ds" element={<Save />} />
-          <Route path="/boxs/dr" element={<Refuese />} />
-          <Route path="/boxs/ab" element={<ApprovalBefore />} />
-          <Route path="/boxs/ao" element={<ApprovalOngoing />} />
-          <Route path="/boxs/ac" element={<ApprovalComplete />} />
-          <Route path="/boxs/ar" element={<ApprovalRefuse />} />
-          <Route path="/boxs/dl" element={<DocumentList />} />
+          <Route path="/boxes/dd" element={<Declare />} />
+          <Route path="/boxes/dc" element={<Complete />} />
+          <Route path="/boxes/ds" element={<Save />} />
+          <Route path="/boxes/dr" element={<Refuese />} />
+          <Route path="/boxes/ab" element={<ApprovalBefore />} />
+          <Route path="/boxes/ao" element={<ApprovalOngoing />} />
+          <Route path="/boxes/ac" element={<ApprovalComplete />} />
+          <Route path="/boxes/ar" element={<ApprovalRefuse />} />
+          <Route path="/boxes/dl" element={<DocumentList />} />
           {/* </Route> */}
           {/* 기안작성 */}
           <Route path="/dratf/form" element={<Dashboard />} />
