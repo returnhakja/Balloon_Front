@@ -5,6 +5,7 @@ import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import Modal from './Modal';
 import {
+  Button,
   Card,
   CardContent,
   Container,
@@ -30,6 +31,7 @@ import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import { styled } from '@mui/material/styles';
+import { blue } from '@mui/material/colors';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   '& .MuiToggleButtonGroup-grouped': {
@@ -44,6 +46,14 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     '&:first-of-type': {
       borderRadius: theme.shape.borderRadius,
     },
+  },
+}));
+
+const SaveButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(blue[500]),
+  backgroundColor: blue[500],
+  '&:hover': {
+    backgroundColor: blue[700],
   },
 }));
 
@@ -276,8 +286,14 @@ function Report() {
           </Paper>
 
           <div className={styles.savebutton}>
-            <button>임시저장</button>
-            <button>상신하기</button>
+            <Box sx={{ '& button': { m: 1 } }}>
+              <Button variant="outlined" size="large">
+                임시저장
+              </Button>
+              <SaveButton variant="contained" color="success" size="large">
+                상신하기
+              </SaveButton>
+            </Box>
           </div>
         </div>
       </Container>

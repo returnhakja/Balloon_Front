@@ -36,6 +36,7 @@ export const insertSchedule = async (inputdata, setOpen) => {
 
   setOpen(false);
 };
+// 수정
 
 //삭제
 export const deletehandle = async (scheduleId, handleClose) => {

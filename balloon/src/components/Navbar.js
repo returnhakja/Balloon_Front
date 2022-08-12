@@ -8,7 +8,7 @@ import Cookies from 'universal-cookie';
 import { logout } from '../context/AuthFunc';
 import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
-import { TextField } from '@mui/material';
+import { Button, Container, TextField } from '@mui/material';
 
 function Navbar({ setEmpId, empInfo }) {
   const cookies = new Cookies();
@@ -68,19 +68,40 @@ function Navbar({ setEmpId, empInfo }) {
         </ul>
 
         {accessCookie ? (
-          <div className="imgflex">
-            {' '}
-            {empInfo.empName} {empInfo.position}{' '}
-            <button type="button" className={styles.btnnav} onClick={logout}>
+          // <div className="fonttest">
+
+          // <span>
+          // <div>
+          <ul className={styles.namediv}>
+            <li className={styles.nameli}>
+              {' '}
+              {empInfo.empName} {empInfo.position}
+            </li>
+
+            {/* </span> */}
+            {/* <button type="button" className={styles.btnnav} onClick={logout}>
               Logout
-            </button>
-          </div>
+            </button> */}
+            <li className={styles.nameli}>
+              <Button onClick={logout} variant="outlined">
+                Logout
+              </Button>
+            </li>
+          </ul>
         ) : (
-          <Link to={'/loginpage'}>
-            <button type="button" className={styles.btnnav}>
+          <ul className={styles.namediv}>
+            <Link to={'/loginpage'}>
+              {/* <button type="button" className={styles.btnnav}>
               Login
-            </button>
-          </Link>
+            </button> */}
+              <li className={styles.nameli}>
+                <Button className={styles.btnnav} variant="contained">
+                  Login
+                </Button>
+              </li>
+            </Link>
+          </ul>
+          /* </div> */
         )}
       </div>
     </header>

@@ -183,39 +183,43 @@ function ManagementEmployee() {
 
   const columns = [
     { field: 'empId', headerName: '사원번호', width: 130 },
-    { field: 'empName', headerName: '이름', width: 90 },
-    { field: 'position', headerName: '직위', width: 90 },
+    { field: 'empName', headerName: '이름', width: 90, editable: true },
+    { field: 'position', headerName: '직위', width: 90, editable: true },
     { field: 'responsibility', headerName: '직책', width: 90 },
-    { field: 'salary', headerName: '월급', width: 90 },
-    { field: 'commission', headerName: '상여금', width: 90 },
+    { field: 'salary', headerName: '월급', width: 90, editable: true },
+    { field: 'commission', headerName: '상여금', width: 90, editable: true },
     { field: 'hiredate', headerName: '고용일자', width: 100 },
-    { field: 'unitName', headerName: '부서이름', width: 100 },
-    { field: 'empBell', headerName: '사내전화번호', width: 130 },
-    { field: 'empMail', headerName: '개인이메일', width: 130 },
-    { field: 'mobile', headerName: '전화번호', width: 130 },
-    { field: 'userRoleGrade', headerName: '사원권한', width: 130 },
+    { field: 'unitName', headerName: '부서이름', width: 100, editable: true },
+    {
+      field: 'empBell',
+      headerName: '사내전화번호',
+      width: 130,
+      editable: true,
+    },
+    { field: 'empMail', headerName: '개인이메일', width: 130, editable: true },
+    { field: 'mobile', headerName: '전화번호', width: 130, editable: true },
+    {
+      field: 'userRoleGrade',
+      headerName: '사원권한',
+      width: 130,
+      editable: true,
+    },
     { field: 'birthday', headerName: '생일', width: 100 },
-    { field: 'address', headerName: '집주소', width: 130 },
-    { field: 'licensePlate', headerName: '차량번호', width: 90 },
-    { field: 'photo', headerName: '사진', width: 100 },
+    { field: 'address', headerName: '집주소', width: 130, editable: true },
+    {
+      field: 'licensePlate',
+      headerName: '차량번호',
+      width: 90,
+      editable: true,
+    },
+    { field: 'photo', headerName: '사진', width: 100, editable: true },
     {
       field: 'actions',
       type: 'actions',
       width: 80,
       getActions: () => [
         <GridActionsCellItem icon={<SettingsIcon />} label="update" />,
-      ],
-    },
-    {
-      field: 'action',
-      type: 'action',
-      width: 80,
-      getActions: (params) => [
-        <GridActionsCellItem
-          icon={<Delete />}
-          label="Delete"
-          onClick={deleteUser(params.id)}
-        />,
+        <GridActionsCellItem icon={<Delete />} label="Delete" />,
       ],
     },
   ];
