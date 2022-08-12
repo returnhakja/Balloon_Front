@@ -1,5 +1,5 @@
 import React from 'react';
-import { handleSubmit } from '../../context/AuthFunc';
+import { login } from '../../context/AuthFunc';
 import {
   Container,
   Button,
@@ -12,7 +12,14 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-function LoginPage({ setLogin }) {
+function LoginPage({ authenticate }) {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    login(data.get('empId'), data.get('password'), authenticate);
+  };
+
   return (
     <Container component="main" sx={{ marginBottom: 25 }}>
       <Box

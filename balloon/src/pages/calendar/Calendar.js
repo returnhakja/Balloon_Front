@@ -35,7 +35,7 @@ function Calendar() {
   });
   // const [list, setList] = useState([]);
 
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
 
   const list = getScheduleByEmp(empInfo.empId);
 
