@@ -29,7 +29,6 @@ function CreateChatroom({ invite }) {
       });
   };
 
-  console.log(invite);
   //chatroomEmployee T에 초대할 사람과 초대한 사람 넣어주기
   const onUserInvite = () => {
     invite &&
