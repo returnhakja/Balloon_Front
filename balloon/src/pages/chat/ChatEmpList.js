@@ -11,6 +11,7 @@ function ChatEmpList({ invite, setInvite }) {
 
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
+
   // 사원list 출력하기
   useEffect(() => {
     getEmpListInSameUnit(empId, setCEList);
