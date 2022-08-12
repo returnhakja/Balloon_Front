@@ -13,6 +13,7 @@ import {
   MenuItem,
   Paper,
   Select,
+  TextField,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -265,7 +266,13 @@ function Report() {
                 <ArrowDropDownIcon />
               </ToggleButton>
             </StyledToggleButtonGroup>
-            <input className={styles.maininput}></input>
+            {/* <input className={styles.maininput}></input> */}
+            <TextField
+              fullWidth
+              multiline
+              rows={10}
+              placeholder="내용을 입력해주세요."
+            />
           </Paper>
 
           <div className={styles.savebutton}>

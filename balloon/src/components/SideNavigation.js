@@ -12,7 +12,6 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import '../css/Sidebar.css';
-import 'react-pro-sidebar/dist/css/styles.css';
 import '../css/SidebarCustom.scss';
 
 const Menuitem = styled(MenuItem)`

@@ -56,10 +56,10 @@ main {
 }
 
 /*선택된 항목*/
-.active {
+/* .active {
   background: lightskyblue;
   color: #000;
-}
+} */
 
 .icon,
 .link_text {
