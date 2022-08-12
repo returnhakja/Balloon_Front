@@ -21,7 +21,7 @@ import 'antd/dist/antd.css';
 import { getDocsByEmp } from './ApprovalAxios';
 
 function Declare() {
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
 
   const [docList, setDocList] = useState([]);
 
