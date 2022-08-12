@@ -86,7 +86,6 @@ function ApprovalComplete() {
                 </FormControl>
               </Box>
               <span className={styles.search}> 검색 </span>
-
               <TextField
                 id="outlined-basic"
                 label="기안제목 입력"

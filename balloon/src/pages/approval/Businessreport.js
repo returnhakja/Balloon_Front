@@ -64,7 +64,7 @@ function Report() {
       <Container>
         <p className={styles.maintitle}>
           {' '}
-          <FcDocument /> 업무기안
+          <FcDocument /> 업무기안 lalala~
         </p>
 
         <table className={styles.table}>
