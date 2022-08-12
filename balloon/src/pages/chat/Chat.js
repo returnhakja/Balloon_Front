@@ -194,14 +194,10 @@ function Chat({ invite }) {
         />
         <br />
         <button onClick={onUserUpdate}>수정하기</button>
-      </div> */}
-
-      <div>
-        <button onClick={onUserAdd}>수정하기</button>
-
       </div>
 
       <div>{/* <button onClick={onUserAdd}>수정하기</button> */}</div>
+
       <br />
       <Link to={'/chatroom'}>채팅목록 이동</Link>
       <br />
