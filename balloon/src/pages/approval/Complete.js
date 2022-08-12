@@ -1,5 +1,5 @@
 import { Container } from '@mui/system';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Component.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -15,8 +15,18 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
+import { useOutletContext, Link } from 'react-router-dom';
+import { Space, Table, Pagination } from 'antd';
+import 'antd/dist/antd.css';
+import { getDocsByEmp } from './ApprovalAxios';
 
 function Declare() {
+  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+
+  const [docList, setDocList] = useState([]);
+
+  const docStatus = 3;
+
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
   const [endvalue, setEndValue] = useState(null);
@@ -27,6 +37,33 @@ function Declare() {
   const handleChange = (event) => {
     setForm(event.target.value);
   };
+
+  useEffect(() => {
+    console.log(empInfo);
+    getDocsByEmp(empInfo.empId, docStatus, setDocList);
+    console.log(docList);
+  }, []);
+
+  const [bottomcenter, setBottomCenter] = useState('bottomcenter');
+  const data = [
+    // 기안 제목 , 상신일 , 문서번호
+    {
+      title: '문서번호',
+      dataIndex: 'docId',
+      key: 'docId',
+    },
+    {
+      title: '문서제목',
+      dataIndex: 'documentTitle',
+      key: 'documentTitle',
+      render: (id, index) => <Link to={`/`}>{id}</Link>,
+    },
+    {
+      title: '처리일자',
+      dataIndex: 'updateTime',
+      key: 'upDateTime',
+    },
+  ];
 
   return (
     <>
@@ -118,6 +155,14 @@ function Declare() {
               style={{ marginTop: '2vh' }}>
               조회
             </Button>
+            <Table
+              columns={data}
+              dataSource={docList}
+              pagination={{
+                position: [bottomcenter],
+                pageSize: 5,
+              }}
+            />
           </div>
         </Container>
       </SideNavigation>

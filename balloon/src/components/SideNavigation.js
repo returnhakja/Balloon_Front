@@ -26,7 +26,7 @@ const SideNavigation = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const styles = {
     sideBarHeight: {
-      height: '100vh',
+      height: '150vh',
     },
     menuIcon: {
       float: 'right',
