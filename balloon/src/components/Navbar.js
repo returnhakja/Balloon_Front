@@ -1,33 +1,13 @@
 import styles from '../css/Navbar.module.css';
 import { Link, NavLink } from 'react-router-dom';
-import { Box } from '@mui/system';
 import Cookies from 'universal-cookie';
-import { logout } from '../context/AuthFunc';
+import { logoutFunc, getCookie } from '../context/AuthFunc';
 import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
+import { Button } from '@mui/material';
 
-//여기부터
-import { Menu, Button } from 'antd';
-import styled from 'styled-components';
-import { BrowserView, MobileView } from 'react-device-detect';
-import { MenuOutlined, MenuFoldOutlined } from '@ant-design/icons';
-import { Container, Typography } from '@mui/material';
-const MenuList = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const NavTop = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  button {
-    background: black;
-    border: none;
-  }
-`;
-function Navbar({ setEmpId, empInfo, setLogin }) {
+function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   const cookies = new Cookies();
-  const [accessCookie, setAccessCookie] = useState('');
 
   function activeStyle({ isActive }) {
     return {
@@ -39,173 +19,83 @@ function Navbar({ setEmpId, empInfo, setLogin }) {
   }
 
   useEffect(() => {
-    cookies.get('accessToken');
-    if (cookies.cookies.accessToken) {
-      setAccessCookie(cookies.cookies.accessToken);
+    if (isLogin === true) {
+      getCookie(cookies);
 
-      getMe(setEmpId);
+      if (cookies.cookies.accessToken) {
+        getMe(setEmpInfo);
+        console.log(empInfo);
+      } else {
+        logoutFunc(logout);
+        localStorage.setItem('logged', false);
+      }
     }
-  }, [accessCookie]);
-
-  //여기부터
-
-  const [toggleMenu, setToggleMenu] = useState(false);
-  const [toggleBar, setToggleBar] = useState(true);
-
-  const toggleChange = () => {
-    setToggleMenu(!toggleMenu);
-    setToggleBar(!toggleBar);
-  };
-
-  const onMenuClick = () => {
-    setToggleMenu(!toggleMenu);
-    setToggleBar(!toggleBar);
-  };
+  }, [isLogin]);
 
   return (
-    // <div className={styles.main}>
-    //   <header className={styles.header}>
-    //     <div className={styles.contents}>
-    //       <Link to={'/'} className={styles.Link}>
-    //         <div>
-    //           <img
-    //             src={`${process.env.PUBLIC_URL}/asset/logo.png`}
-    //             alt="풍선"
-    //             className={styles.ballon}
-    //           />
-    //           <strong className={styles.ballonfont}>
-    //             {' '}
-    //             BALL<span className={styles.oofont}>OO</span>N{' '}
-    //           </strong>
-    //         </div>
-    //       </Link>
 
-    //       <div className={styles.ulll}>
-    //         <ul className={styles.ulmarginn}>
-    //           <NavLink to={'/box'} style={activeStyle}>
-    //             <Box className={styles.lii}>결재관리</Box>
-    //           </NavLink>
-    //           <NavLink to={'/calendar'} style={activeStyle}>
-    //             <Box className={styles.lii}>캘린더</Box>
-    //           </NavLink>
-    //           <NavLink to={'/chatemplist'} style={activeStyle}>
-    //             <Box className={styles.lii}>메신저</Box>
-    //           </NavLink>
-    //           <NavLink to={'/organization'} style={activeStyle}>
-    //             <Box className={styles.lii}>조직도</Box>
-    //           </NavLink>
-    //           {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
-    //             <NavLink to={'/management/unit'} style={activeStyle}>
-    //               <Box className={styles.lii}>조직관리</Box>
-    //             </NavLink>
-    //           ) : null}
-    //           {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
-    //             <NavLink to={'/management/employee'} style={activeStyle}>
-    //               <Box className={styles.lii}>사원관리</Box>
-    //             </NavLink>
-    //           ) : null}
-    //         </ul>
-    //       </div>
-    //       {accessCookie ? (
-    //         <div>
-    //           <span>
-    //             {' '}
-    //             {empInfo.empName} {empInfo.position}{' '}
-    //           </span>
-    //           <button type="button" className={styles.btnnav} onClick={logout}>
-    //             Logout
-    //           </button>
-    //         </div>
-    //       ) : (
-    //         <Link to={'/loginpage'}>
-    //           <button type="button" className={styles.btnnav}>
-    //             Login
-    //           </button>
-    //         </Link>
-    //       )}
+    <header className={styles.header}>
+      <div className={styles.contents}>
+        <div className={styles.imgflex}>
+          <Link to={'/'} className={styles.Link}>
+            <h2>
+              BALL<span className={styles.oofont}>OO</span>N{' '}
+            </h2>
+          </Link>
+        </div>
+        <ul className={styles.ulmarginn}>
+          <NavLink to={'/boxes'} style={activeStyle}>
+            <li className={styles.lii}>결재관리</li>
+          </NavLink>
+          <NavLink to={'/calendar'} style={activeStyle}>
+            <li className={styles.lii}>캘린더</li>
+          </NavLink>
+          <NavLink to={'/chatroom'} style={activeStyle}>
+            <li className={styles.lii}>메신저</li>
+          </NavLink>
+          <NavLink to={'/organization'} style={activeStyle}>
+            <li className={styles.lii}>조직도</li>
+          </NavLink>
+          {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+            <NavLink to={'/management/unit'} style={activeStyle}>
+              <li className={styles.lii}>조직관리</li>
+            </NavLink>
+          ) : null}
+          {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+            <NavLink to={'/management/employee'} style={activeStyle}>
+              <li className={styles.lii}>사원관리</li>
+            </NavLink>
+          ) : null}
+        </ul>
 
-    //       <div className="text-end"></div>
-    //     </div>
-    //   </header>
-    // </div>
+        {isLogin ? (
+          <ul className={styles.namediv}>
+            <li className={styles.nameli}>
+              {' '}
 
-    //여기부터
-    <Container maxWidth={'xl'}>
-      {/* web */}
-      <BrowserView>
-        <MenuList>
-          <Menu selectedKeys="mail" mode="horizontal">
-            <Box>
-              <Link to={'/'}>
-                {/* <img
-                  src={`${process.env.PUBLIC_URL}/asset/logo.png`}
-                  alt="풍선"
-                  className={styles.ballon}
-                /> */}
-                <strong className={styles.ballonfont}>
-                  {' '}
-                  BALL<span className={styles.oofont}>OO</span>N{' '}
-                </strong>
-              </Link>
-            </Box>
-
-            <Menu.Item key="subs">
-              <NavLink to={'/box'} style={activeStyle}>
-                결재관리
-              </NavLink>
-            </Menu.Item>
-
-            <Menu.Item key="product">
-              <NavLink to={'/calendar'} style={activeStyle}>
-                캘린더
-              </NavLink>
-            </Menu.Item>
-
-            <Menu.Item key="ms">
-              <NavLink to={'/chatemplist'} style={activeStyle}>
-                메신저
-              </NavLink>
-            </Menu.Item>
-
-            <Menu.Item key="Or">
-              <NavLink to={'/organization'} style={activeStyle}>
-                조직도
-              </NavLink>
-            </Menu.Item>
-            {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
-              <Menu.Item key="Mani">
-                <NavLink to={'/management/unit'} style={activeStyle}>
-                  조직관리
-                </NavLink>
-              </Menu.Item>
-            ) : null}
-            {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
-              <Menu.Item key="ment">
-                <NavLink to={'/management/employee'} style={activeStyle}>
-                  사원관리
-                </NavLink>
-              </Menu.Item>
-            ) : null}
-          </Menu>
-
-          {accessCookie ? (
-            <Typography variant="h6" align="center" className={styles.text}>
               {empInfo.empName} {empInfo.position}{' '}
-              <Button onClick={logout}>Logout</Button>
-            </Typography>
-          ) : (
+              <Button
+                type="button"
+                variant="outlined"
+                className={styles.btnnav}
+                onClick={() => logoutFunc(logout)}>
+                Logout
+              </Button>
+            </li>
+          </ul>
+        ) : (
+          <ul className={styles.namediv}>
             <Link to={'/loginpage'}>
-              <Button>Login</Button>
+              <li className={styles.nameli}>
+                <Button className={styles.btnnav} variant="contained">
+                  Login
+                </Button>
+              </li>
             </Link>
-          )}
-          {/* <Menu mode="horizontal">
-            <Menu.Item key="signin">
-              <Link to="/loginpage">로그인</Link>
-            </Menu.Item>
-          </Menu> */}
-        </MenuList>
-      </BrowserView>
-    </Container>
+          </ul>
+        )}
+      </div>
+    </header>
   );
 }
 

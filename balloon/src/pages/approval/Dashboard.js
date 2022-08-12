@@ -79,47 +79,45 @@ const card2 = (
 
 function Dashboard() {
   return (
-    <div>
-      <SideNavigation>
-        <Container maxWidth="xl">
-          <p style={{ fontSize: '2.1rem' }}>기본양식함</p>
-          <br />
-          <hr />
-          <p style={{ fontSize: '1.5rem', marginTop: '2%' }}>기본양식 3</p>
-          <br />
-          <Box
-            sx={{
-              display: 'flex',
-              width: 1500,
-              height: 200,
+    <SideNavigation>
+      <Container maxWidth="xl">
+        <p style={{ fontSize: '2.1rem' }}>기본양식함</p>
+        <br />
+        <hr />
+        <p style={{ fontSize: '1.5rem', marginTop: '2%' }}>기본양식 3</p>
+        <br />
+        <Box
+          sx={{
+            display: 'flex',
+            width: 1500,
+            height: 200,
 
-              justifyContent: 'space-around',
-              p: 1,
-              m: 1,
-              bgcolor: 'background.paper',
-            }}>
-            <Card
-              variant="outlined"
-              sx={{ minWidth: 300 }}
-              style={{ backgroundColor: '#F1F9FF' }}>
-              {card}
-            </Card>
-            <Card
-              variant="outlined"
-              sx={{ minWidth: 300 }}
-              style={{ backgroundColor: '#F1F9FF' }}>
-              {card1}
-            </Card>
-            <Card
-              variant="outlined"
-              sx={{ minWidth: 300 }}
-              style={{ backgroundColor: '#F1F9FF' }}>
-              {card2}
-            </Card>
-          </Box>
-        </Container>
-      </SideNavigation>
-    </div>
+            justifyContent: 'space-around',
+            p: 1,
+            m: 1,
+            bgcolor: 'background.paper',
+          }}>
+          <Card
+            variant="outlined"
+            sx={{ minWidth: 300 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {card}
+          </Card>
+          <Card
+            variant="outlined"
+            sx={{ minWidth: 300 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {card1}
+          </Card>
+          <Card
+            variant="outlined"
+            sx={{ minWidth: 300 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {card2}
+          </Card>
+        </Box>
+      </Container>
+    </SideNavigation>
   );
 }
 

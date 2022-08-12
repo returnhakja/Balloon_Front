@@ -5,69 +5,33 @@ import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import Modal from './Modal';
 import {
+  Button,
   Card,
   CardContent,
   Container,
-  Divider,
-  FormControl,
-  MenuItem,
   Paper,
-  Select,
   TextField,
-  ToggleButton,
   ToggleButtonGroup,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { BsFillExclamationTriangleFill } from 'react-icons/bs';
-import FormatBoldIcon from '@mui/icons-material/FormatBold';
-import FormatItalicIcon from '@mui/icons-material/FormatItalic';
-import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
-import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
-import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
-import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
-import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
+
 import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
-const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
-  '& .MuiToggleButtonGroup-grouped': {
-    margin: theme.spacing(0.5),
-    border: 0,
-    '&.Mui-disabled': {
-      border: 0,
-    },
-    '&:not(:first-of-type)': {
-      borderRadius: theme.shape.borderRadius,
-    },
-    '&:first-of-type': {
-      borderRadius: theme.shape.borderRadius,
-    },
+import { blue } from '@mui/material/colors';
+import { FcDocument } from 'react-icons/fc';
+const SaveButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(blue[500]),
+  backgroundColor: blue[500],
+  '&:hover': {
+    backgroundColor: blue[700],
   },
 }));
 
 function Trip() {
-  const [form, setForm] = useState('');
-
-  const handleChange = (event) => {
-    setForm(event.target.value);
-  };
-
-  const [alignment, setAlignment] = useState('left');
-  const [formats, setFormats] = useState(() => ['italic']);
-
-  const handleFormat = (event, newFormats) => {
-    setFormats(newFormats);
-  };
-
-  const handleAlignment = (event, newAlignment) => {
-    setAlignment(newAlignment);
-  };
-
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
   const [endvalue, setEndValue] = useState(null);
@@ -76,7 +40,7 @@ function Trip() {
   const [openModal, setOpenModal] = useState(false);
 
   // 사원 정보 context
-  const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo, setEmpInfo] = useOutletContext();
 
   console.log(empInfo);
 
@@ -106,7 +70,10 @@ function Trip() {
   return (
     <SideNavigation>
       <Container>
-        <p className={styles.maintitle}>출장계획서</p>
+        <p className={styles.maintitle}>
+          <FcDocument />
+          출장계획서
+        </p>
 
         <table className={styles.table}>
           <thead>
@@ -122,45 +89,16 @@ function Trip() {
             <tr align="center" bgcolor="white">
               <td className={styles.tdleft}>보존연한</td>
               <td className={styles.td}>5년</td>
-              <td className={styles.tdright}>공개여부</td>
-              <th className={styles.th}>
-                <Box sx={{ minWidth: 150 }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={form}
-                      onChange={handleChange}>
-                      <MenuItem value={10}>부서공개</MenuItem>
-                      <MenuItem value={20}>비공개</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </th>
-            </tr>
-            <tr align="center" bgcolor="white">
               <td className={styles.tdleft}>기안자</td>
-              <td className={styles.td}>
-                {empInfo.empName}({empInfo.empId})
-              </td>
-              <td className={styles.tdright}>기안부서</td>
               <th className={styles.th}>
-                <Box sx={{ minWidth: 150 }}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={form}
-                      onChange={handleChange}>
-                      <MenuItem value={10}>Balloon</MenuItem>
-                      <MenuItem value={20}>부서가없잖아</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
+                {' '}
+                {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
+            <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
+
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
           <button
@@ -184,17 +122,6 @@ function Trip() {
         </Card>
         <hr className={styles.hrmargins} />
 
-        <div className={styles.bodycontent}>
-          <div className={styles.bodycontentC}>
-            <BsFillExclamationTriangleFill
-              color="#37E6E1"
-              className={styles.icon}
-            />{' '}
-            안내
-            <p>출장계획서를 작성하세요.</p>
-          </div>
-        </div>
-
         <p className={styles.giantitle}>기안내용</p>
         <table className={styles.table}>
           <thead>
@@ -210,17 +137,6 @@ function Trip() {
                     className={styles.inputtext}
                   />
                 </form>
-              </td>
-            </tr>
-
-            <tr align="center" bgcolor="white">
-              <td className={styles.filetd}>파일첨부</td>
-              <td className={styles.tdright}>여기 파일첨부</td>
-            </tr>
-            <tr align="center" bgcolor="white">
-              <td className={styles.tdleft}>참조문서</td>
-              <td colSpan={2} className={styles.tdright}>
-                여기 문서넣기
               </td>
             </tr>
           </thead>
@@ -319,51 +235,23 @@ function Trip() {
               flexWrap: 'wrap',
               justifyContent: 'center',
             }}>
-            <StyledToggleButtonGroup
-              size="small"
-              value={alignment}
-              exclusive
-              onChange={handleAlignment}
-              aria-label="text alignment">
-              <ToggleButton value="left" aria-label="left aligned">
-                <FormatAlignLeftIcon />
-              </ToggleButton>
-              <ToggleButton value="center" aria-label="centered">
-                <FormatAlignCenterIcon />
-              </ToggleButton>
-              <ToggleButton value="right" aria-label="right aligned">
-                <FormatAlignRightIcon />
-              </ToggleButton>
-              <ToggleButton value="justify" aria-label="justified" disabled>
-                <FormatAlignJustifyIcon />
-              </ToggleButton>
-            </StyledToggleButtonGroup>
-            <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
-            <StyledToggleButtonGroup
-              size="small"
-              value={formats}
-              onChange={handleFormat}
-              aria-label="text formatting">
-              <ToggleButton value="bold" aria-label="bold">
-                <FormatBoldIcon />
-              </ToggleButton>
-              <ToggleButton value="italic" aria-label="italic">
-                <FormatItalicIcon />
-              </ToggleButton>
-              <ToggleButton value="underlined" aria-label="underlined">
-                <FormatUnderlinedIcon />
-              </ToggleButton>
-              <ToggleButton value="color" aria-label="color">
-                <FormatColorFillIcon />
-                <ArrowDropDownIcon />
-              </ToggleButton>
-            </StyledToggleButtonGroup>
-            <input className={styles.maininput}></input>
+            <TextField
+              fullWidth
+              multiline
+              rows={10}
+              placeholder="내용을 입력해주세요."
+            />
           </Paper>
 
           <div className={styles.savebutton}>
-            <button>임시저장</button>
-            <button>상신하기</button>
+            <Box sx={{ '& button': { m: 1 } }}>
+              <Button variant="outlined" size="large">
+                임시저장
+              </Button>
+              <SaveButton variant="contained" color="success" size="large">
+                상신하기
+              </SaveButton>
+            </Box>
           </div>
         </div>
       </Container>

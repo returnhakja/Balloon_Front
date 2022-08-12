@@ -96,7 +96,7 @@ const card3 = (
   </React.Fragment>
 );
 
-function Boxs() {
+function Boxes() {
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event, newValue) => {
@@ -180,4 +180,4 @@ function Boxs() {
   );
 }
 
-export default Boxs;
+export default Boxes;

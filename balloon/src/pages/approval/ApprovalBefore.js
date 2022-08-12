@@ -87,22 +87,6 @@ function ApprovalBefore() {
               </Box>
 
               <span className={styles.search}> 검색 </span>
-              <Box sx={{ minWidth: 120, marginLeft: 1 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
-                    기안제목
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={form}
-                    label="기안양식"
-                    onChange={handleChange}>
-                    <MenuItem value={10}>기안부서</MenuItem>
-                    <MenuItem value={20}>기안제목</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
               <TextField
                 id="outlined-basic"
                 label="기안제목 입력"
