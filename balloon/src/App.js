@@ -45,6 +45,9 @@ function App() {
   const [cookie, setCookie] = useState();
   const [isLogin, setLogin] = useState(null);
 
+  // 채팅방 초대하기
+  const [invite, setInvite] = useState([]);
+
   // useEffect(() => {
   //   const logged = localStorage.getItem('isLogin');
   //   logged && JSON.parse(logged) ? setLogin(true) : setLogin(false);
@@ -122,10 +125,16 @@ function App() {
             <Route path="/dratf/bt" element={<Businesstrip />} />
             <Route path="/dratf/pa" element={<Persnelappointment />} />
             {/* 메신저 */}
-            <Route path="/chatemplist" element={<ChatEmpList />} />
+            <Route
+              path="/chatemplist"
+              element={<ChatEmpList invite={invite} setInvite={setInvite} />}
+            />
             <Route path="/chatroom" element={<ChatRoom />} />
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/createroom" element={<CreateRoom />} />
+            <Route path="/chat" element={<Chat invite={invite} />} />
+            <Route
+              path="/createroom"
+              element={<CreateRoom invite={invite} />}
+            />
             {/* 조직관리 */}
             <Route path="/management/unit" element={<ManagementUnit />} />
             {/* 사원관리 */}

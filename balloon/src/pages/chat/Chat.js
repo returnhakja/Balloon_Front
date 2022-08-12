@@ -7,11 +7,13 @@ import { Link, useOutletContext } from 'react-router-dom';
 import moment from 'moment';
 import axios from 'axios';
 
-function Chat() {
+function Chat({ invite }) {
   // login할때 empId를 가져옴 -> 채팅방생성/채팅 시 사용가능
   const [setEmpId, empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
   console.log(empId);
+  console.log(empInfo.empName);
+
   //실시간 시간 가져오기
   const nowTime = moment().format('HH:mm');
 
@@ -37,62 +39,106 @@ function Chat() {
   };
 
   const send = () => {
-    console.log('sending');
+    // invite.pop(empId);
+    // console.log(invite);
     client.send(
       '/app/chat/message',
       {},
       JSON.stringify({
         chatroomId: chatroomId,
-        writer: empInfo.empId,
+        writer: empId,
         chatContent: inputRef.current.value,
       })
     );
   };
+
   //채팅방 채팅기록
   const [chatting, setChatting] = useState([]);
 
+  //채팅방 정보 불러오기
+  const [chatroomName, setChatroomName] = useState('');
+  const [headCount, setHeadCount] = useState(0);
+
+  const chatroomInfo = () => {
+    axios
+      .get(`http://localhost:8080/oneChatroom/${chatroomId}`)
+      .then((response) => {
+        console.log(response.data.chatroomName);
+        setChatroomName(response.data.chatroomName);
+        setHeadCount(response.data.headCount);
+      });
+  };
+
+  //chatroomEmployee T에 chatroomId로 사원정보 가져오기
+  const [empinfo, setEmpinfo] = useState([]);
+
+  useEffect(() => {
+    const empIdInfo = () => {
+      axios
+        .get(`http://localhost:8080/oneChatEmp/${chatroomId}`)
+        .then((response) => {
+          console.log(response.data);
+          setEmpinfo(response.data);
+        });
+    };
+    empIdInfo(setEmpinfo);
+  }, []);
+  console.log(empinfo);
+
+  {
+    empinfo &&
+      empinfo.map((data) => {
+        console.log(data.empId.empName);
+        return {};
+      });
+  }
+
   //chatroom에 들어갔을 때 기록남게
   useEffect(() => {
-    const onChatroomList = (setChatting) => {
+    const chatRecord = (setChatting) => {
       axios
-        .get(`http://localhost:8080/onechatroom/${chatroomId}`)
+        .get(`http://localhost:8080/chatRecord/${chatroomId}`)
         .then((response) => {
           console.log(response.data);
           setChatting(response.data);
         });
     };
-    onChatroomList(setChatting);
+    chatRecord(setChatting);
+    chatroomInfo();
   }, []);
 
-  //채팅방 인원수 & 이름수정
-  // const onUserUpdate = () => {
-  //   const chatroomName = document.getElementById('chatroomName');
-  //   const headCount = document.getElementById('headCount');
-  //   axios
-  //     .put(`http://localhost:8080/updateroomName/${chatroomId}`, {
-  //       chatroomName: chatroomName.value,
-  //       headCount: headCount.value,
-  //     })
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     });
-  // };
+  console.log(chatroomName);
+  console.log(headCount);
 
-  //사원초대
-  const onUserAdd = () => {
-    const employee = document.getElementById('empId');
-    console.log(chatroomId);
-    console.log(employee.value);
+  //채팅방 이름수정
+  const onUserUpdate = () => {
+    const chatroomName = document.getElementById('chatroomName');
+
     axios
-      .post(`http://localhost:8080/insertChatEmp/${chatroomId}`, {
-        empId: {
-          empId: employee.value,
-        },
+      .put(`http://localhost:8080/updateroom/${chatroomId}`, {
+        chatroomName: chatroomName.value,
+        headCount: headCount,
       })
       .then((response) => {
         console.log(response.data);
       });
   };
+
+  //사원초대
+  // const onUserAdd = () => {
+  //   const employee = document.getElementById('empId');
+  //   console.log(chatroomId);
+  //   console.log(employee.value);
+  //   axios
+  //     .post(`http://localhost:8080/insertChatEmp/${chatroomId}`, {
+  //       empId: {
+  //         empId: employee.value,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     });
+  // };
 
   //채팅방 나가기
   const onExitRoom = () => {
@@ -104,49 +150,58 @@ function Chat() {
         console.log(response.data);
       });
   };
+
+  {
+    empinfo &&
+      empinfo.map((data) => {
+        console.log(data.empId.empName);
+        return {};
+      });
+  }
+
   return (
     <>
       <div className="header-title-container">
-        <h3>채팅방이름</h3>
+        <h3>{chatroomName}</h3>
       </div>
-      <br />
       <div>
+        {empinfo &&
+          empinfo.map((data) => {
+            console.log(data.empId.empName);
+            return <div>{data.empId.empName}</div>;
+          })}
+      </div>
+
+      <br />
+      {/* 채팅방에서 사원초대하기 */}
+      {/* <div>
         <input id="empId" placeholder="초대할 사원의 사번을 입력하세요" />
         <button onClick={onUserAdd}>사원초대하기</button>
-      </div>
+      </div> */}
       {/* 채팅방 나가기 */}
       <div>
-        <button onClick={() => onExitRoom(chatroomId, empId)}>나가기</button>
+        <Link to={'/chatroom'} onClick={() => onExitRoom(chatroomId, empId)}>
+          나가기
+        </Link>
       </div>
       {/* 채팅방 인원수 & 이름수정 */}
-      {/* <div>
+      <div>
         <hr />
         <input
           id="chatroomName"
           placeholder="수정할 채팅방의 이름을 입력하세요"
-          defaultValue={chatting[0].chatroom.chatroomName}
+          defaultValue={chatroomName}
         />
         <br />
-        <input
-          id="headCount"
-          placeholder="수정할 인원수 입력하세요"
-          defaultValue={chatting[0] && chatting.headCount}
-        />
-        <br />
-
         <button onClick={onUserUpdate}>수정하기</button>
-      </div> */}
-
-      <div>
-
-        <button onClick={onUserAdd}>수정하기</button>
       </div>
+
+      <div>{/* <button onClick={onUserAdd}>수정하기</button> */}</div>
       <br />
       <Link to={'/chatroom'}>채팅목록 이동</Link>
       <br />
       <br />
       <div style={{ border: '1px solid black', margin: '5px' }}>
-
         {/* 채팅기록을 가져옴 */}
         {chatting.map((msg, index) => {
           return (
@@ -158,6 +213,7 @@ function Chat() {
                 </div>
               ) : (
                 <div className={styles.othermessage}>
+                  {msg.employee.empName}
                   {msg.chatTime}
                   {msg.chatContent}
                 </div>
