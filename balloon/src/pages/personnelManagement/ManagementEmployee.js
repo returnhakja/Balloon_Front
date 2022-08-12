@@ -154,8 +154,8 @@
 
 // export default ManagementEmployee;
 
-import React, { useEffect, useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import React, { useCallback, useEffect, useState } from 'react';
+import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import {
   selectEmployees,
   minusPage,
@@ -163,51 +163,82 @@ import {
   selectEmployeeByEmpId,
 } from '../../context/EmployeeAxios';
 import { Container } from '@mui/system';
+import Delete from '@mui/icons-material/Delete';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 function ManagementEmployee() {
   const [empList, setEmpList] = useState([]);
+  const [rows, setRows] = useState(empList);
 
+  const deleteUser = useCallback(
+    (id) => () => {
+      setTimeout(() => {
+        setRows((prevRows) => prevRows.filter((rows) => rows.id !== id));
+      });
+    },
+    []
+  );
   // console.log(empList);
 
   const columns = [
     { field: 'empId', headerName: '사원번호', width: 130 },
-    { field: 'empName', headerName: '이름', width: 130 },
-    { field: 'position', headerName: '직위', width: 130 },
-    { field: 'responsibility', headerName: '직책', width: 130 },
-    { field: 'salary', headerName: '월급', width: 130 },
-    { field: 'commission', headerName: '상여금', width: 130 },
-    { field: 'hiredate', headerName: '고용일자', width: 130 },
-    { field: 'unitName', headerName: '부서이름', width: 130 },
+    { field: 'empName', headerName: '이름', width: 90 },
+    { field: 'position', headerName: '직위', width: 90 },
+    { field: 'responsibility', headerName: '직책', width: 90 },
+    { field: 'salary', headerName: '월급', width: 90 },
+    { field: 'commission', headerName: '상여금', width: 90 },
+    { field: 'hiredate', headerName: '고용일자', width: 100 },
+    { field: 'unitName', headerName: '부서이름', width: 100 },
     { field: 'empBell', headerName: '사내전화번호', width: 130 },
     { field: 'empMail', headerName: '개인이메일', width: 130 },
     { field: 'mobile', headerName: '전화번호', width: 130 },
     { field: 'userRoleGrade', headerName: '사원권한', width: 130 },
-    { field: 'birthday', headerName: '생일', width: 130 },
+    { field: 'birthday', headerName: '생일', width: 100 },
     { field: 'address', headerName: '집주소', width: 130 },
-    { field: 'licensePlate', headerName: '차량번호', width: 130 },
-    { field: 'photo', headerName: '사진', width: 130 },
+    { field: 'licensePlate', headerName: '차량번호', width: 90 },
+    { field: 'photo', headerName: '사진', width: 100 },
+    {
+      field: 'actions',
+      type: 'actions',
+      width: 80,
+      getActions: () => [
+        <GridActionsCellItem icon={<SettingsIcon />} label="update" />,
+      ],
+    },
+    {
+      field: 'action',
+      type: 'action',
+      width: 80,
+      getActions: (params) => [
+        <GridActionsCellItem
+          icon={<Delete />}
+          label="Delete"
+          onClick={deleteUser(params.id)}
+        />,
+      ],
+    },
   ];
-  console.log('aaa');
 
-  // setLoading(true);
   useEffect(() => {
     selectEmployees(setEmpList);
     console.log(empList);
   }, []);
   return (
-    <Container maxWidth="maxWidth">
-      {console.log('ddd')}
-      <div style={{ height: 1000, width: '100%' }}>
-        {console.log('ddd')}
-        <DataGrid
-          rows={empList}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          checkboxSelection
-        />
-      </div>
-    </Container>
+    <div style={{ marginTop: 70 }}>
+      <Container maxWidth="maxWidth">
+        <PersonAddIcon fontSize="large" color="action" />
+        <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
+          <DataGrid
+            rows={empList}
+            columns={columns}
+            pageSize={10}
+            rowsPerPageOptions={[10]}
+            checkboxSelection
+          />
+        </div>
+      </Container>
+    </div>
   );
 }
 
