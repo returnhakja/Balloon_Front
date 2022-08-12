@@ -11,8 +11,6 @@ function Chat({ invite }) {
   // login할때 empId를 가져옴 -> 채팅방생성/채팅 시 사용가능
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
-  console.log(empId);
-  console.log(empInfo.empName);
 
   //실시간 시간 가져오기
   const nowTime = moment().format('HH:mm');
@@ -195,8 +193,6 @@ function Chat({ invite }) {
         <br />
         <button onClick={onUserUpdate}>수정하기</button>
       </div>
-
-      <div>{/* <button onClick={onUserAdd}>수정하기</button> */}</div>
 
       <br />
       <Link to={'/chatroom'}>채팅목록 이동</Link>
