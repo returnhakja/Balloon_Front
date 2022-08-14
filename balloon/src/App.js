@@ -22,9 +22,9 @@ import ApprovalComplete from './pages/approval/ApprovalComplete';
 import ApprovalRefuse from './pages/approval/ApprovalRefuse';
 import DocumentList from './pages/approval/DocumentList';
 
-import Calendar from './pages/calendar/Calendar';
-
 import LoginPage from './pages/login/LoginPage';
+
+import Calendar from './pages/calendar/Calendar';
 
 import ManagementUnit from './pages/personnelManagement/ManagementUnit';
 import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
@@ -42,15 +42,6 @@ function App() {
 
   // 채팅방 초대하기
   const [invite, setInvite] = useState([]);
-
-  // useEffect(() => {
-  //   const logged = localStorage.getItem('isLogin');
-  //   logged && JSON.parse(logged) ? setLogin(true) : setLogin(false);
-  // });
-
-  // useEffect(() => {
-  //   localStorage.setItem('isLogin', isLogin);
-  // }, [isLogin]);
 
   useEffect(() => {
     const l = localStorage.getItem('logged');
@@ -88,8 +79,8 @@ function App() {
         <Route path="/organization">
           <Route index element={<Organization />} />
         </Route>
-        {/* Private Routes */}
 
+        {/* Private Routes */}
         <Route
           element={
             <PrivateRoutes
