@@ -19,8 +19,9 @@ import TextField from '@mui/material/TextField';
 import { getDocsByEmp } from '../../context/ApprovalAxios';
 
 import { Space, Table, Pagination } from 'antd';
-import 'antd/dist/antd.css';
+
 import { DataGrid } from '@mui/x-data-grid';
+
 
 function Declare() {
   const [empInfo, setEmpInfo] = useOutletContext();

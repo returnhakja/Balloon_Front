@@ -22,6 +22,7 @@ import { getDocsByEmp } from '../../context/ApprovalAxios';
 import { DataGrid } from '@mui/x-data-grid';
 
 
+
 function Declare() {
   const [empInfo, setEmpInfo] = useOutletContext();
 

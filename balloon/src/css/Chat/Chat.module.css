@@ -53,3 +53,16 @@
   width: 20%;
   height: 90%;
 }
+
+.logoutBtn {
+  text-align: right;
+}
+
+.updatename {
+  text-align: right;
+}
+
+.chatroomname {
+  text-align: center;
+  background-color: aquamarine;
+}
