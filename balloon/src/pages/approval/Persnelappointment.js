@@ -20,6 +20,18 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  textAlign: 'center',
+};
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -34,7 +46,8 @@ function Pointment() {
   const [startValue, setStartValue] = useState(null);
 
   // 모달
-  const [openModal, setOpenModal] = useState(false);
+  // const [openModal, setOpenModal] = useState(false);
+  const [openapprovalModal, setOpenapprovalModal] = useState(false);
 
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
@@ -99,13 +112,21 @@ function Pointment() {
             type="button"
             className={styles.btnnav}
             onClick={() => {
-              setOpenModal(true);
+              // setOpenModal(true);
+              setOpenapprovalModal(true);
             }}
             id="cancelBtn">
             결재선설정
           </button>
         </div>
-        {openModal && <Modal closeModal={setOpenModal} />}
+        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
+        {openapprovalModal && (
+          <Modal
+            openapprovalModal={openapprovalModal}
+            setOpenapprovalModal={setOpenapprovalModal}
+            style={style}
+          />
+        )}
         <hr />
         <br />
         <Card

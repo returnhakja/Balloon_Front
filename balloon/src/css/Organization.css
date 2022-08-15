@@ -156,7 +156,7 @@
   content: '';
   position: absolute;
   top: 0;
-  left: 50%;
+  left: 49.9%;
   -webkit-transform: translate(-50%, -100%);
   transform: translate(-50%, -100%);
   width: 2px;

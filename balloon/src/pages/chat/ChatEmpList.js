@@ -16,6 +16,7 @@ function ChatEmpList({ invite, setInvite }) {
   useEffect(() => {
     getEmpListInSameUnit(empId, setCEList);
     console.log(chatEmpList);
+    setInvite([]);
   }, []);
 
   //초대할 사원을 담아두는 메소드

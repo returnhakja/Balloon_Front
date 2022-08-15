@@ -1,11 +1,11 @@
-import { minusPage, plusPage } from "../context/BoardAxios";
+import { minusPage, plusPage } from '../context/BoardAxios';
 import {
   Alignments,
   PageDiv,
   PageSpan,
   PaginationSpan,
   IButton,
-} from "../styles/StyleMB";
+} from '../styles/StyleMB';
 
 function PageList({ boardList, page, setPage }) {
   return (
@@ -15,8 +15,7 @@ function PageList({ boardList, page, setPage }) {
           <IButton
             onClick={() => {
               minusPage(page, setPage);
-            }}
-          >
+            }}>
             prev
           </IButton>
         )}
@@ -30,10 +29,9 @@ function PageList({ boardList, page, setPage }) {
                   onClick={(e) => {
                     setPage(e.target.id);
                   }}
-                  aria-current={parseInt(page) === number ? "page" : null}
-                >
-                  {" "}
-                  {number}{" "}
+                  aria-current={parseInt(page) === number ? 'page' : null}>
+                  {' '}
+                  {number}{' '}
                 </PaginationSpan>
               </PageSpan>
             );
@@ -42,8 +40,7 @@ function PageList({ boardList, page, setPage }) {
           <IButton
             onClick={() => {
               plusPage(page, setPage, boardList.totalPage);
-            }}
-          >
+            }}>
             next
           </IButton>
         )}

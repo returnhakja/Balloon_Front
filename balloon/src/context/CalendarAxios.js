@@ -29,7 +29,7 @@ export const insertSchedule = async (inputdata, setOpen) => {
   const headers = {
     'Content-Type': 'application/json',
   };
-
+  console.log(inputdata);
   await axios
     .post(url, inputdata, {
       headers,
@@ -41,7 +41,7 @@ export const insertSchedule = async (inputdata, setOpen) => {
 // 수정
 
 //삭제
-export const deletehandle = async (scheduleId, handleClose) => {
+export const deletehandle = async (scheduleId, openUpdate, handleClose) => {
   console.log(scheduleId);
 
   await axios
@@ -52,5 +52,5 @@ export const deletehandle = async (scheduleId, handleClose) => {
     })
     .catch((err) => console.log(err));
 
-  window.location.href = '/calendar';
+  // window.location.href = '/calendar';
 };

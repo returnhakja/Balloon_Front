@@ -1,22 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { insertSchedule } from '../../context/CalendarAxios';
 import styles from '../../css/Component.module.css';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  DatePicker,
+  DateTimePicker,
+  LocalizationProvider,
+} from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ko } from 'date-fns/esm/locale';
+import {
+  getEmpListInSameUnit,
+  selectEmployeeByEmpId,
+} from '../../context/EmployeeAxios';
+import { BsCalendarWeek } from 'react-icons/bs';
+import { margin } from '@mui/system';
 
 function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const handleClose = () => setOpenInsert(false);
   const [startValue, setStartValue] = useState(new Date());
   const [endvalue, setEndValue] = useState(new Date());
+  const [eList, setCEList] = useState([]);
+  const [invite, setInvite] = useState([]);
+  const empId = empInfo.empId;
 
   const insertHandle = () => {
     const scheduletitle = document.getElementById('scheduletitle').value;
     const CalendarContent = document.getElementById('CalendarContent').value;
     const CalendarLocation = document.getElementById('CalendarLocation').value;
-
+    invite.push(empId);
+    console.log(invite);
+    // const inputData = invite.map(input=>)
     const inputdata = {
       scheduleTitle: scheduletitle,
       scheduleStart: startValue,
@@ -25,9 +40,25 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
       scheduleMemo: CalendarContent,
       scheduleLocation: CalendarLocation,
       employee: { empId: empInfo.empId },
+      employeeIds: invite,
     };
-
     insertSchedule(inputdata, setOpenInsert);
+    // invite(inputdata);
+  };
+  useEffect(() => {
+    getEmpListInSameUnit(empId, setCEList);
+    // setInvite();
+    console.log(eList);
+    // console.log(empId);
+  }, []);
+
+  const onInvite = (checked, data) => {
+    if (checked) {
+      setInvite([...invite, data]);
+      console.log(invite);
+    } else {
+      setInvite(invite.filter((button) => button !== data));
+    }
   };
 
   return (
@@ -40,8 +71,17 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         <Typography
           id="modal-modal-title"
           variant="h4"
-          component="h2"
-          sx={{ mb: 2, mt: 2, color: 'red' }}>
+          component="h4"
+          sx={{ mb: 2, mt: 2, color: '#00AAFF' }}>
+          <BsCalendarWeek className={styles.icon} />
+          <span>일정 등록</span>
+          <hr />
+        </Typography>
+        <Typography
+          id="modal-modal-title"
+          variant="h6"
+          component="h6"
+          sx={{ mb: 2, mt: 2 }}>
           일정 제목
         </Typography>
         <TextField
@@ -52,17 +92,17 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         />
         <Typography
           id="modal-modal-title"
-          variant="h4"
-          component="h2"
+          variant="h6"
+          component="h6"
           sx={{ mb: 2, mt: 2 }}>
-          일정
+          날짜 선택
         </Typography>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
+          <DateTimePicker
             label="시작일"
             value={startValue + 1}
             type=" date"
-            inputFormat={'yyyy-MM-dd'}
+            inputFormat={'yyyy/MM/dd  HH:mm'}
             locale={ko}
             onChange={(newValue) => {
               setStartValue(newValue);
@@ -73,10 +113,10 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
         <span className={styles.centerfont}> : </span>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
+          <DateTimePicker
             label="끝나는일"
             value={endvalue}
-            inputFormat={'yyyy-MM-dd'}
+            inputFormat={'yyyy/MM/dd  HH:mm'}
             locale={ko}
             onChange={(newValue) => {
               setEndValue(newValue);
@@ -84,14 +124,24 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          같은부서 사원을 찾을 수 있는 그걸 만들어야하는데 몰라서 일딴 텍스트
-        </Typography>
 
-        <Typography
-          id="modal-modal-description"
-          variant="h4"
-          sx={{ mt: 2, mb: 2 }}>
+        {eList.map((emp, index) => {
+          return (
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <input
+                type="checkbox"
+                onChange={(e) => {
+                  onInvite(e.currentTarget.checked, emp.empId);
+                }}
+                checked={invite.includes(emp.empId) ? true : false}
+              />
+              {emp.empName}
+              {emp.position}
+            </Typography>
+          );
+        })}
+
+        <Typography id="modal-modal-description" variant="h6" sx={{ mt: 2 }}>
           MEMO
         </Typography>
 
@@ -102,10 +152,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
           sx={{ width: '100%' }}
         />
 
-        <Typography
-          id="modal-modal-description"
-          variant="h4"
-          sx={{ mt: 2, mb: 2 }}>
+        <Typography id="modal-modal-description" variant="h6" sx={{ mt: 2 }}>
           장소
         </Typography>
         <TextField
