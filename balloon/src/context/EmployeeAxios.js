@@ -123,25 +123,24 @@ export const getEmpListInSameUnit = async (empId, setCEList) => {
 };
 
 // 사원 추가
-export const InsertEmployee = async (
-  empId
-  // , boardContent, userEmail
-) => {
-  // const urlStr = process.env.REACT_APP_URL_EMP;
-  // const inputBoard = {
-  //   boardTitle: boardTitle,
-  //   boardContent: boardContent,
-  //   user: {
-  //     userEmail: userEmail,
-  //   },
-  // };
-  // axios
-  //   .post(urlStr, inputBoard, process.env.REACT_APP_HEADER)
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
-  // window.location.href = "/";
-};
+// export const InsertEmployee = async (
+//   inputEmp
+// ) => {
+// //   const urlStr = process.env.REACT_APP_URL_EMP;
+//   // const inputBoard = {
+//   //   boardTitle: boardTitle,
+//   //   boardContent: boardContent,
+//   //   user: {
+//   //     userEmail: userEmail,
+//   //   },
+//   // };
+//   // axios
+//   //   .post(urlStr, inputBoard, process.env.REACT_APP_HEADER)
+//   //   .catch((error) => {
+//   //     console.log(error);
+//   //   });
+//   // window.location.href = "/";
+// };
 
 // 사원 수정
 export const updateEmployee = async (
