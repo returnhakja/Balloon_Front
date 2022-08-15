@@ -35,6 +35,7 @@ import CreateRoom from './pages/chat/CreateRoom';
 
 import Organization from './pages/Organization';
 import ChatEmpList from './pages/chat/ChatEmpList';
+import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
@@ -123,6 +124,7 @@ function App() {
           <Route path="/management/unit" element={<ManagementUnit />} />
           {/* 사원관리 */}
           <Route path="/management/employee" element={<ManagementEmployee />} />
+          <Route path="/add/employee" element={<EmpAddPage />} />
         </Route>
       </Route>
     </Routes>

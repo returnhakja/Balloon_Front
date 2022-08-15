@@ -18,6 +18,7 @@ import { Container } from '@mui/system';
 import Delete from '@mui/icons-material/Delete';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { Link } from 'react-router-dom';
 
 const CustomTypeEditComponent = (props) => {
   const apiRef = useGridApiContext();
@@ -59,7 +60,7 @@ function ManagementEmployee() {
     selectEmployees(setEmpList);
     console.log(empList);
     setRows(empList);
-  }, [empList]);
+  }, []);
 
   const columns = [
     { field: 'empId', headerName: '사원번호', width: 130 },
@@ -172,7 +173,9 @@ function ManagementEmployee() {
   return (
     <div style={{ marginTop: 70, marginBottom: 50 }}>
       <Container maxWidth="maxWidth">
-        <PersonAddIcon fontSize="large" color="action" />
+        <Link to={'/add/employee'}>
+          <PersonAddIcon fontSize="large" color="action" />
+        </Link>
         <Box sx={{ width: '100%', height: 650 }}>
           <DataGrid
             rows={rows}
@@ -180,7 +183,7 @@ function ManagementEmployee() {
             editMode="row"
             experimentalFeatures={{ newEditingApi: true }}
             pageSize={10}
-            // rowsPerPageOptions={[10]}
+            rowsPerPageOptions={[10]}
             checkboxSelection
           />
         </Box>
