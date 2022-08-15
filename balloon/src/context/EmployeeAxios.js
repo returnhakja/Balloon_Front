@@ -167,7 +167,8 @@ export const updateEmployee = async (
 
 // 사번으로 사원 삭제
 export const deleteEmployee = async (empId) => {
-  // const urlStr = process.env.REACT_APP_URL_EMP + '/' + empId;
-  // await axios.delete(urlStr).catch((error) => console.log(error));
+  const url = '/api/emp/delete/';
+  const urlStr = url + empId;
+  await axios.delete(urlStr).catch((error) => console.log(error));
   // window.location.href = "/";
 };

@@ -68,15 +68,13 @@ const responseArr = [
   'CEO',
 ];
 
+const gradeArr = ['ROLE_GUEST', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN'];
+
 function EmpAddPage() {
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    // setPersonName(
-    //   // On autofill we get a stringified value.
-    //   typeof value === 'string' ? value.split(',') : value,
-    // );
   };
 
   const handleSubmit = (event) => {
@@ -102,42 +100,48 @@ function EmpAddPage() {
           사원번호
           <TextField
             margin="normal"
-            label="사원번호"
+            // label="사원번호"
             required
             fullWidth
-            name="empId"
+            id="empId"
             autoComplete="empId"
             autoFocus
           />
           비밀번호
           <TextField
             margin="normal"
-            label="비밀번호"
+            // label="비밀번호"
             type="password"
             required
             fullWidth
-            name="password"
+            id="password"
             autoComplete="current-password"
           />
           이름
           <TextField
             margin="normal"
-            label="이름"
+            // label="이름"
             required
             fullWidth
-            name="empName"
+            id="empName"
             autoComplete="empName"
           />
-          <InputLabel id="demo-multiple-name-label">직위</InputLabel>
+          <InputLabel id="label-position">직위</InputLabel>
           <Select
-            labelId="demo-multiple-name-label"
-            id="demo-multiple-name"
+            margin="none"
+            // labelId="직위"
+            id="position"
+            defaultValue={positionArr[0]}
             // multiple
             // value={'인턴'}
-            onChange={handleChange}
+            // onChange={handleChange}
+            onChange={(e, value) => {
+              console.log(e.target.value);
+              value = e.target.value;
+            }}
             input={<OutlinedInput label="position" />}
             MenuProps={MenuProps}
-            style={{ width: '50vw' }}>
+            style={{ width: '100%' }}>
             {positionArr.map((position) => (
               <MenuItem
                 key={position}
@@ -148,89 +152,176 @@ function EmpAddPage() {
               </MenuItem>
             ))}
           </Select>
-          <br />
-          <InputLabel id="demo-multiple-name-label">직책</InputLabel>
+          <InputLabel id="label-responsibility">직책</InputLabel>
           <Select
-            labelId="demo-multiple-name-label"
-            id="demo-multiple-name"
+            margin="normal"
+            // labelId="직책"
+            // label="직책"
+            id="responsibility"
+            defaultValue={responseArr[0]}
             // multiple
             // value={'인턴'}
-            onChange={handleChange}
-            input={<OutlinedInput label="position" />}
+            input={<OutlinedInput label="responsibility" />}
             MenuProps={MenuProps}
-            style={{ width: '50vw' }}>
-            {positionArr.map((position) => (
+            style={{ width: '100%' }}
+            onChange={(e, value) => {
+              console.log(e.target.value);
+              value = e.target.value;
+            }}>
+            {responseArr.map((responsibility) => (
               <MenuItem
-                key={position}
-                value={position}
+                key={responsibility}
+                value={responsibility}
                 // style={getStyles(name, personName, theme)}
               >
-                {position}
+                {responsibility}
               </MenuItem>
             ))}
           </Select>
-          직위
-          <br />
-          <select name="position">
-            <option value="인턴">인턴</option>
-            <option value="사원">사원</option>
-            <option value="주임">주임</option>
-            <option value="대리">대리</option>
-            <option value="과장">과장</option>
-            <option value="차장">차장</option>
-            <option value="부장">부장</option>
-            <option value="이사">이사</option>
-            <option value="상무">상무</option>
-            <option value="전무">전무</option>
-            <option value="부사장">부사장</option>
-            <option value="사장">사장</option>
-            <option value="부회장">부회장</option>
-            <option value="이사회 의장">이사회 의장</option>
-            <option value="회장">회장</option>
-          </select>
-          <br />
-          직책
-          <br />
-          <select name="responsibility">
-            <option value="없음">없음</option>
-            <option value="파트장">파트장</option>
-            <option value="팀장">팀장</option>
-            <option value="지점장">지점장</option>
-            <option value="본부장">본부장</option>
-            <option value="그룹장">그룹장</option>
-            <option value="부서장">부서장</option>
-            <option value="사업부장">사업부장</option>
-            <option value="부문장">부문장</option>
-            <option value="센터장">센터장</option>
-            <option value="실장">실장</option>
-            <option value="임원">임원</option>
-            <option value="상근고문">상근고문</option>
-            <option value="고문">고문</option>
-            <option value="CIO">CIO</option>
-            <option value="COO">COO</option>
-            <option value="CMO">CMO</option>
-            <option value="CFO">CFO</option>
-            <option value="CTO">CTO</option>
-            <option value="CEO">CEO</option>
-          </select>
-          <br />
-          이름
+          <InputLabel id="label-salary">월급</InputLabel>
           <TextField
             margin="normal"
-            label="이름"
+            // label="월급"
+            type="number"
             required
             fullWidth
-            name="empName"
-            autoComplete="empName"
+            id="salary"
+            autoComplete="salary"
+          />{' '}
+          <InputLabel id="label-commission">상여금</InputLabel>
+          <TextField
+            margin="normal"
+            // label="상여금"
+            type="number"
+            required
+            fullWidth
+            id="commission"
+            autoComplete="commission"
           />
-          직위
+          <InputLabel id="label-hiredate">고용일자</InputLabel>
           <TextField
             margin="normal"
-            label="직위"
+            // label="고용일자"
+            type="date"
             required
             fullWidth
-            name="position"
-            autoComplete="position"
+            id="hiredate"
+            autoComplete="hiredate"
+          />
+          <InputLabel id="label-unit">조직이름</InputLabel>
+          <Select
+            margin="normal"
+            // labelId="조직"
+            // label="조직"
+            id="unit"
+            defaultValue={responseArr[0]}
+            input={<OutlinedInput label="unit" />}
+            MenuProps={MenuProps}
+            style={{ width: '100%' }}
+            onChange={(e, value) => {
+              console.log(e.target.value);
+              value = e.target.value;
+            }}>
+            {responseArr.map((responsibility) => (
+              <MenuItem
+                key={responsibility}
+                value={responsibility}
+                // style={getStyles(name, personName, theme)}
+              >
+                {responsibility}
+              </MenuItem>
+            ))}
+          </Select>
+          <InputLabel id="label-empBell">사내전화번호</InputLabel>
+          <TextField
+            margin="normal"
+            // label="사내전화번호"
+            required
+            fullWidth
+            id="empBell"
+            autoComplete="empBell"
+          />
+          <InputLabel id="label-empMail">개인이메일</InputLabel>
+          <TextField
+            margin="normal"
+            // label="개인이메일"
+            type="email"
+            required
+            fullWidth
+            id="empMail"
+            autoComplete="empMail"
+          />
+          <InputLabel id="label-mobile">전화번호</InputLabel>
+          <TextField
+            margin="normal"
+            // label="전화번호"
+            required
+            fullWidth
+            id="mobile"
+            autoComplete="mobile"
+          />
+          <InputLabel id="label-userRoleGrade">사원권한</InputLabel>
+          <Select
+            margin="normal"
+            // labelId="사원권한"
+            // label="사원권한"
+            id="userRoleGrade"
+            defaultValue={gradeArr[1]}
+            // multiple
+            // value={'인턴'}
+            input={<OutlinedInput label="userRoleGrade" />}
+            MenuProps={MenuProps}
+            style={{ width: '100%' }}
+            onChange={(e, value) => {
+              console.log(e.target.value);
+              value = e.target.value;
+            }}>
+            {gradeArr.map((userRoleGrade) => (
+              <MenuItem
+                key={userRoleGrade}
+                value={userRoleGrade}
+                // style={getStyles(name, personName, theme)}
+              >
+                {userRoleGrade}
+              </MenuItem>
+            ))}
+          </Select>
+          <InputLabel id="label-birthday">생일</InputLabel>
+          <TextField
+            margin="normal"
+            // label="생일"
+            required
+            fullWidth
+            id="birthday"
+            autoComplete="birthday"
+          />
+          <InputLabel id="label-address">집주소</InputLabel>
+          <TextField
+            margin="normal"
+            // label="집주소"
+            required
+            fullWidth
+            id="address"
+            autoComplete="address"
+          />
+          <InputLabel id="label-licensePlate">차량번호</InputLabel>
+          <TextField
+            margin="normal"
+            // label="차량번호"
+            required
+            fullWidth
+            id="licensePlate"
+            autoComplete="licensePlate"
+          />
+          <InputLabel id="label-photo">사진</InputLabel>
+          <TextField
+            margin="normal"
+            // label="사진"
+            type="file"
+            required
+            fullWidth
+            id="photo"
+            autoComplete="photo"
           />
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

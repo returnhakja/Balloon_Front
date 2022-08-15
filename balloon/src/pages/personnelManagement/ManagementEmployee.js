@@ -4,6 +4,7 @@ import {
   minusPage,
   plusPage,
   selectEmployeeByEmpId,
+  deleteEmployee,
 } from '../../context/EmployeeAxios';
 import {
   DataGrid,
@@ -166,7 +167,11 @@ function ManagementEmployee() {
       width: 80,
       getActions: () => [
         <GridActionsCellItem icon={<SettingsIcon />} label="update" />,
-        <GridActionsCellItem icon={<Delete />} label="Delete" />,
+        <GridActionsCellItem
+          icon={<Delete />}
+          label="Delete"
+          onClick={(e) => console.log(e)}
+        />,
       ],
     },
   ];
