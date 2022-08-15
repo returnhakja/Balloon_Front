@@ -3,6 +3,7 @@ import Cookies from 'universal-cookie';
 
 // 로그인
 export const login = async (empId, password, authenticate) => {
+  console.log(empId, password, authenticate);
   const header = { 'Content-Type': 'application/json' };
   const url = '/auth/login';
   const inputLogin = {
@@ -10,13 +11,16 @@ export const login = async (empId, password, authenticate) => {
     password: password,
   };
   const loggi = await axios.post(url, inputLogin, header).catch((error) => {
+    console.log(empId, password, authenticate);
     console.log(error);
   });
 
   if (!!loggi) {
     authenticate();
-    window.location.href = '/';
+    console.log(empId, password, authenticate);
+    // window.location.href = '/';
   } else {
+    console.log(empId, password, authenticate);
     alert('아이디 혹은 비밀번호가 틀립니다.');
   }
 };

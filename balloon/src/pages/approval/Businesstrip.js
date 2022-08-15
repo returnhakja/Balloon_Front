@@ -31,14 +31,27 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  textAlign: 'center',
+};
+
 function Trip() {
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
   const [endvalue, setEndValue] = useState(null);
 
   // 모달
-  const [openModal, setOpenModal] = useState(false);
-
+  // const [openModal, setOpenModal] = useState(false);
+  const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
 
@@ -105,13 +118,21 @@ function Trip() {
             type="button"
             className={styles.btnnav}
             onClick={() => {
-              setOpenModal(true);
+              // setOpenModal(true);
+              setOpenapprovalModal(true);
             }}
             id="cancelBtn">
             결재선설정
           </button>
         </div>
-        {openModal && <Modal closeModal={setOpenModal} />}
+        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
+        {openapprovalModal && (
+          <Modal
+            openapprovalModal={openapprovalModal}
+            setOpenapprovalModal={setOpenapprovalModal}
+            style={style}
+          />
+        )}
         <hr />
         <br />
         <Card
@@ -145,6 +166,21 @@ function Trip() {
         {/* 여기부터는 상세내용 */}
 
         <table className={styles.tableborder}>
+          <thead>
+            <tr className={styles.trcon}>
+              <td className={styles.titlename}>기안제목</td>
+              <td className={styles.titlename} colSpan={2}>
+                <form>
+                  <input
+                    type="text"
+                    name="title"
+                    placeholder="기안제목을 입력하세요."
+                    className={styles.inputtext}
+                  />
+                </form>
+              </td>
+            </tr>
+          </thead>
           <thead>
             <tr className={styles.trcon}>
               <td className={styles.titlename}>신청자 정보</td>

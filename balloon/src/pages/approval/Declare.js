@@ -19,7 +19,7 @@ import TextField from '@mui/material/TextField';
 import { getDocsByEmp } from './ApprovalAxios';
 
 import { Space, Table, Pagination } from 'antd';
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
 
 function Declare() {
   const [empInfo, setEmpInfo] = useOutletContext();
