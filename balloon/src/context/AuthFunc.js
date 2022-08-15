@@ -1,6 +1,21 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 
+// 회원가입
+export const signup = async (
+  inputEmp
+) => {
+  const url = '/auth/signup';
+  
+  axios
+    .post(urlStr, inputBoard, {"Content-type": "application/json")
+    .catch((error) => {
+      console.log(error);
+    });
+  // window.location.href = "/";
+};
+
+
 // 로그인
 export const login = async (empId, password, authenticate) => {
   console.log(empId, password, authenticate);
