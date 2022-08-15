@@ -29,3 +29,19 @@
   font-size: 2rem;
   margin-left: 16vw;
 }
+
+.input {
+  font-size: 16px;
+  width: 100%;
+  height: 50px;
+  text-align: center;
+}
+
+.input:focus {
+  outline: 1px solid #00aaff;
+}
+
+/* 아이콘 */
+.icon {
+  margin-top: 5px;
+}

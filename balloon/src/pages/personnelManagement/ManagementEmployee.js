@@ -155,7 +155,7 @@
 // export default ManagementEmployee;
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import {
   selectEmployees,
   minusPage,
@@ -202,7 +202,6 @@ function ManagementEmployee() {
       field: 'userRoleGrade',
       headerName: '사원권한',
       width: 130,
-      editable: true,
     },
     { field: 'birthday', headerName: '생일', width: 100 },
     { field: 'address', headerName: '집주소', width: 130, editable: true },
@@ -232,12 +231,14 @@ function ManagementEmployee() {
     <div style={{ marginTop: 70 }}>
       <Container maxWidth="maxWidth">
         <PersonAddIcon fontSize="large" color="action" />
+
         <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
           <DataGrid
             rows={empList}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10]}
+            components={{ Toolbar: GridToolbar }}
             checkboxSelection
           />
         </div>

@@ -28,9 +28,23 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  textAlign: 'center',
+};
+
 function Report() {
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
+  const [openapprovalModal, setOpenapprovalModal] = useState(false);
 
   console.log(empInfo);
 
@@ -57,14 +71,14 @@ function Report() {
     </React.Fragment>
   );
 
-  const [openModal, setOpenModal] = useState(false);
+  // const [openModal, setOpenModal] = useState(false);
   console.log(empInfo);
   return (
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
           {' '}
-          <FcDocument /> 업무기안 lalala~
+          <FcDocument /> 업무기안
         </p>
 
         <table className={styles.table}>
@@ -90,18 +104,26 @@ function Report() {
             <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
-        {openModal && <Modal closeModal={setOpenModal} />}
+        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
           <button
             type="button"
             className={styles.btnnav}
             onClick={() => {
-              setOpenModal(true);
+              // setOpenModal(true);
+              setOpenapprovalModal(true);
             }}
             id="cancelBtn">
             결재선설정
           </button>
+          {openapprovalModal && (
+            <Modal
+              openapprovalModal={openapprovalModal}
+              setOpenapprovalModal={setOpenapprovalModal}
+              style={style}
+            />
+          )}
         </div>
         <hr />
         <br />
