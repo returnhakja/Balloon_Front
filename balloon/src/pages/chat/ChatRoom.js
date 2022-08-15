@@ -15,7 +15,6 @@ function ChatRoom() {
 
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
-  console.log(empInfo);
 
   useEffect(() => {
     const onChatroom = (setChatroom) => {

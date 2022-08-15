@@ -2,9 +2,23 @@ import { useEffect, useState } from 'react';
 import styles from '../../css/Component.module.css';
 import axios from 'axios';
 import { deletehandle } from '../../context/CalendarAxios';
-import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  Box,
+  Button,
+  Input,
+  InputLabel,
+  Modal,
+  TextField,
+  Typography,
+} from '@mui/material';
+import {
+  DatePicker,
+  DateTimePicker,
+  LocalizationProvider,
+} from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { useOutletContext } from 'react-router-dom';
+import { BsCalendarWeek } from 'react-icons/bs';
 
 function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
   console.log('sssss');
@@ -13,31 +27,35 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
   console.log(setOpenUpdate);
   const handleClose = () => setOpenUpdate(false);
 
-  const [startValue, setStartValue] = useState(null);
-  const [endvalue, setEndValue] = useState(null);
+  const [list, setList] = useState([]);
+  const [startValue, setStartValue] = useState(list.scheduleStart);
+  const [endvalue, setEndValue] = useState(list.scheduleEnd);
+  console.log(list.scheduleStart);
+  const [empInfo, setEmpInfo] = useOutletContext();
 
-  useEffect(
-    () => {
-      const headers = {
-        'Content-Type': 'application/json',
-      };
+  useEffect(() => {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
 
-      // console.log(list);
-      // const data = async (list) => {
-      //   console.log(list);
-      //   const response = await axios
-      //     .get(`http://localhost:8080/api/calall/` + list[0], headers)
+    const data = async (list) => {
+      const response = await axios
+        .get(`/api/cal/all/${openUpdate.scheduleId}`, headers)
 
-      //     .then((response) => {
-      //       setList(response.data);
-      //     });
-      // };
+        .then((response) => {
+          setList(response.data);
+        });
+    };
 
-      // data();
-    },
-    []
-    //  [list]
-  );
+    data();
+    console.log();
+    console.log(empInfo);
+  }, []);
+
+  useEffect(() => {
+    setStartValue(list.scheduleStart);
+    setEndValue(list.scheduleEnd);
+  }, [list]);
 
   //업데이트
   const updateHandle = () => {
@@ -46,30 +64,46 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
     const CalendarLocation = document.getElementById('CalendarLocation').value;
 
     const inputdata = {
+      scheduleId: list.scheduleId,
       scheduleTitle: scheduletitle,
       scheduleStart: startValue,
       scheduleEnd: endvalue,
+      empName: empInfo.empName,
       scheduleMemo: CalendarContent,
       scheduleLocation: CalendarLocation,
+      empId: { empId: empInfo.empId },
     };
     const headers = {
       'Content-Type': 'application/json',
     };
 
-    // const data = async () => {
-    //   const response = await axios.put(
-    //     `http://localhost:8080/api/cal/update`,
-    //     inputdata,
-    //     {
-    //       headers,
-    //     }
-    //   );
-    //   setOpenUpdate(false);
-    //   window.location.href = '/calendar';
-    // };
-    // data();
+    const data = async (inputdata) => {
+      await axios
+        .put('/api/cal/update', inputdata, {
+          headers,
+        })
+        .catch((err) => console.log(err));
+      setOpenUpdate(false);
+      window.location.href = '/calendar';
+    };
+    data(inputdata);
   };
 
+  const deletehandle1 = async () => {
+    console.log(openUpdate.scheduleId);
+
+    await axios
+      .delete(`http://localhost:8080/api/cal/delete/${openUpdate.scheduleId}`)
+
+      .then(() => {
+        handleClose(false);
+      })
+      .catch((err) => console.log(err));
+
+    // window.location.href = '/calendar';
+  };
+
+  console.log(list);
   return (
     <Modal
       open={openUpdate}
@@ -80,79 +114,78 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
         <Typography
           id="modal-modal-title"
           variant="h4"
-          component="h2"
+          component="h4"
+          sx={{ mb: 2, mt: 2, color: '#00AAFF' }}>
+          <BsCalendarWeek className={styles.icon} />
+          <span>일정 보기</span>
+          <hr />
+        </Typography>
+        <Typography
+          id="modal-modal-title"
+          variant="h6"
+          component="h6"
           sx={{ mb: 2, mt: 2, color: 'red' }}>
           일정 제목
         </Typography>
-        <TextField
+        <input
           required
-          id="outlined-required"
-          label="일정 제목을 입력하세요"
-          // defaultValue={}
-          sx={{ width: '100%' }}
+          defaultValue={list.scheduleTitle}
+          className={styles.input}
+          id="scheduletitle"
         />
         <Typography
           id="modal-modal-title"
-          variant="h4"
-          component="h2"
+          variant="h6"
+          component="h6"
           sx={{ mb: 2, mt: 2 }}>
           일정
         </Typography>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
+          <DateTimePicker
             label="시작일"
             value={startValue}
-            type=" date"
-            inputFormat={'yyyy-MM-dd'}
+            inputFormat={'yyyy/MM/dd  HH:mm'}
+            renderInput={(params) => <TextField {...params} />}
             onChange={(newValue) => {
               setStartValue(newValue);
             }}
-            renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
-
         <span className={styles.centerfont}> : </span>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
+          <DateTimePicker
             label="끝나는일"
             value={endvalue}
-            inputFormat={'yyyy-MM-dd'}
+            inputFormat={'yyyy/MM/dd  HH:mm'}
             onChange={(newValue) => {
               setEndValue(newValue);
             }}
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          같은부서 사원을 찾을 수 있는 그걸 만들어야하는데 몰라서 일딴 텍스트
-        </Typography>
-
+        =
         <Typography
           id="modal-modal-description"
-          variant="h4"
+          variant="h6"
           sx={{ mt: 2, mb: 2 }}>
           MEMO
         </Typography>
-
-        <TextField
-          required
-          id="outlined-required1"
-          label="메모 입력"
-          sx={{ width: '100%' }}
-        />
-
+        <input
+          defaultValue={list.scheduleMemo}
+          className={styles.input}
+          id="CalendarContent"></input>
         <Typography
           id="modal-modal-description"
-          variant="h4"
+          variant="h6"
           sx={{ mt: 2, mb: 2 }}>
           장소
         </Typography>
-        <TextField
-          required
-          id="outlined-required2"
-          label="장소 입력"
-          sx={{ mt: 1, width: '100%' }}
+        <input
+          defaultValue={list.scheduleLocation}
+          className={styles.input}
+          id="CalendarLocation"
         />
+        <br />
         <Button
           onClick={handleClose}
           sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>
@@ -164,7 +197,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
           수정
         </Button>
         <Button
-          onClick={() => deletehandle('scheduleId', handleClose)}
+          onClick={() => deletehandle1()}
           sx={{ fontSize: 30, border: 1, mt: 1 }}>
           삭제
         </Button>

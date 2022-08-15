@@ -19,7 +19,7 @@ import TextField from '@mui/material/TextField';
 import { useOutletContext, Link } from 'react-router-dom';
 import { getDocsByUnit } from './ApprovalAxios';
 import { Space, Table, Pagination } from 'antd';
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
 
 function DocList() {
   const [empInfo, setEmpInfo] = useOutletContext();

@@ -148,7 +148,6 @@ function ManagementEmployee() {
         }
       },
       width: 130,
-      editable: true,
     },
     { field: 'birthday', headerName: '생일', width: 100 },
     { field: 'address', headerName: '집주소', width: 130, editable: true },
@@ -184,6 +183,7 @@ function ManagementEmployee() {
             experimentalFeatures={{ newEditingApi: true }}
             pageSize={10}
             rowsPerPageOptions={[10]}
+            components={{ Toolbar: GridToolbar }}
             checkboxSelection
           />
         </Box>
