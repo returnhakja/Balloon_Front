@@ -17,9 +17,10 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
 import { useOutletContext, Link } from 'react-router-dom';
-import { getDocsByUnit } from './ApprovalAxios';
+import { getDocsByUnit } from '../../context/ApprovalAxios';
 import { Space, Table, Pagination } from 'antd';
-// import 'antd/dist/antd.css';
+import 'antd/dist/antd.css';
+import { DataGrid } from '@mui/x-data-grid';
 
 function DocList() {
   const [empInfo, setEmpInfo] = useOutletContext();
@@ -44,24 +45,30 @@ function DocList() {
   }, []);
 
   const [bottomcenter, setBottomCenter] = useState('bottomcenter');
-  const data = [
-    // 기안 제목 , 상신일 , 문서번호
-    {
-      title: '문서번호',
-      dataIndex: 'docId',
-      key: 'docId',
-    },
-    {
-      title: '문서제목',
-      dataIndex: 'documentTitle',
-      key: 'documentTitle',
-      render: (id, index) => <Link to={`/`}>{id}</Link>,
-    },
-    {
-      title: '처리일자',
-      dataIndex: 'updateTime',
-      key: 'upDateTime',
-    },
+  // const data = [
+  //   // 기안 제목 , 상신일 , 문서번호
+  //   {
+  //     title: '문서번호',
+  //     dataIndex: 'docId',
+  //     key: 'docId',
+  //   },
+  //   {
+  //     title: '문서제목',
+  //     dataIndex: 'documentTitle',
+  //     key: 'documentTitle',
+  //     render: (id, index) => <Link to={`/`}>{id}</Link>,
+  //   },
+  //   {
+  //     title: '처리일자',
+  //     dataIndex: 'updateTime',
+  //     key: 'upDateTime',
+  //   },
+  // ];
+
+  const columns = [
+    { field: 'docId', headerName: '문서번호', width: 130 },
+    { field: 'documentTitle', headerName: '문서제목', width: 130 },
+    { field: 'updateTime', headerName: '처리일자', width: 130 },
   ];
 
   return (
@@ -139,14 +146,23 @@ function DocList() {
               style={{ marginTop: '2vh' }}>
               조회
             </Button>
-            <Table
+            {/* <Table
               columns={data}
               dataSource={docList}
               pagination={{
                 position: [bottomcenter],
                 pageSize: 5,
               }}
-            />
+            /> */}
+            <div style={{ height: 250, width: '100%', marginBottom: 70 }}>
+              <DataGrid
+                getRowId={(docList) => docList.docId}
+                rows={docList}
+                columns={columns}
+                pageSize={10}
+                rowsPerPageOptions={[10]}
+              />
+            </div>
           </div>
         </Container>
       </SideNavigation>
