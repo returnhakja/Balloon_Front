@@ -10,6 +10,7 @@ import {
   GridEditSingleSelectCell,
   GridActionsCellItem,
   useGridApiContext,
+  GridToolbar,
 } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -61,10 +62,11 @@ function ManagementEmployee() {
     console.log(empList);
     setRows(empList);
   }, []);
+  // console.log(empList);
 
   const columns = [
-    { field: 'empId', headerName: '사원번호', width: 130 },
-    { field: 'empName', headerName: '이름', width: 90, editable: true },
+    { field: 'empId', headerName: '사원번호', width: 100 },
+    { field: 'empName', headerName: '이름', width: 80, editable: true },
     {
       field: 'position',
       headerName: '직위',
@@ -126,14 +128,14 @@ function ManagementEmployee() {
       width: 90,
       editable: true,
     },
-    { field: 'salary', headerName: '월급', width: 90, editable: true },
-    { field: 'commission', headerName: '상여금', width: 90, editable: true },
+    { field: 'salary', headerName: '월급', width: 80, editable: true },
+    { field: 'commission', headerName: '상여금', width: 80, editable: true },
     { field: 'hiredate', headerName: '고용일자', width: 100 },
     { field: 'unitName', headerName: '조직이름', width: 100, editable: true },
     {
       field: 'empBell',
       headerName: '사내전화번호',
-      width: 130,
+      width: 120,
       editable: true,
     },
     { field: 'empMail', headerName: '개인이메일', width: 130, editable: true },
@@ -175,9 +177,9 @@ function ManagementEmployee() {
         <Link to={'/add/employee'}>
           <PersonAddIcon fontSize="large" color="action" />
         </Link>
-        <Box sx={{ width: '100%', height: 650 }}>
+        <Box sx={{ width: '100%', height: 700 }}>
           <DataGrid
-            rows={rows}
+            rows={empList}
             columns={columns}
             editMode="row"
             experimentalFeatures={{ newEditingApi: true }}

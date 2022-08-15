@@ -9,8 +9,76 @@ import {
   Avatar,
   Box,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const positionArr = [
+  '인턴',
+  '사원',
+  '주임',
+  '대리',
+  '과장',
+  '차장',
+  '부장',
+  '이사',
+  '상무',
+  '전무',
+  '부사장',
+  '사장',
+  '부회장',
+  '이사회 의장',
+  '회장',
+];
+
+const responseArr = [
+  '없음',
+  '파트장',
+  '팀장',
+  '지점장',
+  '본부장',
+  '그룹장',
+  '부서장',
+  '사업부장',
+  '부문장',
+  '센터장',
+  '실장',
+  '임원',
+  '상근고문',
+  '고문',
+  'CIO',
+  'COO',
+  'CMO',
+  'CFO',
+  'CTO',
+  'CEO',
+];
 
 function EmpAddPage() {
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    // setPersonName(
+    //   // On autofill we get a stringified value.
+    //   typeof value === 'string' ? value.split(',') : value,
+    // );
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -60,6 +128,47 @@ function EmpAddPage() {
             name="empName"
             autoComplete="empName"
           />
+          <InputLabel id="demo-multiple-name-label">직위</InputLabel>
+          <Select
+            labelId="demo-multiple-name-label"
+            id="demo-multiple-name"
+            // multiple
+            // value={'인턴'}
+            onChange={handleChange}
+            input={<OutlinedInput label="position" />}
+            MenuProps={MenuProps}
+            style={{ width: '50vw' }}>
+            {positionArr.map((position) => (
+              <MenuItem
+                key={position}
+                value={position}
+                // style={getStyles(name, personName, theme)}
+              >
+                {position}
+              </MenuItem>
+            ))}
+          </Select>
+          <br />
+          <InputLabel id="demo-multiple-name-label">직책</InputLabel>
+          <Select
+            labelId="demo-multiple-name-label"
+            id="demo-multiple-name"
+            // multiple
+            // value={'인턴'}
+            onChange={handleChange}
+            input={<OutlinedInput label="position" />}
+            MenuProps={MenuProps}
+            style={{ width: '50vw' }}>
+            {positionArr.map((position) => (
+              <MenuItem
+                key={position}
+                value={position}
+                // style={getStyles(name, personName, theme)}
+              >
+                {position}
+              </MenuItem>
+            ))}
+          </Select>
           직위
           <br />
           <select name="position">

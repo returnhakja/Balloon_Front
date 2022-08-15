@@ -32,39 +32,37 @@ export const plusPage = async (page, setPage) => {
 };
 
 // 전체 사원 출력 (리스트)
-export const selectEmployees = async (setEmpList) =>
-  // setEmps
-  {
-    const url = '/api/emp/emps';
-    const list = await axios
-      .get(url)
-      .then((response) => {
-        const arr = [];
-        response.data.map((data, index) => {
-          arr.push({
-            id: index,
-            empId: data.empId,
-            empName: data.empName,
-            position: data.position,
-            responsibility: data.responsibility,
-            salary: data.salary,
-            commission: data.commission,
-            hiredate: data.hiredate,
-            unitName: data.unit.unitName,
-            empBell: data.empBell,
-            empMail: data.empMail,
-            mobile: data.mobile,
-            userRoleGrade: data.userRoleGrade,
-            birthday: data.birthday,
-            address: data.address,
-            licensePlate: data.licensePlate,
-            photo: data.photo,
-          });
+export const selectEmployees = async (setEmpList) => {
+  const url = '/api/emp/emps';
+  await axios
+    .get(url)
+    .then((response) => {
+      const arr = [];
+      response.data.map((data, index) => {
+        arr.push({
+          id: index,
+          empId: data.empId,
+          empName: data.empName,
+          position: data.position,
+          responsibility: data.responsibility,
+          salary: data.salary,
+          commission: data.commission,
+          hiredate: data.hiredate,
+          unitName: data.unit.unitName,
+          empBell: data.empBell,
+          empMail: data.empMail,
+          mobile: data.mobile,
+          userRoleGrade: data.userRoleGrade,
+          birthday: data.birthday,
+          address: data.address,
+          licensePlate: data.licensePlate,
+          photo: data.photo,
         });
-        setEmpList(arr);
-      })
-      .catch((error) => console.log(error));
-  };
+      });
+      setEmpList(arr);
+    })
+    .catch((error) => console.log(error));
+};
 
 // accessToken으로 이름, 직위, id 가져오기
 export const getMe = async (setEmpInfo) => {
