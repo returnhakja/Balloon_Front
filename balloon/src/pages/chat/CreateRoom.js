@@ -6,6 +6,7 @@ import { Link, useOutletContext } from 'react-router-dom';
 
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
+import { onCreateChatroom, onUserInvite } from '../../context/ChatAxios';
 
 function CreateChatroom({ invite }) {
   const [roomId, setRoomId] = useState();
@@ -32,20 +33,20 @@ function CreateChatroom({ invite }) {
   };
 
   //채팅방만들기
-  const onCreateChatroom = () => {
-    const chatroomName = document.getElementById('chatroomName');
-    invite.push(empInfo);
-    console.log(invite);
-    axios
-      .post('http://localhost:8080/createChatroom', {
-        chatroomName: chatroomName.value,
-        headCount: invite.length,
-      })
-      .then((response) => {
-        console.log(response.data);
-        setRoomId(response.data);
-      });
-  };
+  // const onCreateChatroom = () => {
+  //   const chatroomName = document.getElementById('chatroomName');
+  // invite.push(empInfo);
+  // console.log(invite);
+  // axios
+  //   .post('http://localhost:8080/createChatroom', {
+  //     chatroomName: chatroomName.value,
+  //     headCount: invite.length,
+  //   })
+  //   .then((response) => {
+  //     console.log(response.data);
+  //     setRoomId(response.data);
+  //   });
+  // };
 
   // {
   //   invite &&
@@ -58,35 +59,35 @@ function CreateChatroom({ invite }) {
 
   //사원초대하기
   //chatroomEmployee T에 초대할 사람과 초대한 사람 넣어주기
-  const onUserInvite = () => {
-    invite &&
-      axios
-        .post(
-          `http://localhost:8080/insertChatEmp/${chatroomId}`,
-          invite.map((data) => {
-            const inviteEnter = () => {
-              client.send(
-                '/app/chat/message',
-                {},
-                JSON.stringify({
-                  chatroomId: chatroomId,
-                  writer: data.empId,
-                  chatContent: data.empName + '님이 입장하셨습니다',
-                })
-              );
-            };
-            inviteEnter();
-            return {
-              empId: {
-                empId: data.empId,
-              },
-            };
-          })
-        )
-        .then((response) => {
-          console.log(response.data);
-        });
-  };
+  // const onUserInvite = () => {
+  //   invite &&
+  //     axios
+  //       .post(
+  //         `http://localhost:8080/insertChatEmp/${chatroomId}`,
+  //         invite.map((data) => {
+  //           const inviteEnter = () => {
+  //             client.send(
+  //               '/app/chat/message',
+  //               {},
+  //               JSON.stringify({
+  //                 chatroomId: chatroomId,
+  //                 writer: data.empId,
+  //                 chatContent: data.empName + '님이 입장하셨습니다',
+  //               })
+  //             );
+  //           };
+  //           inviteEnter();
+  //           return {
+  //             empId: {
+  //               empId: data.empId,
+  //             },
+  //           };
+  //         })
+  //       )
+  //       .then((response) => {
+  //         console.log(response.data);
+  //       });
+  // };
 
   return (
     <div>
@@ -104,12 +105,19 @@ function CreateChatroom({ invite }) {
       <Button
         variant="contained"
         onClick={() => {
-          onCreateChatroom();
+          onCreateChatroom(
+            empInfo,
+            setRoomId,
+            invite,
+            document.getElementById('chatroomName')
+          );
         }}>
         등록
       </Button>
       <Link to={`/chat?room=${roomId}`}>
-        <Button variant="contained" onClick={() => onUserInvite()}>
+        <Button
+          variant="contained"
+          onClick={() => onUserInvite(chatroomId, invite, client)}>
           <div>채팅하기</div>
         </Button>
       </Link>

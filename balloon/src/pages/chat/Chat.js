@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import styles from './Chat.module.css';
+import styles from '../../css/Chat/Chat.module.css';
 import { Link, useOutletContext } from 'react-router-dom';
 import moment from 'moment';
 import axios from 'axios';
@@ -9,6 +9,13 @@ import axios from 'axios';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
 import { TextField } from '@mui/material';
+import {
+  chatRecord,
+  chatroomInfo,
+  empIdInfo,
+  onExitRoom,
+  onUserUpdate,
+} from '../../context/ChatAxios';
 
 function Chat({ chatempinfo, setChatempinfo }) {
   // login할때 empId를 가져옴 -> 채팅방생성/채팅 시 사용가능
@@ -57,8 +64,8 @@ function Chat({ chatempinfo, setChatempinfo }) {
   const onKeyPress = (e) => {
     if (e.key == 'Enter') {
       send();
+      inputRef.current.value = '';
     }
-    inputRef.current.value = '';
   };
 
   //채팅방 채팅기록
@@ -68,61 +75,60 @@ function Chat({ chatempinfo, setChatempinfo }) {
   const [chatroomName, setChatroomName] = useState('');
   const [headCount, setHeadCount] = useState(0);
 
-  const chatroomInfo = () => {
-    axios
-      .get(`http://localhost:8080/oneChatroom/${chatroomId}`)
-      .then((response) => {
-        console.log(response.data.chatroomName);
-        setChatroomName(response.data.chatroomName);
-        setHeadCount(response.data.headCount);
-      });
-  };
+  //채팅방이름수정을위해서 채팅방정보가져옴
+  // const chatroomInfo = () => {
+  //   axios
+  //     .get(`http://localhost:8080/oneChatroom/${chatroomId}`)
+  //     .then((response) => {
+  //       console.log(response.data.chatroomName);
+  //       setChatroomName(response.data.chatroomName);
+  //       setHeadCount(response.data.headCount);
+  //     });
+  // };
 
   //chatroomEmployee T에 chatroomId로 사원정보 가져오기
+  //채팅방에 어떤사람이 남아있는지 알려주기 위해서
   // const [chatempinfo, setChatempinfo] = useState([]);
 
   useEffect(() => {
-    const empIdInfo = () => {
-      axios
-        .get(`http://localhost:8080/oneChatEmp/${chatroomId}`)
-        .then((response) => {
-          console.log(response.data);
-          setChatempinfo(response.data);
-        });
-    };
-    empIdInfo(setChatempinfo);
+    // const empIdInfo = () => {
+    //   axios
+    //     .get(`http://localhost:8080/oneChatEmp/${chatroomId}`)
+    //     .then((response) => {
+    //       console.log(response.data);
+    //       setChatempinfo(response.data);
+    //     });
+    // };
+    empIdInfo(chatroomId, setChatempinfo);
   }, []);
 
   //chatroom에 들어갔을 때 기록남게
   useEffect(() => {
-    const chatRecord = (setChatting) => {
-      axios
-        .get(`http://localhost:8080/chatRecord/${chatroomId}`)
-        .then((response) => {
-          console.log(response.data);
-          setChatting(response.data);
-        });
-    };
-    chatRecord(setChatting);
-    chatroomInfo();
+    // const chatRecord = (setChatting) => {
+    //   axios
+    //     .get(`http://localhost:8080/chatRecord/${chatroomId}`)
+    //     .then((response) => {
+    //       console.log(response.data);
+    //       setChatting(response.data);
+    //     });
+    // };
+    chatRecord(chatroomId, setChatting);
+    chatroomInfo(chatroomId, setChatroomName, setHeadCount);
   }, []);
 
-  console.log(chatroomName);
-  console.log(headCount);
-
   //채팅방 이름수정
-  const onUserUpdate = () => {
-    const chatroomName = document.getElementById('chatroomName');
+  // const onUserUpdate = () => {
+  //   const chatroomName = document.getElementById('chatroomName');
 
-    axios
-      .put(`http://localhost:8080/updateroom/${chatroomId}`, {
-        chatroomName: chatroomName.value,
-        headCount: headCount,
-      })
-      .then((response) => {
-        console.log(response.data);
-      });
-  };
+  //   axios
+  //     .put(`http://localhost:8080/updateroom/${chatroomId}`, {
+  //       chatroomName: chatroomName.value,
+  //       headCount: headCount,
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     });
+  // };
 
   //사원초대
   // const onUserAdd = () => {
@@ -153,17 +159,17 @@ function Chat({ chatempinfo, setChatempinfo }) {
     );
   };
 
-  const onExitRoom = () => {
-    console.log(chatroomId);
-    console.log(empId);
-    axios
-      .delete(`http://localhost:8080/deleteroom/${chatroomId}/${empId}`)
-      .then((response) => {
-        console.log(response.data);
-      });
-    sendExit();
-  };
-  console.log(empInfo.empName);
+  // const onExitRoom = () => {
+  //   console.log(chatroomId);
+  //   console.log(empId);
+  //   axios
+  //     .delete(`http://localhost:8080/deleteroom/${chatroomId}/${empId}`)
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     });
+  //   sendExit();
+  // };
+  // console.log(empInfo.empName);
 
   return (
     <>
@@ -175,7 +181,7 @@ function Chat({ chatempinfo, setChatempinfo }) {
       </Link>
       {/* 채팅방 나가기 */}
       <div className={styles.logoutBtn}>
-        <Button onClick={() => onExitRoom(chatroomId, empId)}>
+        <Button onClick={() => onExitRoom(chatroomId, empId, sendExit)}>
           <Link to={'/chatroom'}>
             <LogoutIcon />
           </Link>
@@ -190,7 +196,15 @@ function Chat({ chatempinfo, setChatempinfo }) {
           defaultValue={chatroomName}
         />
         <br />
-        <Button variant="contained" onClick={onUserUpdate}>
+        <Button
+          variant="contained"
+          onClick={() =>
+            onUserUpdate(
+              chatroomId,
+              document.getElementById('chatroomName'),
+              headCount
+            )
+          }>
           수정하기
         </Button>
       </div>

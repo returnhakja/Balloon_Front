@@ -9,28 +9,20 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Container } from '@mui/system';
 
+import { onChatroom } from '../../context/ChatAxios';
+import { onDeleteRoom } from '../../context/ChatAxios';
+
 function ChatRoom() {
   const [chatroom, setChatroom] = useState([]);
-
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
-  console.log(empInfo);
 
+  //마지막으로 보낸 채팅list가져오기
   useEffect(() => {
-    const onChatroom = (setChatroom) => {
-      axios.get(`http://localhost:8080/allChat/${empId}`).then((response) => {
-        setChatroom(response.data);
-        console.log(response.data);
-      });
-    };
-    onChatroom(setChatroom);
-  }, []);
-
-  const onDeleteRoom = (chatroomId) => {
-    axios
-      .delete(`http://localhost:8080/deleteChatroom/${chatroomId}`)
-      .then((response) => console.log(response.data));
-  };
+    if (empId) {
+      onChatroom(setChatroom, empId);
+    }
+  }, [empId]);
 
   return (
     <>

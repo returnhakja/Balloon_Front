@@ -48,27 +48,12 @@ function ChatEmpList({ invite, setInvite }) {
       <div>
         <ol>
           {chatEmpList.map((ce, index) => {
-            // console.log(ce.empId);
             return (
               <div key={index} style={{ border: '1px solid black' }}>
                 <img src={ce.photo} alt="사원 이미지" />
                 {'  '}
                 <span>{ce.empName}</span> {'  '}
                 <span>{ce.position}</span>
-                {/* <input
-                type="checkbox"
-                onChange={(e) => {
-                  onInvite(e.currentTarget.checked, ce.empId);
-                }}
-                checked={invite.includes(ce.empId) ? true : false}
-              /> */}
-                {/* <Checkbox
-                  type="checkbox"
-                  onChange={(e) => {
-                    onInvite(e.currentTarget.checked, ce.empId);
-                  }}
-                  checked={invite.includes(ce.empId) ? true : false}
-                /> */}
                 <Checkbox
                   type="checkbox"
                   onChange={(e) => {
