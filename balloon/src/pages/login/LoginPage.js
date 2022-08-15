@@ -54,7 +54,8 @@ function LoginPage({ authenticate }) {
             required
             fullWidth
             name="password"
-            autoComplete="current-password"></TextField>
+            autoComplete="current-password"
+          />
 
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

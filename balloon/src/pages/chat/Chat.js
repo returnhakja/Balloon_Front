@@ -225,7 +225,6 @@ function Chat({ chatempinfo, setChatempinfo }) {
         <button onClick={onUserAdd}>사원초대하기</button>
       </div> */}
 
-      <div>{/* <button onClick={onUserAdd}>수정하기</button> */}</div>
       <br />
       <br />
       <br />
