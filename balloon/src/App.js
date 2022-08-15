@@ -22,9 +22,9 @@ import ApprovalComplete from './pages/approval/ApprovalComplete';
 import ApprovalRefuse from './pages/approval/ApprovalRefuse';
 import DocumentList from './pages/approval/DocumentList';
 
-import Calendar from './pages/calendar/Calendar';
-
 import LoginPage from './pages/login/LoginPage';
+
+import Calendar from './pages/calendar/Calendar';
 
 import ManagementUnit from './pages/personnelManagement/ManagementUnit';
 import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
@@ -35,6 +35,7 @@ import CreateRoom from './pages/chat/CreateRoom';
 
 import Organization from './pages/Organization';
 import ChatEmpList from './pages/chat/ChatEmpList';
+import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
@@ -42,15 +43,6 @@ function App() {
 
   // 채팅방 초대하기
   const [invite, setInvite] = useState([]);
-
-  // useEffect(() => {
-  //   const logged = localStorage.getItem('isLogin');
-  //   logged && JSON.parse(logged) ? setLogin(true) : setLogin(false);
-  // });
-
-  // useEffect(() => {
-  //   localStorage.setItem('isLogin', isLogin);
-  // }, [isLogin]);
 
   useEffect(() => {
     const l = localStorage.getItem('logged');
@@ -88,8 +80,8 @@ function App() {
         <Route path="/organization">
           <Route index element={<Organization />} />
         </Route>
-        {/* Private Routes */}
 
+        {/* Private Routes */}
         <Route
           element={
             <PrivateRoutes
@@ -132,6 +124,7 @@ function App() {
           <Route path="/management/unit" element={<ManagementUnit />} />
           {/* 사원관리 */}
           <Route path="/management/employee" element={<ManagementEmployee />} />
+          <Route path="/add/employee" element={<EmpAddPage />} />
         </Route>
       </Route>
     </Routes>
