@@ -9,7 +9,7 @@ export const signup = async (
   const url = '/auth/signup';
   
   axios
-    .post(urlStr, inputBoard,header)
+    .post(url, inputEmp, header)
     .catch((error) => {
       console.log(error);
     });
