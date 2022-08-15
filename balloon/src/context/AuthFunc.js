@@ -5,10 +5,11 @@ import Cookies from 'universal-cookie';
 export const signup = async (
   inputEmp
 ) => {
+    const header = { 'Content-Type': 'application/json' };
   const url = '/auth/signup';
   
   axios
-    .post(urlStr, inputBoard, {"Content-type": "application/json")
+    .post(urlStr, inputBoard,header)
     .catch((error) => {
       console.log(error);
     });
