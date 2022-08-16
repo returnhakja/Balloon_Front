@@ -171,7 +171,10 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
         </LocalizationProvider>
         <span className={styles.centerfont}> : </span>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
+          {/* <DateTimePicker */}
+
           {/* <DateTimePicker
+
             locale={ko}
             label="끝나는일"
             value={endvalue}
@@ -181,6 +184,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
             }}
             renderInput={(params) => <TextField {...params} />}
           /> */}
+
           <TextField
             id="endvalue"
             label="끝나는 일"
