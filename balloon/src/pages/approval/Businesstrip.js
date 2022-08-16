@@ -94,7 +94,7 @@ function Trip() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>출장계획서</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>-</th>
+              <th className={styles.th}>출장계획-</th>
             </tr>
           </thead>
 

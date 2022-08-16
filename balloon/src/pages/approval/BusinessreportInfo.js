@@ -45,6 +45,7 @@ function Report() {
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
+  const [bizRptInfo, setBizRptInfo] = useState({});
 
   console.log(empInfo);
 
@@ -142,14 +143,15 @@ function Report() {
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
                 {' '}
-                <form>
+                {/* <form>
                   <input
                     type="text"
                     name="title"
                     placeholder="기안제목을 입력하세요."
                     className={styles.inputtext}
                   />
-                </form>
+                </form> */}
+                <TextField value={가져온것} />
               </td>
             </tr>
           </thead>
