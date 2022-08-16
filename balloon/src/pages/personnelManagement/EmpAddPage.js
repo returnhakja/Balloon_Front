@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   Button,
@@ -10,6 +10,7 @@ import {
   Box,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { findUnitList } from '../../context/UnitAxios';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -71,16 +72,69 @@ const responseArr = [
 const gradeArr = ['ROLE_GUEST', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN'];
 
 function EmpAddPage() {
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-  };
+  // const handleChange = (event) => {
+  //   const {
+  //     target: { value },
+  //   } = event;
+  // };
+
+  const [unitList, setUnitList] = useState([]);
+  const [posi, setPosi] = useState('인턴');
+  const [responsi, setResponsi] = useState('없음');
+  const [unit, setUnit] = useState('');
+  const [urg, setUrg] = useState('ROLE_USER');
+  const [birth, setBirth] = useState(null);
+  const [unitArr, setUnitArr] = useState([]);
+
+  useEffect(() => {
+    findUnitList(setUnitList);
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    // const data = new FormData(event.currentTarget);
+    const empId = document.getElementById('empId');
+    const password = document.getElementById('password');
+    const empName = document.getElementById('empName');
+    const position = posi;
+    const responsibility = responsi;
+    const salary = document.getElementById('salary');
+    const commission = document.getElementById('commission');
+    const hiredate = document.getElementById('hiredate');
+    // const unitcode = document.getElementById('units');
+    const unitcode = unit;
+    const empBell = document.getElementById('empBell');
+    const empMail = document.getElementById('empMail');
+    const mobile = document.getElementById('mobile');
+    const userRoleGrade = urg;
+    const birthday = document.getElementById('birthday');
+    const address = document.getElementById('address');
+    const licensePlate = document.getElementById('licensePlate');
+    const photo = document.getElementById('photo');
 
+    const inputEmpData = {
+      empId: empId.value,
+      password: password.value,
+      empName: empName.value,
+      position: position,
+      responsibility: responsibility,
+      salary: salary.value,
+      commission: commission.value,
+      hiredate: hiredate.value,
+      unit: {
+        unitCode: unitcode,
+      },
+      empBell: empBell.value,
+      empMail: empMail.value,
+      mobile: mobile.value,
+      userRoleGrade: userRoleGrade,
+      birthday: birthday.value,
+      address: address.value,
+      licensePlate: licensePlate.value,
+      photo: photo.value,
+    };
+
+    console.log(inputEmpData);
     // insert(data, authenticate);
   };
 
@@ -132,12 +186,13 @@ function EmpAddPage() {
             // labelId="직위"
             id="position"
             defaultValue={positionArr[0]}
+            value={posi}
             // multiple
             // value={'인턴'}
             // onChange={handleChange}
-            onChange={(e, value) => {
-              console.log(e.target.value);
-              value = e.target.value;
+            onChange={(e) => {
+              setPosi(e.target.value);
+              console.log(posi);
             }}
             input={<OutlinedInput label="position" />}
             MenuProps={MenuProps}
@@ -154,19 +209,20 @@ function EmpAddPage() {
           </Select>
           <InputLabel id="label-responsibility">직책</InputLabel>
           <Select
-            margin="normal"
+            margin="none"
             // labelId="직책"
             // label="직책"
             id="responsibility"
             defaultValue={responseArr[0]}
+            value={responsi}
             // multiple
             // value={'인턴'}
             input={<OutlinedInput label="responsibility" />}
             MenuProps={MenuProps}
             style={{ width: '100%' }}
-            onChange={(e, value) => {
-              console.log(e.target.value);
-              value = e.target.value;
+            onChange={(e) => {
+              setResponsi(e.target.value);
+              console.log(responsi);
             }}>
             {responseArr.map((responsibility) => (
               <MenuItem
@@ -210,20 +266,22 @@ function EmpAddPage() {
           />
           <InputLabel id="label-unit">조직이름</InputLabel>
           <Select
-            margin="normal"
+            margin="none"
             // labelId="조직"
             // label="조직"
             id="unit"
             defaultValue={responseArr[0]}
+            value={unit}
             input={<OutlinedInput label="unit" />}
             MenuProps={MenuProps}
             style={{ width: '100%' }}
-            onChange={(e, value) => {
-              console.log(e.target.value);
-              value = e.target.value;
+            onChange={(e) => {
+              setUnit(e.target.value);
+              console.log(unit);
             }}>
             {responseArr.map((responsibility) => (
               <MenuItem
+                // className="units"
                 key={responsibility}
                 value={responsibility}
                 // style={getStyles(name, personName, theme)}
@@ -262,19 +320,21 @@ function EmpAddPage() {
           />
           <InputLabel id="label-userRoleGrade">사원권한</InputLabel>
           <Select
-            margin="normal"
+            margin="none"
             // labelId="사원권한"
             // label="사원권한"
             id="userRoleGrade"
             defaultValue={gradeArr[1]}
+            value={urg}
             // multiple
             // value={'인턴'}
             input={<OutlinedInput label="userRoleGrade" />}
             MenuProps={MenuProps}
             style={{ width: '100%' }}
-            onChange={(e, value) => {
+            onChange={(e) => {
               console.log(e.target.value);
-              value = e.target.value;
+              setUrg(e.target.value);
+              console.log(urg);
             }}>
             {gradeArr.map((userRoleGrade) => (
               <MenuItem
@@ -290,6 +350,7 @@ function EmpAddPage() {
           <TextField
             margin="normal"
             // label="생일"
+            type="date"
             required
             fullWidth
             id="birthday"
@@ -331,7 +392,8 @@ function EmpAddPage() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 4, mb: 2 }}>
+            sx={{ mt: 4, mb: 2 }}
+            onClick={handleSubmit}>
             사원추가{' '}
           </Button>
         </Box>

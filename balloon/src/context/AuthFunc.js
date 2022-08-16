@@ -2,20 +2,16 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 
 // 회원가입
-export const signup = async (
-  inputEmp
-) => {
-    const header = { 'Content-Type': 'application/json' };
+export const signup = async (inputEmpData) => {
+  console.log(inputEmpData);
+  const header = { 'Content-Type': 'application/json' };
   const url = '/auth/signup';
-  
-  axios
-    .post(url, inputEmp, header)
-    .catch((error) => {
-      console.log(error);
-    });
+
+  axios.post(url, inputEmpData, header).catch((error) => {
+    console.log(error);
+  });
   // window.location.href = "/";
 };
-
 
 // 로그인
 export const login = async (empId, password, authenticate) => {

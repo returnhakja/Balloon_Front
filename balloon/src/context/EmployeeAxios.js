@@ -164,10 +164,16 @@ export const updateEmployee = async (
   //   window.location.href = "/";
 };
 
+// 사원관리페이지 랜더링 함수
+export const deleteCheck = async (deleteChk, setDeleteChk) => {
+  setDeleteChk(true);
+};
+
 // 사번으로 사원 삭제
-export const deleteEmployee = async (empId) => {
+export const deleteEmployee = async (data) => {
+  console.log(data);
   const url = '/api/emp/delete/';
-  const urlStr = url + empId;
+  const urlStr = url + data.empId;
   await axios.delete(urlStr).catch((error) => console.log(error));
-  // window.location.href = "/";
+  window.location.href = '/management/employee';
 };
