@@ -1,19 +1,10 @@
-import React from 'react';
-import {
-  Container,
-  Button,
-  Checkbox,
-  TextField,
-  FormControlLabel,
-  Typography,
-  Avatar,
-  Box,
-} from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import React, { useEffect, useState } from 'react';
+import { signup } from '../../context/AuthFunc';
+import { findUnitList } from '../../context/UnitAxios';
+import { Container, Button, TextField, Typography, Box } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 const ITEM_HEIGHT = 48;
@@ -68,22 +59,100 @@ const responseArr = [
   'CEO',
 ];
 
+const gradeArr = ['ROLE_GUEST', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN'];
+
 function EmpAddPage() {
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    // setPersonName(
-    //   // On autofill we get a stringified value.
-    //   typeof value === 'string' ? value.split(',') : value,
-    // );
+  // const handleChange = (event) => {
+  //   const {
+  //     target: { value },
+  //   } = event;
+  // };
+
+  // const [unitList, setUnitList] = useState([]);
+
+  const [unitArr, setUnitArr] = useState([]);
+  const [posi, setPosi] = useState('인턴');
+  const [responsi, setResponsi] = useState('없음');
+  const [unit, setUnit] = useState('');
+  const [urg, setUrg] = useState('ROLE_USER');
+  const [birth, setBirth] = useState(null);
+  const [hidePassword, setHidePassword] = useState(true);
+
+  const toggleHidePassword = () => {
+    setHidePassword(!hidePassword);
   };
+
+  useEffect(() => {
+    findUnitList(setUnitArr);
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    // const data = new FormData(event.currentTarget);
+    const empId = document.getElementById('empId').value;
+    const password = document.getElementById('password').value;
+    const empName = document.getElementById('empName').value;
+    const position = posi;
+    const responsibility = responsi;
+    var salary = document.getElementById('salary').value;
+    var commission = document.getElementById('commission').value;
+    const hiredate = document.getElementById('hiredate').value;
+    // const unitcode = document.getElementById('units');
+    const unitcode = unit;
+    const empBell = document.getElementById('empBell').value;
+    const empMail = document.getElementById('empMail').value;
+    const mobile = document.getElementById('mobile').value;
+    const userRoleGrade = urg;
+    var birthday = document.getElementById('birthday').value;
+    var address = document.getElementById('address').value;
+    var licensePlate = document.getElementById('licensePlate').value;
+    var photo = document.getElementById('photo').value;
 
-    // insert(data, authenticate);
+    if (birthday === '') {
+      console.log('dd');
+      birthday = null;
+    } else {
+      console.log('aa');
+      birthday = Date.parse(birthday);
+    }
+    if (address === '') {
+      address = null;
+    }
+    if (licensePlate === '') {
+      licensePlate = null;
+    }
+    if (photo === '') {
+      photo = null;
+    }
+
+    salary = parseFloat(salary);
+    commission = parseFloat(commission);
+
+    const inputEmpData = {
+      empId: empId,
+      password: password,
+      empName: empName,
+      position: position,
+      responsibility: responsibility,
+      salary: salary,
+      commission: commission,
+      hiredate: hiredate,
+      unit: {
+        unitCode: unitcode,
+      },
+      empBell: empBell,
+      empMail: empMail,
+      mobile: mobile,
+      userRoleGrade: userRoleGrade,
+      birthday: birthday,
+      address: address,
+      licensePlate: licensePlate,
+      photo: photo,
+    };
+
+    console.log(inputEmpData);
+
+    signup(inputEmpData);
   };
 
   return (
@@ -102,135 +171,196 @@ function EmpAddPage() {
           사원번호
           <TextField
             margin="normal"
-            label="사원번호"
+            // label="사원번호"
             required
             fullWidth
-            name="empId"
+            id="empId"
             autoComplete="empId"
             autoFocus
           />
           비밀번호
-          <TextField
-            margin="normal"
-            label="비밀번호"
-            type="password"
-            required
-            fullWidth
-            name="password"
-            autoComplete="current-password"
-          />
+          <Box style={{ width: '50vw', display: 'flex' }}>
+            <TextField
+              margin="normal"
+              // label="비밀번호"
+              type={hidePassword ? 'password' : 'text'}
+              required
+              fullWidth
+              id="password"
+              autoComplete="current-password"
+              visible="true"
+            />{' '}
+            <button onClick={toggleHidePassword}>
+              {hidePassword ? '보이기' : '숨기기'}
+            </button>
+          </Box>
           이름
           <TextField
             margin="normal"
-            label="이름"
+            // label="이름"
             required
             fullWidth
-            name="empName"
+            id="empName"
             autoComplete="empName"
           />
-          <InputLabel id="demo-multiple-name-label">직위</InputLabel>
+          <InputLabel id="label-position">직위</InputLabel>
           <Select
-            labelId="demo-multiple-name-label"
-            id="demo-multiple-name"
-            // multiple
-            // value={'인턴'}
-            onChange={handleChange}
+            margin="none"
+            id="position"
+            value={posi}
+            onChange={(e) => {
+              setPosi(e.target.value);
+              console.log(posi);
+            }}
             input={<OutlinedInput label="position" />}
             MenuProps={MenuProps}
-            style={{ width: '50vw' }}>
+            style={{ width: '100%' }}>
             {positionArr.map((position) => (
-              <MenuItem
-                key={position}
-                value={position}
-                // style={getStyles(name, personName, theme)}
-              >
+              <MenuItem key={position} value={position}>
                 {position}
               </MenuItem>
             ))}
           </Select>
-          <br />
-          <InputLabel id="demo-multiple-name-label">직책</InputLabel>
+          <InputLabel id="label-responsibility">직책</InputLabel>
           <Select
-            labelId="demo-multiple-name-label"
-            id="demo-multiple-name"
-            // multiple
-            // value={'인턴'}
-            onChange={handleChange}
-            input={<OutlinedInput label="position" />}
+            margin="none"
+            id="responsibility"
+            value={responsi}
+            input={<OutlinedInput label="responsibility" />}
             MenuProps={MenuProps}
-            style={{ width: '50vw' }}>
-            {positionArr.map((position) => (
-              <MenuItem
-                key={position}
-                value={position}
-                // style={getStyles(name, personName, theme)}
-              >
-                {position}
+            style={{ width: '100%' }}
+            onChange={(e) => {
+              setResponsi(e.target.value);
+              console.log(responsi);
+            }}>
+            {responseArr.map((responsibility) => (
+              <MenuItem key={responsibility} value={responsibility}>
+                {responsibility}
               </MenuItem>
             ))}
           </Select>
-          직위
-          <br />
-          <select name="position">
-            <option value="인턴">인턴</option>
-            <option value="사원">사원</option>
-            <option value="주임">주임</option>
-            <option value="대리">대리</option>
-            <option value="과장">과장</option>
-            <option value="차장">차장</option>
-            <option value="부장">부장</option>
-            <option value="이사">이사</option>
-            <option value="상무">상무</option>
-            <option value="전무">전무</option>
-            <option value="부사장">부사장</option>
-            <option value="사장">사장</option>
-            <option value="부회장">부회장</option>
-            <option value="이사회 의장">이사회 의장</option>
-            <option value="회장">회장</option>
-          </select>
-          <br />
-          직책
-          <br />
-          <select name="responsibility">
-            <option value="없음">없음</option>
-            <option value="파트장">파트장</option>
-            <option value="팀장">팀장</option>
-            <option value="지점장">지점장</option>
-            <option value="본부장">본부장</option>
-            <option value="그룹장">그룹장</option>
-            <option value="부서장">부서장</option>
-            <option value="사업부장">사업부장</option>
-            <option value="부문장">부문장</option>
-            <option value="센터장">센터장</option>
-            <option value="실장">실장</option>
-            <option value="임원">임원</option>
-            <option value="상근고문">상근고문</option>
-            <option value="고문">고문</option>
-            <option value="CIO">CIO</option>
-            <option value="COO">COO</option>
-            <option value="CMO">CMO</option>
-            <option value="CFO">CFO</option>
-            <option value="CTO">CTO</option>
-            <option value="CEO">CEO</option>
-          </select>
-          <br />
-          이름
+          <InputLabel id="label-salary">월급</InputLabel>
           <TextField
             margin="normal"
-            label="이름"
+            type="number"
             required
             fullWidth
-            name="empName"
-            autoComplete="empName"
+            id="salary"
+            autoComplete="salary"
+          />{' '}
+          <InputLabel id="label-commission">상여금</InputLabel>
+          <TextField
+            margin="normal"
+            type="number"
+            required
+            fullWidth
+            id="commission"
+            autoComplete="commission"
           />
-          직위
+          <InputLabel id="label-hiredate">고용일자</InputLabel>
           <TextField
             margin="normal"
-            label="직위"
+            type="date"
             required
             fullWidth
-            name="position"
-            autoComplete="position"
+            id="hiredate"
+            autoComplete="hiredate"
+          />
+          <InputLabel id="label-unit">조직이름</InputLabel>
+          <Select
+            margin="none"
+            id="unit"
+            value={unit}
+            input={<OutlinedInput label="unit" />}
+            MenuProps={MenuProps}
+            style={{ width: '100%' }}
+            onChange={(e) => {
+              setUnit(e.target.value);
+              console.log(unit);
+            }}>
+            {unitArr.map((unit) => (
+              <MenuItem key={unit.unitCode} value={unit.unitCode}>
+                {unit.unitName + ' (' + unit.unitCode + ')'}
+              </MenuItem>
+            ))}
+          </Select>
+          <InputLabel id="label-empBell">사내전화번호</InputLabel>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="empBell"
+            autoComplete="empBell"
+          />
+          <InputLabel id="label-empMail">개인이메일</InputLabel>
+          <TextField
+            margin="normal"
+            type="email"
+            required
+            fullWidth
+            id="empMail"
+            autoComplete="empMail"
+          />
+          <InputLabel id="label-mobile">전화번호</InputLabel>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="mobile"
+            autoComplete="mobile"
+          />
+          <InputLabel id="label-userRoleGrade">사원권한</InputLabel>
+          <Select
+            margin="none"
+            id="userRoleGrade"
+            value={urg}
+            input={<OutlinedInput label="userRoleGrade" />}
+            MenuProps={MenuProps}
+            style={{ width: '100%' }}
+            onChange={(e) => {
+              console.log(e.target.value);
+              setUrg(e.target.value);
+              console.log(urg);
+            }}>
+            {gradeArr.map((userRoleGrade) => (
+              <MenuItem key={userRoleGrade} value={userRoleGrade}>
+                {userRoleGrade}
+              </MenuItem>
+            ))}
+          </Select>
+          <InputLabel id="label-birthday">생일</InputLabel>
+          <TextField
+            margin="normal"
+            type="date"
+            required
+            fullWidth
+            id="birthday"
+            autoComplete="birthday"
+          />
+          <InputLabel id="label-address">집주소</InputLabel>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="address"
+            autoComplete="address"
+          />
+          <InputLabel id="label-licensePlate">차량번호</InputLabel>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="licensePlate"
+            autoComplete="licensePlate"
+          />
+          <InputLabel id="label-photo">사진</InputLabel>
+          <TextField
+            margin="normal"
+            type="file"
+            required
+            fullWidth
+            id="photo"
+            autoComplete="photo"
           />
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -240,7 +370,8 @@ function EmpAddPage() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 4, mb: 2 }}>
+            sx={{ mt: 4, mb: 2 }}
+            onClick={handleSubmit}>
             사원추가{' '}
           </Button>
         </Box>
