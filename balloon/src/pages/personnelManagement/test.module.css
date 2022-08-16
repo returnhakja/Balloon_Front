@@ -1,0 +1,14 @@
+/* div[role='tooltip'] {
+  top: -160px !important;
+  left: 450px !important;
+} */
+
+div[MuiDataGrid-paper] {
+  top: -160px !important;
+  left: 450px !important;
+}
+
+.MuiPaper-elevation {
+  top: -160px !important;
+  left: 450px !important;
+}

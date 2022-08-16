@@ -21,6 +21,8 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Link } from 'react-router-dom';
 
+// import './test.module.css';
+
 const CustomTypeEditComponent = (props) => {
   const apiRef = useGridApiContext();
 
@@ -187,6 +189,11 @@ function ManagementEmployee() {
             rowsPerPageOptions={[10]}
             components={{ Toolbar: GridToolbar }}
             checkboxSelection
+            sx={{
+              '	.MuiDataGrid-filterForm': {
+                color: 'red',
+              },
+            }}
           />
         </Box>
       </Container>
