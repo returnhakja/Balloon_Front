@@ -1,20 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Container,
-  Button,
-  Checkbox,
-  TextField,
-  FormControlLabel,
-  Typography,
-  Avatar,
-  Box,
-} from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { signup } from '../../context/AuthFunc';
 import { findUnitList } from '../../context/UnitAxios';
+import { Container, Button, TextField, Typography, Box } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 const ITEM_HEIGHT = 48;
@@ -78,64 +68,91 @@ function EmpAddPage() {
   //   } = event;
   // };
 
-  const [unitList, setUnitList] = useState([]);
+  // const [unitList, setUnitList] = useState([]);
+
+  const [unitArr, setUnitArr] = useState([]);
   const [posi, setPosi] = useState('인턴');
   const [responsi, setResponsi] = useState('없음');
   const [unit, setUnit] = useState('');
   const [urg, setUrg] = useState('ROLE_USER');
   const [birth, setBirth] = useState(null);
-  const [unitArr, setUnitArr] = useState([]);
+  const [hidePassword, setHidePassword] = useState(true);
+
+  const toggleHidePassword = () => {
+    setHidePassword(!hidePassword);
+  };
 
   useEffect(() => {
-    findUnitList(setUnitList);
+    findUnitList(setUnitArr);
   }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     // const data = new FormData(event.currentTarget);
-    const empId = document.getElementById('empId');
-    const password = document.getElementById('password');
-    const empName = document.getElementById('empName');
+    const empId = document.getElementById('empId').value;
+    const password = document.getElementById('password').value;
+    const empName = document.getElementById('empName').value;
     const position = posi;
     const responsibility = responsi;
-    const salary = document.getElementById('salary');
-    const commission = document.getElementById('commission');
-    const hiredate = document.getElementById('hiredate');
+    var salary = document.getElementById('salary').value;
+    var commission = document.getElementById('commission').value;
+    const hiredate = document.getElementById('hiredate').value;
     // const unitcode = document.getElementById('units');
     const unitcode = unit;
-    const empBell = document.getElementById('empBell');
-    const empMail = document.getElementById('empMail');
-    const mobile = document.getElementById('mobile');
+    const empBell = document.getElementById('empBell').value;
+    const empMail = document.getElementById('empMail').value;
+    const mobile = document.getElementById('mobile').value;
     const userRoleGrade = urg;
-    const birthday = document.getElementById('birthday');
-    const address = document.getElementById('address');
-    const licensePlate = document.getElementById('licensePlate');
-    const photo = document.getElementById('photo');
+    var birthday = document.getElementById('birthday').value;
+    var address = document.getElementById('address').value;
+    var licensePlate = document.getElementById('licensePlate').value;
+    var photo = document.getElementById('photo').value;
+
+    if (birthday === '') {
+      console.log('dd');
+      birthday = null;
+    } else {
+      console.log('aa');
+      birthday = Date.parse(birthday);
+    }
+    if (address === '') {
+      address = null;
+    }
+    if (licensePlate === '') {
+      licensePlate = null;
+    }
+    if (photo === '') {
+      photo = null;
+    }
+
+    salary = parseFloat(salary);
+    commission = parseFloat(commission);
 
     const inputEmpData = {
-      empId: empId.value,
-      password: password.value,
-      empName: empName.value,
+      empId: empId,
+      password: password,
+      empName: empName,
       position: position,
       responsibility: responsibility,
-      salary: salary.value,
-      commission: commission.value,
-      hiredate: hiredate.value,
+      salary: salary,
+      commission: commission,
+      hiredate: hiredate,
       unit: {
         unitCode: unitcode,
       },
-      empBell: empBell.value,
-      empMail: empMail.value,
-      mobile: mobile.value,
+      empBell: empBell,
+      empMail: empMail,
+      mobile: mobile,
       userRoleGrade: userRoleGrade,
-      birthday: birthday.value,
-      address: address.value,
-      licensePlate: licensePlate.value,
-      photo: photo.value,
+      birthday: birthday,
+      address: address,
+      licensePlate: licensePlate,
+      photo: photo,
     };
 
     console.log(inputEmpData);
-    // insert(data, authenticate);
+
+    signup(inputEmpData);
   };
 
   return (
@@ -162,15 +179,21 @@ function EmpAddPage() {
             autoFocus
           />
           비밀번호
-          <TextField
-            margin="normal"
-            // label="비밀번호"
-            type="password"
-            required
-            fullWidth
-            id="password"
-            autoComplete="current-password"
-          />
+          <Box style={{ width: '50vw', display: 'flex' }}>
+            <TextField
+              margin="normal"
+              // label="비밀번호"
+              type={hidePassword ? 'password' : 'text'}
+              required
+              fullWidth
+              id="password"
+              autoComplete="current-password"
+              visible="true"
+            />{' '}
+            <button onClick={toggleHidePassword}>
+              {hidePassword ? '보이기' : '숨기기'}
+            </button>
+          </Box>
           이름
           <TextField
             margin="normal"
@@ -183,13 +206,8 @@ function EmpAddPage() {
           <InputLabel id="label-position">직위</InputLabel>
           <Select
             margin="none"
-            // labelId="직위"
             id="position"
-            defaultValue={positionArr[0]}
             value={posi}
-            // multiple
-            // value={'인턴'}
-            // onChange={handleChange}
             onChange={(e) => {
               setPosi(e.target.value);
               console.log(posi);
@@ -198,11 +216,7 @@ function EmpAddPage() {
             MenuProps={MenuProps}
             style={{ width: '100%' }}>
             {positionArr.map((position) => (
-              <MenuItem
-                key={position}
-                value={position}
-                // style={getStyles(name, personName, theme)}
-              >
+              <MenuItem key={position} value={position}>
                 {position}
               </MenuItem>
             ))}
@@ -210,13 +224,8 @@ function EmpAddPage() {
           <InputLabel id="label-responsibility">직책</InputLabel>
           <Select
             margin="none"
-            // labelId="직책"
-            // label="직책"
             id="responsibility"
-            defaultValue={responseArr[0]}
             value={responsi}
-            // multiple
-            // value={'인턴'}
             input={<OutlinedInput label="responsibility" />}
             MenuProps={MenuProps}
             style={{ width: '100%' }}
@@ -225,11 +234,7 @@ function EmpAddPage() {
               console.log(responsi);
             }}>
             {responseArr.map((responsibility) => (
-              <MenuItem
-                key={responsibility}
-                value={responsibility}
-                // style={getStyles(name, personName, theme)}
-              >
+              <MenuItem key={responsibility} value={responsibility}>
                 {responsibility}
               </MenuItem>
             ))}
@@ -237,7 +242,6 @@ function EmpAddPage() {
           <InputLabel id="label-salary">월급</InputLabel>
           <TextField
             margin="normal"
-            // label="월급"
             type="number"
             required
             fullWidth
@@ -247,7 +251,6 @@ function EmpAddPage() {
           <InputLabel id="label-commission">상여금</InputLabel>
           <TextField
             margin="normal"
-            // label="상여금"
             type="number"
             required
             fullWidth
@@ -257,7 +260,6 @@ function EmpAddPage() {
           <InputLabel id="label-hiredate">고용일자</InputLabel>
           <TextField
             margin="normal"
-            // label="고용일자"
             type="date"
             required
             fullWidth
@@ -267,10 +269,7 @@ function EmpAddPage() {
           <InputLabel id="label-unit">조직이름</InputLabel>
           <Select
             margin="none"
-            // labelId="조직"
-            // label="조직"
             id="unit"
-            defaultValue={responseArr[0]}
             value={unit}
             input={<OutlinedInput label="unit" />}
             MenuProps={MenuProps}
@@ -279,21 +278,15 @@ function EmpAddPage() {
               setUnit(e.target.value);
               console.log(unit);
             }}>
-            {responseArr.map((responsibility) => (
-              <MenuItem
-                // className="units"
-                key={responsibility}
-                value={responsibility}
-                // style={getStyles(name, personName, theme)}
-              >
-                {responsibility}
+            {unitArr.map((unit) => (
+              <MenuItem key={unit.unitCode} value={unit.unitCode}>
+                {unit.unitName + ' (' + unit.unitCode + ')'}
               </MenuItem>
             ))}
           </Select>
           <InputLabel id="label-empBell">사내전화번호</InputLabel>
           <TextField
             margin="normal"
-            // label="사내전화번호"
             required
             fullWidth
             id="empBell"
@@ -302,7 +295,6 @@ function EmpAddPage() {
           <InputLabel id="label-empMail">개인이메일</InputLabel>
           <TextField
             margin="normal"
-            // label="개인이메일"
             type="email"
             required
             fullWidth
@@ -312,7 +304,6 @@ function EmpAddPage() {
           <InputLabel id="label-mobile">전화번호</InputLabel>
           <TextField
             margin="normal"
-            // label="전화번호"
             required
             fullWidth
             id="mobile"
@@ -321,13 +312,8 @@ function EmpAddPage() {
           <InputLabel id="label-userRoleGrade">사원권한</InputLabel>
           <Select
             margin="none"
-            // labelId="사원권한"
-            // label="사원권한"
             id="userRoleGrade"
-            defaultValue={gradeArr[1]}
             value={urg}
-            // multiple
-            // value={'인턴'}
             input={<OutlinedInput label="userRoleGrade" />}
             MenuProps={MenuProps}
             style={{ width: '100%' }}
@@ -337,11 +323,7 @@ function EmpAddPage() {
               console.log(urg);
             }}>
             {gradeArr.map((userRoleGrade) => (
-              <MenuItem
-                key={userRoleGrade}
-                value={userRoleGrade}
-                // style={getStyles(name, personName, theme)}
-              >
+              <MenuItem key={userRoleGrade} value={userRoleGrade}>
                 {userRoleGrade}
               </MenuItem>
             ))}
@@ -349,7 +331,6 @@ function EmpAddPage() {
           <InputLabel id="label-birthday">생일</InputLabel>
           <TextField
             margin="normal"
-            // label="생일"
             type="date"
             required
             fullWidth
@@ -359,7 +340,6 @@ function EmpAddPage() {
           <InputLabel id="label-address">집주소</InputLabel>
           <TextField
             margin="normal"
-            // label="집주소"
             required
             fullWidth
             id="address"
@@ -368,7 +348,6 @@ function EmpAddPage() {
           <InputLabel id="label-licensePlate">차량번호</InputLabel>
           <TextField
             margin="normal"
-            // label="차량번호"
             required
             fullWidth
             id="licensePlate"
@@ -377,7 +356,6 @@ function EmpAddPage() {
           <InputLabel id="label-photo">사진</InputLabel>
           <TextField
             margin="normal"
-            // label="사진"
             type="file"
             required
             fullWidth
