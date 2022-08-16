@@ -19,6 +19,7 @@ import {
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useOutletContext } from 'react-router-dom';
 import { BsCalendarWeek } from 'react-icons/bs';
+import { ko } from 'date-fns/esm/locale';
 
 function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
   console.log('sssss');
@@ -142,6 +143,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
         </Typography>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DateTimePicker
+            locale={ko}
             label="시작일"
             value={startValue}
             inputFormat={'yyyy/MM/dd  HH:mm'}
@@ -154,6 +156,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
         <span className={styles.centerfont}> : </span>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DateTimePicker
+            locale={ko}
             label="끝나는일"
             value={endvalue}
             inputFormat={'yyyy/MM/dd  HH:mm'}
@@ -163,7 +166,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
-        =
+
         <Typography
           id="modal-modal-description"
           variant="h6"
