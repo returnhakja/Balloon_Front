@@ -19,6 +19,8 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Link } from 'react-router-dom';
 
+// import './test.module.css';
+
 const CustomTypeEditComponent = (props) => {
   const apiRef = useGridApiContext();
 
@@ -201,6 +203,10 @@ function ManagementEmployee() {
             onCellClick={(data) => {
               handleClick(data);
             }}
+            sx={{
+              '	.MuiDataGrid-filterForm': {
+                color: 'red',
+              },
           />
         </Box>
       </Container>
