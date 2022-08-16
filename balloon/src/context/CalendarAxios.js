@@ -38,6 +38,20 @@ export const insertSchedule = async (inputdata, setOpen) => {
 
   setOpen(false);
 };
+
+export const insertSchedulList = async (schduleListAdd, setOpen) => {
+  const url = '/api/cal/schedule';
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+  await axios
+    .post(url, schduleListAdd, {
+      headers,
+    })
+    .catch((err) => console.log(err));
+  setOpen(false);
+};
+
 // 수정
 
 //삭제
