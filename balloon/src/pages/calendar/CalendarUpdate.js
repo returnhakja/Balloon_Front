@@ -19,6 +19,7 @@ import {
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useOutletContext } from 'react-router-dom';
 import { BsCalendarWeek } from 'react-icons/bs';
+import { ko } from 'date-fns/esm/locale';
 
 function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
   console.log('sssss');
@@ -55,6 +56,8 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
   useEffect(() => {
     setStartValue(list.scheduleStart);
     setEndValue(list.scheduleEnd);
+    console.log(startValue);
+    console.log(endvalue);
   }, [list]);
 
   //업데이트
@@ -104,6 +107,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
   };
 
   console.log(list);
+
   return (
     <Modal
       open={openUpdate}
@@ -141,7 +145,8 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
           일정
         </Typography>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DateTimePicker
+          {/* <DateTimePicker
+            locale={ko}
             label="시작일"
             value={startValue}
             inputFormat={'yyyy/MM/dd  HH:mm'}
@@ -149,11 +154,25 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
             onChange={(newValue) => {
               setStartValue(newValue);
             }}
+          /> */}
+          <TextField
+            id="startvalue"
+            label="시작일"
+            type="datetime-local"
+            value={startValue}
+            sx={{ width: 250 }}
+            onChange={(e) => {
+              setStartValue(e.target.value);
+            }}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </LocalizationProvider>
         <span className={styles.centerfont}> : </span>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DateTimePicker
+          {/* <DateTimePicker
+            locale={ko}
             label="끝나는일"
             value={endvalue}
             inputFormat={'yyyy/MM/dd  HH:mm'}
@@ -161,9 +180,22 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
               setEndValue(newValue);
             }}
             renderInput={(params) => <TextField {...params} />}
+          /> */}
+          <TextField
+            id="endvalue"
+            label="끝나는 일"
+            type="datetime-local"
+            value={endvalue}
+            sx={{ width: 250 }}
+            onChange={(e) => {
+              setEndValue(e.target.value);
+            }}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </LocalizationProvider>
-        =
+
         <Typography
           id="modal-modal-description"
           variant="h6"

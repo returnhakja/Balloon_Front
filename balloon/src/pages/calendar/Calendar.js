@@ -32,7 +32,9 @@ function Calendar() {
   });
   const handleDateClick = (e) => {
     console.log(e);
+    setOpenInsert(true);
   };
+
   const handleEventClick = (e) => {
     const scheduleId = e.event._def.extendedProps.scheduleId;
     setOpenInsert(false);
