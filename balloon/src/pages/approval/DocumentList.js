@@ -19,8 +19,7 @@ import TextField from '@mui/material/TextField';
 import { useOutletContext, Link } from 'react-router-dom';
 import { getDocsByUnit } from '../../context/ApprovalAxios';
 import { Space, Table, Pagination } from 'antd';
-import { DataGrid } from '@mui/x-data-grid';
-
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 function DocList() {
   const [empInfo, setEmpInfo] = useOutletContext();

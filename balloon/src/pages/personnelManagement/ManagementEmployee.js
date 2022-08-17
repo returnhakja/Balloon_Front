@@ -208,6 +208,7 @@ function ManagementEmployee() {
               '	.MuiDataGrid-filterForm': {
                 color: 'red',
               },
+            }}
           />
         </Box>
       </Container>
