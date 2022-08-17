@@ -117,26 +117,9 @@ function PersonnelAppointmentInfo() {
         </table>
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
-          <button
-            disabled
-            type="button"
-            className={styles.btnnav}
-            onClick={() => {
-              // setOpenModal(true);
-              setOpenapprovalModal(true);
-            }}
-            id="cancelBtn">
-            결재선설정
-          </button>
         </div>
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
-        {openapprovalModal && (
-          <Modal
-            openapprovalModal={openapprovalModal}
-            setOpenapprovalModal={setOpenapprovalModal}
-            style={style}
-          />
-        )}
+
         <hr />
         <br />
         <Card
@@ -148,42 +131,29 @@ function PersonnelAppointmentInfo() {
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>
-        <table className={styles.table}>
-          <thead>
-            <tr className={styles.trcon}>
-              <td className={styles.tdleft}>기안제목</td>
-              <td colSpan={2} className={styles.tdright}>
-                {' '}
-                <form>
-                  <TextField
-                    type="text"
-                    name="title"
-                    value={paInfo.documentTitle}
-                    className={styles.inputtext}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </form>
-              </td>
-            </tr>
-          </thead>
-        </table>
-        <br />
+
         {/* 여기부터는 상세내용 */}
 
         <table className={styles.tableborder}>
           <thead>
             <tr className={styles.trcon}>
-              <td className={styles.titlename}>인사명령일</td>
-              <td className={styles.titlename} colSpan={4}>
+              <td className={styles.tdleft}>기안제목</td>
+              <td colSpan={2} className={styles.tdright}>
+                {' '}
+                {paInfo.documentTitle}
+              </td>{' '}
+            </tr>
+            <tr className={styles.trcon}>
+              <td className={styles.tdleft}>인사명령일</td>
+              <td className={styles.titlename} colSpan={2}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     disabled
-                    label="일자 선택"
+                    label="명령 일자"
                     value={paInfo.personnelDate}
                     type=" date"
                     inputFormat={'yyyy-MM-dd'}
+                    className={styles.datepicker}
                     renderInput={(params) => <TextField {...params} />}
                   />
                 </LocalizationProvider>
@@ -201,6 +171,7 @@ function PersonnelAppointmentInfo() {
             <tr>
               <td className={styles.tdreaui}>
                 <TextField
+                  focused={false}
                   type="text"
                   name="title"
                   value={paInfo.movedEmpName}
@@ -213,6 +184,7 @@ function PersonnelAppointmentInfo() {
               <td className={styles.tdreaui}>
                 <form>
                   <TextField
+                    focused={false}
                     type="text"
                     name="title"
                     value={paInfo.unit && paInfo.unit.unitName}
@@ -230,6 +202,7 @@ function PersonnelAppointmentInfo() {
                     name="title"
                     value={paInfo.position}
                     className={styles.inputtext}
+                    focused={false}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -254,6 +227,7 @@ function PersonnelAppointmentInfo() {
               multiline
               rows={10}
               value={paInfo.documentContent}
+              focused={false}
               InputProps={{
                 readOnly: true,
               }}
