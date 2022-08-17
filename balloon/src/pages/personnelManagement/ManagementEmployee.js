@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
   selectEmployees,
-  deleteEmployee,
+  updateCheck,
+  updateEmployee,
   deleteCheck,
+  deleteEmployee,
 } from '../../context/EmployeeAxios';
 import {
   DataGrid,
@@ -19,8 +21,6 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import { Link } from 'react-router-dom';
-
-// import './test.module.css';
 
 const CustomTypeEditComponent = (props) => {
   const apiRef = useGridApiContext();
@@ -46,31 +46,39 @@ function ManagementEmployee() {
   const [empList, setEmpList] = useState([]);
   const [rowData, setRowData] = useState({});
   const [deleteChk, setDeleteChk] = useState(false);
+  const [updateChk, setUpdateChk] = useState(false);
+
+  const handleClick = (data) => {
+    setRowData(data.row);
+  };
+
+  const handleUpdate = (setUpdateChk) => {
+    updateCheck(setUpdateChk);
+  };
+
+  const handleDelete = (setDeleteChk) => {
+    deleteCheck(setDeleteChk);
+  };
 
   useEffect(() => {
     selectEmployees(setEmpList);
   }, []);
 
+  useEffect(() => {}, [rowData]);
+
   useEffect(() => {
-    console.log(rowData);
-  }, [rowData]);
+    if (updateChk === true) {
+      updateEmployee(rowData);
+      setUpdateChk(false);
+    }
+  }, [updateChk]);
 
   useEffect(() => {
     if (deleteChk === true) {
-      console.log(deleteChk);
       deleteEmployee(rowData);
       setDeleteChk(false);
     }
   }, [deleteChk]);
-
-  const handleClick = (data) => {
-    console.log(data);
-    setRowData(data.row);
-  };
-
-  const handleDelete = (deleteChk, setDeleteChk) => {
-    deleteCheck(deleteChk, setDeleteChk);
-  };
 
   const columns = [
     { field: 'empId', headerName: '사원번호', width: 100 },
@@ -173,12 +181,18 @@ function ManagementEmployee() {
       type: 'actions',
       width: 80,
       getActions: () => [
-        <GridActionsCellItem icon={<SettingsIcon />} label="update" />,
+        <GridActionsCellItem
+          icon={<SettingsIcon />}
+          label="update"
+          onClick={() => {
+            handleUpdate(setUpdateChk);
+          }}
+        />,
         <GridActionsCellItem
           icon={<Delete />}
           label="Delete"
           onClick={() => {
-            handleDelete(deleteChk, setDeleteChk);
+            handleDelete(setDeleteChk);
           }}
         />,
       ],
@@ -193,6 +207,11 @@ function ManagementEmployee() {
         </Link>
         <Box sx={{ width: '100%', height: 700 }}>
           <DataGrid
+            sx={{
+              '	.MuiDataGrid-filterForm': {
+                color: 'red',
+              },
+            }}
             rows={empList}
             columns={columns}
             editMode="row"
@@ -203,11 +222,6 @@ function ManagementEmployee() {
             checkboxSelection
             onCellClick={(data) => {
               handleClick(data);
-            }}
-            sx={{
-              '	.MuiDataGrid-filterForm': {
-                color: 'red',
-              },
             }}
           />
         </Box>
