@@ -3,7 +3,7 @@ import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import Modal from './Modal';
+import Modalapproval from './Modalapproval';
 import {
   Button,
   Card,
@@ -116,6 +116,7 @@ function BizReportInfo() {
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
+
         </div>
         <hr />
         <br />

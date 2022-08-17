@@ -3,7 +3,7 @@ import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import Modal from './Modal';
+import Modalapproval from './Modalapproval';
 import {
   Button,
   Card,
@@ -125,7 +125,7 @@ function BizTripInfo() {
         </div>
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         {openapprovalModal && (
-          <Modal
+          <Modalapproval
             openapprovalModal={openapprovalModal}
             setOpenapprovalModal={setOpenapprovalModal}
             style={style}

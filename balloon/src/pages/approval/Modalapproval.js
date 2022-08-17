@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useOutletContext } from 'react-router-dom';
 import {
   Modal,
   Button,
@@ -12,6 +13,7 @@ import {
   Box,
 } from '@mui/material';
 
+import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -34,14 +36,32 @@ function intersection(a, b) {
 }
 
 function Modalapproval({ openapprovalModal, setOpenapprovalModal }) {
+  const [chatEmpList, setCEList] = useState([]);
+  const [empInfo, setEmpInfo] = useOutletContext();
+  const empId = empInfo.empId;
   const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState([0, 1, 2, 3]);
+  const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
 
   const handleClose = () => setOpenapprovalModal(false);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
+
+  // 사원list 출력하기
+  useEffect(() => {
+    getEmpListInSameUnit(empId, setCEList);
+  }, []);
+
+  useEffect(() => {
+    if (chatEmpList.length !== 0) {
+      const arr = [];
+      chatEmpList.map((data) => {
+        arr.push(data);
+      });
+      setLeft(arr);
+    }
+  }, [chatEmpList]);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -85,7 +105,7 @@ function Modalapproval({ openapprovalModal, setOpenapprovalModal }) {
           const labelId = `transfer-list-item-${value}-label`;
           return (
             <ListItem
-              key={value}
+              key={value.empId}
               role="listitem"
               button
               onClick={handleToggle(value)}>
@@ -99,7 +119,7 @@ function Modalapproval({ openapprovalModal, setOpenapprovalModal }) {
                   }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={`집보내줘 ${value + 1}`} />
+              <ListItemText id={labelId} primary={`${value.empName}`} />
             </ListItem>
           );
         })}
@@ -112,8 +132,9 @@ function Modalapproval({ openapprovalModal, setOpenapprovalModal }) {
     <Modal
       open={openapprovalModal}
       onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-desribedby="modal-modal-description">
+      // aria-labelledby="modal-modal-title"
+      // aria-desribedby="modal-modal-description"
+    >
       <Box sx={style}>
         <h1>결재선 설정</h1>
         <br />
