@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
-import { FaCog, FaThList } from 'react-icons/fa';
+import { BsPencil, BsPencilFill } from 'react-icons/bs';
+import { FaBookReader, FaCog, FaFolderOpen, FaThList } from 'react-icons/fa';
+import { FcDocument } from 'react-icons/fc';
 import {
   Menu,
   MenuItem,
@@ -47,7 +49,7 @@ const SideNavigation = ({ children }) => {
           </SidebarHeader>
 
           <Menu iconShape="square">
-            <Menuitem icon={<FaCog />}>
+            <Menuitem icon={<BsPencilFill />}>
               <Link to={'/dratf/form'}>기안작성</Link>
             </Menuitem>
 
@@ -68,7 +70,7 @@ const SideNavigation = ({ children }) => {
                 <Link to={'/boxes/dr'}>반려된</Link>
               </MenuItem>
             </SubMenu>
-            <SubMenu title="결재함" icon={<FaThList />}>
+            <SubMenu title="결재함" icon={<FaBookReader />}>
               <Menuitem>
                 <Link to={'/boxes/ab'}>결재전</Link>
               </Menuitem>
@@ -85,7 +87,7 @@ const SideNavigation = ({ children }) => {
                 <Link to={'/boxes/ar'}>반려된</Link>
               </MenuItem>
             </SubMenu>
-            <Menuitem icon={<FaCog />}>
+            <Menuitem icon={<FaFolderOpen />}>
               <Link to={'/boxes/dl'}>문서대장</Link>
             </Menuitem>
           </Menu>

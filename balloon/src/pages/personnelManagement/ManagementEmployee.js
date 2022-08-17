@@ -224,6 +224,12 @@ function ManagementEmployee() {
               handleClick(data);
             }}
 
+            sx={{
+              '	.MuiDataGrid-filterForm': {
+                color: 'red',
+              },
+            }}
+
           />
         </Box>
       </Container>

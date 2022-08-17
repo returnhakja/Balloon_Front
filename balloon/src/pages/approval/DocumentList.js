@@ -151,6 +151,9 @@ function DocList() {
           <p className={styles.sasinfont}>문서대장</p>
           <br />
           <hr />
+          <br />
+          <br />
+          <p> 총 : {docList.length} 건</p>
           {/* 
           <div className={styles.maintitle}>
             <span className={styles.mainfont}> 상신일 </span>
