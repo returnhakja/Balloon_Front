@@ -89,7 +89,7 @@ function Pointment() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>인사명령</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>-</th>
+              <th className={styles.th}>인사명령-</th>
             </tr>
           </thead>
 

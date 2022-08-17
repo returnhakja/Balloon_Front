@@ -36,6 +36,9 @@ import CreateRoom from './pages/chat/CreateRoom';
 import Organization from './pages/Organization';
 import ChatEmpList from './pages/chat/ChatEmpList';
 import EmpAddPage from './pages/personnelManagement/EmpAddPage';
+import BusinessreportInfo from './pages/approval/BusinessreportInfo';
+import BusinessTripInfo from './pages/approval/BusinesstripInfo';
+import PersnelappointmentInfo from './pages/approval/PersnelappointmentInfo';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
@@ -106,6 +109,15 @@ function App() {
           <Route path="/boxes/ac" element={<ApprovalComplete />} />
           <Route path="/boxes/ar" element={<ApprovalRefuse />} />
           <Route path="/boxes/dl" element={<DocumentList />} />
+
+          {/* 상세 정보 */}
+          <Route path="/doc/br" element={<BusinessreportInfo />} />
+          <Route path="/doc/br/:docId" element={<BusinessreportInfo />} />
+          <Route path="/doc/tp" element={<BusinessTripInfo />} />
+          <Route path="/doc/tp/:docId" element={<BusinessTripInfo />} />
+          <Route path="/doc/pa" element={<PersnelappointmentInfo />} />
+          <Route path="/doc/pa/:docId" element={<PersnelappointmentInfo />} />
+
           {/* </Route> */}
           {/* 기안작성 */}
           <Route path="/dratf/form" element={<Dashboard />} />
