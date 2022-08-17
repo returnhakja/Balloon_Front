@@ -123,25 +123,24 @@ export const getEmpListInSameUnit = async (empId, setCEList) => {
 };
 
 // 사원 추가
-export const InsertEmployee = async (
-  empId
-  // , boardContent, userEmail
-) => {
-  // const urlStr = process.env.REACT_APP_URL_EMP;
-  // const inputBoard = {
-  //   boardTitle: boardTitle,
-  //   boardContent: boardContent,
-  //   user: {
-  //     userEmail: userEmail,
-  //   },
-  // };
-  // axios
-  //   .post(urlStr, inputBoard, process.env.REACT_APP_HEADER)
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
-  // window.location.href = "/";
-};
+// export const InsertEmployee = async (
+//   inputEmp
+// ) => {
+// //   const urlStr = process.env.REACT_APP_URL_EMP;
+//   // const inputBoard = {
+//   //   boardTitle: boardTitle,
+//   //   boardContent: boardContent,
+//   //   user: {
+//   //     userEmail: userEmail,
+//   //   },
+//   // };
+//   // axios
+//   //   .post(urlStr, inputBoard, process.env.REACT_APP_HEADER)
+//   //   .catch((error) => {
+//   //     console.log(error);
+//   //   });
+//   // window.location.href = "/";
+// };
 
 // 사원 수정
 export const updateEmployee = async (
@@ -165,9 +164,16 @@ export const updateEmployee = async (
   //   window.location.href = "/";
 };
 
+// 사원관리페이지 랜더링 함수
+export const deleteCheck = async (deleteChk, setDeleteChk) => {
+  setDeleteChk(true);
+};
+
 // 사번으로 사원 삭제
-export const deleteEmployee = async (empId) => {
-  // const urlStr = process.env.REACT_APP_URL_EMP + '/' + empId;
-  // await axios.delete(urlStr).catch((error) => console.log(error));
-  // window.location.href = "/";
+export const deleteEmployee = async (data) => {
+  console.log(data);
+  const url = '/api/emp/delete/';
+  const urlStr = url + data.empId;
+  await axios.delete(urlStr).catch((error) => console.log(error));
+  window.location.href = '/management/employee';
 };

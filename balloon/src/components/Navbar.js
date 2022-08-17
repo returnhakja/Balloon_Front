@@ -24,7 +24,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
 
       if (cookies.cookies.accessToken) {
         getMe(setEmpInfo);
-        console.log(empInfo);
+        // console.log(empInfo);
       } else {
         logoutFunc(logout);
         localStorage.setItem('logged', false);
