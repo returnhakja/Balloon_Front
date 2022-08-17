@@ -223,6 +223,7 @@ function ManagementEmployee() {
             onCellClick={(data) => {
               handleClick(data);
             }}
+
           />
         </Box>
       </Container>
