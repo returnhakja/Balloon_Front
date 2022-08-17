@@ -5,6 +5,8 @@ import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 import Button from '@mui/material/Button';
 import { Checkbox, Grid } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
+import Search from 'antd/lib/transfer/search';
+// import TextField from '@mui/material/TextField';
 
 function ChatEmpList({ invite, setInvite }) {
   const [chatEmpList, setCEList] = useState([]);
@@ -15,7 +17,6 @@ function ChatEmpList({ invite, setInvite }) {
   // 사원list 출력하기
   useEffect(() => {
     getEmpListInSameUnit(empId, setCEList);
-    console.log(chatEmpList);
     setInvite([]);
   }, []);
 
