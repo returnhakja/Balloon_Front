@@ -71,23 +71,20 @@ export const onUserInvite = async (chatroomId, invite, client) => {
 //////////////////////////////////////////////////////
 //Chat.js
 //chatroomEmployee T에 chatroomId로 사원정보 가져오기
+export const empIdInfo = async (chatroomId, setChatempinfo) => {
+  axios
+    .get(`http://localhost:8080/oneChatEmp/${chatroomId}`)
+    .then((response) => {
+      setChatempinfo(response.data);
+    });
+};
+
 //이전에 채팅했던 기록보이게
 export const chatRecord = async (chatroomId, setChatting) => {
   axios
     .get(`http://localhost:8080/chatRecord/${chatroomId}`)
     .then((response) => {
-      console.log(response.data);
       setChatting(response.data);
-    });
-};
-
-export const empIdInfo = async (chatroomId, setChatempinfo) => {
-  console.log(chatroomId);
-  axios
-    .get(`http://localhost:8080/oneChatEmp/${chatroomId}`)
-    .then((response) => {
-      console.log(response.data);
-      setChatempinfo(response.data);
     });
 };
 

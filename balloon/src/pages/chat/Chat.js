@@ -4,7 +4,6 @@ import Stomp from 'stompjs';
 import styles from '../../css/Chat/Chat.module.css';
 import { Link, useOutletContext } from 'react-router-dom';
 import moment from 'moment';
-import axios from 'axios';
 
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
@@ -17,7 +16,9 @@ import {
   onUserUpdate,
 } from '../../context/ChatAxios';
 
-function Chat({ chatempinfo, setChatempinfo }) {
+import Modal from './Modal';
+
+function Chat() {
   // login할때 empId를 가져옴 -> 채팅방생성/채팅 시 사용가능
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
@@ -88,7 +89,7 @@ function Chat({ chatempinfo, setChatempinfo }) {
 
   //chatroomEmployee T에 chatroomId로 사원정보 가져오기
   //채팅방에 어떤사람이 남아있는지 알려주기 위해서
-  // const [chatempinfo, setChatempinfo] = useState([]);
+  const [chatempinfo, setChatempinfo] = useState([]);
 
   useEffect(() => {
     // const empIdInfo = () => {
@@ -129,6 +130,12 @@ function Chat({ chatempinfo, setChatempinfo }) {
   //       console.log(response.data);
   //     });
   // };
+
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
 
   //사원초대
   // const onUserAdd = () => {
@@ -174,7 +181,10 @@ function Chat({ chatempinfo, setChatempinfo }) {
   return (
     <>
       <div className={styles.chatroomname}>
-        <h3>{chatroomName}</h3>
+        <h3>
+          <button onClick={openModal}>{chatroomName}</button>
+          {modalOpen && <Modal setModalOpen={setModalOpen} />}
+        </h3>
       </div>
       <Link to={'/chatroom'}>
         <Button variant="contained">채팅목록 이동</Button>
@@ -188,7 +198,7 @@ function Chat({ chatempinfo, setChatempinfo }) {
         </Button>
       </div>
       {/* 채팅방 인원수 & 이름수정 */}
-      <div className={styles.updatename}>
+      {/* <div className={styles.updatename}>
         <TextField
           id="chatroomName"
           variant="outlined"
@@ -207,7 +217,8 @@ function Chat({ chatempinfo, setChatempinfo }) {
           }>
           수정하기
         </Button>
-      </div>
+      </div> */}
+      {/* <div>{modalOpen == true ? <Modal /> : null}</div> */}
 
       <div>
         <h3>채팅방에 있는 사람</h3>

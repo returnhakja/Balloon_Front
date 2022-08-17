@@ -17,11 +17,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
 import { useOutletContext, Link } from 'react-router-dom';
 import { Space, Table, Pagination } from 'antd';
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
 import { getDocsByEmp } from '../../context/ApprovalAxios';
 import { DataGrid } from '@mui/x-data-grid';
-
-
 
 function Declare() {
   const [empInfo, setEmpInfo] = useOutletContext();
