@@ -17,11 +17,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
 import { useOutletContext, Link } from 'react-router-dom';
 import { Space, Table, Pagination } from 'antd';
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
 import { getDocsByEmp } from '../../context/ApprovalAxios';
-import { DataGrid } from '@mui/x-data-grid';
-
-
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 function Declare() {
   const [empInfo, setEmpInfo] = useOutletContext();
@@ -69,9 +67,9 @@ function Declare() {
   // ];
 
   const columns = [
-    { field: 'docId', headerName: '문서번호', width: 130 },
-    { field: 'documentTitle', headerName: '문서제목', width: 130 },
-    { field: 'updateTime', headerName: '처리일자', width: 130 },
+    { field: 'docId', headerName: '문서번호', width: 160 },
+    { field: 'documentTitle', headerName: '문서제목', width: 350 },
+    { field: 'updateTime', headerName: '처리일자', width: 350 },
   ];
 
   return (
@@ -81,7 +79,7 @@ function Declare() {
           <p className={styles.sasinfont}>완료된</p>
           <br />
           <hr />
-
+          {/* 
           <div className={styles.maintitle}>
             <span className={styles.mainfont}> 상신일 </span>
 
@@ -148,8 +146,8 @@ function Declare() {
               size="large"
               style={{ marginTop: '2vh' }}>
               조회
-            </Button>
-            {/* <Table
+            </Button> */}
+          {/* <Table
               columns={data}
               dataSource={docList}
               pagination={{
@@ -157,16 +155,17 @@ function Declare() {
                 pageSize: 5,
               }}
             /> */}
-            <div style={{ height: 250, width: '100%', marginBottom: 70 }}>
-              <DataGrid
-                getRowId={(docList) => docList.docId}
-                rows={docList}
-                columns={columns}
-                pageSize={10}
-                rowsPerPageOptions={[10]}
-              />
-            </div>
+          <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
+            <DataGrid
+              getRowId={(docList) => docList.docId}
+              rows={docList}
+              columns={columns}
+              pageSize={10}
+              rowsPerPageOptions={[10]}
+              components={{ Toolbar: GridToolbar }}
+            />
           </div>
+          {/* </div> */}
         </Container>
       </SideNavigation>
     </>
