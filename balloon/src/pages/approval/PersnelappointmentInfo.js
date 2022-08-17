@@ -14,21 +14,13 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-
-import { styled } from '@mui/material/styles';
-import { blue } from '@mui/material/colors';
-
 import { FcDocument } from 'react-icons/fc';
-import { getBizRptByBizRptId } from '../../context/ApprovalAxios';
-
-const SaveButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.getContrastText(blue[500]),
-  backgroundColor: blue[500],
-  '&:hover': {
-    backgroundColor: blue[700],
-  },
-}));
-
+import { styled } from '@mui/material/styles';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { blue } from '@mui/material/colors';
+import { getPAByPAId } from '../../context/ApprovalAxios';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -42,19 +34,31 @@ const style = {
   textAlign: 'center',
 };
 
-function BizReportInfo() {
+const SaveButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(blue[500]),
+  backgroundColor: blue[500],
+  '&:hover': {
+    backgroundColor: blue[700],
+  },
+}));
+
+function PersonnelAppointmentInfo() {
+  // 날짜 관련
+  const [startValue, setStartValue] = useState(null);
+
+  // 모달
+  // const [openModal, setOpenModal] = useState(false);
+  const [openapprovalModal, setOpenapprovalModal] = useState(false);
+
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
-  const [openapprovalModal, setOpenapprovalModal] = useState(false);
-  const [bizRptInfo, setBizRptInfo] = useState({});
+
+  const [paInfo, setPaInfo] = useState({});
 
   const params = useParams();
-  console.log(params);
-  console.log(empInfo);
-  console.log(bizRptInfo);
 
   useEffect(() => {
-    getBizRptByBizRptId(params.docId, setBizRptInfo);
+    getPAByPAId(params.docId, setPaInfo);
   }, []);
 
   const card = (
@@ -80,23 +84,21 @@ function BizReportInfo() {
     </React.Fragment>
   );
 
-  // const [openModal, setOpenModal] = useState(false);
-  console.log(empInfo);
   return (
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          {' '}
-          <FcDocument /> 업무기안
+          <FcDocument />
+          인사명령
         </p>
 
         <table className={styles.table}>
           <thead>
             <tr align="center" bgcolor="white">
               <td className={styles.tdleft}>기안양식</td>
-              <td className={styles.td}>업무기안</td>
+              <td className={styles.td}>인사명령</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>{bizRptInfo.businessReportId}</th>
+              <th className={styles.th}>{paInfo.personnelAppointmentId}</th>
             </tr>
           </thead>
 
@@ -113,28 +115,28 @@ function BizReportInfo() {
             <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
           <button
+            disabled
             type="button"
             className={styles.btnnav}
             onClick={() => {
               // setOpenModal(true);
               setOpenapprovalModal(true);
             }}
-            disabled
             id="cancelBtn">
             결재선설정
           </button>
-          {openapprovalModal && (
-            <Modal
-              openapprovalModal={openapprovalModal}
-              setOpenapprovalModal={setOpenapprovalModal}
-              style={style}
-            />
-          )}
         </div>
+        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
+        {openapprovalModal && (
+          <Modal
+            openapprovalModal={openapprovalModal}
+            setOpenapprovalModal={setOpenapprovalModal}
+            style={style}
+          />
+        )}
         <hr />
         <br />
         <Card
@@ -156,17 +158,86 @@ function BizReportInfo() {
                   <TextField
                     type="text"
                     name="title"
-                    value={bizRptInfo.documentTitle}
+                    value={paInfo.documentTitle}
                     className={styles.inputtext}
                     InputProps={{
                       readOnly: true,
                     }}
                   />
                 </form>
-                {/* <TextField />*/}
               </td>
             </tr>
           </thead>
+        </table>
+        <br />
+        {/* 여기부터는 상세내용 */}
+
+        <table className={styles.tableborder}>
+          <thead>
+            <tr className={styles.trcon}>
+              <td className={styles.titlename}>인사명령일</td>
+              <td className={styles.titlename} colSpan={4}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    disabled
+                    label="일자 선택"
+                    value={paInfo.personnelDate}
+                    type=" date"
+                    inputFormat={'yyyy-MM-dd'}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+              </td>
+            </tr>
+          </thead>
+          <tbody className={styles.tbodyin}>
+            <tr className={styles.trcolor}>
+              <td className={styles.tdreaui}>구성원명</td>
+
+              <td className={styles.tdreaui}>발령부서</td>
+              <td className={styles.tdreaui}>발령직급</td>
+            </tr>
+
+            <tr>
+              <td className={styles.tdreaui}>
+                <TextField
+                  type="text"
+                  name="title"
+                  value={paInfo.movedEmpName}
+                  className={styles.inputtext}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+              </td>
+              <td className={styles.tdreaui}>
+                <form>
+                  <TextField
+                    type="text"
+                    name="title"
+                    value={paInfo.unit && paInfo.unit.unitName}
+                    className={styles.inputtext}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                </form>
+              </td>
+              <td className={styles.tdreaui}>
+                <form>
+                  <TextField
+                    type="text"
+                    name="title"
+                    value={paInfo.position}
+                    className={styles.inputtext}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                </form>
+              </td>
+            </tr>
+          </tbody>
         </table>
 
         <div className={styles.fonttext}>
@@ -182,7 +253,7 @@ function BizReportInfo() {
               fullWidth
               multiline
               rows={10}
-              value={bizRptInfo.documentContent}
+              value={paInfo.documentContent}
               InputProps={{
                 readOnly: true,
               }}
@@ -190,7 +261,7 @@ function BizReportInfo() {
           </Paper>
 
           <div className={styles.savebutton}>
-            <Box sx={{ button: { m: 1 } }}>
+            <Box sx={{ '& button': { m: 1 } }}>
               <Link to="/boxes/dl">
                 <SaveButton variant="contained" color="success" size="large">
                   목록으로
@@ -204,4 +275,4 @@ function BizReportInfo() {
   );
 }
 
-export default BizReportInfo;
+export default PersonnelAppointmentInfo;

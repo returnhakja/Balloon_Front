@@ -26,6 +26,26 @@ export const getBizRptByBizRptId = async (bizRptId, setBizRptInfo) => {
   const str = url + bizRptId;
   await axios.get(str).then((res) => {
     console.log(res.data);
-    // setdocList(res.data);
+    setBizRptInfo(res.data);
+  });
+};
+
+// 출장 보고 기안 정보
+export const getBizTpByBizTpId = async (bizTpId, setBizTpInfo) => {
+  const url = '/api/biztp/';
+  const str = url + bizTpId;
+  await axios.get(str).then((res) => {
+    console.log(res.data);
+    setBizTpInfo(res.data);
+  });
+};
+
+// 인사 명령 기안 정보
+export const getPAByPAId = async (PAId, setPAInfo) => {
+  const url = '/api/pa/';
+  const str = url + PAId;
+  await axios.get(str).then((res) => {
+    console.log(res.data);
+    setPAInfo(res.data);
   });
 };

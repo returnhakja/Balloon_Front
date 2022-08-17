@@ -64,13 +64,70 @@ function DocList() {
   //     key: 'upDateTime',
   //   },
   // ];
+
+  // --------------------------------------- test
+  // function getdocId(params) {
+  //   return (
+  //     <Link to={`/doc/${params.row.docId}`}>
+  //       {params.row && params.row.documentTitle}
+  //     </Link>
+  //   );
+  // }
+
+  // function getdocId(params) {
+  //   let documentId = params.row.docId;
+  //   switch (documentId && documentId.split(0, 8)) {
+  //     case '업무기안':
+  //       return (
+  //         <Link to={`/doc/br/${params.row.docId}`}>
+  //           {params.row && params.row.documentTitle}
+  //         </Link>
+  //       );
+
+  //     case '출장계획':
+  //       return (
+  //         <Link to={`/doc/tp/${params.row.docId}`}>
+  //           {params.row && params.row.documentTitle}
+  //         </Link>
+  //       );
+
+  //     case '인사명령':
+  //       return (
+  //         <Link to={`/doc/pa/${params.row.docId}`}>
+  //           {params.row && params.row.documentTitle}
+  //         </Link>
+  //       );
+
+  //     // default:
+  //     //   return alert('똑바로 보고좀 넣어라');
+  //   }
+  // }
+
   function getdocId(params) {
-    return (
-      <Link to={`/doc/${params.row.docId}`}>
-        {params.row && params.row.documentTitle}
-      </Link>
-    );
+    let documentId = params.row.docId;
+    if (documentId.includes('업무기안')) {
+      return (
+        <Link to={`/doc/br/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else if (documentId.includes('출장계획')) {
+      return (
+        <Link to={`/doc/tp/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else if (documentId.includes('인사명령')) {
+      return (
+        <Link to={`/doc/pa/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else {
+      alert('fuck you');
+    }
   }
+  // --------------------------------------- test
 
   const columns = [
     {
