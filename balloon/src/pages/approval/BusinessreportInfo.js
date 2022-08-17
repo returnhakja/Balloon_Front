@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
@@ -19,6 +19,7 @@ import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
 
 import { FcDocument } from 'react-icons/fc';
+import { getBizRptByBizRptId } from '../../context/ApprovalAxios';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -41,12 +42,20 @@ const style = {
   textAlign: 'center',
 };
 
-function Report() {
+function BizReportInfo() {
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
+  const [bizRptInfo, setBizRptInfo] = useState({});
 
+  const params = useParams();
+  console.log(params);
   console.log(empInfo);
+  console.log(bizRptInfo);
+
+  useEffect(() => {
+    getBizRptByBizRptId(params.docId, setBizRptInfo);
+  }, []);
 
   const card = (
     <React.Fragment>
@@ -87,7 +96,7 @@ function Report() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>업무기안</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>업무기안-</th>
+              <th className={styles.th}>{bizRptInfo.businessReportId}</th>
             </tr>
           </thead>
 
@@ -114,6 +123,7 @@ function Report() {
               // setOpenModal(true);
               setOpenapprovalModal(true);
             }}
+            disabled
             id="cancelBtn">
             결재선설정
           </button>
@@ -143,13 +153,17 @@ function Report() {
               <td colSpan={2} className={styles.tdright}>
                 {' '}
                 <form>
-                  <input
+                  <TextField
                     type="text"
                     name="title"
-                    placeholder="기안제목을 입력하세요."
+                    value={bizRptInfo.documentTitle}
                     className={styles.inputtext}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
                 </form>
+                {/* <TextField />*/}
               </td>
             </tr>
           </thead>
@@ -168,18 +182,20 @@ function Report() {
               fullWidth
               multiline
               rows={10}
-              placeholder="내용을 입력해주세요."
+              value={bizRptInfo.documentContent}
+              InputProps={{
+                readOnly: true,
+              }}
             />
           </Paper>
 
           <div className={styles.savebutton}>
             <Box sx={{ button: { m: 1 } }}>
-              <Button variant="outlined" size="large">
-                임시저장
-              </Button>
-              <SaveButton variant="contained" color="success" size="large">
-                상신하기
-              </SaveButton>
+              <Link to="/boxes/dl">
+                <SaveButton variant="contained" color="success" size="large">
+                  목록으로
+                </SaveButton>
+              </Link>
             </Box>
           </div>
         </div>
@@ -188,4 +204,4 @@ function Report() {
   );
 }
 
-export default Report;
+export default BizReportInfo;
