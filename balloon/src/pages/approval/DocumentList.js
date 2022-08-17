@@ -19,9 +19,7 @@ import TextField from '@mui/material/TextField';
 import { useOutletContext, Link } from 'react-router-dom';
 import { getDocsByUnit } from '../../context/ApprovalAxios';
 import { Space, Table, Pagination } from 'antd';
-import 'antd/dist/antd.css';
-import { DataGrid } from '@mui/x-data-grid';
-
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 function DocList() {
   const [empInfo, setEmpInfo] = useOutletContext();
@@ -41,7 +39,7 @@ function DocList() {
 
   useEffect(() => {
     console.log(empInfo);
-    getDocsByUnit(empInfo.unit.unitCode, setDocList);
+    getDocsByUnit(empInfo.unit && empInfo.unit.unitCode, setDocList);
     console.log(docList);
   }, []);
 
@@ -66,12 +64,86 @@ function DocList() {
   //   },
   // ];
 
+  // --------------------------------------- test
+  // function getdocId(params) {
+  //   return (
+  //     <Link to={`/doc/${params.row.docId}`}>
+  //       {params.row && params.row.documentTitle}
+  //     </Link>
+  //   );
+  // }
+
+  // function getdocId(params) {
+  //   let documentId = params.row.docId;
+  //   switch (documentId && documentId.split(0, 8)) {
+  //     case '업무기안':
+  //       return (
+  //         <Link to={`/doc/br/${params.row.docId}`}>
+  //           {params.row && params.row.documentTitle}
+  //         </Link>
+  //       );
+
+  //     case '출장계획':
+  //       return (
+  //         <Link to={`/doc/tp/${params.row.docId}`}>
+  //           {params.row && params.row.documentTitle}
+  //         </Link>
+  //       );
+
+  //     case '인사명령':
+  //       return (
+  //         <Link to={`/doc/pa/${params.row.docId}`}>
+  //           {params.row && params.row.documentTitle}
+  //         </Link>
+  //       );
+
+  //     // default:
+  //     //   return alert('똑바로 보고좀 넣어라');
+  //   }
+  // }
+
+  function getdocId(params) {
+    let documentId = params.row.docId;
+    if (documentId.includes('업무기안')) {
+      return (
+        <Link to={`/doc/br/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else if (documentId.includes('출장계획')) {
+      return (
+        <Link to={`/doc/tp/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else if (documentId.includes('인사명령')) {
+      return (
+        <Link to={`/doc/pa/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else {
+      alert('fuck you');
+    }
+  }
+  // --------------------------------------- test
+
   const columns = [
-    { field: 'docId', headerName: '문서번호', width: 130 },
-    { field: 'documentTitle', headerName: '문서제목', width: 130 },
-    { field: 'updateTime', headerName: '처리일자', width: 130 },
+    {
+      field: 'docId',
+      headerName: '문서번호',
+      width: 200,
+    },
+    {
+      field: 'documentTitle',
+      headerName: '문서제목',
+      width: 350,
+      renderCell: getdocId,
+    },
+    { field: 'updateTime', headerName: '처리일자', width: 200 },
   ];
 
+  // console.log(columns[0].valueGetter.params);
   return (
     <>
       <SideNavigation>
@@ -79,7 +151,7 @@ function DocList() {
           <p className={styles.sasinfont}>문서대장</p>
           <br />
           <hr />
-
+          {/* 
           <div className={styles.maintitle}>
             <span className={styles.mainfont}> 상신일 </span>
 
@@ -146,8 +218,8 @@ function DocList() {
               size="large"
               style={{ marginTop: '2vh' }}>
               조회
-            </Button>
-            {/* <Table
+            </Button> */}
+          {/* <Table
               columns={data}
               dataSource={docList}
               pagination={{
@@ -155,16 +227,17 @@ function DocList() {
                 pageSize: 5,
               }}
             /> */}
-            <div style={{ height: 250, width: '100%', marginBottom: 70 }}>
-              <DataGrid
-                getRowId={(docList) => docList.docId}
-                rows={docList}
-                columns={columns}
-                pageSize={10}
-                rowsPerPageOptions={[10]}
-              />
-            </div>
+          <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
+            <DataGrid
+              getRowId={(docList) => docList.docId}
+              rows={docList}
+              columns={columns}
+              pageSize={10}
+              rowsPerPageOptions={[10]}
+              components={{ Toolbar: GridToolbar }}
+            />
           </div>
+          {/* </div> */}
         </Container>
       </SideNavigation>
     </>

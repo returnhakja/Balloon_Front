@@ -51,7 +51,7 @@ const SideNavigation = ({ children }) => {
               <Link to={'/dratf/form'}>기안작성</Link>
             </Menuitem>
 
-            <SubMenu title="진행중" icon={<FaThList />}>
+            <SubMenu title="기안함" icon={<FaThList />}>
               <Menuitem>
                 <Link to={'/boxes/dd'}>상신한</Link>
               </Menuitem>

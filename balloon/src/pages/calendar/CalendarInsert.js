@@ -68,6 +68,8 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     console.log(scheduleListAdd);
 
     insertSchedulList(scheduleListAdd, setOpenInsert);
+    
+    
   };
 
   useEffect(() => {
