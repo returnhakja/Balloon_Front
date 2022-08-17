@@ -122,31 +122,22 @@ export const getEmpListInSameUnit = async (empId, setCEList) => {
     .catch((error) => console.log(error));
 };
 
-// 사원 추가
-// export const InsertEmployee = async (
-//   inputEmp
-// ) => {
-// //   const urlStr = process.env.REACT_APP_URL_EMP;
-//   // const inputBoard = {
-//   //   boardTitle: boardTitle,
-//   //   boardContent: boardContent,
-//   //   user: {
-//   //     userEmail: userEmail,
-//   //   },
-//   // };
-//   // axios
-//   //   .post(urlStr, inputBoard, process.env.REACT_APP_HEADER)
-//   //   .catch((error) => {
-//   //     console.log(error);
-//   //   });
-//   // window.location.href = "/";
-// };
+// 사원관리페이지 삭제용 랜더링 함수
+export const updateCheck = async (setUpdateChk) => {
+  setUpdateChk(true);
+};
+
+// 사원관리페이지 삭제용 랜더링 함수
+export const deleteCheck = async (setDeleteChk) => {
+  setDeleteChk(true);
+};
 
 // 사원 수정
 export const updateEmployee = async (
-  empId
+  data
   // , title, content, contenter
 ) => {
+  console.log(data);
   // const urlStr = process.env.REACT_APP_URL_EMP;
   // const inputEmp = {
   //   //   boardNo: boardNo,
@@ -162,11 +153,6 @@ export const updateEmployee = async (
   //       console.log(error);
   //     });
   //   window.location.href = "/";
-};
-
-// 사원관리페이지 랜더링 함수
-export const deleteCheck = async (deleteChk, setDeleteChk) => {
-  setDeleteChk(true);
 };
 
 // 사번으로 사원 삭제
