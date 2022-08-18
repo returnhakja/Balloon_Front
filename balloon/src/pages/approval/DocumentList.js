@@ -123,7 +123,7 @@ function DocList() {
         </Link>
       );
     } else {
-      alert('fuck you');
+      alert('있었는데 아니 없어요.');
     }
   }
   // --------------------------------------- test

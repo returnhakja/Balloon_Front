@@ -15,7 +15,6 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { BsFillExclamationTriangleFill } from 'react-icons/bs';
 
 import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -48,6 +47,7 @@ function Trip() {
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
   const [endvalue, setEndValue] = useState(null);
+  const [inputData, setInputData] = useState({});
 
   // 모달
   // const [openModal, setOpenModal] = useState(false);
@@ -94,7 +94,9 @@ function Trip() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>출장계획서</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>출장계획-</th>
+              <th className={styles.th}>
+                <input id="bizTpId"></input>
+              </th>
             </tr>
           </thead>
 
@@ -172,6 +174,7 @@ function Trip() {
               <td className={styles.titlename} colSpan={2}>
                 <form>
                   <input
+                    id="bizTpTitle"
                     type="text"
                     name="title"
                     placeholder="기안제목을 입력하세요."
@@ -185,7 +188,7 @@ function Trip() {
             <tr className={styles.trcon}>
               <td className={styles.titlename}>신청자 정보</td>
               <td className={styles.titlename} colSpan={2}>
-                검색어케함?
+                {empInfo.empName} ({empInfo.empId})
               </td>
             </tr>
           </thead>
