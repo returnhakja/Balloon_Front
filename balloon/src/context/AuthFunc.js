@@ -282,7 +282,7 @@ export const signup = async (inputEmpData) => {
   axios.post(url, inputEmpData, header).catch((error) => {
     console.log(error);
   });
-  // window.location.href = "/";
+  window.location.href = '/management/employee';
 };
 
 // 로그인

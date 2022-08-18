@@ -17,7 +17,8 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/system';
 import Delete from '@mui/icons-material/Delete';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonAddIcon from '@mui/icons-material/PersonAddAlt1';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import { Link } from 'react-router-dom';
@@ -205,6 +206,13 @@ function ManagementEmployee() {
         <Link to={'/add/employee'}>
           <PersonAddIcon fontSize="large" color="action" />
         </Link>
+
+        <GroupAddIcon
+          fontSize="large"
+          color="action"
+          style={{ marginLeft: '20px' }}
+        />
+
         <Box sx={{ width: '100%', height: 700 }}>
           <DataGrid
             sx={{
@@ -223,7 +231,6 @@ function ManagementEmployee() {
             onCellClick={(data) => {
               handleClick(data);
             }}
-
           />
         </Box>
       </Container>
