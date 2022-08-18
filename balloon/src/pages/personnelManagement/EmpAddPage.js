@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { signup } from '../../context/AuthFunc';
+import { signupValidation, signup } from '../../context/AuthFunc';
 import { findUnitList } from '../../context/UnitAxios';
+import { selectEmpByEmpId } from '../../context/EmployeeAxios';
 import { Container, Button, TextField, Typography, Box } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -77,9 +78,23 @@ function EmpAddPage() {
   const [urg, setUrg] = useState('ROLE_USER');
   const [birth, setBirth] = useState(null);
   const [hidePassword, setHidePassword] = useState(true);
+  const [idChk, setIdChk] = useState(false);
 
-  const toggleHidePassword = () => {
+  const toggleHidePassword = (event) => {
+    event.preventDefault();
     setHidePassword(!hidePassword);
+  };
+
+  const idCheckHandle = (event) => {
+    event.preventDefault();
+
+    const empId = document.getElementById('empId').value;
+    if (!empId) {
+      alert('아이디를 입력해주세요!!');
+    } else {
+      setIdChk(true);
+      selectEmpByEmpId(empId, setIdChk);
+    }
   };
 
   useEffect(() => {
@@ -94,36 +109,40 @@ function EmpAddPage() {
     const empName = document.getElementById('empName').value;
     const position = posi;
     const responsibility = responsi;
-    var salary = document.getElementById('salary').value;
-    var commission = document.getElementById('commission').value;
+    let salary = document.getElementById('salary').value;
+    let commission = document.getElementById('commission').value;
     const hiredate = document.getElementById('hiredate').value;
-    // const unitcode = document.getElementById('units');
     const unitcode = unit;
     const empBell = document.getElementById('empBell').value;
     const empMail = document.getElementById('empMail').value;
     const mobile = document.getElementById('mobile').value;
     const userRoleGrade = urg;
-    var birthday = document.getElementById('birthday').value;
-    var address = document.getElementById('address').value;
-    var licensePlate = document.getElementById('licensePlate').value;
-    var photo = document.getElementById('photo').value;
+    let birthday = document.getElementById('birthday').value;
+    let address = document.getElementById('address').value;
+    let licensePlate = document.getElementById('licensePlate').value;
+    let photo = document.getElementById('photo').value;
 
-    if (birthday === '') {
-      console.log('dd');
-      birthday = null;
-    } else {
-      console.log('aa');
-      birthday = Date.parse(birthday);
-    }
-    if (address === '') {
-      address = null;
-    }
-    if (licensePlate === '') {
-      licensePlate = null;
-    }
-    if (photo === '') {
-      photo = null;
-    }
+    signupValidation(
+      idChk,
+      empId,
+      password,
+      empName,
+      position,
+      responsibility,
+      salary,
+      commission,
+      hiredate,
+      unitcode,
+      empBell,
+      empMail,
+      mobile,
+      userRoleGrade,
+      birthday,
+      address,
+      licensePlate,
+      photo
+    );
+    console.log('start');
 
     salary = parseFloat(salary);
     commission = parseFloat(commission);
@@ -150,9 +169,7 @@ function EmpAddPage() {
       photo: photo,
     };
 
-    console.log(inputEmpData);
-
-    signup(inputEmpData);
+    // signup(inputEmpData);
   };
 
   return (
@@ -169,15 +186,18 @@ function EmpAddPage() {
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           사원번호
-          <TextField
-            margin="normal"
-            // label="사원번호"
-            required
-            fullWidth
-            id="empId"
-            autoComplete="empId"
-            autoFocus
-          />
+          <Box style={{ width: '50vw', display: 'flex' }}>
+            <TextField
+              margin="normal"
+              // label="사원번호"
+              required
+              fullWidth
+              id="empId"
+              autoComplete="empId"
+              autoFocus
+            />{' '}
+            <button onClick={idCheckHandle}>중복 확인</button>
+          </Box>
           비밀번호
           <Box style={{ width: '50vw', display: 'flex' }}>
             <TextField

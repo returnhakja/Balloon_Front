@@ -12,7 +12,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ko } from 'date-fns/esm/locale';
 import {
   getEmpListInSameUnit,
-  selectEmployeeByEmpId,
+  setEmpInfoByEmpId,
 } from '../../context/EmployeeAxios';
 import { BsCalendarWeek } from 'react-icons/bs';
 
