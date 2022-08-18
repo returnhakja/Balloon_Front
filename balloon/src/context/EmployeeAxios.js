@@ -89,11 +89,11 @@ export const selectEmpByEmpId = async (empId, setIdChk) => {
     .get(urlStr)
     .then(() => {
       setIdChk(false);
-      alert('이미 아이디가 있습니다.');
+      alert('이미사원번호가 있습니다.');
     })
     .catch((error) => {
       console.log(error);
-      alert('생성 가능한 아이디입니다.');
+      alert('생성 가능한 사원번호입니다.');
     });
 };
 

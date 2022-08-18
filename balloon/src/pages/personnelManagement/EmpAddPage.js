@@ -103,7 +103,6 @@ function EmpAddPage() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // const data = new FormData(event.currentTarget);
     const empId = document.getElementById('empId').value;
     const password = document.getElementById('password').value;
     const empName = document.getElementById('empName').value;
@@ -122,7 +121,7 @@ function EmpAddPage() {
     let licensePlate = document.getElementById('licensePlate').value;
     let photo = document.getElementById('photo').value;
 
-    signupValidation(
+    const inputEmp = signupValidation(
       idChk,
       empId,
       password,
@@ -144,32 +143,9 @@ function EmpAddPage() {
     );
     console.log('start');
 
-    salary = parseFloat(salary);
-    commission = parseFloat(commission);
-
-    const inputEmpData = {
-      empId: empId,
-      password: password,
-      empName: empName,
-      position: position,
-      responsibility: responsibility,
-      salary: salary,
-      commission: commission,
-      hiredate: hiredate,
-      unit: {
-        unitCode: unitcode,
-      },
-      empBell: empBell,
-      empMail: empMail,
-      mobile: mobile,
-      userRoleGrade: userRoleGrade,
-      birthday: birthday,
-      address: address,
-      licensePlate: licensePlate,
-      photo: photo,
-    };
-
-    // signup(inputEmpData);
+    if (inputEmp !== null) {
+      inputEmp.then((data) => signup(data));
+    }
   };
 
   return (
@@ -321,7 +297,7 @@ function EmpAddPage() {
             id="empMail"
             autoComplete="empMail"
           />
-          <InputLabel id="label-mobile">전화번호</InputLabel>
+          <InputLabel id="label-mobile">휴대폰번호</InputLabel>
           <TextField
             margin="normal"
             required

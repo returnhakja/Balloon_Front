@@ -107,18 +107,36 @@ export const signupValidation = async (
   }
 
   if (cnt === 12) {
-    const salaryRegEx = /^[0-9]+$/;
+    // const salaryRegEx = /^[0-9]+$/;
+    // const salaryRegEx2 = /^[^0]\\d*|^[^0]\\d*\\.{1}\\d*[^0]$|^(0.)\\d*[^0]$/;
     if (!salary) {
       alert('월급을 입력해주세요!!');
     } else {
+      // if (salary.match(salaryRegEx) === null) {
+      //   if (salary.match(salaryRegEx2) === null) {
+      //     console.log(salary.match(salaryRegEx2));
+      //     alert('숫자만 입력해주세요!!');
+      //   } else {
+      //     cnt--;
+      //   }
+      // } else {
+      // }
+      salary = parseFloat(salary);
       cnt--;
     }
   }
 
   if (cnt === 11) {
+    // const commissionRegEx = /^[0-9]+$/;
     if (!commission) {
       alert('상여금을 입력해주세요!!');
     } else {
+      // if (commission.match(commissionRegEx) === null) {
+      // alert('숫자만 입력해주세요!!');
+      // } else {
+      // }
+
+      commission = parseFloat(commission);
       cnt--;
     }
   }
@@ -140,34 +158,43 @@ export const signupValidation = async (
   }
 
   if (cnt === 8) {
-    const empBellRegEx = /^05(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
+    const empBellRegEx = /^\d{3}-\d{3}-\d{4}$/;
     if (!empBell) {
       alert('사내전화를 입력해주세요!!');
     } else {
       if (empBell.match(empBellRegEx) === null) {
-        cnt--;
+        alert('사내 전화번호 형식을 맞춰주세요');
       } else {
-        alert('형식을 맞춰주세요');
+        cnt--;
       }
     }
   }
 
   if (cnt === 7) {
     const emailRegEx =
-      /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+      /^[A-Za-z0-9]([-]?[A-Za-z0-9])*@[A-Za-z0-9]([-]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
 
     if (!empMail) {
       alert('이메일을 입력해주세요!!');
     } else {
-      cnt--;
+      if (empMail.match(emailRegEx) === null) {
+        alert('이메일 형식을 맞춰주세요');
+      } else {
+        cnt--;
+      }
     }
   }
 
   if (cnt === 6) {
+    const mobileRegEx = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/;
     if (!mobile) {
       alert('휴대폰 번호를 입력해주세요!!');
     } else {
-      cnt--;
+      if (mobile.match(mobileRegEx) === null) {
+        alert('휴대폰 번호 형식에 맞춰주세요');
+      } else {
+        cnt--;
+      }
     }
   }
 
@@ -219,10 +246,31 @@ export const signupValidation = async (
   console.log(cnt);
 
   if (cnt === 0) {
-    return true;
+    const inputData = {
+      empId: empId,
+      password: password,
+      empName: empName,
+      position: position,
+      responsibility: responsibility,
+      salary: salary,
+      commission: commission,
+      hiredate: hiredate,
+      unit: {
+        unitCode: unitcode,
+      },
+      empBell: empBell,
+      empMail: empMail,
+      mobile: mobile,
+      userRoleGrade: userRoleGrade,
+      birthday: birthday,
+      address: address,
+      licensePlate: licensePlate,
+      photo: photo,
+    };
+    return await inputData;
   }
 
-  // return alert('입력하세요!');
+  return null;
 };
 
 // 회원가입
@@ -239,24 +287,17 @@ export const signup = async (inputEmpData) => {
 
 // 로그인
 export const login = async (empId, password, authenticate) => {
-  console.log(empId, password, authenticate);
   const header = { 'Content-Type': 'application/json' };
   const url = '/auth/login';
   const inputLogin = {
     empId: empId,
     password: password,
   };
-  const loggi = await axios.post(url, inputLogin, header).catch((error) => {
-    console.log(empId, password, authenticate);
-    console.log(error);
-  });
+  const loggi = await axios.post(url, inputLogin, header).catch((error) => {});
 
   if (!!loggi) {
     authenticate();
-    console.log(empId, password, authenticate);
-    // window.location.href = '/';
   } else {
-    console.log(empId, password, authenticate);
     alert('아이디 혹은 비밀번호가 틀립니다.');
   }
 };
