@@ -99,44 +99,51 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     //   console.log(test[index]);
     add.map((data, index) => {
       console.log(data);
-      inviteSchedule &&
-        axios
-          .post(
-            `http://localhost:8080/insertSch/${data.chatroomId}`,
+      axios
+        .post(
+          `http://localhost:8080/insertChatEmp/${data.chatroomId}`,
+          [
             {
               empId: {
                 empId: inviteSchedule[index],
               },
             },
-            // inviteSchedule.map((data) => {
-            // const sendSchedule = () => {
+            {
+              empId: {
+                empId: calendarBot,
+              },
+            },
+          ],
 
-            //
-            client.send(
-              '/app/chat/message',
-              {},
-              JSON.stringify({
-                chatroomId: data.chatroomId,
-                writer: calendarBot,
-                chatContent:
-                  '새로운 일정이 등록되었습니다. 확인하세요' +
-                  <Link to={'/chatroom'}>자세히보기</Link>,
-              })
-            )
-
-            //
-            // };
-            // sendSchedule();
-            // return {
-            //   empId: {
-            //     empId: inviteSchedule[index],
-            //   },
-            // };
-            // })
+          //
+          client.send(
+            '/app/chat/message',
+            {},
+            JSON.stringify({
+              chatroomId: data.chatroomId,
+              writer: calendarBot,
+              chatContent:
+                '새로운 일정이 등록되었습니다. 확인하세요' +
+                <Link to={'/chatroom'}>자세히보기</Link>,
+            })
           )
-          .then((response) => {
-            console.log(response.data);
-          });
+
+          // inviteSchedule.map((data) => {
+          // const sendSchedule = () => {
+
+          //
+          // };
+          // sendSchedule();
+          // return {
+          //   empId: {
+          //     empId: inviteSchedule[index],
+          //   },
+          // };
+          // })
+        )
+        .then((response) => {
+          console.log(response.data);
+        });
     });
   };
 
@@ -184,12 +191,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
     //일정등록 후 알림보내기
     onSchCreateChatroom(inviteSchedule);
-
-    // add.map((data) => {
-    //   data.then((test) => {
-    //     console.log(test);
-    //   });
-    // });
   };
 
   useEffect(() => {
