@@ -71,6 +71,7 @@ function EmpAddPage() {
   const [birth, setBirth] = useState(null);
   const [hidePassword, setHidePassword] = useState(true);
   const [idChk, setIdChk] = useState(false);
+  const [dataChk, setDataChk] = useState(false);
 
   const toggleHidePassword = (event) => {
     event.preventDefault();
@@ -114,6 +115,7 @@ function EmpAddPage() {
     let photo = document.getElementById('photo').value;
 
     const inputEmp = signupValidation(
+      setDataChk,
       idChk,
       empId,
       password,
@@ -133,9 +135,10 @@ function EmpAddPage() {
       licensePlate,
       photo
     );
-    console.log('start');
+    console.log(inputEmp);
 
-    if (inputEmp !== null) {
+    console.log(dataChk);
+    if (dataChk === true) {
       inputEmp.then((data) => signup(data));
     }
   };

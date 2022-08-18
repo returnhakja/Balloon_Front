@@ -1,8 +1,10 @@
 import axios from 'axios';
+import { set } from 'date-fns';
 import Cookies from 'universal-cookie';
 
 // 회원가입 유효성 검사
 export const signupValidation = async (
+  setDataChk,
   idChk,
   empId,
   password,
@@ -267,7 +269,9 @@ export const signupValidation = async (
       licensePlate: licensePlate,
       photo: photo,
     };
-    return await inputData;
+    return setDataChk(true), inputData;
+  } else {
+    return null;
   }
 
   return null;

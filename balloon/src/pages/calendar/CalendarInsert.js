@@ -24,7 +24,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const empId = empInfo.empId;
   const scheduleListAdd = [];
 
-
   //사원추가 모달을 위한 open
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
@@ -61,15 +60,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     client.disconnect();
   };
 
-  const onInviteSchedule = (checked, data) => {
-    if (checked) {
-      setInviteSchedule([...inviteSchedule, data]);
-      console.log(inviteSchedule);
-    } else {
-      setInviteSchedule(inviteSchedule.filter((button) => button !== data));
-    }
-  };
-
   //채팅방 만들기
 
   const onSchCreateChatroom = (inviteSchedule) => {
@@ -90,7 +80,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
       });
     return arr;
   };
-
 
   //chatroomEmployee T에 값넣고 채팅보내는 부분
 
@@ -200,7 +189,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     // console.log(empId);
   }, []);
 
-
   const onInviteSchedule = (checked, data) => {
     if (checked) {
       setInviteSchedule([...inviteSchedule, data]);
@@ -208,7 +196,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
       setInviteSchedule(inviteSchedule.filter((button) => button !== data));
     }
   };
-
 
   return (
     <Modal
