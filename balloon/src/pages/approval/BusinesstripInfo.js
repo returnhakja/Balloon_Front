@@ -122,17 +122,6 @@ function BizTripInfo() {
 
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
-          <button
-            type="button"
-            className={styles.btnnav}
-            onClick={() => {
-              // setOpenModal(true);
-              setOpenapprovalModal(true);
-            }}
-            disabled
-            id="cancelBtn">
-            결재선설정
-          </button>
         </div>
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         {openapprovalModal && (
@@ -160,17 +149,7 @@ function BizTripInfo() {
             <tr className={styles.trcon}>
               <td className={styles.titlename}>기안제목</td>
               <td className={styles.titlename} colSpan={2}>
-                <form>
-                  <TextField
-                    type="text"
-                    name="title"
-                    value={bizTpInfo.documentTitle}
-                    className={styles.inputtext}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </form>
+                {bizTpInfo.documentTitle}
               </td>
             </tr>
           </thead>
@@ -230,6 +209,7 @@ function BizTripInfo() {
               <td className={styles.tdreaui}>
                 <form>
                   <TextField
+                    focused={false}
                     type="text"
                     name="title"
                     value={bizTpInfo.destination}
@@ -243,6 +223,7 @@ function BizTripInfo() {
               <td className={styles.tdreaui}>
                 <form>
                   <TextField
+                    focused={false}
                     type="text"
                     name="title"
                     value={bizTpInfo.visitingPurpose}
@@ -267,6 +248,7 @@ function BizTripInfo() {
               justifyContent: 'center',
             }}>
             <TextField
+              focused={false}
               fullWidth
               multiline
               rows={10}

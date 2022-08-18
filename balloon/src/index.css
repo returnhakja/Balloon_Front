@@ -1,8 +1,17 @@
+@font-face {
+  font-family: 'NotoSans';
+  src: url('./font/NotoSans.ttf');
+}
+
+* {
+  font-family: 'NotoSans';
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    sans-serif, 'NotoSans';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

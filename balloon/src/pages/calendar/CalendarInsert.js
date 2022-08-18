@@ -3,18 +3,13 @@ import { useOutletContext } from 'react-router-dom';
 import { insertSchedule, insertSchedulList } from '../../context/CalendarAxios';
 import styles from '../../css/Component.module.css';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-import {
-  DatePicker,
-  DateTimePicker,
-  LocalizationProvider,
-} from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { ko } from 'date-fns/esm/locale';
+
 import {
   getEmpListInSameUnit,
   setEmpInfoByEmpId,
 } from '../../context/EmployeeAxios';
 import { BsCalendarWeek } from 'react-icons/bs';
+import { onCreateChatroom } from '../../context/ChatAxios';
 
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
@@ -29,6 +24,24 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const empId = empInfo.empId;
   const scheduleListAdd = [];
 
+  //사원추가 모달을 위한 open
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleListClose = () => {
+    setInviteSchedule([]);
+    setOpen(false);
+  };
+
+  const handleempAddClose = () => {
+    if (inviteSchedule == 0) {
+      alert('사원을 추가 해 주세요');
+    } else {
+      setInviteSchedule([]);
+      setOpen(false);
+    }
+  };
   //일정보내기
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
@@ -86,7 +99,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   };
   console.log(chatroomId);
 
-  for (const i = 0; i < inviteSchedule.length; i++) {
+  for (const i = 0; i < inviteSchedule && inviteSchedule.length; i++) {
     onSchCreateChatroom();
   }
 
@@ -192,7 +205,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const onInviteSchedule = (checked, data) => {
     if (checked) {
       setInviteSchedule([...inviteSchedule, data]);
-      console.log(inviteSchedule);
     } else {
       setInviteSchedule(inviteSchedule.filter((button) => button !== data));
     }
@@ -234,8 +246,8 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
           sx={{ mb: 2, mt: 2 }}>
           날짜 선택
         </Typography>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          {/* <DateTimePicker
+
+        {/* <DateTimePicker
             label="시작일"
             value={startValue + 1}
             type="datetime-local"
@@ -246,23 +258,23 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
             }}
             renderInput={(params) => <TextField {...params} />}
           /> */}
-          <TextField
-            id="startvalue"
-            label="시작일"
-            type="datetime-local"
-            defaultValue={startValue}
-            onChange={(newValue) => {
-              setStartValue(newValue);
-            }}
-            sx={{ width: 250 }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </LocalizationProvider>
+        <TextField
+          id="startvalue"
+          label="시작일"
+          type="datetime-local"
+          defaultValue={startValue}
+          onChange={(newValue) => {
+            setStartValue(newValue);
+          }}
+          sx={{ width: 250 }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+
         <span className={styles.centerfont}> : </span>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          {/* <DateTimePicker
+
+        {/* <DateTimePicker
             label="끝나는일"
             type="datetime-local"
             value={endvalue}
@@ -273,35 +285,51 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
             }}
             renderInput={(params) => <TextField {...params} />}
           /> */}
-          <TextField
-            id="endvalue"
-            label="끝나는 일"
-            type="datetime-local"
-            defaultValue={endvalue}
-            sx={{ width: 250 }}
-            onChange={(newValue) => {
-              setEndValue(newValue);
-            }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </LocalizationProvider>
-        {eList.map((emp, index) => {
-          return (
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              <input
-                type="checkbox"
-                onChange={(e) => {
-                  onInviteSchedule(e.currentTarget.checked, emp.empId);
-                }}
-                checked={inviteSchedule.includes(emp.empId) ? true : false}
-              />
-              <p>{emp.empName}</p>
-              {emp.position}
-            </Typography>
-          );
-        })}
+        <TextField
+          id="endvalue"
+          label="끝나는 일"
+          type="datetime-local"
+          defaultValue={endvalue}
+          sx={{ width: 250 }}
+          onChange={(newValue) => {
+            setEndValue(newValue);
+          }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <br />
+        <br />
+        <Button onClick={handleOpen}>사원추가</Button>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="parent-modal-title"
+          aria-describedby="parent-modal-description">
+          <Box sx={{ ...style, width: 400 }}>
+            {eList.map((emp, index) => {
+              return (
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  <input
+                    type="checkbox"
+                    onChange={(e) => {
+                      console.log(e);
+                      onInviteSchedule(e.currentTarget.checked, emp.empId);
+                      // console.log(e);
+                    }}
+                    checked={inviteSchedule.includes(emp.empId) ? true : false}
+                  />
+                  {emp.empName}
+                  {emp.position}{' '}
+                </Typography>
+              );
+            })}
+            <br />
+            <Button onClick={handleListClose}>취소하기</Button>
+            <Button onClick={handleempAddClose}>추가하기</Button>
+            {/* <ChildModal /> */}
+          </Box>
+        </Modal>
 
         <Typography id="modal-modal-description" variant="h6" sx={{ mt: 2 }}>
           MEMO

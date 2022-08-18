@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'NotoSans';
+  src: url('../font/NotoSans.ttf');
+}
+* {
+  font-family: 'NotoSans';
+}
+
 .header {
   left: 0;
   top: 0;
@@ -15,6 +23,7 @@
   width: 96%;
   height: 100%;
   margin: 0 auto;
+  font-family: 'NotoSans';
 }
 
 .ulmarginn {
@@ -48,7 +57,7 @@
   background-color: white;
   width: 70%;
   height: 20vw;
-  display: inline-block;
+  /* display: inline-block; */
   margin-left: 50%;
   margin-top: 10%;
   transform: translateX(-50%);
@@ -114,7 +123,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 200px;
 }
 
 .nameli {

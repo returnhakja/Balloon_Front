@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, Container, Typography } from '@mui/material';
 import SideNavigation from '../../components/SideNavigation';
 import Tab from '@mui/material/Tab';
@@ -37,7 +37,7 @@ const card1 = (
         color="#00AAFF"
         gutterBottom
         textAlign="center">
-        저장된
+        완료된
       </Typography>
       <hr />
       <br />
@@ -59,7 +59,7 @@ const card2 = (
         color="#00AAFF"
         gutterBottom
         textAlign="center">
-        완료된
+        저장된
       </Typography>
       <hr />
       <br />
@@ -97,7 +97,7 @@ const card3 = (
 );
 
 function Boxes() {
-  const [value, setValue] = React.useState('1');
+  const [value, setValue] = useState('1');
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
