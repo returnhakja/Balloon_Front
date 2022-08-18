@@ -62,7 +62,7 @@ const responseArr = [
 
 const gradeArr = ['ROLE_GUEST', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN'];
 
-function EmpAddPage() {
+function EmpListAddPage() {
   const [unitArr, setUnitArr] = useState([]);
   const [posi, setPosi] = useState('인턴');
   const [responsi, setResponsi] = useState('없음');
@@ -140,6 +140,12 @@ function EmpAddPage() {
     }
   };
 
+  const eventHhandle = (event) => {
+    event.preventDefault();
+    let empList = document.getElementById('empList').value;
+    console.log(empList);
+  };
+
   return (
     <Container component="main" sx={{ marginBottom: 25 }}>
       <Box
@@ -150,9 +156,28 @@ function EmpAddPage() {
           alignItems: 'center',
         }}>
         <Typography component="h1" variant="h5">
-          사원추가
+          사원리스트 추가
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <br />
+        <br />
+        <InputLabel id="label-empList">엑셀</InputLabel>
+        <TextField
+          margin="normal"
+          type="file"
+          required
+          fullWidth
+          id="empList"
+          autoComplete="empList"
+        />
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 4, mb: 2 }}
+          onClick={eventHhandle}>
+          사원리스트 추가{' '}
+        </Button>
+        {/* <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           사원번호
           <Box style={{ width: '50vw', display: 'flex' }}>
             <TextField
@@ -350,22 +375,15 @@ function EmpAddPage() {
             id="photo"
             autoComplete="photo"
           />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="저장하기"
-          /> */}
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 4, mb: 2 }}
-            onClick={handleSubmit}>
-            사원추가{' '}
-          </Button>
-        </Box>
+         
+          //  <FormControlLabel
+          //   control={<Checkbox value="remember" color="primary" />}
+          //   label="저장하기"
+          // /> 
+        </Box> */}
       </Box>
     </Container>
   );
 }
 
-export default EmpAddPage;
+export default EmpListAddPage;

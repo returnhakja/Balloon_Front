@@ -207,11 +207,13 @@ function ManagementEmployee() {
           <PersonAddIcon fontSize="large" color="action" />
         </Link>
 
-        <GroupAddIcon
-          fontSize="large"
-          color="action"
-          style={{ marginLeft: '20px' }}
-        />
+        <Link to={'/add/employees'}>
+          <GroupAddIcon
+            fontSize="large"
+            color="action"
+            style={{ marginLeft: '20px' }}
+          />
+        </Link>
 
         <Box sx={{ width: '100%', height: 700 }}>
           <DataGrid
