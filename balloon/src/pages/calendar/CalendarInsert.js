@@ -6,7 +6,7 @@ import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 
 import {
   getEmpListInSameUnit,
-  selectEmployeeByEmpId,
+  setEmpInfoByEmpId,
 } from '../../context/EmployeeAxios';
 import { BsCalendarWeek } from 'react-icons/bs';
 import { onCreateChatroom } from '../../context/ChatAxios';
