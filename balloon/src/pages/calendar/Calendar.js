@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { getScheduleByEmp } from '../../context/CalendarAxios';
 import '../../css/Celendar.css';
-import { Button, Container } from '@mui/material';
+import { Button, Container, Typography } from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interaction from '@fullcalendar/interaction';
@@ -11,6 +11,7 @@ import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import CalendarInsert from './CalendarInsert';
 import CalendarUpdate from './CalendarUpdate';
 import axios from 'axios';
+import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -30,10 +31,17 @@ function Calendar() {
     state: false,
     scheduleId: null,
   });
+  const [eList, setCEList] = useState([]);
+  const [empInfo, setEmpInfo] = useOutletContext();
+  const empId = empInfo.empId;
   const handleDateClick = (e) => {
     console.log(e);
     setOpenInsert(true);
   };
+  useEffect(() => {
+    getEmpListInSameUnit(empId, setCEList);
+    console.log(eList);
+  }, []);
 
   const handleEventClick = (e) => {
     const scheduleId = e.event._def.extendedProps.scheduleId;
@@ -45,16 +53,28 @@ function Calendar() {
     console.log(scheduleId);
   };
 
-  const [empInfo, setEmpInfo] = useOutletContext();
-
   const list = getScheduleByEmp(empInfo.empId);
 
   //모달
   return (
     <div className="container">
-      <Container maxWidth="xl">
-        {/* 모달 */}
-
+      {/* <input type="checkbox" /> */}
+      {eList.map((emp, index) => {
+        return (
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <input
+              type="checkbox"
+              onClick={() => {
+                getScheduleByEmp(empInfo.empId);
+                console.log('dkdkddkk');
+              }}
+            />
+            {emp.empName}
+            {emp.position}{' '}
+          </Typography>
+        );
+      })}
+      <Container maxWidth="md">
         <Button
           onClick={() => {
             setOpenInsert(true);
@@ -62,7 +82,6 @@ function Calendar() {
           sx={{ fontSize: 30 }}>
           일정 등록
         </Button>
-
         {/* 등록 */}
         {openInsert && (
           <CalendarInsert
@@ -81,7 +100,6 @@ function Calendar() {
             empInfo={empInfo}
           />
         )}
-
         <FullCalendar
           locale="ko"
           height="70vh"

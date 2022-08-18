@@ -5,6 +5,10 @@ import { logoutFunc, getCookie } from '../context/AuthFunc';
 import { getMe } from '../context/EmployeeAxios';
 import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+
+import ClearIcon from '@mui/icons-material/Clear';
+import './Navbar.css';
 
 function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   const cookies = new Cookies();
@@ -32,44 +36,117 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
     }
   }, [isLogin]);
 
+  //   return (
+  //     <header className={styles.header}>
+  //       <div className={styles.contents}>
+  //         <div className={styles.imgflex}>
+  //           <Link to={'/'} className={styles.Link}>
+  //             <h2>
+  //               BALL<span className={styles.oofont}>OO</span>N{' '}
+  //             </h2>
+  //           </Link>
+  //         </div>
+  //         <ul className={styles.ulmarginn}>
+  //           <NavLink to={'/boxes'} style={activeStyle}>
+  //             <li className={styles.lii}>결재관리</li>
+  //           </NavLink>
+  //           <NavLink to={'/calendar'} style={activeStyle}>
+  //             <li className={styles.lii}>캘린더</li>
+  //           </NavLink>
+  //           <NavLink to={'/chatemplist'} style={activeStyle}>
+  //             <li className={styles.lii}>메신저</li>
+  //           </NavLink>
+  //           <NavLink to={'/organization'} style={activeStyle}>
+  //             <li className={styles.lii}>조직도</li>
+  //           </NavLink>
+  //           {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+  //             <NavLink to={'/management/unit'} style={activeStyle}>
+  //               <li className={styles.lii}>조직관리</li>
+  //             </NavLink>
+  //           ) : null}
+  //           {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+  //             <NavLink to={'/management/employee'} style={activeStyle}>
+  //               <li className={styles.lii}>사원관리</li>
+  //             </NavLink>
+  //           ) : null}
+  //         </ul>
+
+  //         {isLogin ? (
+  //           <ul className={styles.namediv}>
+  //             <li className={styles.nameli}>
+  //               {' '}
+  //               {empInfo.empName} {empInfo.position}{' '}
+  //               <Button
+  //                 type="button"
+  //                 variant="outlined"
+  //                 className={styles.btnnav}
+  //                 onClick={() => logoutFunc(logout)}>
+  //                 Logout
+  //               </Button>
+  //             </li>
+  //           </ul>
+  //         ) : (
+  //           <ul className={styles.namediv}>
+  //             <Link to={'/loginpage'}>
+  //               <li className={styles.nameli}>
+  //                 <Button className={styles.btnnav} variant="contained">
+  //                   Login
+  //                 </Button>
+  //               </li>
+  //             </Link>
+  //           </ul>
+  //         )}
+  //       </div>
+  //     </header>
+  //   );
+  // }
+
+  // export default Navbar;
+
+  // import React, { useState } from 'react';
+  // import { Link } from 'react-router-dom';
+  // import './Navbar.css';
+  // import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+  // import AddAlertIcon from '@mui/icons-material/AddAlert';
+  // function Navbar() {
+  const [isMobile, setIsMobile] = useState(false);
+
   return (
-    <header className={styles.header}>
-      <div className={styles.contents}>
-        <div className={styles.imgflex}>
-          <Link to={'/'} className={styles.Link}>
-            <h2>
-              BALL<span className={styles.oofont}>OO</span>N{' '}
-            </h2>
-          </Link>
-        </div>
-        <ul className={styles.ulmarginn}>
-          <NavLink to={'/boxes'} style={activeStyle}>
-            <li className={styles.lii}>결재관리</li>
+    <nav className="navbar">
+      <Link to={'/'} className={styles.Link}>
+        <h3 className="logo">
+          BALL<span className={styles.oofont}>OO</span>N{' '}
+        </h3>
+      </Link>
+      <ul
+        className={isMobile ? 'nav-links-mobile' : 'nav-links'}
+        onClick={() => setIsMobile(false)}>
+        <NavLink to={'/boxes'} style={activeStyle}>
+          <li className="approval">결재관리</li>
+        </NavLink>
+        <NavLink to={'/calendar'} style={activeStyle}>
+          <li className="celendar">캘린더</li>
+        </NavLink>
+        <NavLink to={'/chatemplist'} style={activeStyle}>
+          <li className="chat">메신저</li>
+        </NavLink>
+        <NavLink to={'/organization'} style={activeStyle}>
+          <li className="management">조직도</li>
+        </NavLink>
+        {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+          <NavLink to={'/management/unit'} style={activeStyle}>
+            <li className="unit">조직관리</li>
           </NavLink>
-          <NavLink to={'/calendar'} style={activeStyle}>
-            <li className={styles.lii}>캘린더</li>
+        ) : null}
+        {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+          <NavLink to={'/management/employee'} style={activeStyle}>
+            <li className="unit">사원관리</li>
           </NavLink>
-          <NavLink to={'/chatemplist'} style={activeStyle}>
-            <li className={styles.lii}>메신저</li>
-          </NavLink>
-          <NavLink to={'/organization'} style={activeStyle}>
-            <li className={styles.lii}>조직도</li>
-          </NavLink>
-          {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
-            <NavLink to={'/management/unit'} style={activeStyle}>
-              <li className={styles.lii}>조직관리</li>
-            </NavLink>
-          ) : null}
-          {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
-            <NavLink to={'/management/employee'} style={activeStyle}>
-              <li className={styles.lii}>사원관리</li>
-            </NavLink>
-          ) : null}
-        </ul>
+        ) : null}
 
         {isLogin ? (
           <ul className={styles.namediv}>
-            <li className={styles.nameli}>
+            <li className="login">
               {' '}
               {empInfo.empName} {empInfo.position}{' '}
               <Button
@@ -84,7 +161,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
         ) : (
           <ul className={styles.namediv}>
             <Link to={'/loginpage'}>
-              <li className={styles.nameli}>
+              <li className="login">
                 <Button className={styles.btnnav} variant="contained">
                   Login
                 </Button>
@@ -92,8 +169,13 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
             </Link>
           </ul>
         )}
-      </div>
-    </header>
+      </ul>
+      <button
+        className="mobile-menu-icon"
+        onClick={() => setIsMobile(!isMobile)}>
+        {isMobile ? <ClearIcon /> : <MenuOpenIcon />}
+      </button>
+    </nav>
   );
 }
 

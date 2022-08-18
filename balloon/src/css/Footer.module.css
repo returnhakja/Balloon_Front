@@ -7,10 +7,9 @@
 
 .footer {
   /* position: absolute; */
-  bottom: 0;
   width: 100%;
   background-color: #00aaff;
-  overflow: hidden;
+  padding: 10px;
 }
 
 .contents {
@@ -30,20 +29,4 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-@media screen and (max-width: 990px) {
-  .title {
-    font-size: 20px;
-  }
-  .team_member {
-    font-size: 16px;
-  }
-  .footer {
-    bottom: 0;
-    margin-top: 40%;
-    overflow: hidden;
-  }
-}
-.test {
-  margin-left: 100px;
 }
