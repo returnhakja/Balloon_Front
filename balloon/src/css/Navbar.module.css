@@ -57,7 +57,7 @@
   background-color: white;
   width: 70%;
   height: 20vw;
-  display: inline-block;
+  /* display: inline-block; */
   margin-left: 50%;
   margin-top: 10%;
   transform: translateX(-50%);
@@ -123,7 +123,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 200px;
 }
 
 .nameli {
