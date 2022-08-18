@@ -7,6 +7,8 @@ import Home from './components/Home';
 import MainPage from './components/MainPage';
 import PrivateRoutes from './components/PrivateRoutes';
 
+import LoginPage from './pages/login/LoginPage';
+
 import Boxes from './pages/approval/Boxes';
 import Dashboard from './pages/approval/Dashboard';
 import Declare from './pages/approval/Declare';
@@ -21,24 +23,23 @@ import ApprovalOngoing from './pages/approval/ApprovalOngoing';
 import ApprovalComplete from './pages/approval/ApprovalComplete';
 import ApprovalRefuse from './pages/approval/ApprovalRefuse';
 import DocumentList from './pages/approval/DocumentList';
-
-import LoginPage from './pages/login/LoginPage';
+import BusinessreportInfo from './pages/approval/BusinessreportInfo';
+import BusinessTripInfo from './pages/approval/BusinesstripInfo';
+import PersnelappointmentInfo from './pages/approval/PersnelappointmentInfo';
 
 import Calendar from './pages/calendar/Calendar';
-
-import ManagementUnit from './pages/personnelManagement/ManagementUnit';
-import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
 
 import Chat from './pages/chat/Chat';
 import ChatRoom from './pages/chat/ChatRoom';
 import CreateRoom from './pages/chat/CreateRoom';
+import ChatEmpList from './pages/chat/ChatEmpList';
 
 import Organization from './pages/Organization';
-import ChatEmpList from './pages/chat/ChatEmpList';
+
+import ManagementUnit from './pages/personnelManagement/ManagementUnit';
+import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
 import EmpAddPage from './pages/personnelManagement/EmpAddPage';
-import BusinessreportInfo from './pages/approval/BusinessreportInfo';
-import BusinessTripInfo from './pages/approval/BusinesstripInfo';
-import PersnelappointmentInfo from './pages/approval/PersnelappointmentInfo';
+import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
@@ -137,6 +138,7 @@ function App() {
           {/* 사원관리 */}
           <Route path="/management/employee" element={<ManagementEmployee />} />
           <Route path="/add/employee" element={<EmpAddPage />} />
+          <Route path="/add/employees" element={<EmpListAddPage />} />
         </Route>
       </Route>
     </Routes>

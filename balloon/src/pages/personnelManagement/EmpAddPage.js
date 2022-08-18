@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { signup } from '../../context/AuthFunc';
+import { signupValidation, signup } from '../../context/AuthFunc';
 import { findUnitList } from '../../context/UnitAxios';
+import { selectEmpByEmpId } from '../../context/EmployeeAxios';
 import { Container, Button, TextField, Typography, Box } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -62,14 +63,6 @@ const responseArr = [
 const gradeArr = ['ROLE_GUEST', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN'];
 
 function EmpAddPage() {
-  // const handleChange = (event) => {
-  //   const {
-  //     target: { value },
-  //   } = event;
-  // };
-
-  // const [unitList, setUnitList] = useState([]);
-
   const [unitArr, setUnitArr] = useState([]);
   const [posi, setPosi] = useState('인턴');
   const [responsi, setResponsi] = useState('없음');
@@ -77,9 +70,23 @@ function EmpAddPage() {
   const [urg, setUrg] = useState('ROLE_USER');
   const [birth, setBirth] = useState(null);
   const [hidePassword, setHidePassword] = useState(true);
+  const [idChk, setIdChk] = useState(false);
 
-  const toggleHidePassword = () => {
+  const toggleHidePassword = (event) => {
+    event.preventDefault();
     setHidePassword(!hidePassword);
+  };
+
+  const idCheckHandle = (event) => {
+    event.preventDefault();
+
+    const empId = document.getElementById('empId').value;
+    if (!empId) {
+      alert('아이디를 입력해주세요!!');
+    } else {
+      setIdChk(true);
+      selectEmpByEmpId(empId, setIdChk);
+    }
   };
 
   useEffect(() => {
@@ -88,71 +95,49 @@ function EmpAddPage() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // const data = new FormData(event.currentTarget);
     const empId = document.getElementById('empId').value;
     const password = document.getElementById('password').value;
     const empName = document.getElementById('empName').value;
     const position = posi;
     const responsibility = responsi;
-    var salary = document.getElementById('salary').value;
-    var commission = document.getElementById('commission').value;
+    let salary = document.getElementById('salary').value;
+    let commission = document.getElementById('commission').value;
     const hiredate = document.getElementById('hiredate').value;
-    // const unitcode = document.getElementById('units');
     const unitcode = unit;
     const empBell = document.getElementById('empBell').value;
     const empMail = document.getElementById('empMail').value;
     const mobile = document.getElementById('mobile').value;
     const userRoleGrade = urg;
-    var birthday = document.getElementById('birthday').value;
-    var address = document.getElementById('address').value;
-    var licensePlate = document.getElementById('licensePlate').value;
-    var photo = document.getElementById('photo').value;
+    let birthday = document.getElementById('birthday').value;
+    let address = document.getElementById('address').value;
+    let licensePlate = document.getElementById('licensePlate').value;
+    let photo = document.getElementById('photo').value;
 
-    if (birthday === '') {
-      console.log('dd');
-      birthday = null;
-    } else {
-      console.log('aa');
-      birthday = Date.parse(birthday);
+    const inputEmp = signupValidation(
+      idChk,
+      empId,
+      password,
+      empName,
+      position,
+      responsibility,
+      salary,
+      commission,
+      hiredate,
+      unitcode,
+      empBell,
+      empMail,
+      mobile,
+      userRoleGrade,
+      birthday,
+      address,
+      licensePlate,
+      photo
+    );
+    console.log('start');
+
+    if (inputEmp !== null) {
+      inputEmp.then((data) => signup(data));
     }
-    if (address === '') {
-      address = null;
-    }
-    if (licensePlate === '') {
-      licensePlate = null;
-    }
-    if (photo === '') {
-      photo = null;
-    }
-
-    salary = parseFloat(salary);
-    commission = parseFloat(commission);
-
-    const inputEmpData = {
-      empId: empId,
-      password: password,
-      empName: empName,
-      position: position,
-      responsibility: responsibility,
-      salary: salary,
-      commission: commission,
-      hiredate: hiredate,
-      unit: {
-        unitCode: unitcode,
-      },
-      empBell: empBell,
-      empMail: empMail,
-      mobile: mobile,
-      userRoleGrade: userRoleGrade,
-      birthday: birthday,
-      address: address,
-      licensePlate: licensePlate,
-      photo: photo,
-    };
-
-    console.log(inputEmpData);
-
-    signup(inputEmpData);
   };
 
   return (
@@ -169,15 +154,18 @@ function EmpAddPage() {
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           사원번호
-          <TextField
-            margin="normal"
-            // label="사원번호"
-            required
-            fullWidth
-            id="empId"
-            autoComplete="empId"
-            autoFocus
-          />
+          <Box style={{ width: '50vw', display: 'flex' }}>
+            <TextField
+              margin="normal"
+              // label="사원번호"
+              required
+              fullWidth
+              id="empId"
+              autoComplete="empId"
+              autoFocus
+            />{' '}
+            <button onClick={idCheckHandle}>중복 확인</button>
+          </Box>
           비밀번호
           <Box style={{ width: '50vw', display: 'flex' }}>
             <TextField
@@ -301,7 +289,7 @@ function EmpAddPage() {
             id="empMail"
             autoComplete="empMail"
           />
-          <InputLabel id="label-mobile">전화번호</InputLabel>
+          <InputLabel id="label-mobile">휴대폰번호</InputLabel>
           <TextField
             margin="normal"
             required

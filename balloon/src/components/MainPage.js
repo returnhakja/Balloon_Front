@@ -17,9 +17,13 @@ function MainPage() {
           <h1 className={styles.h1}>BALLOON</h1>
           {empInfo.empName ? (
             <>
+              <br />
               <p className={styles.pbottom}>
-                {empInfo.empName}님 오신것을 환영합니다. 일을 하세요.
+                {empInfo.empName + ' ' + empInfo.position}님 오신것을
+                환영합니다.
               </p>
+              <br />
+              <p>일을 하세요.</p>
             </>
           ) : (
             <>

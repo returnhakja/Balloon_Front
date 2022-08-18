@@ -3,7 +3,7 @@ import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import Modal from './Modal';
+import Modalapproval from './Modalapproval';
 import {
   Button,
   Card,
@@ -116,24 +116,7 @@ function BizReportInfo() {
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
-          <button
-            type="button"
-            className={styles.btnnav}
-            onClick={() => {
-              // setOpenModal(true);
-              setOpenapprovalModal(true);
-            }}
-            disabled
-            id="cancelBtn">
-            결재선설정
-          </button>
-          {openapprovalModal && (
-            <Modal
-              openapprovalModal={openapprovalModal}
-              setOpenapprovalModal={setOpenapprovalModal}
-              style={style}
-            />
-          )}
+
         </div>
         <hr />
         <br />
@@ -149,10 +132,11 @@ function BizReportInfo() {
         <table className={styles.table}>
           <thead>
             <tr className={styles.trcon}>
-              <td className={styles.tdleft}>기안제목</td>
+              <td className={styles.tdleftpadding}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
                 {' '}
-                <form>
+                {bizRptInfo.documentTitle}
+                {/* <form>
                   <TextField
                     type="text"
                     name="title"
@@ -161,8 +145,9 @@ function BizReportInfo() {
                     InputProps={{
                       readOnly: true,
                     }}
+                    focused={false}
                   />
-                </form>
+                </form> */}
                 {/* <TextField />*/}
               </td>
             </tr>
@@ -186,6 +171,7 @@ function BizReportInfo() {
               InputProps={{
                 readOnly: true,
               }}
+              focused={false}
             />
           </Paper>
 

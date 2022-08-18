@@ -72,6 +72,11 @@
   color: white;
 }
 
+#cancelBtndisable {
+  background-color: rgba(143, 139, 140, 0.836);
+  color: rgb(255, 255, 255);
+  cursor: no-drop;
+}
 .test {
   text-align: right;
 }

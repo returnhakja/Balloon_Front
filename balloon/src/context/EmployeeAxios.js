@@ -77,13 +77,28 @@ export const getMe = async (setEmpInfo) => {
   await axios
     .get(url, config)
     .then((data) => {
-      selectEmployeeByEmpId(data.data.empId, setEmpInfo);
+      setEmpInfoByEmpId(data.data.empId, setEmpInfo);
     })
     .catch((error) => console.log(error));
 };
 
-// 사번으로 사원 검색
-export const selectEmployeeByEmpId = async (empId, setEmpInfo) => {
+// 사번으로 Idcheck
+export const selectEmpByEmpId = async (empId, setIdChk) => {
+  const urlStr = '/api/emp/' + empId;
+  await axios
+    .get(urlStr)
+    .then(() => {
+      setIdChk(false);
+      alert('이미사원번호가 있습니다.');
+    })
+    .catch((error) => {
+      console.log(error);
+      alert('생성 가능한 사원번호입니다.');
+    });
+};
+
+// 사번으로 사원 검색 후, 정보 넣기
+export const setEmpInfoByEmpId = async (empId, setEmpInfo) => {
   const urlStr = '/api/emp/' + empId;
   await axios
     .get(urlStr)
