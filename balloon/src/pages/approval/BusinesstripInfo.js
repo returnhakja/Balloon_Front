@@ -23,7 +23,10 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
 import { FcDocument } from 'react-icons/fc';
-import { getBizTpByBizTpId } from '../../context/ApprovalAxios';
+import {
+  getBizTpByBizTpId,
+  getBizTpEmpByBizTpId,
+} from '../../context/ApprovalAxios';
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
   backgroundColor: blue[500],
@@ -50,6 +53,7 @@ function BizTripInfo() {
   const [startValue, setStartValue] = useState(null);
   const [endvalue, setEndValue] = useState(null);
   const [bizTpInfo, setBizTpInfo] = useState({});
+  const [bizTpEmp, setBizTpEmp] = useState({});
   // 모달
   // const [openModal, setOpenModal] = useState(false);
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
@@ -60,9 +64,11 @@ function BizTripInfo() {
   console.log(params);
   console.log(empInfo);
   console.log(bizTpInfo);
+  console.log(bizTpEmp);
 
   useEffect(() => {
     getBizTpByBizTpId(params.docId, setBizTpInfo);
+    getBizTpEmpByBizTpId(params.docId, setBizTpEmp);
   }, []);
 
   const card = (
@@ -166,7 +172,14 @@ function BizTripInfo() {
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
                 {' '}
-                일단 독고다이
+                {bizTpEmp[0] &&
+                  bizTpEmp.map((data) => {
+                    return (
+                      <div>
+                        {data.emp.empName} ({data.emp.empId})
+                      </div>
+                    );
+                  })}
               </td>
               <td className={styles.titlename}></td>
             </tr>
