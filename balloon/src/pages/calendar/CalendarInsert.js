@@ -28,7 +28,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const [inviteSchedule, setInviteSchedule] = useState([]);
   const empId = empInfo.empId;
   const scheduleListAdd = [];
-
   //일정보내기
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
@@ -46,81 +45,83 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     client.disconnect();
   };
 
-  const [chatroomId, setchatroomId] = useState();
-  useEffect(() => {}, [chatroomId]);
+  const onInviteSchedule = (checked, data) => {
+    if (checked) {
+      setInviteSchedule([...inviteSchedule, data]);
+      console.log(inviteSchedule);
+    } else {
+      setInviteSchedule(inviteSchedule.filter((button) => button !== data));
+    }
+  };
 
   //채팅방 만들기
-  //채팅방만들기랑 일정등록이 같이되게
-  const onSchCreateChatroom = () => {
-    // inviteSchedule &&
+
+  const onSchCreateChatroom = (inviteSchedule) => {
+    inviteSchedule.pop(empId);
+    console.log(inviteSchedule);
+    let arr = [];
+    inviteSchedule.map(() => {
+      arr.push({
+        chatroomName: '일정봇',
+        headCount: 2,
+      });
+    });
     axios
-      .post(
-        'http://localhost:8080/createChatroom',
-        {
-          chatroomName: '일정봇',
-          headCount: 1,
-        }
-        // inviteSchedule.map((data) => {
-        //   console.log(data);
-        //   const sendSchedule = () => {
-        //     client.send(
-        //       '/app/chat/message',
-        //       {},
-        //       JSON.stringify({
-        //         chatroomId: chatroomId,
-        //         writer: data,
-        //         chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
-        //       })
-        //     );
-        //   };
-        //   sendSchedule();
-        //   return {
-        //     empId: data,
-        //   };
-        // })
-      )
+      .post('http://localhost:8080/createSchChatroom', arr)
       .then((response) => {
         console.log(response.data);
-        setchatroomId(response.data);
+        onSchUserInvite(response.data, inviteSchedule);
       });
+    return arr;
   };
-  console.log(chatroomId);
-
-  for (const i = 0; i < inviteSchedule.length; i++) {
-    onSchCreateChatroom();
-  }
 
   //chatroomEmployee T에 값넣고 채팅보내는 부분
-  //이부분은 상관없음
-  const onSchUserInvite = () => {
-    console.log(chatroomId);
-    inviteSchedule &&
-      axios
-        .post(
-          `http://localhost:8080/insertChatEmp/${chatroomId}`,
-          inviteSchedule.map((data) => {
-            const sendSchedule = () => {
-              client.send(
-                '/app/chat/message',
-                {},
-                JSON.stringify({
-                  chatroomId: chatroomId,
-                  writer: data,
-                  chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
-                })
-              );
-            };
-            sendSchedule();
-            return {
+
+  const onSchUserInvite = (add, inviteSchedule) => {
+    add.sort();
+    console.log(add);
+    // add.map((data, index) => {
+    // data.then((test) => {
+    //   console.log(test[index]);
+    add.map((data, index) => {
+      console.log(data);
+      inviteSchedule &&
+        axios
+          .post(
+            `http://localhost:8080/insertSch/${data.chatroomId}`,
+            {
               empId: {
-                empId: data,
+                empId: inviteSchedule[index],
               },
-            };
-          })
-        )
-        .then((response) => {
-          console.log(response.data);
-        });
+            },
+            // inviteSchedule.map((data) => {
+            // const sendSchedule = () => {
+
+            //
+            client.send(
+              '/app/chat/message',
+              {},
+              JSON.stringify({
+                chatroomId: data.chatroomId,
+                writer: inviteSchedule[index],
+                chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
+              })
+            )
+
+            //
+            // };
+            // sendSchedule();
+            // return {
+            //   empId: {
+            //     empId: inviteSchedule[index],
+            //   },
+            // };
+            // })
+          )
+          .then((response) => {
+            console.log(response.data);
+          });
+    });
   };
 
   const insertHandle = () => {
@@ -149,23 +150,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
     const ids = inputdata.employeeIds;
     console.log(inputdata.employeeIds);
-
-    console.log(chatroomId);
     ids.map((id) => {
-      // console.log(chatroomId);
-      // const sendSchedule = () => {
-      //   client.send(
-      //     '/app/chat/message',
-      //     {},
-      //     JSON.stringify({
-      //       chatroomId: chatroomId,
-      //       writer: id,
-      //       chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
-      //     })
-      //   );
-      // };
-      // sendSchedule();
-
       scheduleListAdd.push({
         scheduleTitle: inputdata.scheduleTitle,
         scheduleStart: inputdata.scheduleStart,
@@ -180,6 +165,15 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     console.log(scheduleListAdd);
 
     insertSchedulList(scheduleListAdd, setOpenInsert);
+
+    //일정등록 후 알림보내기
+    onSchCreateChatroom(inviteSchedule);
+
+    // add.map((data) => {
+    //   data.then((test) => {
+    //     console.log(test);
+    //   });
+    // });
   };
 
   useEffect(() => {
@@ -188,16 +182,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     console.log(eList);
     // console.log(empId);
   }, []);
-
-  const onInviteSchedule = (checked, data) => {
-    if (checked) {
-      setInviteSchedule([...inviteSchedule, data]);
-      console.log(inviteSchedule);
-    } else {
-      setInviteSchedule(inviteSchedule.filter((button) => button !== data));
-    }
-  };
-
   return (
     <Modal
       open={openInsert}
@@ -329,17 +313,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         {/* 채팅방만드는 부분 */}
         <Button
           onClick={() => {
-            onSchCreateChatroom();
-          }}
-          sx={{ fontSize: 30, border: 1, mt: 1 }}>
-          채팅방생성
-        </Button>
-
-        {/* 일정등록하고 채팅보내는 부분 */}
-        <Button
-          onClick={() => {
             insertHandle();
-            onSchUserInvite();
           }}
           sx={{ fontSize: 30, border: 1, mt: 1 }}>
           등록
