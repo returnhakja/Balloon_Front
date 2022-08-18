@@ -237,25 +237,23 @@ function Chat() {
       </div> */}
 
       <br />
-      <br />
-      <br />
       <div style={{ border: '1px solid black', margin: '5px' }}>
         {/* 채팅기록을 가져옴 */}
         {chatting.map((msg, index) => {
-          const chatTime = msg.chatTime.substr(0, 10);
+          const chatTime = msg.chatTime.substr(11, 15);
           console.log(chatTime);
           return (
             <div key={index}>
               {msg.employee.empId === empInfo.empId ? (
                 <div className={styles.message}>
-                  {chatTime}
                   {msg.chatContent}
+                  {chatTime}
                 </div>
               ) : (
-                <div className={styles.othermessage}>
-                  {msg.employee.empName}
-                  {chatTime}
-                  {msg.chatContent}
+                <div className={styles.othername}>
+                  <div>{msg.employee.empName}</div>
+                  <span className={styles.othermessage}>{msg.chatContent}</span>
+                  <span className={styles.time}>{chatTime}</span>
                 </div>
               )}
             </div>
