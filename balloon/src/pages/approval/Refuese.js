@@ -25,7 +25,7 @@ function Declare() {
 
   const [docList, setDocList] = useState([]);
 
-  const docStatus = 5;
+  const docStatus = 4;
 
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
