@@ -9,11 +9,11 @@ import {
   setEmpInfoByEmpId,
 } from '../../context/EmployeeAxios';
 import { BsCalendarWeek } from 'react-icons/bs';
-import { onCreateChatroom } from '../../context/ChatAxios';
 
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const handleClose = () => setOpenInsert(false);
@@ -23,7 +23,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const [inviteSchedule, setInviteSchedule] = useState([]);
   const empId = empInfo.empId;
   const scheduleListAdd = [];
-
 
   //사원추가 모달을 위한 open
   const [open, setOpen] = useState(false);
@@ -39,10 +38,11 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     if (inviteSchedule == 0) {
       alert('사원을 추가 해 주세요');
     } else {
-      setInviteSchedule([]);
       setOpen(false);
     }
   };
+
+  console.log(inviteSchedule);
 
   //일정보내기
   const sock = new SockJS('http://localhost:8080/chatstart');
@@ -64,14 +64,13 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const onInviteSchedule = (checked, data) => {
     if (checked) {
       setInviteSchedule([...inviteSchedule, data]);
-      console.log(inviteSchedule);
     } else {
       setInviteSchedule(inviteSchedule.filter((button) => button !== data));
     }
   };
 
   //채팅방 만들기
-
+  const calendarBot = 'Y0000001';
   const onSchCreateChatroom = (inviteSchedule) => {
     inviteSchedule.pop(empId);
     console.log(inviteSchedule);
@@ -91,11 +90,9 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     return arr;
   };
 
-
   //chatroomEmployee T에 값넣고 채팅보내는 부분
 
   const onSchUserInvite = (add, inviteSchedule) => {
-    add.sort();
     console.log(add);
     // add.map((data, index) => {
     // data.then((test) => {
@@ -120,8 +117,10 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
               {},
               JSON.stringify({
                 chatroomId: data.chatroomId,
-                writer: inviteSchedule[index],
-                chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
+                writer: calendarBot,
+                chatContent:
+                  '새로운 일정이 등록되었습니다. 확인하세요' +
+                  <Link to={'/chatroom'}>자세히보기</Link>,
               })
             )
 
@@ -199,16 +198,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     console.log(eList);
     // console.log(empId);
   }, []);
-
-
-  const onInviteSchedule = (checked, data) => {
-    if (checked) {
-      setInviteSchedule([...inviteSchedule, data]);
-    } else {
-      setInviteSchedule(inviteSchedule.filter((button) => button !== data));
-    }
-  };
-
 
   return (
     <Modal
