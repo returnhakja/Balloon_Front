@@ -22,9 +22,6 @@ export const signupValidation = async (
   licensePlate,
   photo
 ) => {
-  const emailRegEx =
-    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
-  const passwordRegEx = /^[A-Za-z0-9]{8,20}$/;
   let cnt = 17;
 
   if (cnt === 17) {
@@ -40,18 +37,56 @@ export const signupValidation = async (
   }
 
   if (cnt === 16) {
+    // 영문과숫자특수문자를 넣어서 8~20자 이내
+    const passwordRegEx = /^(?=.*[a-zA-Z0-9][!@#$%^*+=-][a-zA-Z0-9]).{8,20}$/;
+    const passwordRegEx2 = /^(?=.*[a-zA-Z0-9][!@#$%^*+=-]).{8,20}$/;
+    const passwordRegEx3 = /^(?=.*[!@#$%^*+=-][a-zA-Z0-9]).{8,20}$/;
+    // const passwordRegEx3 = /^[A-Za-z0-9]{8,20}$/;
     if (!password) {
       alert('비밀번호를 입력해주세요!!');
     } else {
-      cnt--;
+      if (password.match(passwordRegEx) === null) {
+        //형식에 맞지 않을 경우 아래 콘솔 출력
+        console.log('1111111111111');
+        if (password.match(passwordRegEx2) === null) {
+          //형식에 맞지 않을 경우 아래 콘솔 출력
+          console.log('2222222222222');
+          if (password.match(passwordRegEx3) === null) {
+            console.log('333333333333');
+            alert('비밀번호 형식을 확인해주세요');
+          } else {
+            // 맞을 경우 출력
+            console.log('비밀번호 형식이 맞아요');
+            cnt--;
+          }
+        } else {
+          // 맞을 경우 출력
+          console.log('비밀번호 형식이 맞아요');
+          cnt--;
+        }
+      } else {
+        // 맞을 경우 출력
+        console.log('비밀번호 형식이 맞아요');
+        cnt--;
+      }
     }
   }
-
   if (cnt === 15) {
+    const nameRegEx = /^[0-9]+$/;
+    const nameRegEx2 = /^[a-zA-Z가-힣]+$/;
     if (!empName) {
       alert('이름을 입력해주세요!!');
     } else {
-      cnt--;
+      if (empName.match(nameRegEx) === null) {
+        if (empName.match(nameRegEx2) === null) {
+          alert('한글과 영어 외에는 입력하지마세요2!!');
+        } else {
+          console.log('asdsad');
+          cnt--;
+        }
+      } else {
+        alert('숫자를 입력하지마세요!!');
+      }
     }
   }
 
@@ -72,6 +107,7 @@ export const signupValidation = async (
   }
 
   if (cnt === 12) {
+    const salaryRegEx = /^[0-9]+$/;
     if (!salary) {
       alert('월급을 입력해주세요!!');
     } else {
@@ -104,14 +140,22 @@ export const signupValidation = async (
   }
 
   if (cnt === 8) {
+    const empBellRegEx = /^05(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
     if (!empBell) {
       alert('사내전화를 입력해주세요!!');
     } else {
-      cnt--;
+      if (empBell.match(empBellRegEx) === null) {
+        cnt--;
+      } else {
+        alert('형식을 맞춰주세요');
+      }
     }
   }
 
   if (cnt === 7) {
+    const emailRegEx =
+      /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+
     if (!empMail) {
       alert('이메일을 입력해주세요!!');
     } else {
