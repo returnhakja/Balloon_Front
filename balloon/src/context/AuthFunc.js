@@ -289,6 +289,18 @@ export const signup = async (inputEmpData) => {
   window.location.href = '/management/employee';
 };
 
+// 엑셀로 회원가입
+export const insertSignupList = async (inputEmpList) => {
+  console.log(inputEmpList);
+  const header = { 'Content-Type': 'application/json' };
+  const url = '/auth/signuplist';
+
+  // axios.post(url, inputEmpList, header).catch((error) => {
+  //   console.log(error);
+  // });
+  // window.location.href = '/management/employee';
+};
+
 // 로그인
 export const login = async (empId, password, authenticate) => {
   const header = { 'Content-Type': 'application/json' };
