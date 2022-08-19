@@ -290,15 +290,48 @@ export const signup = async (inputEmpData) => {
 };
 
 // 엑셀로 회원가입
-export const insertSignupList = async (inputEmpList) => {
-  console.log(inputEmpList);
+export const insertSignupList = async (rows) => {
+  console.log(rows);
   const header = { 'Content-Type': 'application/json' };
   const url = '/auth/signuplist';
 
-  // axios.post(url, inputEmpList, header).catch((error) => {
-  //   console.log(error);
-  // });
-  // window.location.href = '/management/employee';
+  const inputEmpList = [];
+  rows.forEach((index) =>
+    inputEmpList.push({
+      empId: index[0],
+      password: index[1],
+      empName: index[2],
+      position: index[3],
+      responsibility: index[4],
+      salary: index[5],
+      commission: index[6],
+      hiredate: index[7],
+      unit: {
+        unitCode: index[8],
+      },
+      empBell: index[9],
+      empMail: index[10],
+      mobile: index[11],
+      userRoleGrade: index[12],
+      birthday: index[13],
+      address: index[14],
+      licensePlate: index[15],
+      photo: index[16],
+    })
+  );
+
+  console.log(inputEmpList);
+  if (inputEmpList.length !== 0) {
+    const signupChk = axios.post(url, inputEmpList, header).catch((error) => {
+      console.log(error);
+    });
+
+    if (signupChk === true) {
+      window.location.href = '/management/employee';
+    } else {
+      alert('정보가 잘못되었습니다.');
+    }
+  }
 };
 
 // 로그인

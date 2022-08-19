@@ -38,10 +38,12 @@ function Calendar() {
     console.log(e);
     setOpenInsert(true);
   };
-  useEffect(() => {
-    getEmpListInSameUnit(empId, setCEList);
-    console.log(eList);
-  }, []);
+
+  // 즐겨찾기 캘린더
+  // useEffect(() => {
+  //   getEmpListInSameUnit(empId, setCEList);
+  //   console.log(eList);
+  // }, []);
 
   const handleEventClick = (e) => {
     const scheduleId = e.event._def.extendedProps.scheduleId;
@@ -123,7 +125,6 @@ function Calendar() {
           dateClick={(e) => handleDateClick(e)}
           events={() => list}
           eventClick={(e) => handleEventClick(e)}
-          event
         />
       </Container>
     </div>
