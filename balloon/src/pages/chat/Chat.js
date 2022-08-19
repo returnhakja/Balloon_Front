@@ -31,7 +31,9 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
+
 import ChatSide from './ChatSide';
+
 
 function Chat() {
   //스크롤
@@ -52,7 +54,9 @@ function Chat() {
   const client = Stomp.over(sock);
 
   //채팅방 사람 확인 state
+
   const [open, setOpen] = useState(false);
+
 
   const handleClick = () => {
     setOpen(!open);
@@ -206,6 +210,7 @@ function Chat() {
 
   return (
     <Container maxWidth="xs">
+<<<<<<< HEAD
       <div className={styles.side}>
         <ChatSide />
         <div className="chatconvimeline">
@@ -214,6 +219,36 @@ function Chat() {
               <button onClick={closemodal}>{chatroomName}</button>
               {modalOpen && <Modal closemodal={closemodal} />}
             </h3>
+=======
+
+      <ChatSide />
+
+      <div className={styles.chatroomname}>
+        <h3>
+          <button onClick={closemodal}>{chatroomName}</button>
+          {modalOpen && <Modal closemodal={closemodal} />}
+        </h3>
+      </div>
+      <div className="chatconvimeline">
+        <div className={styles.chatheadder}>
+          <Link to={'/chatroom'}>
+            <Button variant="contained">채팅목록 이동</Button>
+          </Link>
+          {/* 채팅방 나가기 */}
+          <div className={styles.logoutBtn}>
+            <Link to={'/chatroom'}>
+              <Button
+                onClick={() =>
+                  onExitRoom(
+                    chatroomId,
+                    empId,
+                    sendExit(client, chatroomId, empInfo)
+                  )
+                }>
+                <LogoutIcon />
+              </Button>
+            </Link>
+>>>>>>> 49289c94d40b1756dd1cde2f3f59508267e8a7bb
           </div>
           <div className={styles.chatheadder}>
             <Link to={'/chatroom'}>
@@ -297,11 +332,20 @@ function Chat() {
         <button onClick={onUserAdd}>사원초대하기</button>
       </div> */}
 
+<<<<<<< HEAD
           <div className={styles.scrollbar}>
             {/* 채팅기록을 가져옴 */}
             {chatting.map((msg, index) => {
               const chatTime = msg.chatTime.substr(11, 5);
               console.log(msg.chatTime.substr(11, 5));
+=======
+        <div className={styles.scrollbar}>
+          {/* 채팅기록을 가져옴 */}
+          {chatting.map((msg, index) => {
+
+            const chatTime = msg.chatTime.substr(11, 5);
+            console.log(msg.chatTime.substr(11, 5));
+>>>>>>> 49289c94d40b1756dd1cde2f3f59508267e8a7bb
 
               return (
                 <div key={index}>
@@ -328,7 +372,12 @@ function Chat() {
             <div className={styles.contain}>
               {/* chatting내용 사용자에 따라 배치 */}
 
+<<<<<<< HEAD
               {/* {input.map((chat, index) => {
+=======
+
+            {/* {input.map((chat, index) => {
+>>>>>>> 49289c94d40b1756dd1cde2f3f59508267e8a7bb
             return (
               <div key={chat.writer + index}>
                 {empInfo.empId === chat.writer.empId ? (
