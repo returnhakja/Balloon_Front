@@ -4,7 +4,7 @@ import Stomp from 'stompjs';
 import styles from '../../css/Chat/Chat.module.css';
 import { Link, useOutletContext } from 'react-router-dom';
 import moment from 'moment';
-
+import SendIcon from '@mui/icons-material/Send';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
 import { TextField } from '@mui/material';
@@ -274,10 +274,12 @@ function Chat() {
                       {chat.chatContent}
                     </div>
                   ) : (
+                    // <div className={styles.othercon}>
                     <div className={styles.othermessage}>
                       {nowTime}
                       {chat.chatContent}
                     </div>
+                    // </div>
                   )}
                   <br />
                 </div>
@@ -289,8 +291,9 @@ function Chat() {
           <input
             className={styles.inputform}
             ref={inputRef}
-            onKeyPress={onKeyPress}></input>
-          <Button
+            onKeyPress={onKeyPress}
+            placeholder="메시지를 입력하세요"></input>
+          {/* <Button
             className={styles.inputbutton}
             onClick={() => {
               inputRef.current.value && send();
@@ -298,6 +301,18 @@ function Chat() {
               inputRef.current.value = '';
             }}>
             보내기
+          </Button> */}
+          <Button
+            variant="contained"
+            endIcon={<SendIcon />}
+            className={styles.inputbutton}
+            onClick={() => {
+              inputRef.current.value && send();
+              inputRef.current.focus();
+              inputRef.current.value = '';
+            }}>
+            {' '}
+            전송
           </Button>
         </div>
       </div>

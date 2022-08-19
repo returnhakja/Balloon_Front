@@ -13,6 +13,7 @@ import { BsCalendarWeek } from 'react-icons/bs';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const handleClose = () => setOpenInsert(false);
@@ -114,9 +115,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
             },
           ],
 
-          // inviteSchedule.map((data) => {
-          // const sendSchedule = () => {
-
           //
           client.send(
             '/app/chat/message',
@@ -124,9 +122,14 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
             JSON.stringify({
               chatroomId: data.chatroomId,
               writer: calendarBot,
-              chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
+              chatContent:
+                '새로운 일정이 등록되었습니다. 확인하세요' +
+                <Link to={'/chatroom'}>자세히보기</Link>,
             })
           )
+
+          // inviteSchedule.map((data) => {
+          // const sendSchedule = () => {
 
           //
           // };
