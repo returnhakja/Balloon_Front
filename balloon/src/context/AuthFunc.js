@@ -1,8 +1,10 @@
 import axios from 'axios';
+import { set } from 'date-fns';
 import Cookies from 'universal-cookie';
 
 // 회원가입 유효성 검사
 export const signupValidation = async (
+  setDataChk,
   idChk,
   empId,
   password,
@@ -267,7 +269,9 @@ export const signupValidation = async (
       licensePlate: licensePlate,
       photo: photo,
     };
-    return await inputData;
+    return setDataChk(true), inputData;
+  } else {
+    return null;
   }
 
   return null;
@@ -283,6 +287,18 @@ export const signup = async (inputEmpData) => {
     console.log(error);
   });
   window.location.href = '/management/employee';
+};
+
+// 엑셀로 회원가입
+export const insertSignupList = async (inputEmpList) => {
+  console.log(inputEmpList);
+  const header = { 'Content-Type': 'application/json' };
+  const url = '/auth/signuplist';
+
+  // axios.post(url, inputEmpList, header).catch((error) => {
+  //   console.log(error);
+  // });
+  // window.location.href = '/management/employee';
 };
 
 // 로그인

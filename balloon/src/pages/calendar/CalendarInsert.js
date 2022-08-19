@@ -63,6 +63,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     client.disconnect();
   };
 
+
   const onInviteSchedule = (checked, data) => {
     if (checked) {
       setInviteSchedule([...inviteSchedule, data]);
