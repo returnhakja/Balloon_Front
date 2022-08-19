@@ -105,3 +105,91 @@ export const insertBizRpt = async (inputData, empInfo, setInputData) => {
 
   await axios.post(url, inputData, { headers });
 };
+
+export const insertBizTp = async (
+  inputData,
+  empInfo,
+  startDate,
+  endDate,
+  setInputData
+) => {
+  const bizTpId = document.getElementById('bizTpId');
+  const bizTpTitle = document.getElementById('bizTpTitle');
+  const bizTpContent = document.getElementById('bizTpContent');
+  const destination = document.getElementById('destination');
+  const visitingPurpose = document.getElementById('visitingPurpose');
+
+  const url = '/api/biztp';
+
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+
+  inputData = {
+    businessTripId: bizTpId.value,
+    documentTitle: bizTpTitle.value,
+    documentContent: bizTpContent.value,
+    startDate: startDate,
+    endDate: endDate,
+    destination: destination.value,
+    visitingPurpose: visitingPurpose.value,
+    empName: empInfo.empName,
+    position: empInfo.position,
+    unitName: empInfo.unit && empInfo.unit.unitName,
+    unit: {
+      unitCode: empInfo.unit && empInfo.unit.unitCode,
+    },
+    emp: {
+      empId: empInfo.empId,
+    },
+  };
+  console.log(inputData);
+  console.log(empInfo);
+
+  await axios.post(url, inputData, { headers });
+};
+
+export const insertPA = async (
+  inputData,
+  empInfo,
+  startDate,
+  endDate,
+  setInputData
+) => {
+  const pAId = document.getElementById('PAId');
+  const pATitle = document.getElementById('PATitle');
+  const pAContent = document.getElementById('PAContent');
+  const movedEmpName = document.getElementById('movedEmpName');
+  const unitName = document.getElementById('unitName');
+  const position = document.getElementById('position');
+
+  const url = '/api/pa';
+
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+
+  inputData = {
+    personnelAppointmentId: pAId.value,
+    documentTitle: pATitle.value,
+    documentContent: pAContent.value,
+    personnelDate: startDate,
+    position: position.value,
+    unitName: empInfo.unit && empInfo.unit.unitName,
+    movedEmpName: movedEmpName.value,
+    empName: empInfo.empName,
+    movedEmpId: {
+      empId: null,
+    },
+    unit: {
+      unitCode: empInfo.unit && empInfo.unit.unitCode,
+    },
+    emp: {
+      empId: empInfo.empId,
+    },
+  };
+  console.log(inputData);
+  console.log(empInfo);
+
+  await axios.post(url, inputData, { headers });
+};

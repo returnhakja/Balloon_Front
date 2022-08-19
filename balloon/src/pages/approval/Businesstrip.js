@@ -22,6 +22,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
 import { FcDocument } from 'react-icons/fc';
+import { insertBizTp } from '../../context/ApprovalAxios';
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
   backgroundColor: blue[500],
@@ -154,6 +155,7 @@ function Trip() {
                 {' '}
                 <form>
                   <input
+                    id="bizTpTitle"
                     type="text"
                     name="title"
                     placeholder="기안제목을 입력하세요."
@@ -170,22 +172,6 @@ function Trip() {
         <table className={styles.tableborder}>
           <thead>
             <tr className={styles.trcon}>
-              <td className={styles.titlename}>기안제목</td>
-              <td className={styles.titlename} colSpan={2}>
-                <form>
-                  <input
-                    id="bizTpTitle"
-                    type="text"
-                    name="title"
-                    placeholder="기안제목을 입력하세요."
-                    className={styles.inputtext}
-                  />
-                </form>
-              </td>
-            </tr>
-          </thead>
-          <thead>
-            <tr className={styles.trcon}>
               <td className={styles.titlename}>신청자 정보</td>
               <td className={styles.titlename} colSpan={2}>
                 {empInfo.empName} ({empInfo.empId})
@@ -197,7 +183,7 @@ function Trip() {
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
                 {' '}
-                위에꺼랑 똑같이하면 되는데
+                이거 일단 없음
               </td>
               <td className={styles.titlename}></td>
             </tr>
@@ -244,6 +230,7 @@ function Trip() {
               <td className={styles.tdreaui}>
                 <form>
                   <input
+                    id="destination"
                     type="text"
                     name="title"
                     placeholder="방문처를 입력하세요"
@@ -254,6 +241,7 @@ function Trip() {
               <td className={styles.tdreaui}>
                 <form>
                   <input
+                    id="visitingPurpose"
                     type="text"
                     name="title"
                     placeholder="방문 목적을 입력하세요"
@@ -275,6 +263,7 @@ function Trip() {
               justifyContent: 'center',
             }}>
             <TextField
+              id="bizTpContent"
               fullWidth
               multiline
               rows={10}
@@ -287,7 +276,20 @@ function Trip() {
               <Button variant="outlined" size="large">
                 임시저장
               </Button>
-              <SaveButton variant="contained" color="success" size="large">
+              <SaveButton
+                variant="contained"
+                color="success"
+                size="large"
+                onClick={async () => {
+                  await insertBizTp(
+                    inputData,
+                    empInfo,
+                    startValue,
+                    endvalue,
+                    setInputData
+                  );
+                  window.location.href = 'http://localhost:3000/boxes';
+                }}>
                 상신하기
               </SaveButton>
             </Box>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
@@ -9,7 +9,11 @@ import {
   Card,
   CardContent,
   Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   TextField,
   Typography,
 } from '@mui/material';
@@ -20,6 +24,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
+import { findUnitList } from '../../context/UnitAxios';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -42,6 +47,27 @@ const SaveButton = styled(Button)(({ theme }) => ({
 }));
 
 function Pointment() {
+  const positionArr = [
+    '인턴',
+    '사원',
+    '주임',
+    '대리',
+    '과장',
+    '차장',
+    '부장',
+    '이사',
+    '상무',
+    '전무',
+    '부사장',
+    '사장',
+    '부회장',
+    '이사회 의장',
+    '회장',
+  ];
+  const [posi, setPosi] = useState('');
+  const [units, setUnits] = useState('');
+  const [unit, setUnit] = useState('');
+
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
 
@@ -51,6 +77,11 @@ function Pointment() {
 
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
+  const [inputData, setInputData] = useState({});
+
+  useEffect(() => {
+    findUnitList(setUnits);
+  }, []);
 
   const card = (
     <React.Fragment>
@@ -89,7 +120,9 @@ function Pointment() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>인사명령</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>인사명령-</th>
+              <th className={styles.th}>
+                <input id="PAId"></input>
+              </th>
             </tr>
           </thead>
 
@@ -146,6 +179,7 @@ function Pointment() {
                 {' '}
                 <form>
                   <input
+                    id="PATitle"
                     type="text"
                     name="title"
                     placeholder="기안제목을 입력하세요."
@@ -182,14 +216,14 @@ function Pointment() {
           <tbody className={styles.tbodyin}>
             <tr className={styles.trcolor}>
               <td className={styles.tdreaui}>구성원명</td>
-              <td className={styles.tdreaui}>발령구분</td>
               <td className={styles.tdreaui}>발령부서</td>
-              <td className={styles.tdreaui}>발령직급</td>
+              <td className={styles.tdreaui}>발령직위</td>
             </tr>
 
             <tr>
               <td className={styles.tdreaui}>
                 <input
+                  id="movedEmpName"
                   type="text"
                   name="title"
                   placeholder="구성원명을 입력하세요."
@@ -197,34 +231,51 @@ function Pointment() {
                 />
               </td>
               <td className={styles.tdreaui}>
-                <form>
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder="발령구분 입력하세요"
-                    className={styles.inputtext}
-                  />
-                </form>
+                <FormControl fullWidth>
+                  <InputLabel>부서를 설정해주세요</InputLabel>
+                  <Select
+                    id="unit"
+                    label="발령부서를 선택하세요"
+                    value={unit}
+                    placeholder=" 발령부서를 선택하세요"
+                    onChange={(e) => {
+                      setUnit(e.target.value);
+                      console.log(unit);
+                    }}
+
+                    // className={styles.inputtext}
+                  >
+                    {units &&
+                      units.map((unit) => (
+                        <MenuItem key={unit} value={unit}>
+                          {unit}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
               </td>
               <td className={styles.tdreaui}>
-                <form>
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder="발령부서를 입력하세요"
-                    className={styles.inputtext}
-                  />
-                </form>
-              </td>
-              <td className={styles.tdreaui}>
-                <form>
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder=" 발령직급을 입력하세요"
-                    className={styles.inputtext}
-                  />
-                </form>
+                <FormControl fullWidth>
+                  <InputLabel>직위를 설정해주세요</InputLabel>
+                  <Select
+                    id="position"
+                    label="발령직위를 선택하세요"
+                    value={posi}
+                    placeholder=" 발령직위를 선택하세요"
+                    onChange={(e) => {
+                      setPosi(e.target.value);
+                      console.log(posi);
+                    }}
+
+                    // className={styles.inputtext}
+                  >
+                    {positionArr.map((position) => (
+                      <MenuItem key={position} value={position}>
+                        {position}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </td>
             </tr>
           </tbody>
@@ -240,6 +291,7 @@ function Pointment() {
               justifyContent: 'center',
             }}>
             <TextField
+              id="PAContent"
               fullWidth
               multiline
               rows={10}
