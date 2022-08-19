@@ -98,13 +98,10 @@ export const selectEmpByEmpId = async (empId, setIdChk) => {
 };
 
 // 사번으로 EmpInfo Get
-export const getEmpByEmpId = async (empId, setGetEmpName) => {
+export const getEmpByEmpId = async (empId, setBotInfo) => {
   const urlStr = '/api/emp/' + empId;
   await axios.get(urlStr).then((data) => {
-    console.log(empId);
-    console.log(data);
-    console.log(data.data.empName);
-    setGetEmpName(data.data);
+    setBotInfo(data.data);
   });
 };
 
