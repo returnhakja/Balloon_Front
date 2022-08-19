@@ -50,7 +50,7 @@ export const onUserInvite = async (chatroomId, invite, client) => {
               {},
               JSON.stringify({
                 chatroomId: chatroomId,
-                writer: data.empId,
+                writer: data,
                 chatContent: data.empName + '님이 입장하셨습니다',
               })
             );
