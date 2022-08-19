@@ -17,11 +17,13 @@ import {
 } from '../../context/ChatAxios';
 
 import Modal from './Modal';
+import { sendExit } from '../../utils/ChatUtils';
 
 function Chat() {
   // login할때 empId를 가져옴 -> 채팅방생성/채팅 시 사용가능
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
+  console.log(empInfo);
 
   //실시간 시간 가져오기
   const nowTime = moment().format('HH:mm');
@@ -38,7 +40,7 @@ function Chat() {
       const chat = JSON.parse(data.body);
       console.log(chat);
       setInput([...input, chat]);
-      console.log(...input);
+      console.log(input);
       disconnect();
     });
   });
@@ -55,7 +57,7 @@ function Chat() {
       {},
       JSON.stringify({
         chatroomId: chatroomId,
-        writer: empId,
+        writer: empInfo,
         chatContent: inputRef.current.value,
       })
     );
@@ -154,17 +156,17 @@ function Chat() {
   // };
 
   //채팅방 나가기
-  const sendExit = () => {
-    client.send(
-      '/app/chat/message',
-      {},
-      JSON.stringify({
-        chatroomId: chatroomId,
-        writer: empId,
-        chatContent: empInfo.empName + '님이 방을 나가셨습니다',
-      })
-    );
-  };
+  // const sendExit = () => {
+  //   client.send(
+  //     '/app/chat/message',
+  //     {},
+  //     JSON.stringify({
+  //       chatroomId: chatroomId,
+  //       writer: empInfo,
+  //       chatContent: empInfo.empName + '님이 방을 나가셨습니다',
+  //     })
+  //   );
+  // };
 
   // const onExitRoom = () => {
   //   console.log(chatroomId);
@@ -191,7 +193,10 @@ function Chat() {
       </Link>
       {/* 채팅방 나가기 */}
       <div className={styles.logoutBtn}>
-        <Button onClick={() => onExitRoom(chatroomId, empId, sendExit)}>
+        <Button
+          onClick={() =>
+            onExitRoom(chatroomId, empId, sendExit(client, chatroomId, empInfo))
+          }>
           <Link to={'/chatroom'}>
             <LogoutIcon />
           </Link>
@@ -237,22 +242,23 @@ function Chat() {
       </div> */}
 
       <br />
-      <div style={{ border: '1px solid black', margin: '5px' }}>
+      <div>
         {/* 채팅기록을 가져옴 */}
         {chatting.map((msg, index) => {
+          // console.log(msg);
           const chatTime = msg.chatTime.substr(11, 15);
-          console.log(chatTime);
+          // console.log(chatTime);
           return (
             <div key={index}>
               {msg.employee.empId === empInfo.empId ? (
                 <div className={styles.message}>
-                  {msg.chatContent}
-                  {chatTime}
+                  <span className={styles.mytime}>{chatTime}</span>
+                  <span className={styles.mycontent}>{msg.chatContent}</span>
                 </div>
               ) : (
-                <div className={styles.othername}>
+                <div className={styles.othermessage}>
                   <div>{msg.employee.empName}</div>
-                  <span className={styles.othermessage}>{msg.chatContent}</span>
+                  <span className={styles.othercontent}>{msg.chatContent}</span>
                   <span className={styles.time}>{chatTime}</span>
                 </div>
               )}
@@ -263,7 +269,30 @@ function Chat() {
       <div className={styles.scroll}>
         <div className={styles.contain}>
           {/* chatting내용 사용자에 따라 배치 */}
-          {input.length !== 0 &&
+
+          {input.map((chat, index) => {
+            return (
+              <div key={chat.writer + index}>
+                {empInfo.empId === chat.writer.empId ? (
+                  <div className={styles.message}>
+                    <span className={styles.mytime}>{nowTime}</span>
+                    <span className={styles.mycontent}>{chat.chatContent}</span>
+                  </div>
+                ) : (
+                  <div className={styles.othermessage}>
+                    <div>{chat.writer.empName}</div>
+                    <span className={styles.othercontent}>
+                      {chat.chatContent}
+                    </span>
+                    <span className={styles.time}>{nowTime}</span>
+                  </div>
+                )}
+                <br />
+              </div>
+            );
+          })}
+
+         {/* {input.length !== 0 &&
             input.map((chat, index) => {
               console.log(chat);
               return (
@@ -285,6 +314,8 @@ function Chat() {
                 </div>
               );
             })}
+*/}
+
         </div>
 
         <div className={styles.inputmain}>

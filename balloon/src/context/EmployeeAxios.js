@@ -97,6 +97,17 @@ export const selectEmpByEmpId = async (empId, setIdChk) => {
     });
 };
 
+// 사번으로 EmpInfo Get
+export const getEmpByEmpId = async (empId, setGetEmpName) => {
+  const urlStr = '/api/emp/' + empId;
+  await axios.get(urlStr).then((data) => {
+    console.log(empId);
+    console.log(data);
+    console.log(data.data.empName);
+    setGetEmpName(data.data.empName);
+  });
+};
+
 // 사번으로 사원 검색 후, 정보 넣기
 export const setEmpInfoByEmpId = async (empId, setEmpInfo) => {
   const urlStr = '/api/emp/' + empId;

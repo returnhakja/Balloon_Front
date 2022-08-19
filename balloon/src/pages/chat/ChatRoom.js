@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 
@@ -9,13 +8,17 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Container } from '@mui/system';
 
-import { onChatroom } from '../../context/ChatAxios';
-import { onDeleteRoom } from '../../context/ChatAxios';
+import { onChatroom, onExitRoom } from '../../context/ChatAxios';
+import Stomp from 'stompjs';
+import { sendExit } from '../../utils/ChatUtils';
+import SockJS from 'sockjs-client';
 
 function ChatRoom() {
   const [chatroom, setChatroom] = useState([]);
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
+  const sock = new SockJS('http://localhost:8080/chatstart');
+  const client = Stomp.over(sock);
 
   //마지막으로 보낸 채팅list가져오기
   useEffect(() => {
@@ -49,7 +52,13 @@ function ChatRoom() {
               <Button
                 variant="text"
                 disableElevation
-                onClick={() => onDeleteRoom(chat.chatroom.chatroomId)}>
+                onClick={() =>
+                  onExitRoom(
+                    chat.chatroom.chatroomId,
+                    empInfo.empId,
+                    sendExit(client, chat.chatroom.chatroomId, empInfo)
+                  )
+                }>
                 <DeleteIcon />
               </Button>
             </Box>
