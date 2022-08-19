@@ -4,7 +4,7 @@ import Stomp from 'stompjs';
 import styles from '../../css/Chat/Chat.module.css';
 import { Link, useOutletContext } from 'react-router-dom';
 import moment from 'moment';
-
+import SendIcon from '@mui/icons-material/Send';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
 import { TextField } from '@mui/material';
@@ -17,11 +17,13 @@ import {
 } from '../../context/ChatAxios';
 
 import Modal from './Modal';
+import { sendExit } from '../../utils/ChatUtils';
 
 function Chat() {
   // login할때 empId를 가져옴 -> 채팅방생성/채팅 시 사용가능
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
+  console.log(empInfo);
 
   //실시간 시간 가져오기
   const nowTime = moment().format('HH:mm');
@@ -38,10 +40,12 @@ function Chat() {
       const chat = JSON.parse(data.body);
       console.log(chat);
       setInput([...input, chat]);
-      console.log(...input);
+      console.log(input);
       disconnect();
     });
   });
+
+  console.log(input);
 
   const disconnect = () => {
     client.disconnect();
@@ -55,7 +59,7 @@ function Chat() {
       {},
       JSON.stringify({
         chatroomId: chatroomId,
-        writer: empId,
+        writer: empInfo,
         chatContent: inputRef.current.value,
       })
     );
@@ -115,7 +119,7 @@ function Chat() {
     // };
     chatRecord(chatroomId, setChatting);
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
-  }, []);
+  }, [input]);
 
   //채팅방 이름수정
   // const onUserUpdate = () => {
@@ -133,8 +137,8 @@ function Chat() {
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  const openModal = () => {
-    setModalOpen(true);
+  const closemodal = () => {
+    setModalOpen(!modalOpen);
   };
 
   //사원초대
@@ -154,17 +158,17 @@ function Chat() {
   // };
 
   //채팅방 나가기
-  const sendExit = () => {
-    client.send(
-      '/app/chat/message',
-      {},
-      JSON.stringify({
-        chatroomId: chatroomId,
-        writer: empId,
-        chatContent: empInfo.empName + '님이 방을 나가셨습니다',
-      })
-    );
-  };
+  // const sendExit = () => {
+  //   client.send(
+  //     '/app/chat/message',
+  //     {},
+  //     JSON.stringify({
+  //       chatroomId: chatroomId,
+  //       writer: empInfo,
+  //       chatContent: empInfo.empName + '님이 방을 나가셨습니다',
+  //     })
+  //   );
+  // };
 
   // const onExitRoom = () => {
   //   console.log(chatroomId);
@@ -182,8 +186,8 @@ function Chat() {
     <>
       <div className={styles.chatroomname}>
         <h3>
-          <button onClick={openModal}>{chatroomName}</button>
-          {modalOpen && <Modal setModalOpen={setModalOpen} />}
+          <button onClick={closemodal}>{chatroomName}</button>
+          {modalOpen && <Modal closemodal={closemodal} />}
         </h3>
       </div>
       <Link to={'/chatroom'}>
@@ -191,7 +195,10 @@ function Chat() {
       </Link>
       {/* 채팅방 나가기 */}
       <div className={styles.logoutBtn}>
-        <Button onClick={() => onExitRoom(chatroomId, empId, sendExit)}>
+        <Button
+          onClick={() =>
+            onExitRoom(chatroomId, empId, sendExit(client, chatroomId, empInfo))
+          }>
           <Link to={'/chatroom'}>
             <LogoutIcon />
           </Link>
@@ -237,25 +244,24 @@ function Chat() {
       </div> */}
 
       <br />
-      <br />
-      <br />
-      <div style={{ border: '1px solid black', margin: '5px' }}>
+      <div>
         {/* 채팅기록을 가져옴 */}
         {chatting.map((msg, index) => {
-          const chatTime = msg.chatTime.substr(0, 10);
-          console.log(chatTime);
+          // console.log(msg);
+          const chatTime = msg.chatTime.substr(11, 15);
+          // console.log(chatTime);
           return (
             <div key={index}>
               {msg.employee.empId === empInfo.empId ? (
                 <div className={styles.message}>
-                  {chatTime}
-                  {msg.chatContent}
+                  <span className={styles.mytime}>{chatTime}</span>
+                  <span className={styles.mycontent}>{msg.chatContent}</span>
                 </div>
               ) : (
                 <div className={styles.othermessage}>
-                  {msg.employee.empName}
-                  {chatTime}
-                  {msg.chatContent}
+                  <div>{msg.employee.empName}</div>
+                  <span className={styles.othercontent}>{msg.chatContent}</span>
+                  <span className={styles.time}>{chatTime}</span>
                 </div>
               )}
             </div>
@@ -265,7 +271,30 @@ function Chat() {
       <div className={styles.scroll}>
         <div className={styles.contain}>
           {/* chatting내용 사용자에 따라 배치 */}
-          {input.length !== 0 &&
+
+          {/* {input.map((chat, index) => {
+            return (
+              <div key={chat.writer + index}>
+                {empInfo.empId === chat.writer.empId ? (
+                  <div className={styles.message}>
+                    <span className={styles.mytime}>{nowTime}</span>
+                    <span className={styles.mycontent}>{chat.chatContent}</span>
+                  </div>
+                ) : (
+                  <div className={styles.othermessage}>
+                    <div>{chat.writer.empName}</div>
+                    <span className={styles.othercontent}>
+                      {chat.chatContent}
+                    </span>
+                    <span className={styles.time}>{nowTime}</span>
+                  </div>
+                )}
+                <br />
+              </div>
+            );
+          })} */}
+
+          {/* {input.length !== 0 &&
             input.map((chat, index) => {
               console.log(chat);
               return (
@@ -276,23 +305,28 @@ function Chat() {
                       {chat.chatContent}
                     </div>
                   ) : (
-                    <div className={styles.othermessage}>
-                      {nowTime}
-                      {chat.chatContent}
+                    <div className={styles.othercon}>
+                      <div className={styles.othermessage}>
+                        {nowTime}
+                        {chat.chatContent}
+                      </div>
                     </div>
                   )}
                   <br />
                 </div>
               );
             })}
+*/}
         </div>
 
         <div className={styles.inputmain}>
           <input
             className={styles.inputform}
             ref={inputRef}
-            onKeyPress={onKeyPress}></input>
-          <Button
+            onKeyPress={onKeyPress}
+            placeholder="메시지를 입력하세요"
+          />
+          {/* <Button
             className={styles.inputbutton}
             onClick={() => {
               inputRef.current.value && send();
@@ -300,6 +334,18 @@ function Chat() {
               inputRef.current.value = '';
             }}>
             보내기
+          </Button> */}
+          <Button
+            variant="contained"
+            endIcon={<SendIcon />}
+            className={styles.inputbutton}
+            onClick={() => {
+              inputRef.current.value && send();
+              inputRef.current.focus();
+              inputRef.current.value = '';
+            }}>
+            {' '}
+            전송
           </Button>
         </div>
       </div>

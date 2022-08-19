@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { signupValidation, signup } from '../../context/AuthFunc';
+import {
+  signupValidation,
+  signup,
+  insertSignupList,
+} from '../../context/AuthFunc';
 import { findUnitList } from '../../context/UnitAxios';
 import { selectEmpByEmpId } from '../../context/EmployeeAxios';
 import { Container, Button, TextField, Typography, Box } from '@mui/material';
@@ -7,6 +11,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import readXlsxFile from 'read-excel-file';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -19,50 +24,51 @@ const MenuProps = {
   },
 };
 
-const positionArr = [
-  '인턴',
-  '사원',
-  '주임',
-  '대리',
-  '과장',
-  '차장',
-  '부장',
-  '이사',
-  '상무',
-  '전무',
-  '부사장',
-  '사장',
-  '부회장',
-  '이사회 의장',
-  '회장',
-];
+// const positionArr = [
+//   '인턴',
+//   '사원',
+//   '주임',
+//   '대리',
+//   '과장',
+//   '차장',
+//   '부장',
+//   '이사',
+//   '상무',
+//   '전무',
+//   '부사장',
+//   '사장',
+//   '부회장',
+//   '이사회 의장',
+//   '회장',
+// ];
 
-const responseArr = [
-  '없음',
-  '파트장',
-  '팀장',
-  '지점장',
-  '본부장',
-  '그룹장',
-  '부서장',
-  '사업부장',
-  '부문장',
-  '센터장',
-  '실장',
-  '임원',
-  '상근고문',
-  '고문',
-  'CIO',
-  'COO',
-  'CMO',
-  'CFO',
-  'CTO',
-  'CEO',
-];
+// const responseArr = [
+//   '없음',
+//   '파트장',
+//   '팀장',
+//   '지점장',
+//   '본부장',
+//   '그룹장',
+//   '부서장',
+//   '사업부장',
+//   '부문장',
+//   '센터장',
+//   '실장',
+//   '임원',
+//   '상근고문',
+//   '고문',
+//   'CIO',
+//   'COO',
+//   'CMO',
+//   'CFO',
+//   'CTO',
+//   'CEO',
+// ];
 
-const gradeArr = ['ROLE_GUEST', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN'];
+// const gradeArr = ['ROLE_GUEST', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN'];
 
 function EmpListAddPage() {
+  const [signupList, setsignupList] = useState([]);
   const [unitArr, setUnitArr] = useState([]);
   const [posi, setPosi] = useState('인턴');
   const [responsi, setResponsi] = useState('없음');
@@ -71,6 +77,26 @@ function EmpListAddPage() {
   const [birth, setBirth] = useState(null);
   const [hidePassword, setHidePassword] = useState(true);
   const [idChk, setIdChk] = useState(false);
+
+  const eventHhandle = (event) => {
+    event.preventDefault();
+    const empList = document.getElementById('empList');
+    console.log(empList);
+
+    readXlsxFile(empList.files[0]).then((rows) => {
+      setsignupList(rows);
+    });
+  };
+
+  // console.log(signupList);
+
+  useEffect(() => {
+    if (signupList !== []) {
+      const rows = signupList.filter((row) => row[0] !== 'empId');
+      console.log(rows);
+      insertSignupList(rows);
+    }
+  }, [signupList]);
 
   const toggleHidePassword = (event) => {
     event.preventDefault();
@@ -138,12 +164,6 @@ function EmpListAddPage() {
     if (inputEmp !== null) {
       inputEmp.then((data) => signup(data));
     }
-  };
-
-  const eventHhandle = (event) => {
-    event.preventDefault();
-    let empList = document.getElementById('empList').value;
-    console.log(empList);
   };
 
   return (
