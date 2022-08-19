@@ -1,27 +1,56 @@
+.othercontent {
+  /* border: 1px rgb(191, 193, 195) solid;
+  padding-left: 5px;
+  padding-right: 10px;
+  margin-bottom: 10px; */
+  background-color: darkseagreen;
+  text-align: left;
+  /* width: 90%; */
+  /* float: left; */
+  /* display: inline-block; */
+  margin-right: 5px;
+}
+
+.mycontent {
+  background-color: antiquewhite;
+  text-align: right;
+  margin-left: 5px;
+}
+
 .othermessage {
-  border: 1px rgb(191, 193, 195) solid;
   padding-left: 5px;
   padding-right: 10px;
   margin-bottom: 10px;
-  background-color: darkseagreen;
-  text-align: left;
+  margin-top: 10px;
   width: 50%;
+  text-align: left;
   float: left;
+  top: 50%;
 }
 
 .time {
-  float: right;
+  text-align: left;
+  /* width: 90%; */
+  /* float: left; */
+  margin: 0px;
+  /* display: inline-block; */
+}
+.mytime {
+  text-align: right;
+  margin: 0px;
 }
 
 .message {
-  border: 1px rgb(191, 193, 195) solid;
+  /* border: 1px rgb(191, 193, 195) solid; */
   padding-left: 5px;
   padding-right: 10px;
   margin-bottom: 10px;
-  background-color: blanchedalmond;
+  margin-top: 10px;
+  /* background-color: blanchedalmond; */
   text-align: right;
   width: 50%;
   float: right;
+  top: 50%;
 }
 
 .scroll {
@@ -68,4 +97,9 @@
 .chatroomname {
   text-align: center;
   background-color: aquamarine;
+}
+
+.time {
+  background-color: white;
+  margin-right: 30%;
 }

@@ -5,21 +5,23 @@ import styles from '../../css/Component.module.css';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 
 import {
+  getEmpByEmpId,
   getEmpListInSameUnit,
   setEmpInfoByEmpId,
 } from '../../context/EmployeeAxios';
 import { BsCalendarWeek } from 'react-icons/bs';
-import { onCreateChatroom } from '../../context/ChatAxios';
 
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const handleClose = () => setOpenInsert(false);
   const [startValue, setStartValue] = useState(new Date());
   const [endvalue, setEndValue] = useState(new Date());
   const [eList, setCEList] = useState([]);
+  const [botInfo, setBotInfo] = useState([]);
   const [inviteSchedule, setInviteSchedule] = useState([]);
   const empId = empInfo.empId;
   const scheduleListAdd = [];
@@ -38,10 +40,11 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     if (inviteSchedule == 0) {
       alert('사원을 추가 해 주세요');
     } else {
-      setInviteSchedule([]);
       setOpen(false);
     }
   };
+
+  console.log(inviteSchedule);
 
   //일정보내기
   const sock = new SockJS('http://localhost:8080/chatstart');
@@ -60,8 +63,17 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     client.disconnect();
   };
 
-  //채팅방 만들기
 
+  const onInviteSchedule = (checked, data) => {
+    if (checked) {
+      setInviteSchedule([...inviteSchedule, data]);
+    } else {
+      setInviteSchedule(inviteSchedule.filter((button) => button !== data));
+    }
+  };
+
+  //채팅방 만들기
+  const calendarBot = 'Y0000001';
   const onSchCreateChatroom = (inviteSchedule) => {
     inviteSchedule.pop(empId);
     console.log(inviteSchedule);
@@ -84,49 +96,54 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   //chatroomEmployee T에 값넣고 채팅보내는 부분
 
   const onSchUserInvite = (add, inviteSchedule) => {
-    add.sort();
     console.log(add);
     // add.map((data, index) => {
     // data.then((test) => {
     //   console.log(test[index]);
     add.map((data, index) => {
       console.log(data);
-      inviteSchedule &&
-        axios
-          .post(
-            `http://localhost:8080/insertSch/${data.chatroomId}`,
+      axios
+        .post(
+          `http://localhost:8080/insertChatEmp/${data.chatroomId}`,
+          [
             {
               empId: {
                 empId: inviteSchedule[index],
               },
             },
-            // inviteSchedule.map((data) => {
-            // const sendSchedule = () => {
+            {
+              empId: {
+                empId: calendarBot,
+              },
+            },
+          ],
 
-            //
-            client.send(
-              '/app/chat/message',
-              {},
-              JSON.stringify({
-                chatroomId: data.chatroomId,
-                writer: inviteSchedule[index],
-                chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
-              })
-            )
-
-            //
-            // };
-            // sendSchedule();
-            // return {
-            //   empId: {
-            //     empId: inviteSchedule[index],
-            //   },
-            // };
-            // })
+          client.send(
+            '/app/chat/message',
+            {},
+            JSON.stringify({
+              chatroomId: data.chatroomId,
+              writer: botInfo,
+              chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
+            })
           )
-          .then((response) => {
-            console.log(response.data);
-          });
+
+          // inviteSchedule.map((data) => {
+          // const sendSchedule = () => {
+
+          //
+          // };
+          // sendSchedule();
+          // return {
+          //   empId: {
+          //     empId: inviteSchedule[index],
+          //   },
+          // };
+          // })
+        )
+        .then((response) => {
+          console.log(response.data);
+        });
     });
   };
 
@@ -174,28 +191,15 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
     //일정등록 후 알림보내기
     onSchCreateChatroom(inviteSchedule);
-
-    // add.map((data) => {
-    //   data.then((test) => {
-    //     console.log(test);
-    //   });
-    // });
   };
 
   useEffect(() => {
     getEmpListInSameUnit(empId, setCEList);
+    getEmpByEmpId(calendarBot, setBotInfo);
     // setInvite();
     console.log(eList);
     // console.log(empId);
   }, []);
-
-  const onInviteSchedule = (checked, data) => {
-    if (checked) {
-      setInviteSchedule([...inviteSchedule, data]);
-    } else {
-      setInviteSchedule(inviteSchedule.filter((button) => button !== data));
-    }
-  };
 
   return (
     <Modal
