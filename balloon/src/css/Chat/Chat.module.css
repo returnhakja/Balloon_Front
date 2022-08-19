@@ -1,4 +1,4 @@
-.othermessage {
+.othercontent {
   /* border: 1px rgb(191, 193, 195) solid;
   padding-left: 5px;
   padding-right: 10px;
@@ -11,7 +11,13 @@
   margin-right: 5px;
 }
 
-.othername {
+.mycontent {
+  background-color: antiquewhite;
+  text-align: right;
+  margin-left: 5px;
+}
+
+.othermessage {
   padding-left: 5px;
   padding-right: 10px;
   margin-bottom: 10px;
@@ -29,16 +35,22 @@
   margin: 0px;
   /* display: inline-block; */
 }
+.mytime {
+  text-align: right;
+  margin: 0px;
+}
 
 .message {
-  border: 1px rgb(191, 193, 195) solid;
+  /* border: 1px rgb(191, 193, 195) solid; */
   padding-left: 5px;
   padding-right: 10px;
   margin-bottom: 10px;
-  background-color: blanchedalmond;
+  margin-top: 10px;
+  /* background-color: blanchedalmond; */
   text-align: right;
   width: 50%;
   float: right;
+  top: 50%;
 }
 
 .scroll {
