@@ -5,10 +5,45 @@ export const getDocsByEmp = async (empId, docStatus, setdocList) => {
   const url = '/api/box/empdocs/';
   const str = url + empId + '/' + docStatus;
   await axios.get(str).then((res) => {
-    console.log(res.data);
+    console.log(res.data.length);
     setdocList(res.data);
   });
 };
+
+// 문서 수 가져오기---------------------------------------
+export const getDDByEmp = async (empId, setDDCount) => {
+  const url = '/api/box/empdocs/';
+  const str = url + empId + '/' + 1;
+  await axios.get(str).then((res) => {
+    console.log(res.data.length);
+    setDDCount(res.data.length);
+  });
+};
+export const getDCByEmp = async (empId, setDCCount) => {
+  const url = '/api/box/empdocs/';
+  const str = url + empId + '/' + 2;
+  await axios.get(str).then((res) => {
+    console.log(res.data.length);
+    setDCCount(res.data.length);
+  });
+};
+export const getDSByEmp = async (empId, setDSCount) => {
+  const url = '/api/box/empdocs/';
+  const str = url + empId + '/' + 3;
+  await axios.get(str).then((res) => {
+    console.log(res.data.length);
+    setDSCount(res.data.length);
+  });
+};
+export const getDRByEmp = async (empId, setDRCount) => {
+  const url = '/api/box/empdocs/';
+  const str = url + empId + '/' + 4;
+  await axios.get(str).then((res) => {
+    console.log(res.data.length);
+    setDRCount(res.data.length);
+  });
+};
+// ---------------------------------------
 
 // 완료된 문서(부서확인용)
 export const getDocsByUnit = async (unitCode, setdocList) => {
@@ -60,21 +95,7 @@ export const getPAByPAId = async (PAId, setPAInfo) => {
   });
 };
 
-export const insertSchedule = async (inputdata, setOpen) => {
-  const url = '/api/cal/insert';
-  const headers = {
-    'Content-Type': 'application/json',
-  };
-  console.log(inputdata);
-  await axios
-    .post(url, inputdata, {
-      headers,
-    })
-    .catch((err) => console.log(err));
-
-  setOpen(false);
-};
-
+// 업무 기안 상신
 export const insertBizRpt = async (inputData, empInfo, setInputData) => {
   const bizRptId = document.getElementById('bizRptId');
   const bizRptTitle = document.getElementById('bizRptTitle');
@@ -106,6 +127,7 @@ export const insertBizRpt = async (inputData, empInfo, setInputData) => {
   await axios.post(url, inputData, { headers });
 };
 
+// 출장 계획 상신
 export const insertBizTp = async (
   inputData,
   empInfo,
@@ -149,20 +171,23 @@ export const insertBizTp = async (
   await axios.post(url, inputData, { headers });
 };
 
+// 인사 명령 상신
 export const insertPA = async (
   inputData,
   empInfo,
   startDate,
-  endDate,
+  mEmp,
+  unit,
+  posi,
   setInputData
 ) => {
   const pAId = document.getElementById('PAId');
   const pATitle = document.getElementById('PATitle');
   const pAContent = document.getElementById('PAContent');
-  const movedEmpName = document.getElementById('movedEmpName');
-  const unitName = document.getElementById('unitName');
-  const position = document.getElementById('position');
 
+  console.log(mEmp);
+  console.log(posi);
+  console.log(unit);
   const url = '/api/pa';
 
   const headers = {
@@ -174,12 +199,12 @@ export const insertPA = async (
     documentTitle: pATitle.value,
     documentContent: pAContent.value,
     personnelDate: startDate,
-    position: position.value,
-    unitName: empInfo.unit && empInfo.unit.unitName,
-    movedEmpName: movedEmpName.value,
+    position: posi,
+    unitName: unit.unitName,
+    movedEmpName: mEmp.empName,
     empName: empInfo.empName,
     movedEmpId: {
-      empId: null,
+      empId: mEmp && mEmp.empId,
     },
     unit: {
       unitCode: empInfo.unit && empInfo.unit.unitCode,

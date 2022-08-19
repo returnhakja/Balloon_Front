@@ -25,6 +25,8 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
 import { findUnitList } from '../../context/UnitAxios';
+import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
+import { insertPA } from '../../context/ApprovalAxios';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -67,6 +69,8 @@ function Pointment() {
   const [posi, setPosi] = useState('');
   const [units, setUnits] = useState('');
   const [unit, setUnit] = useState('');
+  const [mEmpInfo, setMEmpInfo] = useState('');
+  const [mEmp, setMEmp] = useState('');
 
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
@@ -81,6 +85,8 @@ function Pointment() {
 
   useEffect(() => {
     findUnitList(setUnits);
+    getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
+    console.log(mEmpInfo);
   }, []);
 
   const card = (
@@ -222,19 +228,34 @@ function Pointment() {
 
             <tr>
               <td className={styles.tdreaui}>
-                <input
-                  id="movedEmpName"
-                  type="text"
-                  name="title"
-                  placeholder="구성원명을 입력하세요."
-                  className={styles.inputtext}
-                />
+                <FormControl fullWidth>
+                  <InputLabel>구성원을 설정해주세요</InputLabel>
+                  <Select
+                    id="mEmp"
+                    label="구성원을 선택하세요"
+                    value={mEmp}
+                    placeholder="구성원을 선택하세요"
+                    onChange={(e) => {
+                      setMEmp(e.target.value);
+                      console.log(mEmp);
+                    }}
+
+                    // className={styles.inputtext}
+                  >
+                    {mEmpInfo &&
+                      mEmpInfo.map((mEmps) => (
+                        <MenuItem key={mEmps.empId} value={mEmps}>
+                          {mEmps.empName} ({mEmps.empId})
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
               </td>
               <td className={styles.tdreaui}>
                 <FormControl fullWidth>
                   <InputLabel>부서를 설정해주세요</InputLabel>
                   <Select
-                    id="unit"
+                    id="unit1"
                     label="발령부서를 선택하세요"
                     value={unit}
                     placeholder=" 발령부서를 선택하세요"
@@ -246,9 +267,9 @@ function Pointment() {
                     // className={styles.inputtext}
                   >
                     {units &&
-                      units.map((unit) => (
-                        <MenuItem key={unit} value={unit}>
-                          {unit}
+                      units.map((unitInfo) => (
+                        <MenuItem key={unitInfo.unitId} value={unitInfo}>
+                          {unitInfo.unitName}
                         </MenuItem>
                       ))}
                   </Select>
@@ -304,7 +325,22 @@ function Pointment() {
               <Button variant="outlined" size="large">
                 임시저장
               </Button>
-              <SaveButton variant="contained" color="success" size="large">
+              <SaveButton
+                variant="contained"
+                color="success"
+                size="large"
+                onClick={async () => {
+                  await insertPA(
+                    inputData,
+                    empInfo,
+                    startValue,
+                    mEmp,
+                    unit,
+                    posi,
+                    setInputData
+                  );
+                  window.location.href = 'http://localhost:3000/boxes';
+                }}>
                 상신하기
               </SaveButton>
             </Box>
