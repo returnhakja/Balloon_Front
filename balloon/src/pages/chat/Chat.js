@@ -200,12 +200,82 @@ function Chat() {
   // };
   // console.log(empInfo.empName);
 
+  // 채팅방 이름 바꾸기
+  const [chatRoomTitle, setChatRoomTitle] = useState(chatroomName);
+  const [changeTitle, setChangeTitle] = useState(false);
+  const [clickChk, setClickChk] = useState(0);
+
+  const onChangeTitle = (event) => {
+    // console.log(event);
+    setChatRoomTitle(event.target.value);
+  };
+
+  useEffect(() => {
+    setChatRoomTitle(chatroomName);
+  }, [chatroomName]);
+
+  useEffect(() => {
+    setClickChk(clickChk);
+  }, [clickChk]);
+
+  const onClickChatRoomTitle = () => {
+    setClickChk(clickChk + 1);
+    // setChangeTitle(true);
+    console.log(clickChk);
+    if (clickChk > 1) {
+      // setChangeTitle(false);
+      // onChangeTitle();
+      setClickChk(0);
+    }
+  };
+
+  const keyEnter = (e) => {
+    if (e.key == 'Enter') {
+      setClickChk(0);
+      onChangeTitle();
+      // setChangeTitle(false);
+    }
+  };
+
   return (
     <Container maxWidth="xs">
       <div className={styles.chatroomname}>
         <h3>
-          <button onClick={closemodal}>{chatroomName}</button>
-          {modalOpen && <Modal closemodal={closemodal} />}
+          {chatroomName ? (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <TextField
+                id="outlined-multiline-flexible"
+                multiline
+                label="-"
+                maxRows={4}
+                value={chatRoomTitle}
+                onChange={onChangeTitle}
+                onKeyPress={keyEnter}
+                onClick={onClickChatRoomTitle}
+              />
+              {clickChk == 2 ? (
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    onUserUpdate(chatroomId, chatRoomTitle, headCount);
+                    setClickChk(0);
+                  }}>
+                  수정하기
+                </Button>
+              ) : (
+                ''
+              )}
+            </div>
+          ) : (
+            <h5 className=" mb-2 font-weight-bold text-gray-dark">
+              {chatRoomTitle}{' '}
+            </h5>
+          )}
         </h3>
       </div>
       <div className="chatconvimeline">
