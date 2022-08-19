@@ -3,7 +3,6 @@ import { useOutletContext } from 'react-router-dom';
 import { insertSchedule, insertSchedulList } from '../../context/CalendarAxios';
 import styles from '../../css/Component.module.css';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-
 import {
   getEmpByEmpId,
   getEmpListInSameUnit,
@@ -17,7 +16,6 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
-  const handleClose = () => setOpenInsert(false);
   const [startValue, setStartValue] = useState(new Date());
   const [endvalue, setEndValue] = useState(new Date());
   const [eList, setCEList] = useState([]);
@@ -25,6 +23,11 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const [inviteSchedule, setInviteSchedule] = useState([]);
   const empId = empInfo.empId;
   const scheduleListAdd = [];
+
+  const handleClose = () => {
+    setOpenInsert(false);
+    window.location.href = '/calendar';
+  };
 
   //사원추가 모달을 위한 open
   const [open, setOpen] = useState(false);
@@ -190,6 +193,8 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
     //일정등록 후 알림보내기
     onSchCreateChatroom(inviteSchedule);
+
+    window.location.href = '/calendar';
   };
 
   useEffect(() => {
@@ -299,7 +304,10 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
           <Box sx={{ ...style, width: 400 }}>
             {eList.map((emp, index) => {
               return (
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <Typography
+                  id="modal-modal-description"
+                  sx={{ mt: 2 }}
+                  key={index}>
                   <input
                     type="checkbox"
                     onChange={(e) => {
