@@ -5,6 +5,7 @@ import styles from '../../css/Component.module.css';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 
 import {
+  getEmpByEmpId,
   getEmpListInSameUnit,
   setEmpInfoByEmpId,
 } from '../../context/EmployeeAxios';
@@ -20,6 +21,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const [startValue, setStartValue] = useState(new Date());
   const [endvalue, setEndValue] = useState(new Date());
   const [eList, setCEList] = useState([]);
+  const [botInfo, setBotInfo] = useState([]);
   const [inviteSchedule, setInviteSchedule] = useState([]);
   const empId = empInfo.empId;
   const scheduleListAdd = [];
@@ -115,16 +117,13 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
             },
           ],
 
-          //
           client.send(
             '/app/chat/message',
             {},
             JSON.stringify({
               chatroomId: data.chatroomId,
-              writer: calendarBot,
-              chatContent:
-                '새로운 일정이 등록되었습니다. 확인하세요' +
-                <Link to={'/chatroom'}>자세히보기</Link>,
+              writer: botInfo,
+              chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
             })
           )
 
@@ -195,6 +194,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
   useEffect(() => {
     getEmpListInSameUnit(empId, setCEList);
+    getEmpByEmpId(calendarBot, setBotInfo);
     // setInvite();
     console.log(eList);
     // console.log(empId);

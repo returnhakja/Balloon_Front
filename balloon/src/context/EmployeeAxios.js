@@ -104,7 +104,7 @@ export const getEmpByEmpId = async (empId, setGetEmpName) => {
     console.log(empId);
     console.log(data);
     console.log(data.data.empName);
-    setGetEmpName(data.data.empName);
+    setGetEmpName(data.data);
   });
 };
 

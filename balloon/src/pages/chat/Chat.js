@@ -45,6 +45,8 @@ function Chat() {
     });
   });
 
+  console.log(input);
+
   const disconnect = () => {
     client.disconnect();
   };
@@ -117,7 +119,7 @@ function Chat() {
     // };
     chatRecord(chatroomId, setChatting);
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
-  }, []);
+  }, [input]);
 
   //채팅방 이름수정
   // const onUserUpdate = () => {
@@ -270,7 +272,7 @@ function Chat() {
         <div className={styles.contain}>
           {/* chatting내용 사용자에 따라 배치 */}
 
-          {input.map((chat, index) => {
+          {/* {input.map((chat, index) => {
             return (
               <div key={chat.writer + index}>
                 {empInfo.empId === chat.writer.empId ? (
@@ -290,9 +292,9 @@ function Chat() {
                 <br />
               </div>
             );
-          })}
+          })} */}
 
-         {/* {input.length !== 0 &&
+          {/* {input.length !== 0 &&
             input.map((chat, index) => {
               console.log(chat);
               return (
@@ -315,7 +317,6 @@ function Chat() {
               );
             })}
 */}
-
         </div>
 
         <div className={styles.inputmain}>
@@ -323,7 +324,8 @@ function Chat() {
             className={styles.inputform}
             ref={inputRef}
             onKeyPress={onKeyPress}
-            placeholder="메시지를 입력하세요"></input>
+            placeholder="메시지를 입력하세요"
+          />
           {/* <Button
             className={styles.inputbutton}
             onClick={() => {
