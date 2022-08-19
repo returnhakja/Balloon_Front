@@ -16,6 +16,7 @@ module.exports = function (app) {
     })
   );
   // app.use(
+  // app.use(
   //   '/box',
   //   createProxyMiddleware({
   //     target: 'http://localhost:8080',

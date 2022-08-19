@@ -31,7 +31,13 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
+
+import ChatSide from './ChatSide';
+
+
 function Chat() {
+  //스크롤
+
   // login할때 empId를 가져옴 -> 채팅방생성/채팅 시 사용가능
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
@@ -48,7 +54,9 @@ function Chat() {
   const client = Stomp.over(sock);
 
   //채팅방 사람 확인 state
-  const [open, setOpen] = useState(true);
+
+  const [open, setOpen] = useState(false);
+
 
   const handleClick = () => {
     setOpen(!open);
@@ -202,6 +210,9 @@ function Chat() {
 
   return (
     <Container maxWidth="xs">
+
+      <ChatSide />
+
       <div className={styles.chatroomname}>
         <h3>
           <button onClick={closemodal}>{chatroomName}</button>
@@ -294,15 +305,16 @@ function Chat() {
         <div className={styles.scrollbar}>
           {/* 채팅기록을 가져옴 */}
           {chatting.map((msg, index) => {
-            // console.log(msg);
-            const chatTime = msg.chatTime.substr(11, 15);
-            // console.log(chatTime);
+
+            const chatTime = msg.chatTime.substr(11, 5);
+            console.log(msg.chatTime.substr(11, 5));
+
             return (
               <div key={index}>
                 {msg.employee.empId === empInfo.empId ? (
                   <div className={styles.message}>
-                    <span className={styles.mytime}>{chatTime}</span>
-                    <span className={styles.mycontent}>{msg.chatContent}</span>
+                    <div className={styles.mytime}>{chatTime}</div>
+                    <div className={styles.mycontent}>{msg.chatContent}</div>
                   </div>
                 ) : (
                   <div className={styles.othermessage}>
@@ -321,6 +333,7 @@ function Chat() {
         <div className={styles.scroll}>
           <div className={styles.contain}>
             {/* chatting내용 사용자에 따라 배치 */}
+
 
             {/* {input.map((chat, index) => {
             return (
