@@ -133,8 +133,8 @@ function Chat() {
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  const openModal = () => {
-    setModalOpen(true);
+  const closemodal = () => {
+    setModalOpen(!modalOpen);
   };
 
   //사원초대
@@ -182,8 +182,8 @@ function Chat() {
     <>
       <div className={styles.chatroomname}>
         <h3>
-          <button onClick={openModal}>{chatroomName}</button>
-          {modalOpen && <Modal setModalOpen={setModalOpen} />}
+          <button onClick={closemodal}>{chatroomName}</button>
+          {modalOpen && <Modal closemodal={closemodal} />}
         </h3>
       </div>
       <Link to={'/chatroom'}>
@@ -274,12 +274,12 @@ function Chat() {
                       {chat.chatContent}
                     </div>
                   ) : (
-                    // <div className={styles.othercon}>
-                    <div className={styles.othermessage}>
-                      {nowTime}
-                      {chat.chatContent}
+                    <div className={styles.othercon}>
+                      <div className={styles.othermessage}>
+                        {nowTime}
+                        {chat.chatContent}
+                      </div>
                     </div>
-                    // </div>
                   )}
                   <br />
                 </div>
