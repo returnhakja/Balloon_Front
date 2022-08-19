@@ -12,7 +12,7 @@ import { onChatroom, onExitRoom } from '../../context/ChatAxios';
 import Stomp from 'stompjs';
 import { sendExit } from '../../utils/ChatUtils';
 import SockJS from 'sockjs-client';
-
+import styles from '../../css/Chat/ChatRoom.module.css';
 function ChatRoom() {
   const [chatroom, setChatroom] = useState([]);
   const [empInfo, setEmpInfo] = useOutletContext();
@@ -29,15 +29,16 @@ function ChatRoom() {
 
   return (
     <>
-      <div>
-        <br />
-        <Link to={'/chatemplist'}>
-          <Button variant="contained">사원리스트 이동</Button>
-        </Link>
-      </div>
       <br />
-      {/* 채팅방 목록보기 & 삭제하기 */}
-      <Container maxWidth="sm">
+      <Container maxWidth="xs" sx={{ border: 1 }}>
+        <div className={styles.chatroom}>
+          <br />
+          <Link to={'/chatemplist'}>
+            <Button variant="contained">사원리스트 이동</Button>
+          </Link>
+        </div>
+        <br />
+        {/* 채팅방 목록보기 & 삭제하기 */}
         {chatroom.map((chat, index) => {
           return (
             <Box key={index} border="1px solid ">
