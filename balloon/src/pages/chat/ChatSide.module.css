@@ -5,6 +5,11 @@
 
   background: rgb(221, 220, 220);
   color: rgb(0, 0, 0);
-  height: 10vh;
-  width: 100px;
+  height: 92vh;
+  width: 50px;
+}
+
+.iconcon {
+  display: flex;
+  justify-content: flex-end;
 }

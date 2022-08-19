@@ -176,3 +176,7 @@
   display: flex;
   justify-content: space-between;
 }
+
+.side {
+  display: flex;
+}
