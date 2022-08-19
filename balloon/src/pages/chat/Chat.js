@@ -4,7 +4,7 @@ import Stomp from 'stompjs';
 import styles from '../../css/Chat/Chat.module.css';
 import { Link, useOutletContext } from 'react-router-dom';
 import moment from 'moment';
-
+import SendIcon from '@mui/icons-material/Send';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
 import { TextField } from '@mui/material';
@@ -135,8 +135,8 @@ function Chat() {
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  const openModal = () => {
-    setModalOpen(true);
+  const closemodal = () => {
+    setModalOpen(!modalOpen);
   };
 
   //사원초대
@@ -184,8 +184,8 @@ function Chat() {
     <>
       <div className={styles.chatroomname}>
         <h3>
-          <button onClick={openModal}>{chatroomName}</button>
-          {modalOpen && <Modal setModalOpen={setModalOpen} />}
+          <button onClick={closemodal}>{chatroomName}</button>
+          {modalOpen && <Modal closemodal={closemodal} />}
         </h3>
       </div>
       <Link to={'/chatroom'}>
@@ -269,6 +269,7 @@ function Chat() {
       <div className={styles.scroll}>
         <div className={styles.contain}>
           {/* chatting내용 사용자에 따라 배치 */}
+
           {input.map((chat, index) => {
             return (
               <div key={chat.writer + index}>
@@ -290,14 +291,40 @@ function Chat() {
               </div>
             );
           })}
+
+         {/* {input.length !== 0 &&
+            input.map((chat, index) => {
+              console.log(chat);
+              return (
+                <div key={chat.writer + index}>
+                  {empInfo.empId === chat.writer ? (
+                    <div className={styles.message}>
+                      {nowTime}
+                      {chat.chatContent}
+                    </div>
+                  ) : (
+                    <div className={styles.othercon}>
+                      <div className={styles.othermessage}>
+                        {nowTime}
+                        {chat.chatContent}
+                      </div>
+                    </div>
+                  )}
+                  <br />
+                </div>
+              );
+            })}
+*/}
+
         </div>
 
         <div className={styles.inputmain}>
           <input
             className={styles.inputform}
             ref={inputRef}
-            onKeyPress={onKeyPress}></input>
-          <Button
+            onKeyPress={onKeyPress}
+            placeholder="메시지를 입력하세요"></input>
+          {/* <Button
             className={styles.inputbutton}
             onClick={() => {
               inputRef.current.value && send();
@@ -305,6 +332,18 @@ function Chat() {
               inputRef.current.value = '';
             }}>
             보내기
+          </Button> */}
+          <Button
+            variant="contained"
+            endIcon={<SendIcon />}
+            className={styles.inputbutton}
+            onClick={() => {
+              inputRef.current.value && send();
+              inputRef.current.focus();
+              inputRef.current.value = '';
+            }}>
+            {' '}
+            전송
           </Button>
         </div>
       </div>

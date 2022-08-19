@@ -3,6 +3,9 @@ import Navbar from './Navbar';
 import { Outlet } from 'react-router-dom';
 import Footer from './Footer';
 
+import AddIcon from '@mui/icons-material/Add';
+import { Fab } from '@mui/material';
+import styles from '../css/Home.module.css';
 function Home({ empInfo, setEmpInfo, logout, isLogin }) {
   return (
     <>
@@ -13,6 +16,11 @@ function Home({ empInfo, setEmpInfo, logout, isLogin }) {
         isLogin={isLogin}
       />
       <Outlet context={[empInfo, setEmpInfo]} />
+
+      <Fab color="primary" aria-label="add" className={styles.Icon}>
+        <AddIcon />
+      </Fab>
+
       <Footer />
     </>
   );

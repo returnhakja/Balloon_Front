@@ -19,6 +19,7 @@ import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
 
 import { FcDocument } from 'react-icons/fc';
+import { insertBizRpt } from '../../context/ApprovalAxios';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -45,6 +46,7 @@ function Report() {
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
+  const [inputData, setInputData] = useState({});
 
   console.log(empInfo);
 
@@ -87,7 +89,9 @@ function Report() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>업무기안</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>업무기안-</th>
+              <th className={styles.th}>
+                <input id="bizRptId"></input>
+              </th>
             </tr>
           </thead>
 
@@ -144,6 +148,7 @@ function Report() {
                 {' '}
                 <form>
                   <input
+                    id="bizRptTitle"
                     type="text"
                     name="title"
                     placeholder="기안제목을 입력하세요."
@@ -165,6 +170,7 @@ function Report() {
               justifyContent: 'center',
             }}>
             <TextField
+              id="bizRptContent"
               fullWidth
               multiline
               rows={10}
@@ -177,7 +183,14 @@ function Report() {
               <Button variant="outlined" size="large">
                 임시저장
               </Button>
-              <SaveButton variant="contained" color="success" size="large">
+              <SaveButton
+                variant="contained"
+                color="success"
+                size="large"
+                onClick={async () => {
+                  await insertBizRpt(inputData, empInfo, setInputData);
+                  window.location.href = 'http://localhost:3000/boxes';
+                }}>
                 상신하기
               </SaveButton>
             </Box>
