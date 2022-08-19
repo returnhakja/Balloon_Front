@@ -325,12 +325,15 @@ export const insertSignupList = async (rows) => {
     const signupChk = axios.post(url, inputEmpList, header).catch((error) => {
       console.log(error);
     });
-
-    if (signupChk === true) {
-      window.location.href = '/management/employee';
-    } else {
-      alert('정보가 잘못되었습니다.');
-    }
+    console.log(signupChk);
+    signupChk.then((check) => {
+      console.log(check);
+      if (check.data === true) {
+        window.location.href = '/management/employee';
+      } else {
+        alert('정보가 잘못되었습니다.');
+      }
+    });
   }
 };
 
