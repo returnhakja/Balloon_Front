@@ -144,16 +144,6 @@ export const getEmpListInSameUnit = async (empId, setCEList) => {
     .catch((error) => console.log(error));
 };
 
-// 사원관리페이지 삭제용 랜더링 함수
-export const updateCheck = async (setUpdateChk) => {
-  setUpdateChk(true);
-};
-
-// 사원관리페이지 삭제용 랜더링 함수
-export const deleteCheck = async (setDeleteChk) => {
-  setDeleteChk(true);
-};
-
 // 사원 수정
 export const updateEmployee = async (
   data
