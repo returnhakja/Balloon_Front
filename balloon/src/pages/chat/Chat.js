@@ -33,6 +33,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 
 import ChatSide from './ChatSide';
+import { Dvr } from '@mui/icons-material';
 
 function Chat() {
   //스크롤
@@ -217,26 +218,26 @@ function Chat() {
               {modalOpen && <Modal closemodal={closemodal} />}
             </h3>
           </div>
-          <div className={styles.chatheadder}>
-            <Link to={'/chatroom'}>
+
+          {/* <Link to={'/chatroom'}>
               <Button variant="contained">채팅목록 이동</Button>
+            </Link> */}
+          {/* 채팅방 나가기 */}
+          <div className={styles.logoutBtn}>
+            <Link to={'/chatroom'}>
+              <Button
+                onClick={() =>
+                  onExitRoom(
+                    chatroomId,
+                    empId,
+                    sendExit(client, chatroomId, empInfo)
+                  )
+                }>
+                <LogoutIcon />
+              </Button>
             </Link>
-            {/* 채팅방 나가기 */}
-            <div className={styles.logoutBtn}>
-              <Link to={'/chatroom'}>
-                <Button
-                  onClick={() =>
-                    onExitRoom(
-                      chatroomId,
-                      empId,
-                      sendExit(client, chatroomId, empInfo)
-                    )
-                  }>
-                  <LogoutIcon />
-                </Button>
-              </Link>
-            </div>
           </div>
+
           {/* 채팅방 인원수 & 이름수정 */}
           {/* <div className={styles.updatename}>
         <TextField
@@ -313,12 +314,16 @@ function Chat() {
                       <div className={styles.mycontent}>{msg.chatContent}</div>
                     </div>
                   ) : (
-                    <div className={styles.othermessage}>
-                      <div>{msg.employee.empName}</div>
-                      <span className={styles.othercontent}>
-                        {msg.chatContent}
-                      </span>
-                      <span className={styles.time}>{chatTime}</span>
+                    <div>
+                      <div className={styles.othermessage}>
+                        <div>{msg.employee.empName}</div>
+                        <div className={styles.contentContan}>
+                          <div className={styles.othercontent}>
+                            {msg.chatContent}
+                          </div>
+                          <div className={styles.time}>{chatTime}</div>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>

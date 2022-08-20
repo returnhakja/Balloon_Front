@@ -5,3 +5,9 @@
 .chatroom {
   /* height: 50vh; */
 }
+
+.chatroomCon {
+}
+.side {
+  display: flex;
+}

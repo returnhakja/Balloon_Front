@@ -7,7 +7,7 @@
 
   background: rgb(221, 220, 220);
   color: rgb(0, 0, 0);
-  height: 100vh;
+  height: 75vh;
   width: 50px;
 }
 
@@ -19,6 +19,7 @@
 .listyle {
   margin-top: 50%;
   margin-bottom: 50%;
+  color: black;
 }
 .listyle:hover {
   color: white;

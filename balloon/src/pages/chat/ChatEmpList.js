@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
-
+import styles from '../../css/Chat/Chat.module.css';
 import Button from '@mui/material/Button';
-import { Checkbox, Grid } from '@mui/material';
+import { Checkbox, Container, Grid } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 import Search from 'antd/lib/transfer/search';
+import ChatSide from './ChatSide';
+
 // import TextField from '@mui/material/TextField';
 
 function ChatEmpList({ invite, setInvite }) {
@@ -32,42 +34,48 @@ function ChatEmpList({ invite, setInvite }) {
   };
 
   return (
-    <div>
-      <Grid container justifyContent="flex-end">
-        <Button className="chatIcon">
-          <Link to={'/createroom'}>
-            <ChatIcon />
-          </Link>
-        </Button>
-      </Grid>
-      <br />
-      <Link to={'/chatroom'}>
-        <Button variant="contained">채팅목록 이동</Button>
-      </Link>
-      <br />
-      <br />
-      <div>
-        <ol>
-          {chatEmpList.map((ce, index) => {
-            return (
-              <div key={index} style={{ border: '1px solid black' }}>
-                <img src={ce.photo} alt="사원 이미지" />
-                {'  '}
-                <span>{ce.empName}</span> {'  '}
-                <span>{ce.position}</span>
-                <Checkbox
-                  type="checkbox"
-                  onChange={(e) => {
-                    onInvite(e.currentTarget.checked, ce);
-                  }}
-                  checked={invite.includes(ce) ? true : false}
-                />
-              </div>
-            );
-          })}
-        </ol>
+    <Container maxWidth="xs" className={styles.Listcontainer}>
+      <div className={styles.side}>
+        <div className={styles.listcon}>
+          <ChatSide />
+          <div className={styles.list}>
+            <div className={styles.chatIcon}>
+              <div className={styles.text}>사원</div>
+              <Grid container justifyContent="flex-end">
+                <Button className="chatIcon">
+                  <Link to={'/createroom'}>
+                    <ChatIcon fontSize="large" className={styles.creatIcon} />
+                  </Link>
+                </Button>
+              </Grid>
+            </div>
+            <hr />
+            <ol className={styles.olList}>
+              {chatEmpList.map((ce, index) => {
+                return (
+                  <div key={index} className={styles.fontlist}>
+                    {/* <img src={ce.photo} alt="사원 이미지" /> */}
+                    {'  '}
+                    <p className={styles.liststyle}>
+                      {ce.empName} {ce.position}
+                      <Checkbox
+                        type="checkbox"
+                        onChange={(e) => {
+                          onInvite(e.currentTarget.checked, ce);
+                        }}
+                        checked={invite.includes(ce) ? true : false}
+                      />
+                    </p>
+
+                    {/* <span>{ce.position}</span> */}
+                  </div>
+                );
+              })}
+            </ol>
+          </div>
+        </div>
       </div>
-    </div>
+    </Container>
   );
 }
 
