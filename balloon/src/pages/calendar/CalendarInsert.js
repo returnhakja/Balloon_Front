@@ -16,8 +16,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
-  const [startValue, setStartValue] = useState(new Date());
-  const [endvalue, setEndValue] = useState(new Date());
+  const [startValue, setStartValue] = useState();
+  const [endvalue, setEndValue] = useState();
   const [eList, setCEList] = useState([]);
   const [botInfo, setBotInfo] = useState([]);
   const [inviteSchedule, setInviteSchedule] = useState([]);
@@ -241,18 +241,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
           sx={{ mb: 2, mt: 2 }}>
           날짜 선택
         </Typography>
-
-        {/* <DateTimePicker
-            label="시작일"
-            value={startValue + 1}
-            type="datetime-local"
-            inputFormat={'yyyy/MM/dd  HH:mm'}
-            locale={ko}
-            onChange={(newValue) => {
-              setStartValue(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-          /> */}
         <TextField
           id="startvalue"
           label="시작일"
@@ -268,18 +256,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         />
 
         <span className={styles.centerfont}> : </span>
-
-        {/* <DateTimePicker
-            label="끝나는일"
-            type="datetime-local"
-            value={endvalue}
-            inputFormat={'yyyy/MM/dd  HH:mm'}
-            locale={ko}
-            onChange={(newValue) => {
-              setEndValue(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-          /> */}
         <TextField
           id="endvalue"
           label="끝나는 일"
