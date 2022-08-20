@@ -340,6 +340,12 @@ function Chat() {
 
             {/* {input.map((chat, index) => {
 
+
+              {/* {input.map((chat, index) => {
+
+
+            {/* {input.map((chat, index) => {
+
             return (
               <div key={chat.writer + index}>
                 {empInfo.empId === chat.writer.empId ? (
