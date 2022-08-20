@@ -31,6 +31,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
+
 import ChatSide from './ChatSide';
 
 function Chat() {
@@ -52,6 +53,7 @@ function Chat() {
   const client = Stomp.over(sock);
 
   //채팅방 사람 확인 state
+
   const [open, setOpen] = useState(false);
 
   const handleClick = () => {
@@ -329,6 +331,10 @@ function Chat() {
               {/* chatting내용 사용자에 따라 배치 */}
 
               {/* {input.map((chat, index) => {
+
+
+            {/* {input.map((chat, index) => {
+
             return (
               <div key={chat.writer + index}>
                 {empInfo.empId === chat.writer.empId ? (
