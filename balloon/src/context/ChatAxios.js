@@ -105,10 +105,23 @@ export const chatroomInfo = async (
 
 //채팅방이름 수정
 export const onUserUpdate = async (chatroomId, chatroomName, headCount) => {
+  console.log(chatroomId, chatroomName, headCount);
+  await axios
+    .put(`http://localhost:8080/updateroom/${chatroomId}`, {
+      chatroomName: chatroomName,
+      headCount: headCount,
+    })
+    .then((response) => {
+      console.log(response.data);
+    });
+};
+
+//채팅방인원수 수정
+export const onHCupdate = async (chatroomId, chatroomName, headCount) => {
   axios
     .put(`http://localhost:8080/updateroom/${chatroomId}`, {
-      chatroomName: chatroomName.value,
-      headCount: headCount,
+      chatroomName: chatroomName,
+      headCount: headCount - 1,
     })
     .then((response) => {
       console.log(response.data);
@@ -122,5 +135,5 @@ export const onExitRoom = async (chatroomId, empId, sendExit) => {
     .then((response) => {
       console.log(response.data);
     });
-  sendExit();
+  // sendExit();
 };

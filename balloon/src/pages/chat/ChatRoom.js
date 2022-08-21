@@ -8,10 +8,14 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Container } from '@mui/system';
 
-import { onChatroom, onExitRoom } from '../../context/ChatAxios';
+import { onChatroom, onExitRoom, onHCupdate } from '../../context/ChatAxios';
 import Stomp from 'stompjs';
 import { sendExit } from '../../utils/ChatUtils';
 import SockJS from 'sockjs-client';
+// import styles from '../../css/Chat/ChatRoom.module.css';
+import ChatSide from './ChatSide';
+import { Grid } from '@mui/material';
+import styles from '../../css/Chat/Chat.module.css';
 
 function ChatRoom() {
   const [chatroom, setChatroom] = useState([]);
@@ -28,14 +32,67 @@ function ChatRoom() {
   }, [empId]);
 
   return (
-    <>
-      <div>
-        <br />
-        <Link to={'/chatemplist'}>
-          <Button variant="contained">사원리스트 이동</Button>
-        </Link>
+    <Container maxWidth="xs" className={styles.Listcontainer}>
+      <div className={styles.side1}>
+        <div className={styles.chatRoomList}>
+          <ChatSide />
+          <div className={styles.list}>
+            <div className={styles.chatfont}>
+              <div className={styles.ChatText}>채팅목록</div>
+            </div>
+            <hr />
+            {chatroom.map((chat, index) => {
+              const a = chat.chatContent.length;
+              console.log(a);
+              console.log(chat.chatContent.substr(0, 15));
+              return (
+                <div className={styles.roomcon}>
+                  <Box key={index} className={styles.chatRoomBox}>
+                    <Link to={`/chat?room=${chat.chatroom.chatroomId}`}>
+                      <Button>
+                        {' '}
+                        {chat.chatroom.chatroomName}({chat.chatroom.headCount})
+                      </Button>
+                      <div className={styles.DeleteBtn}>
+                        <Button
+                          variant="text"
+                          disableElevation
+                          onClick={() =>
+                            onExitRoom(
+                              chat.chatroom.chatroomId,
+                              empInfo.empId,
+                              sendExit(
+                                client,
+                                chat.chatroom.chatroomId,
+                                empInfo
+                              )
+                            )
+                          }>
+                          <DeleteIcon />
+                        </Button>
+                      </div>
+                      <p className={styles.content}>
+                        {a <= '15' ? (
+                          <span className={styles.content}>
+                            {chat.chatContent}
+                          </span>
+                        ) : (
+                          <span className={styles.content}>
+                            {chat.chatContent.substr(0, 15)}...
+                          </span>
+                        )}
+                        {/* {chat.chatContent.substr(0, 15)}... */}
+                      </p>
+                    </Link>
+                  </Box>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
-      <br />
+
+    {/*  <br />
       {/* 채팅방 목록보기 & 삭제하기 */}
       <Container maxWidth="sm">
         {chatroom.map((chat, index) => {
@@ -52,20 +109,28 @@ function ChatRoom() {
               <Button
                 variant="text"
                 disableElevation
-                onClick={() =>
+                onClick={() => {
                   onExitRoom(
                     chat.chatroom.chatroomId,
                     empInfo.empId,
                     sendExit(client, chat.chatroom.chatroomId, empInfo)
-                  )
-                }>
+                  );
+                  onHCupdate(
+                    chat.chatroom.chatroomId,
+                    chat.chatroom.chatroomName,
+                    chat.chatroom.headCount
+                  );
+                }}>
                 <DeleteIcon />
               </Button>
             </Box>
           );
         })}
       </Container>
-    </>
+    </>*/}
+
+    </Container>
+
   );
 }
 export default ChatRoom;

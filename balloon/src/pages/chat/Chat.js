@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import styles from '../../css/Chat/Chat.module.css';
@@ -6,18 +6,35 @@ import { Link, useOutletContext } from 'react-router-dom';
 import moment from 'moment';
 import SendIcon from '@mui/icons-material/Send';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Button } from '@mui/material';
+import {
+  Button,
+  Collapse,
+  Container,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import { TextField } from '@mui/material';
 import {
   chatRecord,
   chatroomInfo,
   empIdInfo,
   onExitRoom,
+  onHCupdate,
   onUserUpdate,
 } from '../../context/ChatAxios';
 
 import Modal from './Modal';
 import { sendExit } from '../../utils/ChatUtils';
+
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import PersonIcon from '@mui/icons-material/Person';
+import GroupIcon from '@mui/icons-material/Group';
+
+import ChatSide from './ChatSide';
+import { Dvr } from '@mui/icons-material';
 
 function Chat() {
   // login할때 empId를 가져옴 -> 채팅방생성/채팅 시 사용가능
@@ -35,6 +52,13 @@ function Chat() {
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
 
+  //채팅방 사람 확인 state
+
+  const [open, setOpen] = useState(false);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
   client.connect({}, () => {
     client.subscribe(`/topic/message`, (data) => {
       const chat = JSON.parse(data.body);
@@ -182,30 +206,113 @@ function Chat() {
   // };
   // console.log(empInfo.empName);
 
+  // 채팅방 이름 바꾸기
+  const [chatRoomTitle, setChatRoomTitle] = useState(chatroomName);
+  const [changeTitle, setChangeTitle] = useState(false);
+  const [clickChk, setClickChk] = useState(0);
+
+  const onChangeTitle = (event) => {
+    // console.log(event);
+    setChatRoomTitle(event.target.value);
+  };
+
+  useEffect(() => {
+    setChatRoomTitle(chatroomName);
+  }, [chatroomName]);
+
+  useEffect(() => {
+    setClickChk(clickChk);
+  }, [clickChk]);
+
+  const onClickChatRoomTitle = () => {
+    setClickChk(clickChk + 1);
+    // setChangeTitle(true);
+    console.log(clickChk);
+    if (clickChk > 1) {
+      // setChangeTitle(false);
+      // onChangeTitle();
+      setClickChk(0);
+    }
+  };
+
+  const keyEnter = (e) => {
+    if (e.key == 'Enter') {
+      setClickChk(0);
+      onChangeTitle();
+      // setChangeTitle(false);
+    }
+  };
+
+
+
   return (
-    <>
-      <div className={styles.chatroomname}>
-        <h3>
-          <button onClick={closemodal}>{chatroomName}</button>
-          {modalOpen && <Modal closemodal={closemodal} />}
+    <Container maxWidth="xs">
+      <div className={styles.side}>
+        <ChatSide />
+        <div className="chatconvimeline">
+          <div className={styles.chatroomname}>
+             <h3>
+          {chatroomName ? (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <TextField
+                id="outlined-multiline-flexible"
+                multiline
+                label="-"
+                maxRows={4}
+                value={chatRoomTitle}
+                onChange={onChangeTitle}
+                onKeyPress={keyEnter}
+                onClick={onClickChatRoomTitle}
+              />
+              {clickChk == 2 ? (
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    onUserUpdate(chatroomId, chatRoomTitle, headCount);
+                    setClickChk(0);
+                  }}>
+                  수정하기
+                </Button>
+              ) : (
+                ''
+              )}
+            </div>
+          ) : (
+            <h5 className=" mb-2 font-weight-bold text-gray-dark">
+              {chatRoomTitle}{' '}
+            </h5>
+          )}
         </h3>
-      </div>
-      <Link to={'/chatroom'}>
-        <Button variant="contained">채팅목록 이동</Button>
-      </Link>
-      {/* 채팅방 나가기 */}
-      <div className={styles.logoutBtn}>
-        <Button
-          onClick={() =>
-            onExitRoom(chatroomId, empId, sendExit(client, chatroomId, empInfo))
-          }>
-          <Link to={'/chatroom'}>
-            <LogoutIcon />
-          </Link>
-        </Button>
-      </div>
-      {/* 채팅방 인원수 & 이름수정 */}
-      {/* <div className={styles.updatename}>
+          </div>
+
+          {/* <Link to={'/chatroom'}>
+              <Button variant="contained">채팅목록 이동</Button>
+            </Link> */}
+
+          {/* 채팅방 나가기 */}
+          <div className={styles.logoutBtn}>
+            <Link to={'/chatroom'}>
+              <Button
+                onClick={() =>
+                  onExitRoom(
+                    chatroomId,
+                    empId,
+                    sendExit(client, chatroomId, empInfo)
+                  )
+                }>
+                <LogoutIcon />
+              </Button>
+            </Link>
+          </div>
+
+          {/* 채팅방 인원수 & 이름수정 */}
+          {/* <div className={styles.updatename}>
+
         <TextField
           id="chatroomName"
           variant="outlined"
@@ -225,54 +332,93 @@ function Chat() {
           수정하기
         </Button>
       </div> */}
-      {/* <div>{modalOpen == true ? <Modal /> : null}</div> */}
+          {/* <div>{modalOpen == true ? <Modal /> : null}</div> */}
+          <List>
+            <ListItemButton onClick={handleClick}>
+              <ListItemIcon>
+                <GroupIcon />
+              </ListItemIcon>
+              <ListItemText primary="채팅중인 사람" />
+              {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+            </ListItemButton>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              {chatempinfo &&
+                chatempinfo.map((data) => {
+                  return (
+                    <List component="div" disablePadding>
+                      <ListItemButton sx={{ pl: 4 }}>
+                        <ListItemIcon>
+                          {/* console.log(data.empId.empName); return{' '} */}
+                          <PersonIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={data.empId.empName} />
+                      </ListItemButton>
+                    </List>
+                  );
+                })}
+            </Collapse>
+          </List>
+          {/* <div>
+          <h3>채팅방에 있는 사람</h3>
+          {chatempinfo &&
+            chatempinfo.map((data) => {
+              console.log(data.empId.empName);
+              return <div>{data.empId.empName}</div>;
+            })}
+        </div> */}
 
-      <div>
-        <h3>채팅방에 있는 사람</h3>
-        {chatempinfo &&
-          chatempinfo.map((data) => {
-            console.log(data.empId.empName);
-            return <div>{data.empId.empName}</div>;
-          })}
-      </div>
-
-      <br />
-      {/* 채팅방에서 사원초대하기 */}
-      {/* <div>
+          {/* 채팅방에서 사원초대하기 */}
+          {/* <div>
         <input id="empId" placeholder="초대할 사원의 사번을 입력하세요" />
         <button onClick={onUserAdd}>사원초대하기</button>
       </div> */}
 
-      <br />
-      <div>
-        {/* 채팅기록을 가져옴 */}
-        {chatting.map((msg, index) => {
-          // console.log(msg);
-          const chatTime = msg.chatTime.substr(11, 15);
-          // console.log(chatTime);
-          return (
-            <div key={index}>
-              {msg.employee.empId === empInfo.empId ? (
-                <div className={styles.message}>
-                  <span className={styles.mytime}>{chatTime}</span>
-                  <span className={styles.mycontent}>{msg.chatContent}</span>
-                </div>
-              ) : (
-                <div className={styles.othermessage}>
-                  <div>{msg.employee.empName}</div>
-                  <span className={styles.othercontent}>{msg.chatContent}</span>
-                  <span className={styles.time}>{chatTime}</span>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-      <div className={styles.scroll}>
-        <div className={styles.contain}>
-          {/* chatting내용 사용자에 따라 배치 */}
+          <div className={styles.scrollbar}>
+            {/* 채팅기록을 가져옴 */}
+            {chatting.map((msg, index) => {
+              const chatTime = msg.chatTime.substr(11, 5);
+              console.log(msg.chatTime.substr(11, 5));
 
-          {/* {input.map((chat, index) => {
+              return (
+                <div key={index}>
+                  {msg.employee.empId === empInfo.empId ? (
+                    <div className={styles.message}>
+                      <div className={styles.mytime}>{chatTime}</div>
+                      <div className={styles.mycontent}>{msg.chatContent}</div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className={styles.othermessage}>
+                        <div>{msg.employee.empName}</div>
+                        <div className={styles.contentContan}>
+                          <div className={styles.othercontent}>
+                            {msg.chatContent}
+                          </div>
+                          <div className={styles.time}>{chatTime}</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className={styles.scroll}>
+            <div className={styles.contain}>
+              {/* chatting내용 사용자에 따라 배치 */}
+
+              {/* {input.map((chat, index) => {
+
+
+            {/* {input.map((chat, index) => {
+
+
+              {/* {input.map((chat, index) => {
+
+
+            {/* {input.map((chat, index) => {
+
             return (
               <div key={chat.writer + index}>
                 {empInfo.empId === chat.writer.empId ? (
@@ -294,7 +440,7 @@ function Chat() {
             );
           })} */}
 
-          {/* {input.length !== 0 &&
+              {/* {input.length !== 0 &&
             input.map((chat, index) => {
               console.log(chat);
               return (
@@ -317,16 +463,16 @@ function Chat() {
               );
             })}
 */}
-        </div>
+            </div>
 
-        <div className={styles.inputmain}>
-          <input
-            className={styles.inputform}
-            ref={inputRef}
-            onKeyPress={onKeyPress}
-            placeholder="메시지를 입력하세요"
-          />
-          {/* <Button
+            <div className={styles.inputmain}>
+              <input
+                className={styles.inputform}
+                ref={inputRef}
+                onKeyPress={onKeyPress}
+                placeholder="메시지를 입력하세요"
+              />
+              {/* <Button
             className={styles.inputbutton}
             onClick={() => {
               inputRef.current.value && send();
@@ -335,21 +481,23 @@ function Chat() {
             }}>
             보내기
           </Button> */}
-          <Button
-            variant="contained"
-            endIcon={<SendIcon />}
-            className={styles.inputbutton}
-            onClick={() => {
-              inputRef.current.value && send();
-              inputRef.current.focus();
-              inputRef.current.value = '';
-            }}>
-            {' '}
-            전송
-          </Button>
+              <Button
+                variant="contained"
+                endIcon={<SendIcon />}
+                className={styles.inputbutton}
+                onClick={() => {
+                  inputRef.current.value && send();
+                  inputRef.current.focus();
+                  inputRef.current.value = '';
+                }}>
+                {' '}
+                전송
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
-    </>
+    </Container>
   );
 }
 export default Chat;

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { BsPencil, BsPencilFill } from 'react-icons/bs';
 import { FaBookReader, FaCog, FaFolderOpen, FaThList } from 'react-icons/fa';
-import { FcDocument } from 'react-icons/fc';
 import {
   Menu,
   MenuItem,

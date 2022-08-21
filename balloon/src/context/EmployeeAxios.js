@@ -140,19 +140,8 @@ export const getEmpListInSameUnit = async (empId, setCEList) => {
     .then((response) => response.data)
     .then((data) => {
       setCEList(data);
-      console.log(data);
     })
     .catch((error) => console.log(error));
-};
-
-// 사원관리페이지 삭제용 랜더링 함수
-export const updateCheck = async (setUpdateChk) => {
-  setUpdateChk(true);
-};
-
-// 사원관리페이지 삭제용 랜더링 함수
-export const deleteCheck = async (setDeleteChk) => {
-  setDeleteChk(true);
 };
 
 // 사원 수정
