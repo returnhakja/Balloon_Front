@@ -1,5 +1,4 @@
-import React, { useRef } from 'react';
-import { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { getScheduleByEmp } from '../../context/CalendarAxios';
 import '../../css/Celendar.css';
@@ -12,6 +11,7 @@ import CalendarInsert from './CalendarInsert';
 import CalendarUpdate from './CalendarUpdate';
 import axios from 'axios';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -26,6 +26,7 @@ const style = {
 };
 
 function Calendar() {
+  const [list, setList] = useState([]);
   const [openInsert, setOpenInsert] = useState(false);
   const [openUpdate, setOpenUpdate] = useState({
     state: false,
@@ -34,28 +35,44 @@ function Calendar() {
   const [eList, setCEList] = useState([]);
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
-  const handleDateClick = (e) => {
-    console.log(e);
+
+  const handleDateClick = () => {
     setOpenInsert(true);
   };
+
+  const handleEventClick = (e) => {
+    e.jsEvent.preventDefault();
+
+    const scheduleId = e.event._def.extendedProps.scheduleId;
+    modalOpen(scheduleId);
+  };
+
+  const modalOpen = (scheduleId) => {
+    if (!!scheduleId) {
+      setOpenInsert(false);
+      setOpenUpdate({
+        state: true,
+        scheduleId: scheduleId,
+      });
+      console.log(scheduleId);
+    }
+  };
+
+  useEffect(() => {
+    if (empInfo.length !== 0) {
+      getScheduleByEmp(empInfo.empId, setList);
+    }
+  }, [empInfo]);
+
+  useEffect(() => {
+    console.log('되나');
+  }, [openInsert, openUpdate]);
 
   // 즐겨찾기 캘린더
   // useEffect(() => {
   //   getEmpListInSameUnit(empId, setCEList);
   //   console.log(eList);
   // }, []);
-
-  const handleEventClick = (e) => {
-    const scheduleId = e.event._def.extendedProps.scheduleId;
-    setOpenInsert(false);
-    setOpenUpdate({
-      state: true,
-      scheduleId: scheduleId,
-    });
-    console.log(scheduleId);
-  };
-
-  const list = getScheduleByEmp(empInfo.empId);
 
   //모달
   return (
@@ -102,30 +119,33 @@ function Calendar() {
             empInfo={empInfo}
           />
         )}
-        <FullCalendar
-          locale="ko"
-          height="70vh"
-          handleWindowResize="50vw"
-          plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
-          headerToolbar={{
-            left: 'title',
-            center: 'dayGridDay dayGridWeek dayGridMonth',
-            right: 'today prevYear prev next nextYear',
-          }}
-          googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
-          eventSources={{
-            googleCalendarId:
-              'ko.south_korea#holiday@group.v.calendar.google.com',
-            className: '대한민국 휴일',
-            color: 'orange',
-          }}
-          eventBackgroundColor={'black'}
-          eventSourceSuccess={() => console.log('Success EventSource')}
-          eventSourceFailure={() => console.log('Failure EventSource')}
-          dateClick={(e) => handleDateClick(e)}
-          events={() => list}
-          eventClick={(e) => handleEventClick(e)}
-        />
+        {list.length !== 0 && (
+          <FullCalendar
+            locale="ko"
+            initialView="dayGridMonth"
+            initialEvents={list}
+            height="70vh"
+            handleWindowResize="50vw"
+            plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
+            headerToolbar={{
+              left: 'title',
+              center: 'dayGridDay dayGridWeek dayGridMonth',
+              right: 'today prevYear prev next nextYear',
+            }}
+            googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
+            eventSources={{
+              googleCalendarId:
+                'ko.south_korea#holiday@group.v.calendar.google.com',
+              className: '대한민국 휴일',
+              color: 'orange',
+            }}
+            eventBackgroundColor={'black'}
+            eventSourceSuccess={() => console.log('Success EventSource')}
+            eventSourceFailure={() => console.log('Failure EventSource')}
+            dateClick={() => handleDateClick()}
+            eventClick={(e) => handleEventClick(e)}
+          />
+        )}
       </Container>
     </div>
   );

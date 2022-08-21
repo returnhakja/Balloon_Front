@@ -40,6 +40,7 @@ import ManagementUnit from './pages/personnelManagement/ManagementUnit';
 import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
 import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
+import UnitListAddPage from './pages/personnelManagement/UnitListAddPage';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
@@ -135,6 +136,7 @@ function App() {
           <Route path="/createroom" element={<CreateRoom invite={invite} />} />
           {/* 조직관리 */}
           <Route path="/management/unit" element={<ManagementUnit />} />
+          <Route path="/add/units" element={<UnitListAddPage />} />
           {/* 사원관리 */}
           <Route path="/management/employee" element={<ManagementEmployee />} />
           <Route path="/add/employee" element={<EmpAddPage />} />

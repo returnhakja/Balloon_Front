@@ -296,27 +296,27 @@ export const insertSignupList = async (rows) => {
   const url = '/auth/signuplist';
 
   const inputEmpList = [];
-  rows.forEach((index) =>
+  rows.forEach((element) =>
     inputEmpList.push({
-      empId: index[0],
-      password: index[1],
-      empName: index[2],
-      position: index[3],
-      responsibility: index[4],
-      salary: index[5],
-      commission: index[6],
-      hiredate: index[7],
+      empId: element[0],
+      password: element[1],
+      empName: element[2],
+      position: element[3],
+      responsibility: element[4],
+      salary: element[5],
+      commission: element[6],
+      hiredate: element[7],
       unit: {
-        unitCode: index[8],
+        unitCode: element[8],
       },
-      empBell: index[9],
-      empMail: index[10],
-      mobile: index[11],
-      userRoleGrade: index[12],
-      birthday: index[13],
-      address: index[14],
-      licensePlate: index[15],
-      photo: index[16],
+      empBell: element[9],
+      empMail: element[10],
+      mobile: element[11],
+      userRoleGrade: element[12],
+      birthday: element[13],
+      address: element[14],
+      licensePlate: element[15],
+      photo: element[16],
     })
   );
 

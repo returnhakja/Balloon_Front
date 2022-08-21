@@ -105,9 +105,10 @@ export const chatroomInfo = async (
 
 //채팅방이름 수정
 export const onUserUpdate = async (chatroomId, chatroomName, headCount) => {
-  axios
+  console.log(chatroomId, chatroomName, headCount);
+  await axios
     .put(`http://localhost:8080/updateroom/${chatroomId}`, {
-      chatroomName: chatroomName.value,
+      chatroomName: chatroomName,
       headCount: headCount,
     })
     .then((response) => {

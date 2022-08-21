@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
   selectEmployees,
-  updateCheck,
   updateEmployee,
-  deleteCheck,
   deleteEmployee,
 } from '../../context/EmployeeAxios';
+import { updateCheck, deleteCheck } from '../../context/MuiRenderFunc';
 import {
   DataGrid,
   GridEditSingleSelectCell,
@@ -224,6 +223,7 @@ function ManagementEmployee() {
             }}
             rows={empList}
             columns={columns}
+            getRowId={(row) => row.empId}
             editMode="row"
             experimentalFeatures={{ newEditingApi: true }}
             pageSize={10}
