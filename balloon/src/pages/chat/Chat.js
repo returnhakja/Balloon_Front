@@ -13,6 +13,7 @@ import {
   chatroomInfo,
   empIdInfo,
   onExitRoom,
+  onHCupdate,
   onUserUpdate,
 } from '../../context/ChatAxios';
 
@@ -196,9 +197,14 @@ function Chat() {
       {/* 채팅방 나가기 */}
       <div className={styles.logoutBtn}>
         <Button
-          onClick={() =>
-            onExitRoom(chatroomId, empId, sendExit(client, chatroomId, empInfo))
-          }>
+          onClick={() => {
+            onExitRoom(
+              chatroomId,
+              empId,
+              sendExit(client, chatroomId, empInfo)
+            );
+            onHCupdate(chatroomId, chatroomName, headCount);
+          }}>
           <Link to={'/chatroom'}>
             <LogoutIcon />
           </Link>

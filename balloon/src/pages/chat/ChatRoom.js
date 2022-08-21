@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Container } from '@mui/system';
 
-import { onChatroom, onExitRoom } from '../../context/ChatAxios';
+import { onChatroom, onExitRoom, onHCupdate } from '../../context/ChatAxios';
 import Stomp from 'stompjs';
 import { sendExit } from '../../utils/ChatUtils';
 import SockJS from 'sockjs-client';
@@ -52,13 +52,18 @@ function ChatRoom() {
               <Button
                 variant="text"
                 disableElevation
-                onClick={() =>
+                onClick={() => {
                   onExitRoom(
                     chat.chatroom.chatroomId,
                     empInfo.empId,
                     sendExit(client, chat.chatroom.chatroomId, empInfo)
-                  )
-                }>
+                  );
+                  onHCupdate(
+                    chat.chatroom.chatroomId,
+                    chat.chatroom.chatroomName,
+                    chat.chatroom.headCount
+                  );
+                }}>
                 <DeleteIcon />
               </Button>
             </Box>
