@@ -243,51 +243,49 @@ function Chat() {
     }
   };
 
-
-
   return (
     <Container maxWidth="xs">
       <div className={styles.side}>
         <ChatSide />
         <div className="chatconvimeline">
           <div className={styles.chatroomname}>
-             <h3>
-          {chatroomName ? (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <TextField
-                id="outlined-multiline-flexible"
-                multiline
-                label="-"
-                maxRows={4}
-                value={chatRoomTitle}
-                onChange={onChangeTitle}
-                onKeyPress={keyEnter}
-                onClick={onClickChatRoomTitle}
-              />
-              {clickChk == 2 ? (
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    onUserUpdate(chatroomId, chatRoomTitle, headCount);
-                    setClickChk(0);
+            <h3>
+              {chatroomName ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}>
-                  수정하기
-                </Button>
+                  <TextField
+                    id="outlined-multiline-flexible"
+                    multiline
+                    label="-"
+                    maxRows={4}
+                    value={chatRoomTitle}
+                    onChange={onChangeTitle}
+                    onKeyPress={keyEnter}
+                    onClick={onClickChatRoomTitle}
+                  />
+                  {clickChk == 2 ? (
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        onUserUpdate(chatroomId, chatRoomTitle, headCount);
+                        setClickChk(0);
+                      }}>
+                      수정하기
+                    </Button>
+                  ) : (
+                    ''
+                  )}
+                </div>
               ) : (
-                ''
+                <h5 className=" mb-2 font-weight-bold text-gray-dark">
+                  {chatRoomTitle}{' '}
+                </h5>
               )}
-            </div>
-          ) : (
-            <h5 className=" mb-2 font-weight-bold text-gray-dark">
-              {chatRoomTitle}{' '}
-            </h5>
-          )}
-        </h3>
+            </h3>
           </div>
 
           {/* <Link to={'/chatroom'}>
