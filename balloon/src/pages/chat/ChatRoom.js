@@ -91,46 +91,7 @@ function ChatRoom() {
           </div>
         </div>
       </div>
-
-    {/*  <br />
-      {/* 채팅방 목록보기 & 삭제하기 */}
-      <Container maxWidth="sm">
-        {chatroom.map((chat, index) => {
-          return (
-            <Box key={index} border="1px solid ">
-              <Link to={`/chat?room=${chat.chatroom.chatroomId}`}>
-                <ListItemButton>
-                  <Button>
-                    {chat.chatroom.chatroomName}({chat.chatroom.headCount})
-                  </Button>
-                  {chat.chatContent}
-                </ListItemButton>
-              </Link>
-              <Button
-                variant="text"
-                disableElevation
-                onClick={() => {
-                  onExitRoom(
-                    chat.chatroom.chatroomId,
-                    empInfo.empId,
-                    sendExit(client, chat.chatroom.chatroomId, empInfo)
-                  );
-                  onHCupdate(
-                    chat.chatroom.chatroomId,
-                    chat.chatroom.chatroomName,
-                    chat.chatroom.headCount
-                  );
-                }}>
-                <DeleteIcon />
-              </Button>
-            </Box>
-          );
-        })}
-      </Container>
-    </>*/}
-
     </Container>
-
   );
 }
 export default ChatRoom;
