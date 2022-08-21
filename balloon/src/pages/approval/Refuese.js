@@ -20,7 +20,7 @@ import { Space, Table, Pagination } from 'antd';
 import { getDocsByEmp } from '../../context/ApprovalAxios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
-function Declare() {
+function Refuese() {
   const [empInfo, setEmpInfo] = useOutletContext();
 
   const [docList, setDocList] = useState([]);
@@ -171,4 +171,4 @@ function Declare() {
   );
 }
 
-export default Declare;
+export default Refuese;

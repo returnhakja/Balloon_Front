@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
@@ -19,7 +19,11 @@ import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
 
 import { FcDocument } from 'react-icons/fc';
-import { getLatestBizRpt, insertBizRpt } from '../../context/ApprovalAxios';
+import {
+  getBizRptByBizRptId,
+  getLatestBizRpt,
+  insertBizRpt,
+} from '../../context/ApprovalAxios';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -47,18 +51,15 @@ function Report() {
   const [empInfo, setEmpInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
-  const [docNum, setDocNum] = useState(0);
-  const [docId, setDocId] = useState('');
+
+  const params = useParams();
 
   console.log(empInfo);
-  console.log(docNum);
 
   useEffect(() => {
-    getLatestBizRpt(setDocNum);
-    docNum !== 0
-      ? setDocId('업무기안' + '-22-' + ('0000000' + (docNum + 1)).slice(-7))
-      : setDocId('업무기안-22-0000001');
-  }, [docNum]);
+    getBizRptByBizRptId(params.docId, setInputData);
+    console.log(inputData);
+  }, []);
 
   const card = (
     <React.Fragment>
@@ -99,7 +100,7 @@ function Report() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>업무기안</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>{docId !== '' && docId}</th>
+              <th className={styles.th}>{inputData.businessReportId}</th>
             </tr>
           </thead>
 
@@ -159,7 +160,7 @@ function Report() {
                     id="bizRptTitle"
                     type="text"
                     name="title"
-                    placeholder="기안제목을 입력하세요."
+                    defaultValue={inputData.documentTitle}
                     className={styles.inputtext}
                   />
                 </form>
@@ -182,18 +183,19 @@ function Report() {
               fullWidth
               multiline
               rows={10}
-              placeholder="내용을 입력해주세요."
+              defaultValue={inputData.documentContent}
             />
           </Paper>
 
           <div className={styles.savebutton}>
             <Box sx={{ button: { m: 1 } }}>
+              <Button>목록으로</Button>
               <Button
                 variant="outlined"
                 size="large"
                 onClick={async () => {
                   await insertBizRpt(
-                    docId,
+                    params.docId,
                     3,
                     inputData,
                     empInfo,
@@ -209,7 +211,7 @@ function Report() {
                 size="large"
                 onClick={async () => {
                   await insertBizRpt(
-                    docId,
+                    params.docId,
                     1,
                     inputData,
                     empInfo,
