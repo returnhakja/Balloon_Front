@@ -6,103 +6,122 @@ import { Box } from '@mui/system';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-
-const card = (
-  <React.Fragment>
-    <CardContent>
-      <Typography
-        sx={{ fontSize: 25 }}
-        color="#00AAFF"
-        gutterBottom
-        textAlign="center">
-        상신된
-      </Typography>
-      <hr />
-      <br />
-      <Typography
-        sx={{ fontSize: 20 }}
-        variant="h5"
-        component="div"
-        textAlign="center">
-        0
-      </Typography>
-    </CardContent>
-  </React.Fragment>
-);
-const card1 = (
-  <React.Fragment>
-    <CardContent>
-      <Typography
-        sx={{ fontSize: 25 }}
-        color="#00AAFF"
-        gutterBottom
-        textAlign="center">
-        완료된
-      </Typography>
-      <hr />
-      <br />
-      <Typography
-        sx={{ fontSize: 20 }}
-        variant="h5"
-        component="div"
-        textAlign="center">
-        0
-      </Typography>
-    </CardContent>
-  </React.Fragment>
-);
-const card2 = (
-  <React.Fragment>
-    <CardContent>
-      <Typography
-        sx={{ fontSize: 25 }}
-        color="#00AAFF"
-        gutterBottom
-        textAlign="center">
-        저장된
-      </Typography>
-      <hr />
-      <br />
-      <Typography
-        sx={{ fontSize: 20 }}
-        variant="h5"
-        component="div"
-        textAlign="center">
-        0
-      </Typography>
-    </CardContent>
-  </React.Fragment>
-);
-const card3 = (
-  <React.Fragment>
-    <CardContent>
-      <Typography
-        sx={{ fontSize: 25 }}
-        color="#00AAFF"
-        gutterBottom
-        textAlign="center">
-        반려된
-      </Typography>
-      <hr />
-      <br />
-      <Typography
-        sx={{ fontSize: 20 }}
-        variant="h5"
-        component="div"
-        textAlign="center">
-        0
-      </Typography>
-    </CardContent>
-  </React.Fragment>
-);
+import { useEffect } from 'react';
+import {
+  getDCByEmp,
+  getDDByEmp,
+  getDRByEmp,
+  getDSByEmp,
+} from '../../context/ApprovalAxios';
+import { useOutletContext } from 'react-router-dom';
 
 function Boxes() {
+  const [empInfo, setEmpInfo] = useOutletContext();
   const [value, setValue] = useState('1');
-
+  const [DDCount, setDDCount] = useState('');
+  const [DCCount, setDCCount] = useState('');
+  const [DSCount, setDSCount] = useState('');
+  const [DRCount, setDRCount] = useState('');
+  const card = (
+    <React.Fragment>
+      <CardContent>
+        <Typography
+          sx={{ fontSize: 25 }}
+          color="#00AAFF"
+          gutterBottom
+          textAlign="center">
+          상신된
+        </Typography>
+        <hr />
+        <br />
+        <Typography
+          sx={{ fontSize: 20 }}
+          variant="h5"
+          component="div"
+          textAlign="center">
+          {DDCount}
+        </Typography>
+      </CardContent>
+    </React.Fragment>
+  );
+  const card1 = (
+    <React.Fragment>
+      <CardContent>
+        <Typography
+          sx={{ fontSize: 25 }}
+          color="#00AAFF"
+          gutterBottom
+          textAlign="center">
+          완료된
+        </Typography>
+        <hr />
+        <br />
+        <Typography
+          sx={{ fontSize: 20 }}
+          variant="h5"
+          component="div"
+          textAlign="center">
+          {DCCount}
+        </Typography>
+      </CardContent>
+    </React.Fragment>
+  );
+  const card2 = (
+    <React.Fragment>
+      <CardContent>
+        <Typography
+          sx={{ fontSize: 25 }}
+          color="#00AAFF"
+          gutterBottom
+          textAlign="center">
+          저장된
+        </Typography>
+        <hr />
+        <br />
+        <Typography
+          sx={{ fontSize: 20 }}
+          variant="h5"
+          component="div"
+          textAlign="center">
+          {DSCount}
+        </Typography>
+      </CardContent>
+    </React.Fragment>
+  );
+  const card3 = (
+    <React.Fragment>
+      <CardContent>
+        <Typography
+          sx={{ fontSize: 25 }}
+          color="#00AAFF"
+          gutterBottom
+          textAlign="center">
+          반려된
+        </Typography>
+        <hr />
+        <br />
+        <Typography
+          sx={{ fontSize: 20 }}
+          variant="h5"
+          component="div"
+          textAlign="center">
+          {DRCount}
+        </Typography>
+      </CardContent>
+    </React.Fragment>
+  );
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  useEffect(() => {
+    getDDByEmp(empInfo.empId, setDDCount);
+    getDCByEmp(empInfo.empId, setDCCount);
+    getDSByEmp(empInfo.empId, setDSCount);
+    getDRByEmp(empInfo.empId, setDRCount);
+  }, []);
+
+  console.log(DDCount, DCCount, DSCount, DRCount);
   return (
     <div>
       <SideNavigation>

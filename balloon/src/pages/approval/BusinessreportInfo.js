@@ -3,7 +3,7 @@ import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import Modalapproval from './Modalapproval';
+import ModalApproval from './ModalApproval';
 import {
   Button,
   Card,
@@ -74,7 +74,7 @@ function BizReportInfo() {
           variant="h5"
           component="div"
           textAlign="center">
-          {empInfo.empName}
+          {bizRptInfo.empName}
         </Typography>
       </CardContent>
     </React.Fragment>
@@ -107,7 +107,7 @@ function BizReportInfo() {
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
                 {' '}
-                {empInfo.empName}({empInfo.empId})
+                {bizRptInfo.empName}({bizRptInfo.emp && bizRptInfo.emp.empId})
               </th>
             </tr>
             <tr align="center" bgcolor="white"></tr>
@@ -116,7 +116,6 @@ function BizReportInfo() {
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
-
         </div>
         <hr />
         <br />
@@ -177,7 +176,7 @@ function BizReportInfo() {
 
           <div className={styles.savebutton}>
             <Box sx={{ button: { m: 1 } }}>
-              <Link to="/boxes/dl">
+              <Link to="/boxes/dc">
                 <SaveButton variant="contained" color="success" size="large">
                   목록으로
                 </SaveButton>
