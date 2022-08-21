@@ -21,6 +21,7 @@ import {
   chatroomInfo,
   empIdInfo,
   onExitRoom,
+  onHCupdate,
   onUserUpdate,
 } from '../../context/ChatAxios';
 
@@ -240,6 +241,7 @@ function Chat() {
 
           {/* 채팅방 인원수 & 이름수정 */}
           {/* <div className={styles.updatename}>
+
         <TextField
           id="chatroomName"
           variant="outlined"
