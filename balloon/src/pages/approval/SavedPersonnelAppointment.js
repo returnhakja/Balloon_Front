@@ -291,7 +291,8 @@ function Pointment() {
                       // defaultValue={mEmp2}
                       placeholder="구성원을 선택하세요"
                       onChange={(e) => {
-                        setMEmp(e.target.value);
+                        console.log(e);
+                        setMEmp2(e.target.value);
                         // console.log(e.target.value);
                       }}
 
@@ -303,7 +304,7 @@ function Pointment() {
                           <MenuItem
                             key={index}
                             value={mEmps.empName + ' (' + mEmps.empId + ')'}>
-                            {/* {console.log(mEmps)} */}
+                            {console.log(mEmps)}
                             {mEmps.empName} ({mEmps.empId})
                           </MenuItem>
                         ))}
@@ -321,7 +322,8 @@ function Pointment() {
                       value={unit2}
                       placeholder=" 발령부서를 선택하세요"
                       onChange={(e) => {
-                        setUnit(e.target.value);
+                        console.log(e);
+                        setUnit2(e.target.value);
                         // console.log(e.target.value);
                       }}
 
@@ -331,7 +333,10 @@ function Pointment() {
                         units.map((unitInfo, index) => (
                           <MenuItem
                             key={index}
-                            value={unit.unitName + ' (' + unit.unitCode + ')'}>
+                            value={
+                              unitInfo.unitName + ' (' + unitInfo.unitCode + ')'
+                            }>
+                            {console.log(unitInfo)}
                             {unitInfo.unitName} ({unitInfo.unitCode})
                           </MenuItem>
                         ))}
