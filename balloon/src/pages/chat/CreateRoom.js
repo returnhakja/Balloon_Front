@@ -7,14 +7,16 @@ import { Link, useOutletContext } from 'react-router-dom';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import { onCreateChatroom, onUserInvite } from '../../context/ChatAxios';
+import { Box, Modal } from '@mui/material';
 
-function CreateChatroom({ invite }) {
+function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
   const [roomId, setRoomId] = useState();
   const chatroomId = roomId;
 
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
 
+  const handleClose = () => setopenCreatChat(false);
   // socket
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
@@ -90,38 +92,41 @@ function CreateChatroom({ invite }) {
   // };
 
   return (
-    <div>
-      <br />
-      <Link to={'/chatemplist'}>
-        <Button variant="contained">사원리스트 이동</Button>
-      </Link>
-      <br />
-      <br />
-      <h3>채팅방 만들기</h3>
-      <br />
-      <Input id="chatroomName" placeholder="채팅방 이름을 입력하세요" />
+    <Modal open={openCreatChat} onClose={handleClose}>
+      <Box sx={style}>
+        {/* <Link to={'/chatemplist'}>
+          <Button variant="contained">사원리스트 이동</Button>
+        </Link> */}
+        <br />
+        <br />
+        <h3>채팅방 만들기</h3>
+        <br />
+        <Input id="chatroomName" placeholder="채팅방 이름을 입력하세요" />
 
-      <br />
-      <Button
-        variant="contained"
-        onClick={() => {
-          onCreateChatroom(
-            empInfo,
-            setRoomId,
-            invite,
-            document.getElementById('chatroomName')
-          );
-        }}>
-        등록
-      </Button>
-      <Link to={`/chat?room=${roomId}`}>
+        <br />
+        <br />
         <Button
           variant="contained"
-          onClick={() => onUserInvite(chatroomId, invite, client)}>
-          <div>채팅하기</div>
+          sx={{ marginRight: 2 }}
+          onClick={() => {
+            onCreateChatroom(
+              empInfo,
+              setRoomId,
+              invite,
+              document.getElementById('chatroomName')
+            );
+          }}>
+          등록
         </Button>
-      </Link>
-    </div>
+        <Link to={`/chat?room=${roomId}`}>
+          <Button
+            variant="contained"
+            onClick={() => onUserInvite(chatroomId, invite, client)}>
+            <div>채팅하기</div>
+          </Button>
+        </Link>
+      </Box>
+    </Modal>
   );
 }
 export default CreateChatroom;

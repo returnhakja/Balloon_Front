@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import styles from '../../css/Chat/Chat.module.css';
@@ -37,8 +37,6 @@ import ChatSide from './ChatSide';
 import { Dvr } from '@mui/icons-material';
 
 function Chat() {
-  //스크롤
-
   // login할때 empId를 가져옴 -> 채팅방생성/채팅 시 사용가능
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
@@ -207,6 +205,8 @@ function Chat() {
   //   sendExit();
   // };
   // console.log(empInfo.empName);
+
+  //스크롤
 
   return (
     <Container maxWidth="xs">
