@@ -21,9 +21,43 @@ export const findUnitList = async (setUnits) => {
     .catch((error) => console.log(error));
 };
 
+export const insertUnitList = async (rows) => {
+  console.log(rows);
+  const header = { 'Content-Type': 'application/json' };
+  const url = '/api/unitlist';
+
+  const inputUnit = [];
+  rows.forEach((element) => {
+    console.log(element);
+    inputUnit.push({
+      unitCode: element[0],
+      unitName: element[1],
+      bell: element[2],
+      unit: { parentUnit: element[3] },
+    });
+  });
+
+  console.log(inputUnit);
+  if (inputUnit.length !== 0) {
+    const signupChk = axios.post(url, inputUnit, header).catch((error) => {
+      console.log(error);
+    });
+    console.log(signupChk);
+    signupChk.then((check) => {
+      console.log(check);
+      if (check.data === true) {
+        window.location.href = '/management/unit';
+      } else {
+        alert('정보가 잘못되었습니다.');
+      }
+    });
+  }
+};
+
 // 사번으로 사원 삭제
 export const deleteUnit = async (data) => {
   console.log(data);
+  console.log(data.unitCode);
   const url = '/api/unit/';
   const urlStr = url + data.unitCode;
   await axios.delete(urlStr).catch((error) => console.log(error));

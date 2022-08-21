@@ -14,6 +14,7 @@ import { Container } from '@mui/system';
 import Delete from '@mui/icons-material/Delete';
 import PersonAddIcon from '@mui/icons-material/PersonAddAlt1';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import QueueIcon from '@mui/icons-material/Queue';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import { Link } from 'react-router-dom';
@@ -63,14 +64,12 @@ function ManagementUnit() {
   useEffect(() => {
     if (unitList.length !== 0) {
       console.log(unitList);
-      unitList.map((row) => {
-        const wo = row.parentUnit;
-        return console.log(wo);
-        // return wo.map((row) => console.log(row));
-        // return console.log( wo.unitCode)
-      });
     }
   }, [unitList]);
+
+  function GetParentUnit(data) {
+    return data.row.parentUnit ? data.row.parentUnit.id : data.row.parentUnit;
+  }
 
   useEffect(() => {}, [rowData]);
 
@@ -102,7 +101,9 @@ function ManagementUnit() {
       headerName: '상위조직',
       width: 300,
       editable: true,
+      valueGetter: GetParentUnit,
     },
+
     {
       field: 'actions',
       type: 'actions',
@@ -129,15 +130,15 @@ function ManagementUnit() {
   return (
     <div style={{ marginTop: 70, marginBottom: 50 }}>
       <Container maxWidth="maxWidth">
-        <Link to={'/add/unit'}>
+        {/* <Link to={'/add/unit'}>
           <PersonAddIcon fontSize="large" color="action" />
-        </Link>
+        </Link> */}
 
         <Link to={'/add/units'}>
-          <GroupAddIcon
+          <QueueIcon
             fontSize="large"
             color="action"
-            style={{ marginLeft: '20px' }}
+            // style={{ marginLeft: '20px' }}
           />
         </Link>
 
