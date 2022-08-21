@@ -71,10 +71,12 @@ function Pointment() {
     '회장',
   ];
   const [posi, setPosi] = useState('');
-  const [units, setUnits] = useState('');
-  const [unit, setUnit] = useState('');
+  const [units, setUnits] = useState([]);
+  const [unit, setUnit] = useState({});
+  const [unit2, setUnit2] = useState('');
   const [mEmpInfo, setMEmpInfo] = useState('');
-  const [mEmp, setMEmp] = useState('');
+  const [mEmp, setMEmp] = useState({});
+  const [mEmp2, setMEmp2] = useState('');
 
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
@@ -101,16 +103,44 @@ function Pointment() {
       getPAByPAId(params.docId, setInputData);
     } else {
       setPosi(inputData.position);
-      setMEmp(
-        inputData.movedEmpId.empName + ' (' + inputData.movedEmpId.empId + ')'
-      );
-      console.log(inputData.movedEmpId.empName);
-      console.log(inputData);
-      setUnit();
+
+      // console.log(inputData.movedEmpId.empName);
+      // console.log(inputData);
     }
-    console.log(mEmpInfo);
-    console.log(inputData);
+    // console.log(mEmpInfo);
+    // console.log(inputData);
   }, [inputData.personnelAppointmentId]);
+
+  useEffect(() => {
+    if (Object.keys(inputData).length !== 0) {
+      // console.log(inputData.personnelDate);
+      console.log(inputData);
+      setStartValue(inputData.personnelDate);
+      setMEmp(inputData.movedEmpId);
+      setUnit(inputData.unit);
+    }
+    if (startValue !== null) {
+      // console.log(startValue);
+    }
+  }, [inputData, startValue]);
+
+  useEffect(() => {
+    // console.log(mEmpInfo);
+  }, [mEmpInfo]);
+
+  useEffect(() => {
+    Object.keys(mEmp).length !== 0 &&
+      setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
+  }, [mEmp]);
+
+  useEffect(() => {
+    Object.keys(unit).length !== 0 &&
+      setUnit2(unit.unitName + ' (' + unit.unitCode + ')');
+  }, [unit]);
+
+  // useEffect(() => {
+  //   units.length !== 0 && console.log(units);
+  // }, [units]);
 
   // mEmpInfo.length !== 0;
 
@@ -230,7 +260,7 @@ function Pointment() {
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     label="일자 선택"
-                    value={startValue}
+                    value={!!startValue && startValue}
                     type=" date"
                     inputFormat={'yyyy-MM-dd'}
                     onChange={(newValue) => {
@@ -253,49 +283,60 @@ function Pointment() {
               <td className={styles.tdreaui}>
                 <FormControl fullWidth>
                   <InputLabel>구성원을 설정해주세요</InputLabel>
-                  <Select
-                    id="mEmp"
-                    label="구성원을 선택하세요"
-                    value={mEmp}
-                    placeholder="구성원을 선택하세요"
-                    onChange={(e) => {
-                      setMEmp(e.target.value);
-                      console.log(e.target.value);
-                    }}
+                  {Object.keys(mEmp).length !== 0 && (
+                    <Select
+                      id="mEmp"
+                      label="구성원을 선택하세요"
+                      value={mEmp2}
+                      // defaultValue={mEmp2}
+                      placeholder="구성원을 선택하세요"
+                      onChange={(e) => {
+                        setMEmp(e.target.value);
+                        // console.log(e.target.value);
+                      }}
 
-                    // className={styles.inputtext}
-                  >
-                    {mEmpInfo &&
-                      mEmpInfo.map((mEmps) => (
-                        <MenuItem key={mEmps.empId} value={mEmps}>
-                          {mEmps.empName} ({mEmps.empId})
-                        </MenuItem>
-                      ))}
-                  </Select>
+                      // className={styles.inputtext}
+                    >
+                      {/* {console.log(mEmp.empId + ' (' + mEmp.empName + ')123')} */}
+                      {mEmpInfo &&
+                        mEmpInfo.map((mEmps, index) => (
+                          <MenuItem
+                            key={index}
+                            value={mEmps.empName + ' (' + mEmps.empId + ')'}>
+                            {/* {console.log(mEmps)} */}
+                            {mEmps.empName} ({mEmps.empId})
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  )}
                 </FormControl>
               </td>
               <td className={styles.tdreaui}>
                 <FormControl fullWidth>
                   <InputLabel>부서를 설정해주세요</InputLabel>
-                  <Select
-                    id="unit1"
-                    label="발령부서를 선택하세요"
-                    value={unit}
-                    placeholder=" 발령부서를 선택하세요"
-                    onChange={(e) => {
-                      setUnit(e.target.value);
-                      console.log(e.target.value);
-                    }}
+                  {Object.keys(unit).length !== 0 && (
+                    <Select
+                      id="unit1"
+                      label="발령부서를 선택하세요"
+                      value={unit2}
+                      placeholder=" 발령부서를 선택하세요"
+                      onChange={(e) => {
+                        setUnit(e.target.value);
+                        // console.log(e.target.value);
+                      }}
 
-                    // className={styles.inputtext}
-                  >
-                    {units &&
-                      units.map((unitInfo) => (
-                        <MenuItem key={unitInfo.unitId} value={unitInfo}>
-                          {unitInfo.unitName}
-                        </MenuItem>
-                      ))}
-                  </Select>
+                      // className={styles.inputtext}
+                    >
+                      {units &&
+                        units.map((unitInfo, index) => (
+                          <MenuItem
+                            key={index}
+                            value={unit.unitName + ' (' + unit.unitCode + ')'}>
+                            {unitInfo.unitName} ({unitInfo.unitCode})
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  )}
                 </FormControl>
               </td>
               <td className={styles.tdreaui}>
@@ -311,13 +352,13 @@ function Pointment() {
                     defaultValue={inputData.position}
                     onChange={(e) => {
                       setPosi(e.target.value);
-                      console.log(posi);
+                      // console.log(posi);
                     }}
 
                     // className={styles.inputtext}
                   >
-                    {positionArr.map((position) => (
-                      <MenuItem key={position} value={position}>
+                    {positionArr.map((position, index) => (
+                      <MenuItem key={index} value={position}>
                         {position}
                       </MenuItem>
                     ))}

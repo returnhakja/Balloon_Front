@@ -23,9 +23,17 @@ import ApprovalOngoing from './pages/approval/ApprovalOngoing';
 import ApprovalComplete from './pages/approval/ApprovalComplete';
 import ApprovalRefuse from './pages/approval/ApprovalRefuse';
 import DocumentList from './pages/approval/DocumentList';
-import BusinessReportInfo from './pages/approval/BusinessReportInfo';
+import BusinessReportInfo from './pages/approval/BusinessreportInfo';
 import BusinessTripInfo from './pages/approval/BusinessTripInfo';
 import PersonnelAppointmentInfo from './pages/approval/PersonnelAppointmentInfo';
+
+import SavedBusinessReport from './pages/approval/SavedBusinessReport';
+import SavedBusinessTrip from './pages/approval/SavedBusinessTrip';
+import SavedPersonnelAppointment from './pages/approval/SavedPersonnelAppointment';
+
+import CompleteBusinessReportInfo from './pages/approval/CompleteBusinessReportInfo';
+import CompleteBusinessTripInfo from './pages/approval/CompleteBusinessTripInfo';
+import CompletePersonnelAppointmentInfo from './pages/approval/CompletePersonnelAppointmentInfo';
 
 import Calendar from './pages/calendar/Calendar';
 
@@ -41,14 +49,6 @@ import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
 import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
 import UnitListAddPage from './pages/personnelManagement/UnitListAddPage';
-
-import SavedBusinessReport from './pages/approval/SavedBusinessReport';
-import SavedBusinessTrip from './pages/approval/SavedBusinessTrip';
-import SavedPersonnelAppointment from './pages/approval/SavedPersonnelAppointment';
-
-import CompleteBusinessReportInfo from './pages/approval/CompleteBusinessReportInfo';
-import CompleteBusinessTripInfo from './pages/approval/CompleteBusinessTripInfo';
-import CompletePersonnelAppointmentInfo from './pages/approval/CompletePersonnelAppointmentInfo';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
