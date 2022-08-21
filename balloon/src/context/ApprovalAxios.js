@@ -95,11 +95,68 @@ export const getPAByPAId = async (PAId, setPAInfo) => {
   });
 };
 
+// 최근 문서번호 가져오기 ------------------------------------------------
+// 가장 최근 업무기안 번호 가져옴
+export const getLatestBizRpt = async (setDocNum) => {
+  const url = '/api/bizrpt/wd';
+  await axios.get(url).then((res) => {
+    const docId = res.data.businessReportId;
+    console.log(docId);
+    const docNum = docId.substr(8, 7);
+    console.log(docNum);
+    setDocNum(parseInt(docNum));
+  });
+};
+
+// 가장 최근 출장계획 번호 가져옴
+export const getLatestBizTP = async (setDocNum) => {
+  const url = '/api/biztp/wd';
+  await axios
+    .get(url)
+    .then((res) => {
+      console.log(res);
+      const docId = res.data.businessTripId;
+      console.log(docId);
+      const docNum = docId.substr(8, 7);
+      console.log(docNum);
+      setDocNum(parseInt(docNum));
+    })
+    .catch(() => {
+      setDocNum(0);
+    });
+};
+
+// 가장 최근 인사명령 번호 가져옴
+export const getLatestPA = async (setDocNum) => {
+  const url = '/api/pa/wd';
+  await axios
+    .get(url)
+    .then((res) => {
+      console.log(res);
+      const docId = res.data.personnelAppointmentId;
+      console.log(docId);
+      const docNum = docId.substr(8, 7);
+      console.log(docNum);
+      setDocNum(parseInt(docNum));
+    })
+    .catch(() => {
+      setDocNum(0);
+    });
+};
+
+// ---------------------------------------
+
 // 업무 기안 상신
-export const insertBizRpt = async (inputData, empInfo, setInputData) => {
-  const bizRptId = document.getElementById('bizRptId');
+export const insertBizRpt = async (
+  docId,
+  docStatus,
+  inputData,
+  empInfo,
+  setInputData
+) => {
   const bizRptTitle = document.getElementById('bizRptTitle');
   const bizRptContent = document.getElementById('bizRptContent');
+  console.log(docStatus);
 
   const url = '/api/bizrpt';
 
@@ -108,9 +165,10 @@ export const insertBizRpt = async (inputData, empInfo, setInputData) => {
   };
 
   inputData = {
-    businessReportId: bizRptId.value,
+    businessReportId: docId,
     documentTitle: bizRptTitle.value,
     documentContent: bizRptContent.value,
+    documentStatus: docStatus,
     empName: empInfo.empName,
     position: empInfo.position,
     unitName: empInfo.unit && empInfo.unit.unitName,
@@ -129,13 +187,14 @@ export const insertBizRpt = async (inputData, empInfo, setInputData) => {
 
 // 출장 계획 상신
 export const insertBizTp = async (
+  docId,
+  docStatus,
   inputData,
   empInfo,
   startDate,
   endDate,
   setInputData
 ) => {
-  const bizTpId = document.getElementById('bizTpId');
   const bizTpTitle = document.getElementById('bizTpTitle');
   const bizTpContent = document.getElementById('bizTpContent');
   const destination = document.getElementById('destination');
@@ -147,10 +206,12 @@ export const insertBizTp = async (
     'Content-Type': 'application/json',
   };
 
+  console.log(docStatus);
   inputData = {
-    businessTripId: bizTpId.value,
+    businessTripId: docId,
     documentTitle: bizTpTitle.value,
     documentContent: bizTpContent.value,
+    documentStatus: docStatus,
     startDate: startDate,
     endDate: endDate,
     destination: destination.value,
@@ -173,6 +234,8 @@ export const insertBizTp = async (
 
 // 인사 명령 상신
 export const insertPA = async (
+  docId,
+  docStatus,
   inputData,
   empInfo,
   startDate,
@@ -195,9 +258,10 @@ export const insertPA = async (
   };
 
   inputData = {
-    personnelAppointmentId: pAId.value,
+    personnelAppointmentId: docId,
     documentTitle: pATitle.value,
     documentContent: pAContent.value,
+    documentStatus: docStatus,
     personnelDate: startDate,
     position: posi,
     unitName: unit.unitName,

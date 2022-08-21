@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import Modalapproval from './Modalapproval';
+import ModalApproval from './ModalApproval';
 import {
   Button,
   Card,
@@ -26,7 +26,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
 import { findUnitList } from '../../context/UnitAxios';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
-import { insertPA } from '../../context/ApprovalAxios';
+import {
+  getLatestPA,
+  getPAByPAId,
+  insertPA,
+} from '../../context/ApprovalAxios';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -83,11 +87,32 @@ function Pointment() {
   const [empInfo, setEmpInfo] = useOutletContext();
   const [inputData, setInputData] = useState({});
 
+  const params = useParams();
+  const unitNameList = [];
+  // unitNameList =
+  //   units &&
+  //   units.map((unit) => {
+  //     unitNameList.push(unit.unitName);
+  //   });
   useEffect(() => {
-    findUnitList(setUnits);
-    getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
+    if (!inputData.personnelAppointmentId) {
+      findUnitList(setUnits);
+      getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
+      getPAByPAId(params.docId, setInputData);
+    } else {
+      setPosi(inputData.position);
+      setMEmp(
+        inputData.movedEmpId.empName + ' (' + inputData.movedEmpId.empId + ')'
+      );
+      console.log(inputData.movedEmpId.empName);
+      console.log(inputData);
+      setUnit();
+    }
     console.log(mEmpInfo);
-  }, []);
+    console.log(inputData);
+  }, [inputData.personnelAppointmentId]);
+
+  // mEmpInfo.length !== 0;
 
   const card = (
     <React.Fragment>
@@ -126,9 +151,7 @@ function Pointment() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>인사명령</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>
-                <input id="PAId"></input>
-              </th>
+              <th className={styles.th}>{inputData.personnelAppointmentId}</th>
             </tr>
           </thead>
 
@@ -160,7 +183,7 @@ function Pointment() {
         </div>
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         {openapprovalModal && (
-          <Modalapproval
+          <ModalApproval
             openapprovalModal={openapprovalModal}
             setOpenapprovalModal={setOpenapprovalModal}
             style={style}
@@ -188,7 +211,7 @@ function Pointment() {
                     id="PATitle"
                     type="text"
                     name="title"
-                    placeholder="기안제목을 입력하세요."
+                    defaultValue={inputData.documentTitle}
                     className={styles.inputtext}
                   />
                 </form>
@@ -237,7 +260,7 @@ function Pointment() {
                     placeholder="구성원을 선택하세요"
                     onChange={(e) => {
                       setMEmp(e.target.value);
-                      console.log(mEmp);
+                      console.log(e.target.value);
                     }}
 
                     // className={styles.inputtext}
@@ -261,7 +284,7 @@ function Pointment() {
                     placeholder=" 발령부서를 선택하세요"
                     onChange={(e) => {
                       setUnit(e.target.value);
-                      console.log(unit);
+                      console.log(e.target.value);
                     }}
 
                     // className={styles.inputtext}
@@ -277,12 +300,15 @@ function Pointment() {
               </td>
               <td className={styles.tdreaui}>
                 <FormControl fullWidth>
-                  <InputLabel>직위를 설정해주세요</InputLabel>
+                  <InputLabel defaultValue={inputData.position}>
+                    직위를 설정해주세요
+                  </InputLabel>
                   <Select
                     id="position"
                     label="발령직위를 선택하세요"
                     value={posi}
                     placeholder=" 발령직위를 선택하세요"
+                    defaultValue={inputData.position}
                     onChange={(e) => {
                       setPosi(e.target.value);
                       console.log(posi);
@@ -316,13 +342,29 @@ function Pointment() {
               fullWidth
               multiline
               rows={10}
-              placeholder="내용을 입력해주세요."
+              defaultValue={inputData.documentContent}
             />
           </Paper>
 
           <div className={styles.savebutton}>
             <Box sx={{ '& button': { m: 1 } }}>
-              <Button variant="outlined" size="large">
+              <Button
+                variant="outlined"
+                size="large"
+                onClick={async () => {
+                  await insertPA(
+                    params.docId,
+                    3,
+                    inputData,
+                    empInfo,
+                    startValue,
+                    mEmp,
+                    unit,
+                    posi,
+                    setInputData
+                  );
+                  window.location.href = 'http://localhost:3000/boxes';
+                }}>
                 임시저장
               </Button>
               <SaveButton
@@ -331,6 +373,8 @@ function Pointment() {
                 size="large"
                 onClick={async () => {
                   await insertPA(
+                    params.docId,
+                    1,
                     inputData,
                     empInfo,
                     startValue,

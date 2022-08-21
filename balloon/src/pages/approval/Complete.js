@@ -19,7 +19,7 @@ import { useOutletContext, Link } from 'react-router-dom';
 import { getDocsByEmp } from '../../context/ApprovalAxios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
-function Declare() {
+function Complete() {
   const [empInfo, setEmpInfo] = useOutletContext();
 
   const [docList, setDocList] = useState([]);
@@ -199,4 +199,4 @@ function Declare() {
   );
 }
 
-export default Declare;
+export default Complete;
