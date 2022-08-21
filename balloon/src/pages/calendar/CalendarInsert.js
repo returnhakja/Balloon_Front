@@ -74,11 +74,28 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     }
   };
 
+  console.log(empId);
+  const [botRoom, setBotRoom] = useState([]);
+  const botChatroom = () => {
+    inviteSchedule.map((data, index) => {
+      console.log(data);
+      axios
+        .get(`http://localhost:8080/botChatroom/${data[index]}`)
+        .then((response) => {
+          console.log(response.data);
+          setBotRoom(response.data);
+        });
+    });
+  };
+  console.log(botRoom);
+
   //채팅방 만들기
   const calendarBot = 'Y0000001';
+
   const onSchCreateChatroom = (inviteSchedule) => {
     inviteSchedule.pop(empId);
     console.log(inviteSchedule);
+
     let arr = [];
     inviteSchedule.map(() => {
       arr.push({
@@ -92,6 +109,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         console.log(response.data);
         onSchUserInvite(response.data, inviteSchedule);
       });
+    botChatroom(empId);
     return arr;
   };
 

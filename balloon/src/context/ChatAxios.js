@@ -116,6 +116,18 @@ export const onUserUpdate = async (chatroomId, chatroomName, headCount) => {
     });
 };
 
+//채팅방인원수 수정
+export const onHCupdate = async (chatroomId, chatroomName, headCount) => {
+  axios
+    .put(`http://localhost:8080/updateroom/${chatroomId}`, {
+      chatroomName: chatroomName,
+      headCount: headCount - 1,
+    })
+    .then((response) => {
+      console.log(response.data);
+    });
+};
+
 //채팅방에서 혼자나가기
 export const onExitRoom = async (chatroomId, empId, sendExit) => {
   axios
@@ -123,5 +135,5 @@ export const onExitRoom = async (chatroomId, empId, sendExit) => {
     .then((response) => {
       console.log(response.data);
     });
-  sendExit();
+  // sendExit();
 };
