@@ -46,8 +46,8 @@ function ChatRoom() {
               console.log(a);
               console.log(chat.chatContent.substr(0, 15));
               return (
-                <div className={styles.roomcon}>
-                  <Box key={index} className={styles.chatRoomBox}>
+                <div className={styles.roomcon} key={index}>
+                  <Box className={styles.chatRoomBox}>
                     <Link to={`/chat?room=${chat.chatroom.chatroomId}`}>
                       <Button>
                         {' '}
