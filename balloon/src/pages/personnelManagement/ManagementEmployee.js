@@ -5,6 +5,7 @@ import {
   deleteEmployee,
 } from '../../context/EmployeeAxios';
 import { updateCheck, deleteCheck } from '../../context/MuiRenderFunc';
+import { positionArr, responseArr, gradeArr } from '../../context/EmpFunc';
 import {
   DataGrid,
   GridEditSingleSelectCell,
@@ -61,24 +62,18 @@ function ManagementEmployee() {
   };
 
   useEffect(() => {
-    selectEmployees(setEmpList);
-  }, []);
+    !!empList && selectEmployees(setEmpList);
 
-  useEffect(() => {}, [rowData]);
-
-  useEffect(() => {
     if (updateChk === true) {
-      updateEmployee(rowData);
+      Object.keys(rowData).length !== 0 && updateEmployee(rowData);
       setUpdateChk(false);
     }
-  }, [updateChk]);
 
-  useEffect(() => {
     if (deleteChk === true) {
-      deleteEmployee(rowData);
+      Object.keys(rowData).length !== 0 && deleteEmployee(rowData);
       setDeleteChk(false);
     }
-  }, [deleteChk]);
+  }, [empList, updateChk, deleteChk, rowData]);
 
   const columns = [
     { field: 'empId', headerName: '사원번호', width: 100 },
@@ -89,23 +84,7 @@ function ManagementEmployee() {
       type: 'singleSelect',
       valueOptions: ({ empList }) => {
         if (!empList) {
-          return [
-            '인턴',
-            '사원',
-            '주임',
-            '대리',
-            '과장',
-            '차장',
-            '부장',
-            '이사',
-            '상무',
-            '전무',
-            '부사장',
-            '사장',
-            '부회장',
-            '이사회 의장',
-            '회장',
-          ];
+          return positionArr;
         }
       },
       width: 90,
@@ -117,28 +96,7 @@ function ManagementEmployee() {
       type: 'singleSelect',
       valueOptions: ({ empList }) => {
         if (!empList) {
-          return [
-            '없음',
-            '파트장',
-            '팀장',
-            '지점장',
-            '본부장',
-            '그룹장',
-            '부서장',
-            '사업부장',
-            '부문장',
-            '센터장',
-            '실장',
-            '임원',
-            '상근고문',
-            '고문',
-            'CIO',
-            'COO',
-            'CMO',
-            'CFO',
-            'CTO',
-            'CEO',
-          ];
+          return responseArr;
         }
       },
       width: 90,
@@ -162,7 +120,7 @@ function ManagementEmployee() {
       type: 'singleSelect',
       valueOptions: ({ empList }) => {
         if (!empList) {
-          return ['ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN'];
+          return gradeArr;
         }
       },
       width: 130,
