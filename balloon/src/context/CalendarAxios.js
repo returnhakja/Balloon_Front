@@ -65,12 +65,12 @@ export const deletehandle = async (scheduleId, openUpdate, handleClose) => {
   console.log(scheduleId);
 
   await axios
-    .delete(`http://localhost:8080/cal/delete/${scheduleId}`)
+    .delete(`/api/cal/delete/${scheduleId}`)
 
     .then(() => {
       handleClose(false);
     })
     .catch((err) => console.log(err));
-
+  console.log(openUpdate.scheduleId);
   // window.location.href = '/calendar';
 };

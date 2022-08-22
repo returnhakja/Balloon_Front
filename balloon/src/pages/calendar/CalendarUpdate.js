@@ -21,7 +21,7 @@ import { useOutletContext } from 'react-router-dom';
 import { BsCalendarWeek } from 'react-icons/bs';
 import { ko } from 'date-fns/esm/locale';
 
-function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
+function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
   console.log('sssss');
   console.log(style);
   console.log(openUpdate);
@@ -101,7 +101,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
     console.log(openUpdate.scheduleId);
 
     await axios
-      .delete(`http://localhost:8080/api/cal/delete/${openUpdate.scheduleId}`)
+      .delete(`/api/cal/delete/${openUpdate.scheduleId}`)
 
       .then(() => {
         handleClose(false);
