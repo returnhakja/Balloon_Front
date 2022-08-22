@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { getScheduleByEmp } from '../../context/CalendarAxios';
 import '../../css/Celendar.css';
@@ -9,8 +9,6 @@ import interaction from '@fullcalendar/interaction';
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import CalendarInsert from './CalendarInsert';
 import CalendarUpdate from './CalendarUpdate';
-import axios from 'axios';
-import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 
 const style = {
   position: 'absolute',
@@ -179,7 +177,6 @@ function Calendar() {
             />
           </>
         )}
-
       </Container>
     </div>
   );
