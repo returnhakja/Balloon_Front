@@ -14,10 +14,10 @@ function Modal({ chatroomName, headCount, setModalOpen }) {
     setModalOpen(false);
   };
 
-  console.log(chatroomId);
-  console.log(chatroomName);
-  console.log(headCount);
-  console.log(empId);
+  // console.log(chatroomId);
+  // console.log(chatroomName);
+  // console.log(headCount);
+  // console.log(empId);
   return (
     <div className={styles.updatename}>
       <button onClick={closeModal}>X</button>

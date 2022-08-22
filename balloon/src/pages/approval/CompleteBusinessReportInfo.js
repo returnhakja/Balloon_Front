@@ -3,7 +3,7 @@ import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import Modalapproval from './Modalapproval';
+import ModalApproval from './ModalApproval';
 import {
   Button,
   Card,
@@ -14,13 +14,21 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { FcDocument } from 'react-icons/fc';
+
 import { styled } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
-import { getPAByPAId } from '../../context/ApprovalAxios';
+
+import { FcDocument } from 'react-icons/fc';
+import { getBizRptByBizRptId } from '../../context/ApprovalAxios';
+
+const SaveButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(blue[500]),
+  backgroundColor: blue[500],
+  '&:hover': {
+    backgroundColor: blue[700],
+  },
+}));
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -34,31 +42,19 @@ const style = {
   textAlign: 'center',
 };
 
-const SaveButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.getContrastText(blue[500]),
-  backgroundColor: blue[500],
-  '&:hover': {
-    backgroundColor: blue[700],
-  },
-}));
-
-function PersonnelAppointmentInfo() {
-  // 날짜 관련
-  const [startValue, setStartValue] = useState(null);
-
-  // 모달
-  // const [openModal, setOpenModal] = useState(false);
-  const [openapprovalModal, setOpenapprovalModal] = useState(false);
-
+function BizReportInfo() {
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
-
-  const [paInfo, setPaInfo] = useState({});
+  const [openapprovalModal, setOpenapprovalModal] = useState(false);
+  const [bizRptInfo, setBizRptInfo] = useState({});
 
   const params = useParams();
+  console.log(params);
+  console.log(empInfo);
+  console.log(bizRptInfo);
 
   useEffect(() => {
-    getPAByPAId(params.docId, setPaInfo);
+    getBizRptByBizRptId(params.docId, setBizRptInfo);
   }, []);
 
   const card = (
@@ -78,27 +74,29 @@ function PersonnelAppointmentInfo() {
           variant="h5"
           component="div"
           textAlign="center">
-          {empInfo.empName}
+          {bizRptInfo.empName}
         </Typography>
       </CardContent>
     </React.Fragment>
   );
 
+  // const [openModal, setOpenModal] = useState(false);
+  console.log(empInfo);
   return (
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          <FcDocument />
-          인사명령
+          {' '}
+          <FcDocument /> 업무기안
         </p>
 
         <table className={styles.table}>
           <thead>
             <tr align="center" bgcolor="white">
               <td className={styles.tdleft}>기안양식</td>
-              <td className={styles.td}>인사명령</td>
+              <td className={styles.td}>업무기안</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>{paInfo.personnelAppointmentId}</th>
+              <th className={styles.th}>{bizRptInfo.businessReportId}</th>
             </tr>
           </thead>
 
@@ -109,17 +107,16 @@ function PersonnelAppointmentInfo() {
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
                 {' '}
-                {empInfo.empName}({empInfo.empId})
+                {bizRptInfo.empName}({bizRptInfo.emp && bizRptInfo.emp.empId})
               </th>
             </tr>
             <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
+        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
         </div>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
-
         <hr />
         <br />
         <Card
@@ -131,86 +128,29 @@ function PersonnelAppointmentInfo() {
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>
-
-        {/* 여기부터는 상세내용 */}
-
-        <table className={styles.tableborder}>
+        <table className={styles.table}>
           <thead>
             <tr className={styles.trcon}>
-              <td className={styles.tdleft}>기안제목</td>
+              <td className={styles.tdleftpadding}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
                 {' '}
-                {paInfo.documentTitle}
-              </td>{' '}
-            </tr>
-            <tr className={styles.trcon}>
-              <td className={styles.tdleft}>인사명령일</td>
-              <td className={styles.titlename} colSpan={2}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    disabled
-                    label="명령 일자"
-                    value={paInfo.personnelDate}
-                    type=" date"
-                    inputFormat={'yyyy-MM-dd'}
-                    className={styles.datepicker}
-                    renderInput={(params) => <TextField {...params} />}
+                {bizRptInfo.documentTitle}
+                {/* <form>
+                  <TextField
+                    type="text"
+                    name="title"
+                    value={bizRptInfo.documentTitle}
+                    className={styles.inputtext}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    focused={false}
                   />
-                </LocalizationProvider>
+                </form> */}
+                {/* <TextField />*/}
               </td>
             </tr>
           </thead>
-          <tbody className={styles.tbodyin}>
-            <tr className={styles.trcolor}>
-              <td className={styles.tdreaui}>구성원명</td>
-
-              <td className={styles.tdreaui}>발령부서</td>
-              <td className={styles.tdreaui}>발령직급</td>
-            </tr>
-
-            <tr>
-              <td className={styles.tdreaui}>
-                <TextField
-                  focused={false}
-                  type="text"
-                  name="title"
-                  value={paInfo.movedEmpName}
-                  className={styles.inputtext}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
-              </td>
-              <td className={styles.tdreaui}>
-                <form>
-                  <TextField
-                    focused={false}
-                    type="text"
-                    name="title"
-                    value={paInfo.unit && paInfo.unit.unitName}
-                    className={styles.inputtext}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </form>
-              </td>
-              <td className={styles.tdreaui}>
-                <form>
-                  <TextField
-                    type="text"
-                    name="title"
-                    value={paInfo.position}
-                    className={styles.inputtext}
-                    focused={false}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </form>
-              </td>
-            </tr>
-          </tbody>
         </table>
 
         <div className={styles.fonttext}>
@@ -226,16 +166,16 @@ function PersonnelAppointmentInfo() {
               fullWidth
               multiline
               rows={10}
-              value={paInfo.documentContent}
-              focused={false}
+              value={bizRptInfo.documentContent}
               InputProps={{
                 readOnly: true,
               }}
+              focused={false}
             />
           </Paper>
 
           <div className={styles.savebutton}>
-            <Box sx={{ '& button': { m: 1 } }}>
+            <Box sx={{ button: { m: 1 } }}>
               <Link to="/boxes/dl">
                 <SaveButton variant="contained" color="success" size="large">
                   목록으로
@@ -249,4 +189,4 @@ function PersonnelAppointmentInfo() {
   );
 }
 
-export default PersonnelAppointmentInfo;
+export default BizReportInfo;

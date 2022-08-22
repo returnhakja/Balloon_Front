@@ -19,7 +19,7 @@ import { useOutletContext, Link } from 'react-router-dom';
 import { getDocsByEmp } from '../../context/ApprovalAxios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
-function Declare() {
+function Complete() {
   const [empInfo, setEmpInfo] = useOutletContext();
 
   const [docList, setDocList] = useState([]);
@@ -190,6 +190,11 @@ function Declare() {
               pageSize={10}
               rowsPerPageOptions={[10]}
               components={{ Toolbar: GridToolbar }}
+              initialState={{
+                sorting: {
+                  sortModel: [{ field: 'updateTime', sort: 'desc' }],
+                },
+              }}
             />
           </div>
           {/* </div> */}
@@ -199,4 +204,4 @@ function Declare() {
   );
 }
 
-export default Declare;
+export default Complete;

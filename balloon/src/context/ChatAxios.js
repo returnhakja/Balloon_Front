@@ -3,16 +3,16 @@ import axios from 'axios';
 //ChatRoom.js
 //마지막으로 보낸 채팅list가져오기
 export const onChatroom = async (setChatroom, empId) => {
-  axios.get(`http://localhost:8080/allChat/${empId}`).then((response) => {
+  axios.get(`/api/allChat/${empId}`).then((response) => {
     setChatroom(response.data);
-    console.log(response.data);
+    // console.log(response.data);
   });
 };
 
 //채팅방 나가기
 export const onDeleteRoom = async (chatroomId) => {
   axios
-    .delete(`http://localhost:8080/deleteChatroom/${chatroomId}`)
+    .delete(`/api/deleteChatroom/${chatroomId}`)
     .then((response) => console.log(response.data));
 };
 
@@ -27,7 +27,7 @@ export const onCreateChatroom = async (
 ) => {
   invite.push(empInfo);
   axios
-    .post('http://localhost:8080/createChatroom', {
+    .post('/api/createChatroom', {
       chatroomName: chatroomName.value,
       headCount: invite.length,
     })
@@ -42,7 +42,7 @@ export const onUserInvite = async (chatroomId, invite, client) => {
   invite &&
     axios
       .post(
-        `http://localhost:8080/insertChatEmp/${chatroomId}`,
+        `/api/insertChatEmp/${chatroomId}`,
         invite.map((data) => {
           const inviteEnter = () => {
             client.send(
@@ -72,20 +72,16 @@ export const onUserInvite = async (chatroomId, invite, client) => {
 //Chat.js
 //chatroomEmployee T에 chatroomId로 사원정보 가져오기
 export const empIdInfo = async (chatroomId, setChatempinfo) => {
-  axios
-    .get(`http://localhost:8080/oneChatEmp/${chatroomId}`)
-    .then((response) => {
-      setChatempinfo(response.data);
-    });
+  axios.get(`/api/oneChatEmp/${chatroomId}`).then((response) => {
+    setChatempinfo(response.data);
+  });
 };
 
 //이전에 채팅했던 기록보이게
 export const chatRecord = async (chatroomId, setChatting) => {
-  axios
-    .get(`http://localhost:8080/chatRecord/${chatroomId}`)
-    .then((response) => {
-      setChatting(response.data);
-    });
+  axios.get(`/api/chatRecord/${chatroomId}`).then((response) => {
+    setChatting(response.data);
+  });
 };
 
 //채팅방에 있는 사원들의 이름과 인원수 가져오기
@@ -94,20 +90,19 @@ export const chatroomInfo = async (
   setChatroomName,
   setHeadCount
 ) => {
-  axios
-    .get(`http://localhost:8080/oneChatroom/${chatroomId}`)
-    .then((response) => {
-      console.log(response.data.chatroomName);
-      setChatroomName(response.data.chatroomName);
-      setHeadCount(response.data.headCount);
-    });
+  axios.get(`/api/oneChatroom/${chatroomId}`).then((response) => {
+    console.log(response.data.chatroomName);
+    setChatroomName(response.data.chatroomName);
+    setHeadCount(response.data.headCount);
+  });
 };
 
 //채팅방이름 수정
 export const onUserUpdate = async (chatroomId, chatroomName, headCount) => {
-  axios
-    .put(`http://localhost:8080/updateroom/${chatroomId}`, {
-      chatroomName: chatroomName.value,
+  console.log(chatroomId, chatroomName, headCount);
+  await axios
+    .put(`/api/updateroom/${chatroomId}`, {
+      chatroomName: chatroomName,
       headCount: headCount,
     })
     .then((response) => {
@@ -118,7 +113,7 @@ export const onUserUpdate = async (chatroomId, chatroomName, headCount) => {
 //채팅방인원수 수정
 export const onHCupdate = async (chatroomId, chatroomName, headCount) => {
   axios
-    .put(`http://localhost:8080/updateroom/${chatroomId}`, {
+    .put(`/api/updateroom/${chatroomId}`, {
       chatroomName: chatroomName,
       headCount: headCount - 1,
     })
@@ -129,10 +124,8 @@ export const onHCupdate = async (chatroomId, chatroomName, headCount) => {
 
 //채팅방에서 혼자나가기
 export const onExitRoom = async (chatroomId, empId, sendExit) => {
-  axios
-    .delete(`http://localhost:8080/deleteroom/${chatroomId}/${empId}`)
-    .then((response) => {
-      console.log(response.data);
-    });
+  axios.delete(`/api/deleteroom/${chatroomId}/${empId}`).then((response) => {
+    console.log(response.data);
+  });
   // sendExit();
 };

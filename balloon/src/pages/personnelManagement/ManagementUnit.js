@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {
-  selectEmployees,
-  updateCheck,
-  updateEmployee,
-  deleteCheck,
-  deleteEmployee,
-} from '../../context/EmployeeAxios';
+import { updateCheck, deleteCheck } from '../../context/MuiRenderFunc';
+import { findUnitList, updateUnit, deleteUnit } from '../../context/UnitAxios';
 import {
   DataGrid,
   GridEditSingleSelectCell,
@@ -19,6 +14,7 @@ import { Container } from '@mui/system';
 import Delete from '@mui/icons-material/Delete';
 import PersonAddIcon from '@mui/icons-material/PersonAddAlt1';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import QueueIcon from '@mui/icons-material/Queue';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import { Link } from 'react-router-dom';
@@ -44,7 +40,7 @@ CustomTypeEditComponent.propTypes = {
 };
 
 function ManagementUnit() {
-  const [unitList, setEnitList] = useState([]);
+  const [unitList, setUnitList] = useState([]);
   const [rowData, setRowData] = useState({});
   const [deleteChk, setDeleteChk] = useState(false);
   const [updateChk, setUpdateChk] = useState(false);
@@ -62,54 +58,87 @@ function ManagementUnit() {
   };
 
   useEffect(() => {
-    // selectEmployees(setEmpList);
+    findUnitList(setUnitList);
   }, []);
+
+  useEffect(() => {
+    if (unitList.length !== 0) {
+      console.log(unitList);
+    }
+  }, [unitList]);
+
+  function GetParentUnit(data) {
+    return data.row.parentUnit ? data.row.parentUnit.id : data.row.parentUnit;
+  }
 
   useEffect(() => {}, [rowData]);
 
   useEffect(() => {
     if (updateChk === true) {
-      updateEmployee(rowData);
+      updateUnit(rowData);
       setUpdateChk(false);
     }
   }, [updateChk]);
 
   useEffect(() => {
     if (deleteChk === true) {
-      deleteEmployee(rowData);
+      deleteUnit(rowData);
       setDeleteChk(false);
     }
   }, [deleteChk]);
 
   const columns = [
-    { field: 'unitCode', headerName: '조직번호', width: 100 },
-    { field: 'unitName', headerName: '조직명', width: 80, editable: true },
+    { field: 'unitCode', headerName: '조직번호', width: 200 },
+    { field: 'unitName', headerName: '조직명', width: 180, editable: true },
     {
       field: 'bell',
       headerName: '조직 전화번호',
-      width: 90,
+      width: 250,
       editable: true,
     },
     {
       field: 'parentUnit',
       headerName: '상위조직',
-      width: 90,
+      width: 300,
       editable: true,
+      valueGetter: GetParentUnit,
+    },
+
+    {
+      field: 'actions',
+      type: 'actions',
+      width: 80,
+      getActions: () => [
+        <GridActionsCellItem
+          icon={<SettingsIcon />}
+          label="update"
+          onClick={() => {
+            handleUpdate(setUpdateChk);
+          }}
+        />,
+        <GridActionsCellItem
+          icon={<Delete />}
+          label="Delete"
+          onClick={() => {
+            handleDelete(setDeleteChk);
+          }}
+        />,
+      ],
     },
   ];
 
   return (
     <div style={{ marginTop: 70, marginBottom: 50 }}>
       <Container maxWidth="maxWidth">
-        <Link to={'/add/employee'}>
+        {/* <Link to={'/add/unit'}>
           <PersonAddIcon fontSize="large" color="action" />
-        </Link>
+        </Link> */}
 
-        <Link to={'/add/employees'}>
-          <GroupAddIcon
+        <Link to={'/add/units'}>
+          <QueueIcon
             fontSize="large"
             color="action"
-            style={{ marginLeft: '20px' }}
+            // style={{ marginLeft: '20px' }}
           />
         </Link>
 
@@ -122,6 +151,7 @@ function ManagementUnit() {
             }}
             rows={unitList}
             columns={columns}
+            getRowId={(row) => row.unitCode}
             editMode="row"
             experimentalFeatures={{ newEditingApi: true }}
             pageSize={10}

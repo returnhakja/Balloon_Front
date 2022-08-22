@@ -67,9 +67,39 @@ function Declare() {
   //   },
   // ];
 
+  function getdocId(params) {
+    let documentId = params.row.docId;
+    if (documentId.includes('업무기안')) {
+      return (
+        <Link to={`/doc/ddbr/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else if (documentId.includes('출장계획')) {
+      return (
+        <Link to={`/doc/ddtp/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else if (documentId.includes('인사명령')) {
+      return (
+        <Link to={`/doc/ddpa/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else {
+      alert('있었는데 아니 없어요.');
+    }
+  }
+
   const columns = [
     { field: 'docId', headerName: '문서번호', width: 160 },
-    { field: 'documentTitle', headerName: '문서제목', width: 350 },
+    {
+      field: 'documentTitle',
+      headerName: '문서제목',
+      width: 350,
+      renderCell: getdocId,
+    },
     { field: 'updateTime', headerName: '처리일자', width: 160 },
   ];
 
@@ -164,6 +194,11 @@ function Declare() {
               pageSize={10}
               rowsPerPageOptions={[10]}
               components={{ Toolbar: GridToolbar }}
+              initialState={{
+                sorting: {
+                  sortModel: [{ field: 'updateTime', sort: 'desc' }],
+                },
+              }}
             />
           </div>
           {/* </div> */}

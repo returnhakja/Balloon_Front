@@ -5,7 +5,7 @@ import { Card, CardContent, Container, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 
 const card = (
-  <Link to={'/dratf/br'}>
+  <Link to={'/draft/br'}>
     <React.Fragment>
       <CardContent>
         <Typography
@@ -29,7 +29,7 @@ const card = (
   </Link>
 );
 const card1 = (
-  <Link to={'/dratf/bt'}>
+  <Link to={'/draft/bt'}>
     <React.Fragment>
       <CardContent>
         <Typography
@@ -53,7 +53,7 @@ const card1 = (
   </Link>
 );
 const card2 = (
-  <Link to={'/dratf/pa'}>
+  <Link to={'/draft/pa'}>
     <React.Fragment>
       <CardContent>
         <Typography

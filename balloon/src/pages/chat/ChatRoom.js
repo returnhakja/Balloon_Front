@@ -33,7 +33,7 @@ function ChatRoom() {
 
   return (
     <Container maxWidth="xs" className={styles.Listcontainer}>
-      <div className={styles.side}>
+      <div className={styles.side1}>
         <div className={styles.chatRoomList}>
           <ChatSide />
           <div className={styles.list}>
@@ -41,22 +41,50 @@ function ChatRoom() {
               <div className={styles.ChatText}>채팅목록</div>
             </div>
             <hr />
-
+            <br />
             {chatroom.map((chat, index) => {
+              console.log(chat.chatTime.substr(11, 5));
+              // const a = chat.chatContent.length;
+              // console.log(a);
+              console.log(chat.chatContent.substr(0, 15));
+              console.log(chat.chatroom.chatroomName.substr(0, 15));
               return (
-                <div className={styles.roomcon}>
-                  <Box key={index} className={styles.chatRoomBox}>
-                    <Link to={`/chat?room=${chat.chatroom.chatroomId}`}>
-                      <Button>
-                        {chat.chatroom.chatroomName}({chat.chatroom.headCount})
-                      </Button>
-                      <p className={styles.content}>
-                        {chat.chatContent}
-                        <div className={styles.DeleteBtn}>
-                          <Button
-                            variant="text"
-                            disableElevation
-                            onClick={() =>
+                <div className={styles.roomcon} key={index}>
+                  <Link to={`/chat?room=${chat.chatroom.chatroomId}`}>
+                    <Box
+                      className={styles.chatRoomBox}
+                      sx={
+                        {
+                          // border: 0.5,
+                          // borderColor: '#8b8b8b',
+                          // marginBottom: 0.1,
+                        }
+                      }>
+                      {/* {chat.chatroom.chatroomName}({chat.chatroom.headCount}) */}
+
+                      {chat.chatroom.chatroomName.length <= '15' ? (
+                        <div>
+                          <span className={styles.chatName}>
+                            {chat.chatroom.chatroomName}(
+                            {chat.chatroom.headCount})
+                          </span>
+                        </div>
+                      ) : (
+                        <div>
+                          <span className={styles.chatName}>
+                            {chat.chatroom.chatroomName.substr(0, 12)}...(
+                            {chat.chatroom.headCount})
+                          </span>
+                        </div>
+                      )}
+
+                      <div className={styles.DeleteBtn}>
+                        <Button
+                          variant="text"
+                          disableElevation
+                          onClick={(e) => {
+                            const roomDelete = () => {
+                              e.preventDefault();
                               onExitRoom(
                                 chat.chatroom.chatroomId,
                                 empInfo.empId,
@@ -65,14 +93,38 @@ function ChatRoom() {
                                   chat.chatroom.chatroomId,
                                   empInfo
                                 )
-                              )
-                            }>
-                            <DeleteIcon />
-                          </Button>
-                        </div>
-                      </p>
-                    </Link>
-                  </Box>
+                              );
+
+                              window.location.href = '/chatroom';
+                            };
+
+                            return roomDelete();
+                          }}>
+                          <DeleteIcon />
+                        </Button>
+                      </div>
+                      <div className={styles.content}>
+                        {chat.chatContent.length <= '30' ? (
+                          <div className={styles.content}>
+                            {chat.chatContent}
+                            <div className={styles.LastTimecon}>
+                              <div className={styles.LastTime}>
+                                {chat.chatTime.substr(11, 5)}
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className={styles.content}>
+                            {chat.chatContent.substr(0, 30)}...
+                            <div className={styles.LastTime}>
+                              {chat.chatTime.substr(11, 5)}
+                            </div>
+                          </div>
+                        )}
+                        {/* {chat.chatContent.substr(0, 15)}... */}
+                      </div>
+                    </Box>
+                  </Link>
                 </div>
               );
             })}

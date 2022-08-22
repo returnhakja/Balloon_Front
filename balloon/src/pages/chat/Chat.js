@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import styles from '../../css/Chat/Chat.module.css';
@@ -183,35 +183,112 @@ function Chat() {
   // };
   // console.log(empInfo.empName);
 
+  // 채팅방 이름 바꾸기
+  const [chatRoomTitle, setChatRoomTitle] = useState(chatroomName);
+  const [changeTitle, setChangeTitle] = useState(false);
+  const [clickChk, setClickChk] = useState(0);
+
+  const onChangeTitle = (event) => {
+    // console.log(event);
+    setChatRoomTitle(event.target.value);
+  };
+
+  useEffect(() => {
+    setChatRoomTitle(chatroomName);
+  }, [chatroomName]);
+
+  useEffect(() => {
+    setClickChk(clickChk);
+  }, [clickChk]);
+
+  const onClickChatRoomTitle = () => {
+    setClickChk(clickChk + 1);
+    // setChangeTitle(true);
+    console.log(clickChk);
+    if (clickChk > 1) {
+      // setChangeTitle(false);
+      // onChangeTitle();
+      setClickChk(0);
+    }
+  };
+
+  const keyEnter = (e) => {
+    if (e.key == 'Enter') {
+      setClickChk(0);
+      onChangeTitle();
+      // setChangeTitle(false);
+    }
+  };
+
   return (
-    <>
-      <div className={styles.chatroomname}>
-        <h3>
-          <button onClick={closemodal}>{chatroomName}</button>
-          {modalOpen && <Modal closemodal={closemodal} />}
-        </h3>
-      </div>
-      <Link to={'/chatroom'}>
-        <Button variant="contained">채팅목록 이동</Button>
-      </Link>
-      {/* 채팅방 나가기 */}
-      <div className={styles.logoutBtn}>
-        <Button
-          onClick={() => {
-            onExitRoom(
-              chatroomId,
-              empId,
-              sendExit(client, chatroomId, empInfo)
-            );
-            onHCupdate(chatroomId, chatroomName, headCount);
-          }}>
-          <Link to={'/chatroom'}>
-            <LogoutIcon />
-          </Link>
-        </Button>
-      </div>
-      {/* 채팅방 인원수 & 이름수정 */}
-      {/* <div className={styles.updatename}>
+    <Container maxWidth="xs" className={styles.Listcontainer}>
+      <div className={styles.side}>
+        <ChatSide />
+        <div className={styles.chatconvimeline}>
+          <div className={styles.chatroomname}>
+            <h3>
+              {chatroomName ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <TextField
+                    id="outlined-multiline-flexible"
+                    multiline
+                    label="-"
+                    maxRows={4}
+                    value={chatRoomTitle}
+                    onChange={onChangeTitle}
+                    onKeyPress={keyEnter}
+                    onClick={onClickChatRoomTitle}
+                  />
+                  {clickChk == 2 ? (
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        onUserUpdate(chatroomId, chatRoomTitle, headCount);
+                        setClickChk(0);
+                      }}>
+                      수정하기
+                    </Button>
+                  ) : (
+                    ''
+                  )}
+                </div>
+              ) : (
+                <h5 className=" mb-2 font-weight-bold text-gray-dark">
+                  {chatRoomTitle}{' '}
+                </h5>
+              )}
+            </h3>
+          </div>
+
+          {/* <Link to={'/chatroom'}>
+              <Button variant="contained">채팅목록 이동</Button>
+            </Link> */}
+          {/* 
+          // {/* 채팅방 나가기 
+          <div className={styles.logoutBtn}>
+            <Link to={'/chatroom'}>
+              <Button
+                onClick={() =>
+                  onExitRoom(
+                    chatroomId,
+                    empId,
+                    sendExit(client, chatroomId, empInfo)
+                  )
+                }>
+                <LogoutIcon />
+              </Button>
+            </Link>
+          </div> */}
+
+          {/* 채팅방 인원수 & 이름수정 */}
+          {/* <div className={styles.updatename}>
+
+
         <TextField
           id="chatroomName"
           variant="outlined"
@@ -231,16 +308,70 @@ function Chat() {
           수정하기
         </Button>
       </div> */}
-      {/* <div>{modalOpen == true ? <Modal /> : null}</div> */}
 
-      <div>
-        <h3>채팅방에 있는 사람</h3>
-        {chatempinfo &&
-          chatempinfo.map((data) => {
-            console.log(data.empId.empName);
-            return <div>{data.empId.empName}</div>;
-          })}
-      </div>
+          {/* <div>{modalOpen == true ? <Modal /> : null}</div> */}
+          <List>
+            <ListItemButton onClick={handleClick}>
+              <ListItemIcon>
+                <GroupIcon />
+              </ListItemIcon>
+              <ListItemText primary="채팅중인 사람" />
+
+              {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+            </ListItemButton>
+
+            <Collapse
+              in={open}
+              timeout="auto"
+              unmountOnExit
+              sx={{
+                position: 'absolute',
+                width: '100%',
+                background: 'lightgray',
+                paddingTop: 2,
+                maxHeight: 200,
+                overflowY: 'scroll',
+              }}>
+              {chatempinfo &&
+                chatempinfo.map((data) => {
+                  return (
+                    <List component="div" disablePadding>
+                      <ListItemButton sx={{ pl: 4 }}>
+                        <ListItemIcon>
+                          {/* console.log(data.empId.empName); return{' '} */}
+                          <PersonIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={data.empId.empName} />
+                      </ListItemButton>
+                    </List>
+                  );
+                })}
+              {/* 채팅방 나가기 */}
+              <div className={styles.logoutBtn}>
+                <Link to={'/chatroom'}>
+                  <Button
+                    onClick={() =>
+                      onExitRoom(
+                        chatroomId,
+                        empId,
+                        sendExit(client, chatroomId, empInfo)
+                      )
+                    }>
+                    <LogoutIcon />
+                  </Button>
+                </Link>
+              </div>
+            </Collapse>
+          </List>
+          {/* <div>
+          <h3>채팅방에 있는 사람</h3>
+          {chatempinfo &&
+            chatempinfo.map((data) => {
+              console.log(data.empId.empName);
+              return <div>{data.empId.empName}</div>;
+            })}
+        </div> */}
+
 
       <br />
       {/* 채팅방에서 사원초대하기 */}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
@@ -22,7 +22,12 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
 import { FcDocument } from 'react-icons/fc';
-import { getLatestBizTP, insertBizTp } from '../../context/ApprovalAxios';
+import {
+  deleteBizTp,
+  getBizTpByBizTpId,
+  getLatestBizTP,
+  insertBizTp,
+} from '../../context/ApprovalAxios';
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
   backgroundColor: blue[500],
@@ -44,13 +49,13 @@ const style = {
   textAlign: 'center',
 };
 
-function Trip() {
+function SavedBusinessTrip() {
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
   const [endvalue, setEndValue] = useState(null);
   const [inputData, setInputData] = useState({});
-  const [docNum, setDocNum] = useState(0);
-  const [docId, setDocId] = useState('');
+
+  const params = useParams();
 
   // 모달
   // const [openModal, setOpenModal] = useState(false);
@@ -59,16 +64,13 @@ function Trip() {
   const [empInfo, setEmpInfo] = useOutletContext();
 
   useEffect(() => {
-    getLatestBizTP(setDocNum);
-    console.log(docNum);
-    docNum !== 0
-      ? setDocId('출장계획' + '-22-' + ('0000000' + (docNum + 1)).slice(-7))
-      : setDocId('출장계획-22-0000001');
-  }, [docNum]);
+    getBizTpByBizTpId(params.docId, setInputData);
+    setStartValue(params.startDate);
+    setEndValue(params.endDate);
+    console.log(startValue);
+  }, []);
 
   console.log(empInfo);
-  console.log(docId);
-
   const card = (
     <React.Fragment>
       <CardContent>
@@ -106,7 +108,7 @@ function Trip() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>출장계획서</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>{docId}</th>
+              <th className={styles.th}>{inputData.businessTripId}</th>
             </tr>
           </thead>
 
@@ -167,7 +169,7 @@ function Trip() {
                     id="bizTpTitle"
                     type="text"
                     name="title"
-                    placeholder="기안제목을 입력하세요."
+                    defaultValue={inputData.documentTitle}
                     className={styles.inputtext}
                   />
                 </form>
@@ -241,8 +243,8 @@ function Trip() {
                   <input
                     id="destination"
                     type="text"
-                    name="title"
-                    placeholder="방문처를 입력하세요"
+                    name="destination"
+                    defaultValue={inputData.destination}
                     className={styles.inputtext}
                   />
                 </form>
@@ -252,8 +254,8 @@ function Trip() {
                   <input
                     id="visitingPurpose"
                     type="text"
-                    name="title"
-                    placeholder="방문 목적을 입력하세요"
+                    name="visitingPurpose"
+                    defaultValue={inputData.visitingPurpose}
                     className={styles.inputtext}
                   />
                 </form>
@@ -276,18 +278,33 @@ function Trip() {
               fullWidth
               multiline
               rows={10}
-              placeholder="내용을 입력해주세요."
+              defaultValue={inputData.documentContent}
             />
           </Paper>
 
           <div className={styles.savebutton}>
             <Box sx={{ '& button': { m: 1 } }}>
+              <Link to="/boxes/ds">
+                <Button variant="outlined" size="large">
+                  목록으로
+                </Button>
+              </Link>
+              <Link to="/boxes/ds">
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={async () => {
+                    await deleteBizTp(params.docId);
+                  }}>
+                  삭제하기
+                </Button>
+              </Link>
               <Button
                 variant="outlined"
                 size="large"
                 onClick={async () => {
                   await insertBizTp(
-                    docId && docId,
+                    params.docId,
                     3,
                     inputData,
                     empInfo,
@@ -305,7 +322,7 @@ function Trip() {
                 size="large"
                 onClick={async () => {
                   await insertBizTp(
-                    docId && docId,
+                    params.docId,
                     1,
                     inputData,
                     empInfo,
@@ -325,4 +342,4 @@ function Trip() {
   );
 }
 
-export default Trip;
+export default SavedBusinessTrip;

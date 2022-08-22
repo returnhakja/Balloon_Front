@@ -106,19 +106,19 @@ function DocList() {
     let documentId = params.row.docId;
     if (documentId.includes('업무기안')) {
       return (
-        <Link to={`/doc/br/${params.row.docId}`}>
+        <Link to={`/doc/cpbr/${params.row.docId}`}>
           {params.row && params.row.documentTitle}
         </Link>
       );
     } else if (documentId.includes('출장계획')) {
       return (
-        <Link to={`/doc/tp/${params.row.docId}`}>
+        <Link to={`/doc/cptp/${params.row.docId}`}>
           {params.row && params.row.documentTitle}
         </Link>
       );
     } else if (documentId.includes('인사명령')) {
       return (
-        <Link to={`/doc/pa/${params.row.docId}`}>
+        <Link to={`/doc/cppa/${params.row.docId}`}>
           {params.row && params.row.documentTitle}
         </Link>
       );
@@ -238,6 +238,11 @@ function DocList() {
               pageSize={10}
               rowsPerPageOptions={[10]}
               components={{ Toolbar: GridToolbar }}
+              initialState={{
+                sorting: {
+                  sortModel: [{ field: 'updateTime', sort: 'desc' }],
+                },
+              }}
             />
           </div>
           {/* </div> */}

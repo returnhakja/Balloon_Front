@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
@@ -19,7 +19,12 @@ import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
 
 import { FcDocument } from 'react-icons/fc';
-import { getLatestBizRpt, insertBizRpt } from '../../context/ApprovalAxios';
+import {
+  deleteBizRpt,
+  getBizRptByBizRptId,
+  getLatestBizRpt,
+  insertBizRpt,
+} from '../../context/ApprovalAxios';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -42,32 +47,22 @@ const style = {
   textAlign: 'center',
 };
 
-function Report() {
+function SavedBusinessReport() {
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
-  const [docNum, setDocNum] = useState(0);
-  const [docId, setDocId] = useState('');
-  const [approver, setApprover] = useState([]);
-  const [noApprover, setNoApprover] = useState([]);
+
+  const params = useParams();
 
   console.log(empInfo);
-  console.log(docNum);
-  console.log(approver);
-  console.log(noApprover);
 
   useEffect(() => {
-    getLatestBizRpt(setDocNum);
-    docNum !== 0
-      ? setDocId('업무기안' + '-22-' + ('0000000' + (docNum + 1)).slice(-7))
-      : setDocId('업무기안-22-0000001');
-  }, [docNum]);
-  useEffect(() => {
-    setNoApprover(noApprover);
-  }, [noApprover]);
+    getBizRptByBizRptId(params.docId, setInputData);
+    console.log(inputData);
+  }, []);
 
-  const DfCard = (
+  const card = (
     <React.Fragment>
       <CardContent>
         <Typography
@@ -90,29 +85,6 @@ function Report() {
     </React.Fragment>
   );
 
-  const ApCard = (empName) => (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          결재자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
-
   // const [openModal, setOpenModal] = useState(false);
   console.log(empInfo);
   return (
@@ -129,7 +101,7 @@ function Report() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>업무기안</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>{docId !== '' && docId}</th>
+              <th className={styles.th}>{inputData.businessReportId}</th>
             </tr>
           </thead>
 
@@ -143,6 +115,7 @@ function Report() {
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
+            <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
@@ -163,36 +136,17 @@ function Report() {
               openapprovalModal={openapprovalModal}
               setOpenapprovalModal={setOpenapprovalModal}
               style={style}
-              setApprover={setApprover}
-              approver={approver}
-              setNoApprover={setNoApprover}
-              noApprover={noApprover}
             />
           )}
         </div>
         <hr />
         <br />
-        <div className={styles.approvalCard}>
-          <Card
-            variant="outlined"
-            sx={{ maxWidth: 150 }}
-            style={{ backgroundColor: '#F1F9FF' }}>
-            {DfCard}
-          </Card>
-          {approver.map((empData) => {
-            console.log(empData);
-
-            return (
-              <Card
-                variant="outlined"
-                sx={{ maxWidth: 150 }}
-                style={{ backgroundColor: '#F1F9FF' }}>
-                {ApCard(empData.empName)}
-              </Card>
-            );
-          })}
-        </div>
-
+        <Card
+          variant="outlined"
+          sx={{ maxWidth: 150 }}
+          style={{ backgroundColor: '#F1F9FF' }}>
+          {card}
+        </Card>
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>
@@ -207,7 +161,7 @@ function Report() {
                     id="bizRptTitle"
                     type="text"
                     name="title"
-                    placeholder="기안제목을 입력하세요."
+                    defaultValue={inputData.documentTitle}
                     className={styles.inputtext}
                   />
                 </form>
@@ -230,18 +184,33 @@ function Report() {
               fullWidth
               multiline
               rows={10}
-              placeholder="내용을 입력해주세요."
+              defaultValue={inputData.documentContent}
             />
           </Paper>
 
           <div className={styles.savebutton}>
             <Box sx={{ button: { m: 1 } }}>
+              <Link to="/boxes/ds">
+                <Button variant="outlined" size="large">
+                  목록으로
+                </Button>
+              </Link>
+              <Link to="/boxes/ds">
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={async () => {
+                    await deleteBizRpt(params.docId);
+                  }}>
+                  삭제하기
+                </Button>
+              </Link>
               <Button
                 variant="outlined"
                 size="large"
                 onClick={async () => {
                   await insertBizRpt(
-                    docId,
+                    params.docId,
                     3,
                     inputData,
                     empInfo,
@@ -257,7 +226,7 @@ function Report() {
                 size="large"
                 onClick={async () => {
                   await insertBizRpt(
-                    docId,
+                    params.docId,
                     1,
                     inputData,
                     empInfo,
@@ -275,4 +244,4 @@ function Report() {
   );
 }
 
-export default Report;
+export default SavedBusinessReport;

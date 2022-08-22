@@ -21,12 +21,15 @@ import { useOutletContext } from 'react-router-dom';
 import { BsCalendarWeek } from 'react-icons/bs';
 import { ko } from 'date-fns/esm/locale';
 
-function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
+function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
   console.log('sssss');
   console.log(style);
   console.log(openUpdate);
   console.log(setOpenUpdate);
-  const handleClose = () => setOpenUpdate(false);
+  const handleClose = () => {
+    setOpenUpdate(false);
+    window.location.href = '/calendar';
+  };
 
   const [list, setList] = useState([]);
   const [startValue, setStartValue] = useState(list.scheduleStart);
@@ -90,30 +93,33 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
       window.location.href = '/calendar';
     };
     data(inputdata);
+
+    window.location.href = '/calendar';
   };
 
   const deletehandle1 = async () => {
     console.log(openUpdate.scheduleId);
 
     await axios
-      .delete(`http://localhost:8080/api/cal/delete/${openUpdate.scheduleId}`)
+      .delete(`/api/cal/delete/${openUpdate.scheduleId}`)
 
       .then(() => {
         handleClose(false);
       })
       .catch((err) => console.log(err));
 
-    // window.location.href = '/calendar';
+    window.location.href = '/calendar';
   };
 
   console.log(list);
 
   return (
     <Modal
-      open={openUpdate}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description">
+      open={openUpdate.length !== 0 && openUpdate.state}
+      onClose={() => handleClose()}
+      // aria-labelledby="modal-modal-title"
+      // aria-describedby="modal-modal-description"
+    >
       <Box sx={style}>
         <Typography
           id="modal-modal-title"
@@ -159,7 +165,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
             id="startvalue"
             label="시작일"
             type="datetime-local"
-            value={startValue}
+            value={!!startValue && startValue}
             sx={{ width: 250 }}
             onChange={(e) => {
               setStartValue(e.target.value);
@@ -189,7 +195,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
             id="endvalue"
             label="끝나는 일"
             type="datetime-local"
-            value={endvalue}
+            value={!!endvalue && endvalue}
             sx={{ width: 250 }}
             onChange={(e) => {
               setEndValue(e.target.value);
@@ -223,12 +229,12 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
         />
         <br />
         <Button
-          onClick={handleClose}
+          onClick={() => handleClose()}
           sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>
           취소
         </Button>
         <Button
-          onClick={updateHandle}
+          onClick={() => updateHandle()}
           sx={{ fontSize: 30, border: 1, mr: 3, mt: 1 }}>
           수정
         </Button>

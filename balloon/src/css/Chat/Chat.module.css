@@ -10,7 +10,7 @@
   /* display: inline-block; */
   display: flex;
   margin-right: 5px;
-  width: 100%;
+  /* width: 100%; */
   /* height: 2px; */
   border-radius: 7px;
   left: 0;
@@ -23,7 +23,7 @@
   text-align: right;
 
   margin-left: 5px;
-  width: 100%;
+  /* width: 100%; */
 
   /* height: 200px; */
 
@@ -54,6 +54,7 @@
   font-size: 12px;
   display: flex;
   justify-content: center;
+  align-items: flex-end;
 
   /* display: inline-block; */
 }
@@ -75,13 +76,14 @@
   float: right;
   top: 50%;
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-items: flex-end;
 }
 
 .scroll {
-  padding: 5% 0;
-  flex: auto;
+  /* padding: 5% 0; */
+
+  /* flex: auto; */
 }
 
 /* .contain {
@@ -163,27 +165,20 @@
   background-color: white;
   /* margin-right: 30%; */
 }
-
 .chatconvimeline {
-  display: flex;
-  height: 400px;
-  padding: 1rem;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  background-color: #fff;
-  flex-direction: column-reverse;
-  overflow-y: auto;
+  width: 100%;
 }
 
 .scrollbar {
-  height: 500px;
-
+  height: 510px;
+  margin-bottom: 5%;
   max-width: 400px;
   overflow-x: hidden;
 }
 
 .side {
   display: flex;
+  border: 1px solid black;
 }
 
 .chatList {
@@ -227,11 +222,26 @@
   border: 1px solid rgb(90, 89, 89);
   display: flex;
 }
-
+.LastTime {
+  float: right;
+  margin-top: 5px;
+  height: 40px;
+  font-size: 12px;
+}
 .chatRoomList {
   height: 100%;
   border: 1px solid rgb(90, 89, 89);
   display: flex;
+}
+.roomcon:hover {
+  /* background-color: #b1b1b1; */
+  background-color: rgba(190, 204, 209, 0.842);
+}
+.chatName {
+  color: black;
+  font-weight: bold;
+  margin-left: 15px;
+  font-size: 16px;
 }
 
 .olList {
@@ -242,6 +252,7 @@
 .creatIcon {
   color: rgba(12, 12, 12, 0.884);
   text-align: center;
+  transform: scaleX(-1);
 }
 .creatIcon:hover {
   color: rgb(8, 230, 238);
@@ -252,18 +263,16 @@
   margin-bottom: 40vh;
 }
 
-/* .chatRoomBox {
-  display: flex;
-  justify-content: space-around;
-} */
-
-.DeleteBtn {
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
-  float: right;
+.chatRoomBox {
+  border: 1px 0.5px 1px 1px;
 }
 
+.DeleteBtn {
+  float: right;
+}
+.LastTimecon {
+  float: right;
+}
 .chatfont {
   display: flex;
   justify-content: center;
@@ -271,11 +280,14 @@
 }
 .content {
   padding: 10px;
+  font-size: 14px;
+  color: #8b8b8b;
+  height: 40px;
 }
 
-.content:hover {
+/* .content:hover {
   background-color: #b1b1b1;
-}
+} */
 
 .contentContan {
   display: flex;

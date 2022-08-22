@@ -19,7 +19,7 @@ import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
 
 import { FcDocument } from 'react-icons/fc';
-import { getBizRptByBizRptId } from '../../context/ApprovalAxios';
+import { deleteBizRpt, getBizRptByBizRptId } from '../../context/ApprovalAxios';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -42,7 +42,7 @@ const style = {
   textAlign: 'center',
 };
 
-function BizReportInfo() {
+function DeclaredBusinessReportInfo() {
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
@@ -176,7 +176,17 @@ function BizReportInfo() {
 
           <div className={styles.savebutton}>
             <Box sx={{ button: { m: 1 } }}>
-              <Link to="/boxes/dc">
+              <Link to="/boxes/dd">
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={async () => {
+                    await deleteBizRpt(params.docId);
+                  }}>
+                  삭제하기
+                </Button>
+              </Link>
+              <Link to="/boxes/dd">
                 <SaveButton variant="contained" color="success" size="large">
                   목록으로
                 </SaveButton>
@@ -189,4 +199,4 @@ function BizReportInfo() {
   );
 }
 
-export default BizReportInfo;
+export default DeclaredBusinessReportInfo;

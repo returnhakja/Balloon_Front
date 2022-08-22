@@ -7,11 +7,27 @@ import { Checkbox, Container, Grid } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 import Search from 'antd/lib/transfer/search';
 import ChatSide from './ChatSide';
+import CreateChatroom from './CreateRoom';
+import AddCommentIcon from '@mui/icons-material/AddComment';
 
 // import TextField from '@mui/material/TextField';
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 300,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  textAlign: 'center',
+};
+
 function ChatEmpList({ invite, setInvite }) {
   const [chatEmpList, setCEList] = useState([]);
+  const [openCreatChat, setopenCreatChat] = useState(false);
 
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
@@ -42,11 +58,26 @@ function ChatEmpList({ invite, setInvite }) {
             <div className={styles.chatIcon}>
               <div className={styles.text}>사원</div>
               <Grid container justifyContent="flex-end">
-                <Button className="chatIcon">
-                  <Link to={'/createroom'}>
-                    <ChatIcon fontSize="large" className={styles.creatIcon} />
-                  </Link>
+                <Button
+                  className="chatIcon"
+                  onClick={() => {
+                    setopenCreatChat(true);
+                  }}>
+                  {/* <Link to={'/createroom'}> */}
+                  <AddCommentIcon
+                    fontSize="large"
+                    className={styles.creatIcon}
+                  />
+                  {/* </Link> */}
                 </Button>
+                {openCreatChat && (
+                  <CreateChatroom
+                    style={style}
+                    openCreatChat={openCreatChat}
+                    setopenCreatChat={setopenCreatChat}
+                    invite={invite}
+                  />
+                )}
               </Grid>
             </div>
             <hr />

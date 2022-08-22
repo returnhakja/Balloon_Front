@@ -1,6 +1,9 @@
 import axios from 'axios';
+import { Navigate } from 'react-router-dom';
 
-export const getScheduleByEmp = async (empId) => {
+export const getScheduleByEmp = async (empId, setList) => {
+  console.log(empId);
+  console.log(empId);
   const url = '/api/cal/';
   const str = url + empId;
   const list = await axios
@@ -21,7 +24,9 @@ export const getScheduleByEmp = async (empId) => {
     })
     .catch((err) => console.log(err));
 
-  return list;
+  console.log(list);
+
+  setList(list);
 };
 
 export const insertSchedule = async (inputdata, setOpen) => {
@@ -50,6 +55,7 @@ export const insertSchedulList = async (schduleListAdd, setOpen) => {
     })
     .catch((err) => console.log(err));
   setOpen(false);
+  // <Navigate to={'/calendar'} />;
 };
 
 // 수정
@@ -59,12 +65,12 @@ export const deletehandle = async (scheduleId, openUpdate, handleClose) => {
   console.log(scheduleId);
 
   await axios
-    .delete(`http://localhost:8080/cal/delete/${scheduleId}`)
+    .delete(`/api/cal/delete/${scheduleId}`)
 
     .then(() => {
       handleClose(false);
     })
     .catch((err) => console.log(err));
-
+  console.log(openUpdate.scheduleId);
   // window.location.href = '/calendar';
 };
