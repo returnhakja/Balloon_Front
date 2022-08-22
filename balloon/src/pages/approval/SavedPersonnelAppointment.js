@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useOutletContext, useParams } from 'react-router-dom';
+import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
@@ -27,6 +27,7 @@ import { blue } from '@mui/material/colors';
 import { findUnitList } from '../../context/UnitAxios';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 import {
+  deletePA,
   getLatestPA,
   getPAByPAId,
   insertPA,
@@ -52,7 +53,7 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function Pointment() {
+function SavedPersonnelAppointment() {
   const positionArr = [
     '인턴',
     '사원',
@@ -394,6 +395,21 @@ function Pointment() {
 
           <div className={styles.savebutton}>
             <Box sx={{ '& button': { m: 1 } }}>
+              <Link to="/boxes/ds">
+                <Button variant="outlined" size="large">
+                  목록으로
+                </Button>
+              </Link>
+              <Link to="/boxes/ds">
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={async () => {
+                    await deletePA(params.docId);
+                  }}>
+                  삭제하기
+                </Button>
+              </Link>
               <Button
                 variant="outlined"
                 size="large"
@@ -441,4 +457,4 @@ function Pointment() {
   );
 }
 
-export default Pointment;
+export default SavedPersonnelAppointment;

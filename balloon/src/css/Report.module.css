@@ -193,3 +193,7 @@
 .datepicker {
   width: 100%;
 }
+
+.approvalCard {
+  display: flex;
+}
