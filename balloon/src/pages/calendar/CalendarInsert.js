@@ -303,7 +303,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
       );
     });
 
-
     console.log(scheduleListAdd);
 
     insertSchedulList(scheduleListAdd, setOpenInsert);
@@ -312,7 +311,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     onSchCreateChatroom(inviteSchedule);
 
     window.location.href = '/calendar';
-
   };
 
   return (
