@@ -11,7 +11,7 @@ export const findCookieAccessToken = () => {
 
 // 전체 사원 출력 (페이징)
 export const selectEmployeeList = async (setEmpList) => {
-  const url = '/api/emp/list';
+  const url = '/employee/list';
   const str = url + '?page=' + 1 + '&size=' + 10;
   await axios
     .get(str)
@@ -33,7 +33,7 @@ export const plusPage = async (page, setPage) => {
 
 // 전체 사원 출력 (리스트)
 export const selectEmployees = async (setEmpList) => {
-  const url = '/api/emp/emps';
+  const url = '/employee/emps';
   await axios
     .get(url)
     .then((response) => {
@@ -73,7 +73,7 @@ export const getMe = async (setEmpInfo) => {
       Authorization: 'Bearer ' + cookie.cookies.accessToken,
     },
   };
-  const url = '/api/emp/me';
+  const url = '/employee/me';
   await axios
     .get(url, config)
     .then((data) => {
@@ -84,7 +84,7 @@ export const getMe = async (setEmpInfo) => {
 
 // 사번으로 Idcheck
 export const selectEmpByEmpId = async (empId, setIdChk) => {
-  const urlStr = '/api/emp/' + empId;
+  const urlStr = '/employee/' + empId;
   await axios
     .get(urlStr)
     .then(() => {
@@ -99,7 +99,7 @@ export const selectEmpByEmpId = async (empId, setIdChk) => {
 
 // 사번으로 EmpInfo Get
 export const getEmpByEmpId = async (empId, setBotInfo) => {
-  const urlStr = '/api/emp/' + empId;
+  const urlStr = '/employee/' + empId;
   await axios.get(urlStr).then((data) => {
     setBotInfo(data.data);
   });
@@ -107,7 +107,7 @@ export const getEmpByEmpId = async (empId, setBotInfo) => {
 
 // 사번으로 사원 검색 후, 정보 넣기
 export const setEmpInfoByEmpId = async (empId, setEmpInfo) => {
-  const urlStr = '/api/emp/' + empId;
+  const urlStr = '/employee/' + empId;
   await axios
     .get(urlStr)
     .then((response) => response.data)
@@ -126,14 +126,14 @@ export const getEmpListByUnitCode = async () => {
       Authorization: 'Bearer ' + cookie,
     },
   };
-  const url = '/api/approval/line/00030000';
+  const url = '/employee/approval/line/00030000';
 
   await axios.get(url, config).catch((error) => console.log(error));
 };
 
 // 같은 부서내 사원 출력(자신 제외)
 export const getEmpListInSameUnit = async (empId, setCEList) => {
-  const url = '/api/emp/unit/list/';
+  const url = '/employee/unit/list/';
   const urlStr = url + empId;
   await axios
     .get(urlStr)
@@ -170,7 +170,7 @@ export const updateEmployee = async (
 // 사번으로 사원 삭제
 export const deleteEmployee = async (data) => {
   console.log(data);
-  const url = '/api/emp/delete/';
+  const url = '/employee/';
   const urlStr = url + data.empId;
   await axios.delete(urlStr).catch((error) => console.log(error));
   window.location.href = '/management/employee';
