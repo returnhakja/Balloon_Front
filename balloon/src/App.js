@@ -50,6 +50,7 @@ import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
 import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
 import UnitListAddPage from './pages/personnelManagement/UnitListAddPage';
+import ChatNotice from './pages/chat/ChatNotice';
 
 import DeclaredBusinessReportInfo from './pages/approval/DeclaredBusinessReportInfo';
 import DeclaredBusinessTripInfo from './pages/approval/DeclaredBusinessTripInfo';
@@ -179,6 +180,7 @@ function App() {
           <Route path="/chatroom" element={<ChatRoom />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/createroom" element={<CreateRoom invite={invite} />} />
+          <Route path="/chatnotice" element={<ChatNotice />} />
           {/* 조직관리 */}
           <Route path="/management/unit" element={<ManagementUnit />} />
           <Route path="/add/units" element={<UnitListAddPage />} />
