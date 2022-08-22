@@ -19,12 +19,7 @@ import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
 
 import { FcDocument } from 'react-icons/fc';
-import {
-  deleteBizRpt,
-  getBizRptByBizRptId,
-  getLatestBizRpt,
-  insertBizRpt,
-} from '../../context/ApprovalAxios';
+import { deleteBizRpt, getBizRptByBizRptId } from '../../context/ApprovalAxios';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -47,19 +42,19 @@ const style = {
   textAlign: 'center',
 };
 
-function SavedBusinessReport() {
+function DeclaredBusinessReportInfo() {
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
-  const [inputData, setInputData] = useState({});
+  const [bizRptInfo, setBizRptInfo] = useState({});
 
   const params = useParams();
-
+  console.log(params);
   console.log(empInfo);
+  console.log(bizRptInfo);
 
   useEffect(() => {
-    getBizRptByBizRptId(params.docId, setInputData);
-    console.log(inputData);
+    getBizRptByBizRptId(params.docId, setBizRptInfo);
   }, []);
 
   const card = (
@@ -79,7 +74,7 @@ function SavedBusinessReport() {
           variant="h5"
           component="div"
           textAlign="center">
-          {empInfo.empName}
+          {bizRptInfo.empName}
         </Typography>
       </CardContent>
     </React.Fragment>
@@ -101,7 +96,7 @@ function SavedBusinessReport() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>업무기안</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>{inputData.businessReportId}</th>
+              <th className={styles.th}>{bizRptInfo.businessReportId}</th>
             </tr>
           </thead>
 
@@ -112,7 +107,7 @@ function SavedBusinessReport() {
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
                 {' '}
-                {empInfo.empName}({empInfo.empId})
+                {bizRptInfo.empName}({bizRptInfo.emp && bizRptInfo.emp.empId})
               </th>
             </tr>
             <tr align="center" bgcolor="white"></tr>
@@ -121,23 +116,6 @@ function SavedBusinessReport() {
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
-          <button
-            type="button"
-            className={styles.btnnav}
-            onClick={() => {
-              // setOpenModal(true);
-              setOpenapprovalModal(true);
-            }}
-            id="cancelBtn">
-            결재선설정
-          </button>
-          {openapprovalModal && (
-            <ModalApproval
-              openapprovalModal={openapprovalModal}
-              setOpenapprovalModal={setOpenapprovalModal}
-              style={style}
-            />
-          )}
         </div>
         <hr />
         <br />
@@ -153,18 +131,23 @@ function SavedBusinessReport() {
         <table className={styles.table}>
           <thead>
             <tr className={styles.trcon}>
-              <td className={styles.tdleft}>기안제목</td>
+              <td className={styles.tdleftpadding}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
                 {' '}
-                <form>
-                  <input
-                    id="bizRptTitle"
+                {bizRptInfo.documentTitle}
+                {/* <form>
+                  <TextField
                     type="text"
                     name="title"
-                    defaultValue={inputData.documentTitle}
+                    value={bizRptInfo.documentTitle}
                     className={styles.inputtext}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    focused={false}
                   />
-                </form>
+                </form> */}
+                {/* <TextField />*/}
               </td>
             </tr>
           </thead>
@@ -180,22 +163,20 @@ function SavedBusinessReport() {
               justifyContent: 'center',
             }}>
             <TextField
-              id="bizRptContent"
               fullWidth
               multiline
               rows={10}
-              defaultValue={inputData.documentContent}
+              value={bizRptInfo.documentContent}
+              InputProps={{
+                readOnly: true,
+              }}
+              focused={false}
             />
           </Paper>
 
           <div className={styles.savebutton}>
             <Box sx={{ button: { m: 1 } }}>
-              <Link to="/boxes/ds">
-                <Button variant="outlined" size="large">
-                  목록으로
-                </Button>
-              </Link>
-              <Link to="/boxes/ds">
+              <Link to="/boxes/dd">
                 <Button
                   variant="outlined"
                   size="large"
@@ -205,37 +186,11 @@ function SavedBusinessReport() {
                   삭제하기
                 </Button>
               </Link>
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={async () => {
-                  await insertBizRpt(
-                    params.docId,
-                    3,
-                    inputData,
-                    empInfo,
-                    setInputData
-                  );
-                  window.location.href = 'http://localhost:3000/boxes';
-                }}>
-                임시저장
-              </Button>
-              <SaveButton
-                variant="contained"
-                color="success"
-                size="large"
-                onClick={async () => {
-                  await insertBizRpt(
-                    params.docId,
-                    1,
-                    inputData,
-                    empInfo,
-                    setInputData
-                  );
-                  window.location.href = 'http://localhost:3000/boxes';
-                }}>
-                상신하기
-              </SaveButton>
+              <Link to="/boxes/dd">
+                <SaveButton variant="contained" color="success" size="large">
+                  목록으로
+                </SaveButton>
+              </Link>
             </Box>
           </div>
         </div>
@@ -244,4 +199,4 @@ function SavedBusinessReport() {
   );
 }
 
-export default SavedBusinessReport;
+export default DeclaredBusinessReportInfo;

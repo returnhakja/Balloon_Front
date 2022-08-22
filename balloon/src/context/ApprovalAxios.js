@@ -282,3 +282,26 @@ export const insertPA = async (
 
   await axios.post(url, inputData, { headers });
 };
+
+// 문서 삭제 ------------------------------------------------
+
+export const deleteBizRpt = async (docId) => {
+  const url = '/api/bizrpt/';
+  const str = url + docId;
+  console.log(str);
+  await axios.delete(str);
+};
+
+export const deleteBizTp = async (docId) => {
+  const url = '/api/biztp/';
+  const str = url + docId;
+  console.log(str);
+  await axios.delete(str);
+};
+
+export const deletePA = async (docId) => {
+  const url = '/api/pa/';
+  const str = url + docId;
+  console.log(str);
+  await axios.delete(str);
+};

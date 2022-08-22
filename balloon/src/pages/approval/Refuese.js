@@ -162,6 +162,11 @@ function Refuese() {
               pageSize={10}
               rowsPerPageOptions={[10]}
               components={{ Toolbar: GridToolbar }}
+              initialState={{
+                sorting: {
+                  sortModel: [{ field: 'updateTime', sort: 'desc' }],
+                },
+              }}
             />
           </div>
           {/* </div> */}

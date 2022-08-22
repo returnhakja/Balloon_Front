@@ -23,7 +23,7 @@ import ApprovalOngoing from './pages/approval/ApprovalOngoing';
 import ApprovalComplete from './pages/approval/ApprovalComplete';
 import ApprovalRefuse from './pages/approval/ApprovalRefuse';
 import DocumentList from './pages/approval/DocumentList';
-import BusinessReportInfo from './pages/approval/BusinessreportInfo';
+import BusinessReportInfo from './pages/approval/BusinessReportInfo';
 import BusinessTripInfo from './pages/approval/BusinessTripInfo';
 import PersonnelAppointmentInfo from './pages/approval/PersonnelAppointmentInfo';
 
@@ -49,6 +49,10 @@ import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
 import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
 import UnitListAddPage from './pages/personnelManagement/UnitListAddPage';
+
+import DeclaredBusinessReportInfo from './pages/approval/DeclaredBusinessReportInfo';
+import DeclaredBusinessTripInfo from './pages/approval/DeclaredBusinessTripInfo';
+import DeclaredPersonnelAppointmentInfo from './pages/approval/DeclaredPersonnelAppointmentInfo';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
@@ -121,31 +125,36 @@ function App() {
           <Route path="/boxes/dl" element={<DocumentList />} />
 
           {/* 상세 정보 */}
-          <Route path="/doc/br" element={<BusinessReportInfo />} />
           <Route path="/doc/br/:docId" element={<BusinessReportInfo />} />
-          <Route path="/doc/tp" element={<BusinessTripInfo />} />
           <Route path="/doc/tp/:docId" element={<BusinessTripInfo />} />
-          <Route path="/doc/pa" element={<PersonnelAppointmentInfo />} />
           <Route path="/doc/pa/:docId" element={<PersonnelAppointmentInfo />} />
 
           {/* 문서대장 상세 정보 */}
-          <Route path="/doc/cpbr" element={<CompleteBusinessReportInfo />} />
           <Route
             path="/doc/cpbr/:docId"
             element={<CompleteBusinessReportInfo />}
           />
-          <Route path="/doc/cptp" element={<CompleteBusinessTripInfo />} />
           <Route
             path="/doc/cptp/:docId"
             element={<CompleteBusinessTripInfo />}
           />
           <Route
-            path="/doc/cppa"
-            element={<CompletePersonnelAppointmentInfo />}
-          />
-          <Route
             path="/doc/cppa/:docId"
             element={<CompletePersonnelAppointmentInfo />}
+          />
+
+          {/* 상신기안 상세 정보 */}
+          <Route
+            path="/doc/ddbr/:docId"
+            element={<DeclaredBusinessReportInfo />}
+          />
+          <Route
+            path="/doc/ddtp/:docId"
+            element={<DeclaredBusinessTripInfo />}
+          />
+          <Route
+            path="/doc/ddpa/:docId"
+            element={<DeclaredPersonnelAppointmentInfo />}
           />
 
           {/* </Route> */}
@@ -155,11 +164,8 @@ function App() {
           <Route path="/draft/bt" element={<BusinessTrip />} />
           <Route path="/draft/pa" element={<PersonnelAppointment />} />
           {/* 저장된 기안 */}
-          <Route path="/draft/sdbr" element={<SavedBusinessReport />} />
           <Route path="/draft/sdbr/:docId" element={<SavedBusinessReport />} />
-          <Route path="/draft/sdbt" element={<SavedBusinessTrip />} />
           <Route path="/draft/sdbt/:docId" element={<SavedBusinessTrip />} />
-          <Route path="/draft/sdpa" element={<SavedPersonnelAppointment />} />
           <Route
             path="/draft/sdpa/:docId"
             element={<SavedPersonnelAppointment />}
