@@ -328,7 +328,7 @@ export const insertSignupList = async (rows) => {
     console.log(signupChk);
     signupChk.then((check) => {
       console.log(check);
-      if (check.data === true) {
+      if (check && check.data === true) {
         window.location.href = '/management/employee';
       } else {
         alert('정보가 잘못되었습니다.');
