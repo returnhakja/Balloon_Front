@@ -244,10 +244,10 @@ function Chat() {
   };
 
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="xs" className={styles.Listcontainer}>
       <div className={styles.side}>
         <ChatSide />
-        <div className="chatconvimeline">
+        <div className={styles.chatconvimeline}>
           <div className={styles.chatroomname}>
             <h3>
               {chatroomName ? (
@@ -291,8 +291,8 @@ function Chat() {
           {/* <Link to={'/chatroom'}>
               <Button variant="contained">채팅목록 이동</Button>
             </Link> */}
-
-          {/* 채팅방 나가기 */}
+          {/* 
+          // {/* 채팅방 나가기 
           <div className={styles.logoutBtn}>
             <Link to={'/chatroom'}>
               <Button
@@ -306,7 +306,7 @@ function Chat() {
                 <LogoutIcon />
               </Button>
             </Link>
-          </div>
+          </div> */}
 
           {/* 채팅방 인원수 & 이름수정 */}
           {/* <div className={styles.updatename}>
@@ -337,9 +337,22 @@ function Chat() {
                 <GroupIcon />
               </ListItemIcon>
               <ListItemText primary="채팅중인 사람" />
+
               {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </ListItemButton>
-            <Collapse in={open} timeout="auto" unmountOnExit>
+
+            <Collapse
+              in={open}
+              timeout="auto"
+              unmountOnExit
+              sx={{
+                position: 'absolute',
+                width: '100%',
+                background: 'lightgray',
+                paddingTop: 2,
+                maxHeight: 200,
+                overflowY: 'scroll',
+              }}>
               {chatempinfo &&
                 chatempinfo.map((data) => {
                   return (
@@ -354,6 +367,21 @@ function Chat() {
                     </List>
                   );
                 })}
+              {/* 채팅방 나가기 */}
+              <div className={styles.logoutBtn}>
+                <Link to={'/chatroom'}>
+                  <Button
+                    onClick={() =>
+                      onExitRoom(
+                        chatroomId,
+                        empId,
+                        sendExit(client, chatroomId, empInfo)
+                      )
+                    }>
+                    <LogoutIcon />
+                  </Button>
+                </Link>
+              </div>
             </Collapse>
           </List>
           {/* <div>
