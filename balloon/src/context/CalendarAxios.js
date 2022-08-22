@@ -1,9 +1,6 @@
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
 
 export const getScheduleByEmp = async (empId, setList) => {
-  console.log(empId);
-  console.log(empId);
   const url = '/api/cal/';
   const str = url + empId;
   const list = await axios
@@ -22,9 +19,7 @@ export const getScheduleByEmp = async (empId, setList) => {
       });
       return arr;
     })
-    .catch((err) => console.log(err));
-
-  console.log(list);
+    .catch((error) => console.log(error));
 
   setList(list);
 };
@@ -34,12 +29,11 @@ export const insertSchedule = async (inputdata, setOpen) => {
   const headers = {
     'Content-Type': 'application/json',
   };
-  console.log(inputdata);
   await axios
     .post(url, inputdata, {
       headers,
     })
-    .catch((err) => console.log(err));
+    .catch((error) => console.log(error));
 
   setOpen(false);
 };
@@ -53,24 +47,42 @@ export const insertSchedulList = async (schduleListAdd, setOpen) => {
     .post(url, schduleListAdd, {
       headers,
     })
-    .catch((err) => console.log(err));
+    .catch((error) => console.log(error));
   setOpen(false);
-  // <Navigate to={'/calendar'} />;
 };
 
-// 수정
+// 일정 클릭 시 scheduleId 가져오기
+export const getScheduleIdInModal = async (scheduleId, headers, setList) => {
+  await axios
+    .get(`/api/cal/all/${scheduleId}`, headers)
+    .then((response) => {
+      setList(response.data);
+    })
+    .catch((error) => console.log(error));
+};
 
-//삭제
-export const deletehandle = async (scheduleId, openUpdate, handleClose) => {
-  console.log(scheduleId);
+// 일정 수정
+export const updateSchedule = async (inputdata, headers, setOpenUpdate) => {
+  const url = '/api/cal/update';
 
+  await axios
+    .put(url, inputdata, {
+      headers,
+    })
+    .catch((error) => console.log(error));
+  setOpenUpdate(false);
+  window.location.href = '/calendar';
+};
+
+// 일정 삭제
+export const deleteSchedule = async (scheduleId, handleClose) => {
   await axios
     .delete(`/api/cal/delete/${scheduleId}`)
 
     .then(() => {
       handleClose(false);
     })
-    .catch((err) => console.log(err));
-  console.log(openUpdate.scheduleId);
-  // window.location.href = '/calendar';
+    .catch((error) => console.log(error));
+
+  window.location.href = '/calendar';
 };

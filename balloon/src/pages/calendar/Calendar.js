@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
+import CalendarInsert from './CalendarInsert';
+import CalendarUpdate from './CalendarUpdate';
 import { getScheduleByEmp } from '../../context/CalendarAxios';
 import '../../css/Celendar.css';
 import { Button, Container, Typography } from '@mui/material';
@@ -7,8 +9,6 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interaction from '@fullcalendar/interaction';
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
-import CalendarInsert from './CalendarInsert';
-import CalendarUpdate from './CalendarUpdate';
 
 const style = {
   position: 'absolute',
@@ -32,8 +32,6 @@ function Calendar() {
   });
   const [eList, setCEList] = useState([]);
   const [empInfo, setEmpInfo] = useOutletContext();
-  const empId = empInfo.empId;
-  console.log(list);
   const handleDateClick = () => {
     setOpenInsert(true);
   };
@@ -57,18 +55,13 @@ function Calendar() {
   };
 
   useEffect(() => {
-    if (empInfo.length !== 0) {
-      getScheduleByEmp(empInfo.empId, setList);
+    if (list.length === 0) {
+      if (empInfo.length !== 0) {
+        getScheduleByEmp(empInfo.empId, setList);
+      }
     }
-  }, [empInfo]);
+  }, [empInfo, openInsert, openUpdate, list]);
 
-  useEffect(() => {
-    console.log('되나');
-  }, [openInsert, openUpdate]);
-
-  useEffect(() => {
-    console.log(list);
-  }, [list]);
   // 즐겨찾기 캘린더
   // useEffect(() => {
   //   getEmpListInSameUnit(empId, setCEList);

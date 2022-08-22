@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
+import ChatSide from './ChatSide';
+import CreateChatroom from './CreateRoom';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 import styles from '../../css/Chat/Chat.module.css';
 import Button from '@mui/material/Button';
 import { Checkbox, Container, Grid } from '@mui/material';
-import ChatIcon from '@mui/icons-material/Chat';
-import Search from 'antd/lib/transfer/search';
-import ChatSide from './ChatSide';
-import CreateChatroom from './CreateRoom';
+// import ChatIcon from '@mui/icons-material/Chat';
+// import Search from 'antd/lib/transfer/search';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 
 // import TextField from '@mui/material/TextField';
@@ -27,23 +27,45 @@ const style = {
 
 function ChatEmpList({ invite, setInvite }) {
   const [chatEmpList, setCEList] = useState([]);
+  const [chatUnitList, setCUList] = useState([]);
   const [openCreatChat, setopenCreatChat] = useState(false);
 
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
 
+  const returnArr = (list, setCUList) => {
+    const arr = [];
+
+    list.map((row) => {
+      // return arr.push(row.unit.unitCode);
+      return arr.push(row.unit.unitName);
+    });
+
+    const array = arr.filter((row, index) => {
+      return arr.indexOf(row) === index;
+    });
+
+    return setCUList(array);
+  };
+
   // 사원list 출력하기
   useEffect(() => {
-    getEmpListInSameUnit(empId, setCEList);
-    setInvite([]);
-  }, []);
+    if (chatUnitList.length === 0) {
+      if (chatEmpList.length === 0) {
+        getEmpListInSameUnit(empId, setCEList);
+        setInvite([]);
+      } else {
+        setCUList(chatEmpList.unit);
+        returnArr(chatEmpList, setCUList);
+      }
+    }
+  }, [chatEmpList, chatUnitList]);
 
   //초대할 사원을 담아두는 메소드
   // const [invite, setInvite] = useState([]);
   const onInvite = (checked, data) => {
     if (checked) {
       setInvite([...invite, data]);
-      console.log(invite);
     } else {
       setInvite(invite.filter((button) => button !== data));
     }
@@ -56,7 +78,7 @@ function ChatEmpList({ invite, setInvite }) {
           <ChatSide />
           <div className={styles.list}>
             <div className={styles.chatIcon}>
-              <div className={styles.text}>사원</div>
+              <div className={styles.text}>사원 목록</div>
               <Grid container justifyContent="flex-end">
                 <Button
                   className="chatIcon"
@@ -82,23 +104,33 @@ function ChatEmpList({ invite, setInvite }) {
             </div>
             <hr />
             <ol className={styles.olList}>
-              {chatEmpList.map((ce, index) => {
+              {chatUnitList.map((cu, index) => {
                 return (
-                  <div key={index} className={styles.fontlist}>
-                    {/* <img src={ce.photo} alt="사원 이미지" /> */}
-                    {'  '}
-                    <p className={styles.liststyle}>
-                      {ce.empName} {ce.position}
-                      <Checkbox
-                        type="checkbox"
-                        onChange={(e) => {
-                          onInvite(e.currentTarget.checked, ce);
-                        }}
-                        checked={invite.includes(ce) ? true : false}
-                      />
-                    </p>
+                  <div key={index}>
+                    <h2>{cu}</h2>
+                    {chatEmpList.map((ce, index) => {
+                      // if (ce.unit.unitCode === cu) {
+                      if (ce.unit.unitName === cu) {
+                        return (
+                          <div key={index} className={styles.fontlist}>
+                            {/* <img src={ce.photo} alt="사원 이미지" /> */}
+                            {'  '}
+                            <div className={styles.liststyle}>
+                              {ce.empName} {ce.position}
+                              <Checkbox
+                                type="checkbox"
+                                onChange={(e) => {
+                                  onInvite(e.currentTarget.checked, ce);
+                                }}
+                                checked={invite.includes(ce) ? true : false}
+                              />
+                            </div>
 
-                    {/* <span>{ce.position}</span> */}
+                            {/* <span>{ce.position}</span> */}
+                          </div>
+                        );
+                      }
+                    })}
                   </div>
                 );
               })}
