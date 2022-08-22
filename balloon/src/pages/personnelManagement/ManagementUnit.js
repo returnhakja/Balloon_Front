@@ -12,8 +12,6 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/system';
 import Delete from '@mui/icons-material/Delete';
-import PersonAddIcon from '@mui/icons-material/PersonAddAlt1';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import QueueIcon from '@mui/icons-material/Queue';
 import SettingsIcon from '@mui/icons-material/Settings';
 
