@@ -17,13 +17,14 @@ import Save from './pages/approval/Save';
 import Refuese from './pages/approval/Refuese';
 import ApprovalBefore from './pages/approval/ApprovalBefore';
 import BusinessReport from './pages/approval/BusinessReport';
+
 import BusinessTrip from './pages/approval/BusinessTrip';
 import PersonnelAppointment from './pages/approval/PersonnelAppointment';
 import ApprovalOngoing from './pages/approval/ApprovalOngoing';
 import ApprovalComplete from './pages/approval/ApprovalComplete';
 import ApprovalRefuse from './pages/approval/ApprovalRefuse';
 import DocumentList from './pages/approval/DocumentList';
-import BusinessReportInfo from './pages/approval/BusinessreportInfo';
+import BusinessReportInfo from './pages/approval/BusinessReportInfo';
 import BusinessTripInfo from './pages/approval/BusinessTripInfo';
 import PersonnelAppointmentInfo from './pages/approval/PersonnelAppointmentInfo';
 
