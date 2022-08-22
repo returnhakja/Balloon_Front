@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
+import ChatSide from './ChatSide';
+import CreateChatroom from './CreateRoom';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 import styles from '../../css/Chat/Chat.module.css';
 import Button from '@mui/material/Button';
 import { Checkbox, Container, Grid } from '@mui/material';
 // import ChatIcon from '@mui/icons-material/Chat';
 // import Search from 'antd/lib/transfer/search';
-import ChatSide from './ChatSide';
-import CreateChatroom from './CreateRoom';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 
 // import TextField from '@mui/material/TextField';
@@ -41,45 +41,31 @@ function ChatEmpList({ invite, setInvite }) {
       return arr.push(row.unit.unitName);
     });
 
-    console.log(arr);
-
-    const ss = ['라이언', '어피치', '라이언', '어피치'];
-
     const array = arr.filter((row, index) => {
       return arr.indexOf(row) === index;
     });
-    console.log(array);
 
     return setCUList(array);
   };
 
   // 사원list 출력하기
   useEffect(() => {
-    if (chatEmpList.length === 0) {
-      getEmpListInSameUnit(empId, setCEList);
-      setInvite([]);
-    } else {
-      console.log(chatEmpList);
-      setCUList(chatEmpList.unit);
-      // const returnArray = returnArr(chatEmpList, setCUList);
-      // console.log(returnArray);
-      returnArr(chatEmpList, setCUList);
-      // if (chatUnitList.length !== 0) {
-      //   console.log(chatUnitList);
-      // }
+    if (chatUnitList.length === 0) {
+      if (chatEmpList.length === 0) {
+        getEmpListInSameUnit(empId, setCEList);
+        setInvite([]);
+      } else {
+        setCUList(chatEmpList.unit);
+        returnArr(chatEmpList, setCUList);
+      }
     }
-  }, [chatEmpList]);
-
-  useEffect(() => {
-    !!chatUnitList.length && console.log(chatUnitList);
-  }, [chatUnitList]);
+  }, [chatEmpList, chatUnitList]);
 
   //초대할 사원을 담아두는 메소드
   // const [invite, setInvite] = useState([]);
   const onInvite = (checked, data) => {
     if (checked) {
       setInvite([...invite, data]);
-      console.log(invite);
     } else {
       setInvite(invite.filter((button) => button !== data));
     }
