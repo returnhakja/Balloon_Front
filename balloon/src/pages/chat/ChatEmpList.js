@@ -56,7 +56,7 @@ function ChatEmpList({ invite, setInvite }) {
           <ChatSide />
           <div className={styles.list}>
             <div className={styles.chatIcon}>
-              <div className={styles.text}>사원</div>
+              <div className={styles.text}>사원 목록</div>
               <Grid container justifyContent="flex-end">
                 <Button
                   className="chatIcon"

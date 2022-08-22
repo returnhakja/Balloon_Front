@@ -17,7 +17,7 @@ import ChatSide from './ChatSide';
 import { Grid } from '@mui/material';
 import styles from '../../css/Chat/Chat.module.css';
 
-function ChatRoom() {
+function ChatNotice() {
   const [chatroom, setChatroom] = useState([]);
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
@@ -38,7 +38,7 @@ function ChatRoom() {
           <ChatSide />
           <div className={styles.list}>
             <div className={styles.chatfont}>
-              <div className={styles.ChatText}>채팅 목록</div>
+              <div className={styles.ChatText}>공지 사항</div>
             </div>
             <hr />
             <br />
@@ -134,4 +134,4 @@ function ChatRoom() {
     </Container>
   );
 }
-export default ChatRoom;
+export default ChatNotice;

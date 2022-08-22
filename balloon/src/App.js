@@ -23,7 +23,7 @@ import ApprovalOngoing from './pages/approval/ApprovalOngoing';
 import ApprovalComplete from './pages/approval/ApprovalComplete';
 import ApprovalRefuse from './pages/approval/ApprovalRefuse';
 import DocumentList from './pages/approval/DocumentList';
-import BusinessReportInfo from './pages/approval/BusinessreportInfo';
+import BusinessReportInfo from './pages/approval/BusinessReportInfo';
 import BusinessTripInfo from './pages/approval/BusinessTripInfo';
 import PersonnelAppointmentInfo from './pages/approval/PersonnelAppointmentInfo';
 
@@ -49,6 +49,7 @@ import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
 import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
 import UnitListAddPage from './pages/personnelManagement/UnitListAddPage';
+import ChatNotice from './pages/chat/ChatNotice';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
@@ -172,6 +173,7 @@ function App() {
           <Route path="/chatroom" element={<ChatRoom />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/createroom" element={<CreateRoom invite={invite} />} />
+          <Route path="/chatnotice" element={<ChatNotice />} />
           {/* 조직관리 */}
           <Route path="/management/unit" element={<ManagementUnit />} />
           <Route path="/add/units" element={<UnitListAddPage />} />
