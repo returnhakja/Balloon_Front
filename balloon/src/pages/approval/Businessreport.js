@@ -49,9 +49,13 @@ function Report() {
   const [inputData, setInputData] = useState({});
   const [docNum, setDocNum] = useState(0);
   const [docId, setDocId] = useState('');
+  const [approver, setApprover] = useState([]);
+  const [noApprover, setNoApprover] = useState([]);
 
   console.log(empInfo);
   console.log(docNum);
+  console.log(approver);
+  console.log(noApprover);
 
   useEffect(() => {
     getLatestBizRpt(setDocNum);
@@ -59,8 +63,11 @@ function Report() {
       ? setDocId('업무기안' + '-22-' + ('0000000' + (docNum + 1)).slice(-7))
       : setDocId('업무기안-22-0000001');
   }, [docNum]);
+  useEffect(() => {
+    setNoApprover(noApprover);
+  }, [noApprover]);
 
-  const card = (
+  const DfCard = (
     <React.Fragment>
       <CardContent>
         <Typography
@@ -78,6 +85,29 @@ function Report() {
           component="div"
           textAlign="center">
           {empInfo.empName}
+        </Typography>
+      </CardContent>
+    </React.Fragment>
+  );
+
+  const ApCard = (empName) => (
+    <React.Fragment>
+      <CardContent>
+        <Typography
+          sx={{ fontSize: 25 }}
+          color="#00AAFF"
+          gutterBottom
+          textAlign="center">
+          결재자
+        </Typography>
+        <hr />
+        <br />
+        <Typography
+          sx={{ fontSize: 20 }}
+          variant="h5"
+          component="div"
+          textAlign="center">
+          {empName}
         </Typography>
       </CardContent>
     </React.Fragment>
@@ -133,17 +163,36 @@ function Report() {
               openapprovalModal={openapprovalModal}
               setOpenapprovalModal={setOpenapprovalModal}
               style={style}
+              setApprover={setApprover}
+              approver={approver}
+              setNoApprover={setNoApprover}
+              noApprover={noApprover}
             />
           )}
         </div>
         <hr />
         <br />
-        <Card
-          variant="outlined"
-          sx={{ maxWidth: 150 }}
-          style={{ backgroundColor: '#F1F9FF' }}>
-          {card}
-        </Card>
+        <div className={styles.approvalCard}>
+          <Card
+            variant="outlined"
+            sx={{ maxWidth: 150 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {DfCard}
+          </Card>
+          {approver.map((empData) => {
+            console.log(empData);
+
+            return (
+              <Card
+                variant="outlined"
+                sx={{ maxWidth: 150 }}
+                style={{ backgroundColor: '#F1F9FF' }}>
+                {ApCard(empData.empName)}
+              </Card>
+            );
+          })}
+        </div>
+
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>

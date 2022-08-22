@@ -35,7 +35,14 @@ function intersection(a, b) {
   return a.filter((value) => b.indexOf(value) !== -1);
 }
 
-function Modalapproval({ openapprovalModal, setOpenapprovalModal }) {
+function Modalapproval({
+  openapprovalModal,
+  setOpenapprovalModal,
+  setApprover,
+  approver,
+  setNoApprover,
+  noApprover,
+}) {
   const [chatEmpList, setCEList] = useState([]);
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
@@ -52,6 +59,8 @@ function Modalapproval({ openapprovalModal, setOpenapprovalModal }) {
   useEffect(() => {
     getEmpListInSameUnit(empId, setCEList);
   }, []);
+  console.log(noApprover);
+  console.log(approver);
 
   useEffect(() => {
     if (chatEmpList.length !== 0) {
@@ -59,7 +68,11 @@ function Modalapproval({ openapprovalModal, setOpenapprovalModal }) {
       chatEmpList.map((data) => {
         arr.push(data);
       });
-      setLeft(arr);
+      if (approver.length !== 0) {
+        console.log();
+        setLeft(noApprover);
+        setRight(approver);
+      } else setLeft(arr);
     }
   }, [chatEmpList]);
 
@@ -101,28 +114,29 @@ function Modalapproval({ openapprovalModal, setOpenapprovalModal }) {
   const customList = (items) => (
     <Paper sx={{ width: 200, height: 230, overflow: 'auto' }}>
       <List dense component="div" role="list">
-        {items.map((value) => {
-          const labelId = `transfer-list-item-${value}-label`;
-          return (
-            <ListItem
-              key={value.empId}
-              role="listitem"
-              button
-              onClick={handleToggle(value)}>
-              <ListItemIcon>
-                <Checkbox
-                  checked={checked.indexOf(value) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{
-                    'aria-labelledby': labelId,
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${value.empName}`} />
-            </ListItem>
-          );
-        })}
+        {items &&
+          items.map((value) => {
+            const labelId = `transfer-list-item-${value}-label`;
+            return (
+              <ListItem
+                key={value.empId}
+                role="listitem"
+                button
+                onClick={handleToggle(value)}>
+                <ListItemIcon>
+                  <Checkbox
+                    checked={checked.indexOf(value) !== -1}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{
+                      'aria-labelledby': labelId,
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText id={labelId} primary={`${value.empName}`} />
+              </ListItem>
+            );
+          })}
         <ListItem />
       </List>
     </Paper>
@@ -153,7 +167,7 @@ function Modalapproval({ openapprovalModal, setOpenapprovalModal }) {
                   variant="outlined"
                   size="small"
                   onClick={handleAllRight}
-                  disabled={left.length === 0}
+                  disabled={left && left.length === 0}
                   aria-label="move all right">
                   ≫
                 </Button>
@@ -198,7 +212,16 @@ function Modalapproval({ openapprovalModal, setOpenapprovalModal }) {
             sx={{ fontSize: 20, mr: 3, border: 1, mt: 3 }}>
             취소
           </Button>
-          <Button sx={{ fontSize: 20, border: 1, mt: 3 }}>계속</Button>
+          <Button
+            sx={{ fontSize: 20, border: 1, mt: 3 }}
+            onClick={() => {
+              setApprover(right);
+              console.log(left);
+              setNoApprover(left);
+              handleClose(false);
+            }}>
+            계속
+          </Button>
         </div>
       </Box>
     </Modal>
