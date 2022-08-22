@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { set } from 'date-fns';
 import Cookies from 'universal-cookie';
 
 // 회원가입 유효성 검사
@@ -43,32 +42,26 @@ export const signupValidation = async (
     const passwordRegEx = /^(?=.*[a-zA-Z0-9][!@#$%^*+=-][a-zA-Z0-9]).{8,20}$/;
     const passwordRegEx2 = /^(?=.*[a-zA-Z0-9][!@#$%^*+=-]).{8,20}$/;
     const passwordRegEx3 = /^(?=.*[!@#$%^*+=-][a-zA-Z0-9]).{8,20}$/;
-    // const passwordRegEx3 = /^[A-Za-z0-9]{8,20}$/;
     if (!password) {
       alert('비밀번호를 입력해주세요!!');
     } else {
+      //형식에 맞지 않을 경우 아래 콘솔 출력
       if (password.match(passwordRegEx) === null) {
         //형식에 맞지 않을 경우 아래 콘솔 출력
-        console.log('1111111111111');
         if (password.match(passwordRegEx2) === null) {
           //형식에 맞지 않을 경우 아래 콘솔 출력
-          console.log('2222222222222');
           if (password.match(passwordRegEx3) === null) {
-            console.log('333333333333');
             alert('비밀번호 형식을 확인해주세요');
           } else {
             // 맞을 경우 출력
-            console.log('비밀번호 형식이 맞아요');
             cnt--;
           }
         } else {
           // 맞을 경우 출력
-          console.log('비밀번호 형식이 맞아요');
           cnt--;
         }
       } else {
         // 맞을 경우 출력
-        console.log('비밀번호 형식이 맞아요');
         cnt--;
       }
     }
@@ -83,7 +76,6 @@ export const signupValidation = async (
         if (empName.match(nameRegEx2) === null) {
           alert('한글과 영어 외에는 입력하지마세요2!!');
         } else {
-          console.log('asdsad');
           cnt--;
         }
       } else {
@@ -109,35 +101,18 @@ export const signupValidation = async (
   }
 
   if (cnt === 12) {
-    // const salaryRegEx = /^[0-9]+$/;
-    // const salaryRegEx2 = /^[^0]\\d*|^[^0]\\d*\\.{1}\\d*[^0]$|^(0.)\\d*[^0]$/;
     if (!salary) {
       alert('월급을 입력해주세요!!');
     } else {
-      // if (salary.match(salaryRegEx) === null) {
-      //   if (salary.match(salaryRegEx2) === null) {
-      //     console.log(salary.match(salaryRegEx2));
-      //     alert('숫자만 입력해주세요!!');
-      //   } else {
-      //     cnt--;
-      //   }
-      // } else {
-      // }
       salary = parseFloat(salary);
       cnt--;
     }
   }
 
   if (cnt === 11) {
-    // const commissionRegEx = /^[0-9]+$/;
     if (!commission) {
       alert('상여금을 입력해주세요!!');
     } else {
-      // if (commission.match(commissionRegEx) === null) {
-      // alert('숫자만 입력해주세요!!');
-      // } else {
-      // }
-
       commission = parseFloat(commission);
       cnt--;
     }
@@ -245,8 +220,6 @@ export const signupValidation = async (
     }
   }
 
-  console.log(cnt);
-
   if (cnt === 0) {
     const inputData = {
       empId: empId,
@@ -269,17 +242,15 @@ export const signupValidation = async (
       licensePlate: licensePlate,
       photo: photo,
     };
+
     return setDataChk(true), inputData;
   } else {
     return null;
   }
-
-  return null;
 };
 
 // 회원가입
 export const signup = async (inputEmpData) => {
-  console.log(inputEmpData);
   const header = { 'Content-Type': 'application/json' };
   const url = '/auth/signup';
 
@@ -291,7 +262,6 @@ export const signup = async (inputEmpData) => {
 
 // 엑셀로 회원가입
 export const insertSignupList = async (rows) => {
-  console.log(rows);
   const header = { 'Content-Type': 'application/json' };
   const url = '/auth/signuplist';
 
@@ -320,14 +290,11 @@ export const insertSignupList = async (rows) => {
     })
   );
 
-  console.log(inputEmpList);
   if (inputEmpList.length !== 0) {
     const signupChk = axios.post(url, inputEmpList, header).catch((error) => {
       console.log(error);
     });
-    console.log(signupChk);
     signupChk.then((check) => {
-      console.log(check);
       if (check.data === true) {
         window.location.href = '/management/employee';
       } else {

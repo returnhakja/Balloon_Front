@@ -39,7 +39,7 @@ export const selectEmployees = async (setEmpList) => {
     .then((response) => {
       const arr = [];
       response.data.map((data, index) => {
-        arr.push({
+        return arr.push({
           id: index,
           empId: data.empId,
           empName: data.empName,
@@ -169,7 +169,6 @@ export const updateEmployee = async (
 
 // 사번으로 사원 삭제
 export const deleteEmployee = async (data) => {
-  console.log(data);
   const url = '/employee/';
   const urlStr = url + data.empId;
   await axios.delete(urlStr).catch((error) => console.log(error));
