@@ -20,7 +20,7 @@ import { Space, Table, Pagination } from 'antd';
 import { getDocsByEmp } from '../../context/ApprovalAxios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
-function Declare() {
+function Save() {
   const [empInfo, setEmpInfo] = useOutletContext();
 
   const [docList, setDocList] = useState([]);
@@ -65,9 +65,40 @@ function Declare() {
   //   },
   // ];
 
+  function getdocId(params) {
+    let documentId = params.row.docId;
+    console.log(params);
+    if (documentId.includes('업무기안')) {
+      return (
+        <Link to={`/draft/sdbr/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else if (documentId.includes('출장계획')) {
+      return (
+        <Link to={`/draft/sdbt/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else if (documentId.includes('인사명령')) {
+      return (
+        <Link to={`/draft/sdpa/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else {
+      alert('있었는데 아니 없어요.');
+    }
+  }
+
   const columns = [
     { field: 'docId', headerName: '문서번호', width: 160 },
-    { field: 'documentTitle', headerName: '문서제목', width: 350 },
+    {
+      field: 'documentTitle',
+      headerName: '문서제목',
+      width: 350,
+      renderCell: getdocId,
+    },
     { field: 'updateTime', headerName: '처리일자', width: 160 },
   ];
 
@@ -171,4 +202,4 @@ function Declare() {
   );
 }
 
-export default Declare;
+export default Save;

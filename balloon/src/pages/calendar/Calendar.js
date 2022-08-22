@@ -68,6 +68,9 @@ function Calendar() {
     console.log('되나');
   }, [openInsert, openUpdate]);
 
+  useEffect(() => {
+    console.log(list);
+  }, [list]);
   // 즐겨찾기 캘린더
   // useEffect(() => {
   //   getEmpListInSameUnit(empId, setCEList);
@@ -120,31 +123,63 @@ function Calendar() {
           />
         )}
 
-        <FullCalendar
-          locale="ko"
-          initialView="dayGridMonth"
-          initialEvents={list}
-          height="70vh"
-          handleWindowResize="50vw"
-          plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
-          headerToolbar={{
-            left: 'title',
-            center: 'dayGridDay dayGridWeek dayGridMonth',
-            right: 'today prevYear prev next nextYear',
-          }}
-          googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
-          eventSources={{
-            googleCalendarId:
-              'ko.south_korea#holiday@group.v.calendar.google.com',
-            className: '대한민국 휴일',
-            color: 'orange',
-          }}
-          eventBackgroundColor={'black'}
-          eventSourceSuccess={() => console.log('Success EventSource')}
-          eventSourceFailure={() => console.log('Failure EventSource')}
-          dateClick={() => handleDateClick()}
-          eventClick={(e) => handleEventClick(e)}
-        />
+        {list.length !== 0 ? (
+          <FullCalendar
+            locale="ko"
+            initialView="dayGridMonth"
+            initialEvents={list}
+            height="70vh"
+            handleWindowResize="50vw"
+            plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
+            headerToolbar={{
+              left: 'title',
+              center: 'dayGridDay dayGridWeek dayGridMonth',
+              right: 'today prevYear prev next nextYear',
+            }}
+            googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
+            eventSources={{
+              googleCalendarId:
+                'ko.south_korea#holiday@group.v.calendar.google.com',
+              className: '대한민국 휴일',
+              color: 'orange',
+            }}
+            eventBackgroundColor={'black'}
+            eventSourceSuccess={() => console.log('Success EventSource')}
+            eventSourceFailure={() => console.log('Failure EventSource')}
+            dateClick={() => handleDateClick()}
+            eventClick={(e) => handleEventClick(e)}
+          />
+        ) : (
+          <>
+            {/* {console.log(list)} */}
+            <FullCalendar
+              locale="ko"
+              initialView="dayGridMonth"
+              initialEvents={list}
+              height="70vh"
+              handleWindowResize="50vw"
+              plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
+              headerToolbar={{
+                left: 'title',
+                center: 'dayGridDay dayGridWeek dayGridMonth',
+                right: 'today prevYear prev next nextYear',
+              }}
+              googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
+              eventSources={{
+                googleCalendarId:
+                  'ko.south_korea#holiday@group.v.calendar.google.com',
+                className: '대한민국 휴일',
+                color: 'orange',
+              }}
+              eventBackgroundColor={'black'}
+              eventSourceSuccess={() => console.log('Success EventSource')}
+              eventSourceFailure={() => console.log('Failure EventSource')}
+              dateClick={() => handleDateClick()}
+              eventClick={(e) => handleEventClick(e)}
+            />
+          </>
+        )}
+
       </Container>
     </div>
   );

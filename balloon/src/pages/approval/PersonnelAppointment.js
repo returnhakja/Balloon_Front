@@ -9,28 +9,24 @@ import {
   Card,
   CardContent,
   Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   TextField,
-  ToggleButtonGroup,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-
+import { FcDocument } from 'react-icons/fc';
 import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
-import { FcDocument } from 'react-icons/fc';
-import { getLatestBizTP, insertBizTp } from '../../context/ApprovalAxios';
-const SaveButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.getContrastText(blue[500]),
-  backgroundColor: blue[500],
-  '&:hover': {
-    backgroundColor: blue[700],
-  },
-}));
-
+import { findUnitList } from '../../context/UnitAxios';
+import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
+import { getLatestPA, insertPA } from '../../context/ApprovalAxios';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -44,30 +40,64 @@ const style = {
   textAlign: 'center',
 };
 
-function Trip() {
-  // 날짜 관련
-  const [startValue, setStartValue] = useState(null);
-  const [endvalue, setEndValue] = useState(null);
-  const [inputData, setInputData] = useState({});
+const SaveButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(blue[500]),
+  backgroundColor: blue[500],
+  '&:hover': {
+    backgroundColor: blue[700],
+  },
+}));
+
+function Pointment() {
+  const positionArr = [
+    '인턴',
+    '사원',
+    '주임',
+    '대리',
+    '과장',
+    '차장',
+    '부장',
+    '이사',
+    '상무',
+    '전무',
+    '부사장',
+    '사장',
+    '부회장',
+    '이사회 의장',
+    '회장',
+  ];
+  const [posi, setPosi] = useState('');
+  const [units, setUnits] = useState('');
+  const [unit, setUnit] = useState('');
+  const [mEmpInfo, setMEmpInfo] = useState('');
+  const [mEmp, setMEmp] = useState('');
   const [docNum, setDocNum] = useState(0);
   const [docId, setDocId] = useState('');
+
+  // 날짜 관련
+  const [startValue, setStartValue] = useState(null);
 
   // 모달
   // const [openModal, setOpenModal] = useState(false);
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
+
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
+  const [inputData, setInputData] = useState({});
 
   useEffect(() => {
-    getLatestBizTP(setDocNum);
+    findUnitList(setUnits);
+    getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
+    console.log(mEmpInfo);
+  }, []);
+
+  useEffect(() => {
+    getLatestPA(setDocNum);
     console.log(docNum);
     docNum !== 0
-      ? setDocId('출장계획' + '-22-' + ('0000000' + (docNum + 1)).slice(-7))
-      : setDocId('출장계획-22-0000001');
+      ? setDocId('인사명령' + '-22-' + ('0000000' + (docNum + 1)).slice(-7))
+      : setDocId('인사명령-22-0000001');
   }, [docNum]);
-
-  console.log(empInfo);
-  console.log(docId);
 
   const card = (
     <React.Fragment>
@@ -97,14 +127,14 @@ function Trip() {
       <Container>
         <p className={styles.maintitle}>
           <FcDocument />
-          출장계획서
+          인사명령
         </p>
 
         <table className={styles.table}>
           <thead>
             <tr align="center" bgcolor="white">
               <td className={styles.tdleft}>기안양식</td>
-              <td className={styles.td}>출장계획서</td>
+              <td className={styles.td}>인사명령</td>
               <td className={styles.tdright}>문서번호</td>
               <th className={styles.th}>{docId}</th>
             </tr>
@@ -123,7 +153,6 @@ function Trip() {
             <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
-
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
           <button
@@ -164,7 +193,7 @@ function Trip() {
                 {' '}
                 <form>
                   <input
-                    id="bizTpTitle"
+                    id="PATitle"
                     type="text"
                     name="title"
                     placeholder="기안제목을 입력하세요."
@@ -181,38 +210,11 @@ function Trip() {
         <table className={styles.tableborder}>
           <thead>
             <tr className={styles.trcon}>
-              <td className={styles.titlename}>신청자 정보</td>
-              <td className={styles.titlename} colSpan={2}>
-                {empInfo.empName} ({empInfo.empId})
-              </td>
-            </tr>
-          </thead>
-          <tbody className={styles.tbodyin}>
-            <tr align="center">
-              <td className={styles.titlename}>동반 출장자</td>
-              <td className={styles.titlename} colSpan={2}>
-                {' '}
-                이거 일단 없음
-              </td>
-              <td className={styles.titlename}></td>
-            </tr>
-            <tr align="center">
-              <td colSpan={3} className={styles.tdmargin}>
-                상세내용
-              </td>
-            </tr>
-
-            <tr className={styles.trcolor}>
-              <td className={styles.tdreaui}>방문기간</td>
-              <td className={styles.tdreaui}>방문처</td>
-              <td className={styles.tdreaui}>방문목적</td>
-            </tr>
-
-            <tr>
-              <td className={styles.tdreaui}>
+              <td className={styles.titlename}>인사명령일</td>
+              <td className={styles.titlename} colSpan={4}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
-                    label="시작일"
+                    label="일자 선택"
                     value={startValue}
                     type=" date"
                     inputFormat={'yyyy-MM-dd'}
@@ -222,41 +224,87 @@ function Trip() {
                     renderInput={(params) => <TextField {...params} />}
                   />
                 </LocalizationProvider>
+              </td>
+            </tr>
+          </thead>
+          <tbody className={styles.tbodyin}>
+            <tr className={styles.trcolor}>
+              <td className={styles.tdreaui}>구성원명</td>
+              <td className={styles.tdreaui}>발령부서</td>
+              <td className={styles.tdreaui}>발령직위</td>
+            </tr>
 
-                <span className={styles.centerfont}> : </span>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    label="끝나는일"
-                    value={endvalue}
-                    inputFormat={'yyyy-MM-dd'}
-                    onChange={(newValue) => {
-                      setEndValue(newValue);
+            <tr>
+              <td className={styles.tdreaui}>
+                <FormControl fullWidth>
+                  <InputLabel>구성원을 설정해주세요</InputLabel>
+                  <Select
+                    id="mEmp"
+                    label="구성원을 선택하세요"
+                    value={mEmp}
+                    placeholder="구성원을 선택하세요"
+                    onChange={(e) => {
+                      setMEmp(e.target.value);
+                      console.log(mEmp);
                     }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
+
+                    // className={styles.inputtext}
+                  >
+                    {mEmpInfo &&
+                      mEmpInfo.map((mEmps) => (
+                        <MenuItem key={mEmps.empId} value={mEmps}>
+                          {mEmps.empName} ({mEmps.empId})
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
               </td>
               <td className={styles.tdreaui}>
-                <form>
-                  <input
-                    id="destination"
-                    type="text"
-                    name="title"
-                    placeholder="방문처를 입력하세요"
-                    className={styles.inputtext}
-                  />
-                </form>
+                <FormControl fullWidth>
+                  <InputLabel>부서를 설정해주세요</InputLabel>
+                  <Select
+                    id="unit1"
+                    label="발령부서를 선택하세요"
+                    value={unit}
+                    placeholder=" 발령부서를 선택하세요"
+                    onChange={(e) => {
+                      setUnit(e.target.value);
+                      console.log(unit);
+                    }}
+
+                    // className={styles.inputtext}
+                  >
+                    {units &&
+                      units.map((unitInfo) => (
+                        <MenuItem key={unitInfo.unitId} value={unitInfo}>
+                          {unitInfo.unitName}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
               </td>
               <td className={styles.tdreaui}>
-                <form>
-                  <input
-                    id="visitingPurpose"
-                    type="text"
-                    name="title"
-                    placeholder="방문 목적을 입력하세요"
-                    className={styles.inputtext}
-                  />
-                </form>
+                <FormControl fullWidth>
+                  <InputLabel>직위를 설정해주세요</InputLabel>
+                  <Select
+                    id="position"
+                    label="발령직위를 선택하세요"
+                    value={posi}
+                    placeholder=" 발령직위를 선택하세요"
+                    onChange={(e) => {
+                      setPosi(e.target.value);
+                      console.log(posi);
+                    }}
+
+                    // className={styles.inputtext}
+                  >
+                    {positionArr.map((position) => (
+                      <MenuItem key={position} value={position}>
+                        {position}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </td>
             </tr>
           </tbody>
@@ -272,7 +320,7 @@ function Trip() {
               justifyContent: 'center',
             }}>
             <TextField
-              id="bizTpContent"
+              id="PAContent"
               fullWidth
               multiline
               rows={10}
@@ -286,13 +334,15 @@ function Trip() {
                 variant="outlined"
                 size="large"
                 onClick={async () => {
-                  await insertBizTp(
-                    docId && docId,
+                  await insertPA(
+                    docId,
                     3,
                     inputData,
                     empInfo,
                     startValue,
-                    endvalue,
+                    mEmp,
+                    unit,
+                    posi,
                     setInputData
                   );
                   window.location.href = 'http://localhost:3000/boxes';
@@ -304,13 +354,15 @@ function Trip() {
                 color="success"
                 size="large"
                 onClick={async () => {
-                  await insertBizTp(
-                    docId && docId,
+                  await insertPA(
+                    docId,
                     1,
                     inputData,
                     empInfo,
                     startValue,
-                    endvalue,
+                    mEmp,
+                    unit,
+                    posi,
                     setInputData
                   );
                   window.location.href = 'http://localhost:3000/boxes';
@@ -325,4 +377,4 @@ function Trip() {
   );
 }
 
-export default Trip;
+export default Pointment;

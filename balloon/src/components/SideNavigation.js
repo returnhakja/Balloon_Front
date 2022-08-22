@@ -49,7 +49,7 @@ const SideNavigation = ({ children }) => {
 
           <Menu iconShape="square">
             <Menuitem icon={<BsPencilFill />}>
-              <Link to={'/dratf/form'}>기안작성</Link>
+              <Link to={'/draft/form'}>기안작성</Link>
             </Menuitem>
 
             <SubMenu title="기안함" icon={<FaThList />}>
