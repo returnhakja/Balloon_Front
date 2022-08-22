@@ -8,6 +8,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import Search from 'antd/lib/transfer/search';
 import ChatSide from './ChatSide';
 import CreateChatroom from './CreateRoom';
+import AddCommentIcon from '@mui/icons-material/AddComment';
 
 // import TextField from '@mui/material/TextField';
 
@@ -63,7 +64,10 @@ function ChatEmpList({ invite, setInvite }) {
                     setopenCreatChat(true);
                   }}>
                   {/* <Link to={'/createroom'}> */}
-                  <ChatIcon fontSize="large" className={styles.creatIcon} />
+                  <AddCommentIcon
+                    fontSize="large"
+                    className={styles.creatIcon}
+                  />
                   {/* </Link> */}
                 </Button>
                 {openCreatChat && (

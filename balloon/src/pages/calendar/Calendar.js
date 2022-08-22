@@ -35,7 +35,7 @@ function Calendar() {
   const [eList, setCEList] = useState([]);
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
-
+  console.log(list);
   const handleDateClick = () => {
     setOpenInsert(true);
   };
@@ -122,6 +122,7 @@ function Calendar() {
             empInfo={empInfo}
           />
         )}
+
         {list.length !== 0 ? (
           <FullCalendar
             locale="ko"
@@ -178,6 +179,7 @@ function Calendar() {
             />
           </>
         )}
+
       </Container>
     </div>
   );

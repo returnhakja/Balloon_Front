@@ -113,7 +113,6 @@ function Report() {
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
-            <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
