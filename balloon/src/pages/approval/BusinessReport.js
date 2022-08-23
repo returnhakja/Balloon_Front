@@ -252,13 +252,13 @@ function Report() {
                     setInputData
                   );
                   {
-                    approver.map((data, index) => {
+                    approver.map(async (data, index) => {
                       console.log(data);
                       console.log(index);
-                      insertApproval(docId, 0, data, inputData, empInfo);
+                      await insertApproval(docId, 0, data, inputData, empInfo);
                     });
                   }
-                  window.location.href = 'http://localhost:3000/boxes';
+                  window.location.href = '/boxes';
                 }}>
                 임시저장
               </Button>
@@ -275,7 +275,7 @@ function Report() {
                       empInfo,
                       setInputData
                     );
-                    window.location.href = 'http://localhost:3000/boxes';
+                    window.location.href = '/boxes';
                   } else {
                     alert('결재선을 설정해주세요 !');
                   }

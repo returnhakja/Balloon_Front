@@ -38,7 +38,7 @@ function intersection(a, b) {
   return a.filter((value) => b.indexOf(value) !== -1);
 }
 
-function Modalapproval({
+function ModalApproval({
   openapprovalModal,
   setOpenapprovalModal,
   setApprover,
@@ -235,4 +235,4 @@ function Modalapproval({
   );
 }
 
-export default Modalapproval;
+export default ModalApproval;

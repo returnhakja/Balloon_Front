@@ -3,6 +3,7 @@ import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import styles from '../../css/Chat/Chat.module.css';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
+import ScrollToBottom from 'react-scroll-to-bottom';
 import SendIcon from '@mui/icons-material/Send';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ScrollToBottom from 'react-scroll-to-bottom';
