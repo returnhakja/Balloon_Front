@@ -55,7 +55,6 @@ import ChatNotice from './pages/chat/ChatNotice';
 import DeclaredBusinessReportInfo from './pages/approval/DeclaredBusinessReportInfo';
 import DeclaredBusinessTripInfo from './pages/approval/DeclaredBusinessTripInfo';
 import DeclaredPersonnelAppointmentInfo from './pages/approval/DeclaredPersonnelAppointmentInfo';
-import NotFound from './pages/NotFound';
 
 import NotFound from './pages/NotFound';
 
