@@ -153,7 +153,7 @@ function Calendar() {
             <FullCalendar
               locale="ko"
               initialView="dayGridMonth"
-              initialEvents={list}
+              // initialEvents={list}
               height="70vh"
               handleWindowResize="50vw"
               plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
@@ -163,12 +163,12 @@ function Calendar() {
                 right: 'today prevYear prev next nextYear',
               }}
               googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
-              eventSources={{
+              events={{
                 googleCalendarId:
                   'ko.south_korea#holiday@group.v.calendar.google.com',
-                className: '대한민국 휴일',
                 color: 'orange',
               }}
+              eventSources={list}
               eventBackgroundColor={'black'}
               eventSourceSuccess={() => console.log('Success EventSource')}
               eventSourceFailure={() => console.log('Failure EventSource')}

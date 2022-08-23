@@ -256,14 +256,18 @@ function Report() {
                 color="success"
                 size="large"
                 onClick={async () => {
-                  await insertBizRpt(
-                    docId,
-                    1,
-                    inputData,
-                    empInfo,
-                    setInputData
-                  );
-                  window.location.href = 'http://localhost:3000/boxes';
+                  if (approver != 0) {
+                    await insertBizRpt(
+                      docId,
+                      1,
+                      inputData,
+                      empInfo,
+                      setInputData
+                    );
+                    window.location.href = 'http://localhost:3000/boxes';
+                  } else {
+                    alert('결재선을 설정해주세요 !');
+                  }
                 }}>
                 상신하기
               </SaveButton>

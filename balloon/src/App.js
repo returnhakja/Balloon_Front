@@ -55,6 +55,7 @@ import ChatNotice from './pages/chat/ChatNotice';
 import DeclaredBusinessReportInfo from './pages/approval/DeclaredBusinessReportInfo';
 import DeclaredBusinessTripInfo from './pages/approval/DeclaredBusinessTripInfo';
 import DeclaredPersonnelAppointmentInfo from './pages/approval/DeclaredPersonnelAppointmentInfo';
+import NotFound from './pages/NotFound';
 
 import NotFound from './pages/NotFound';
 
@@ -190,6 +191,7 @@ function App() {
           <Route path="/management/employee" element={<ManagementEmployee />} />
           <Route path="/add/employee" element={<EmpAddPage />} />
           <Route path="/add/employees" element={<EmpListAddPage />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>
