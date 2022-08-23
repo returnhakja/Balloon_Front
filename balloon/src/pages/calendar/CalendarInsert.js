@@ -131,6 +131,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
   const [botRoom, setBotRoom] = useState([]);
   const botChatroom = () => {
+
     axios.post(`/cre/botchatroom`, inviteSchedule).then((response) => {
       console.log(response.data);
       setBotRoom(response.data);
