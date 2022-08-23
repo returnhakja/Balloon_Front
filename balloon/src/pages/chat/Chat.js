@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import styles from '../../css/Chat/Chat.module.css';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {
@@ -33,10 +33,13 @@ import GroupIcon from '@mui/icons-material/Group';
 
 import ChatSide from './ChatSide';
 
+const scrollToBottom = () => {
+  document.getElementById('scroller').scroll(0, 1000);
+};
+
 function Chat() {
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
-
   const chatroomId = new URL(document.location).searchParams.get('room');
   const [input, setInput] = useState([]);
   const inputRef = useRef();
@@ -274,7 +277,7 @@ function Chat() {
                 })}
               {/* 채팅방 나가기 */}
               <div className={styles.logoutBtn}>
-                <Link to={'/chatroom'}>
+                <Link to={'/chatlist'}>
                   <Button
                     onClick={() =>
                       onExitRoom(
@@ -304,7 +307,7 @@ function Chat() {
         <button onClick={onUserAdd}>사원초대하기</button>
       </div> */}
 
-          <div className={styles.scrollbar}>
+          <div className={styles.scrollbar} id="scroller">
             {/* 채팅기록을 가져옴 */}
             {chatting.map((msg, index) => {
               const chatTime = msg.chatTime.substr(11, 5);
@@ -420,6 +423,8 @@ function Chat() {
                   inputRef.current.value && send();
                   inputRef.current.focus();
                   inputRef.current.value = '';
+                  // inputRef.current.scroll(0, 1000);
+                  // scrollToBottom();
                 }}>
                 {' '}
                 전송

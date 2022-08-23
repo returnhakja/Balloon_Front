@@ -179,8 +179,8 @@ function App() {
             path="/chatemplist"
             element={<ChatEmpList invite={invite} setInvite={setInvite} />}
           />
-          <Route path="/chatroom" element={<ChatRoom />} />
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/chatlist" element={<ChatRoom />} />
+          <Route path="/chatting" element={<Chat />} />
           <Route path="/createroom" element={<CreateRoom invite={invite} />} />
           <Route path="/chatnotice" element={<ChatNotice />} />
           {/* 조직관리 */}

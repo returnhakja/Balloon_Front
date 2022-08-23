@@ -17,7 +17,7 @@ function ChatSide({ children }) {
               <PersonIcon fontSize="large" />
             </li>
           </Link>
-          <Link to={'/chatroom'}>
+          <Link to={'/chatlist'}>
             <li className={styles.listyle}>
               <ChatIcon fontSize="large" />
             </li>
