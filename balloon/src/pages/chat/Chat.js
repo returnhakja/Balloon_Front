@@ -5,6 +5,7 @@ import styles from '../../css/Chat/Chat.module.css';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
 import LogoutIcon from '@mui/icons-material/Logout';
+import ScrollToBottom from 'react-scroll-to-bottom';
 import {
   Button,
   Collapse,
@@ -239,13 +240,13 @@ function Chat() {
         </Button>
       </div> */}
           {/* <div>{modalOpen == true ? <Modal /> : null}</div> */}
-          <List>
+          <List sx={{ zIndex: 5 }}>
             <ListItemButton onClick={handleClick}>
               <ListItemIcon>
                 <GroupIcon />
               </ListItemIcon>
               <ListItemText primary="채팅중인 사람" />
-
+              {/* 테[스트] */}
               {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </ListItemButton>
 
@@ -307,7 +308,7 @@ function Chat() {
         <button onClick={onUserAdd}>사원초대하기</button>
       </div> */}
 
-          <div className={styles.scrollbar} id="scroller">
+          <ScrollToBottom className={styles.scrollbar} id="scroller">
             {/* 채팅기록을 가져옴 */}
             {chatting.map((msg, index) => {
               const chatTime = msg.chatTime.substr(11, 5);
@@ -336,7 +337,7 @@ function Chat() {
                 </div>
               );
             })}
-          </div>
+          </ScrollToBottom>
 
           <div className={styles.scroll}>
             <div className={styles.contain}>
