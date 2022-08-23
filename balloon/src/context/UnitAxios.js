@@ -24,7 +24,7 @@ export const findUnitList = async (setUnits) => {
 export const insertUnitList = async (rows) => {
   console.log(rows);
   const header = { 'Content-Type': 'application/json' };
-  const url = '/unit/add';
+  const url = '/unit/list';
 
   const inputUnit = [];
   rows.forEach((element) => {
@@ -64,7 +64,7 @@ export const deleteUnit = async (data) => {
   window.location.href = '/management/unit';
 };
 
-// 조직 번호로 조직 업데이트
+// 조직 번호로 조직 업데이트 - 미완
 export const updateUnit = async (data) => {
   console.log(data);
   // const url = '/unit/change';

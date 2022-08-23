@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import axios from 'axios';
 import { Link, useOutletContext } from 'react-router-dom';
 
 import Input from '@mui/material/Input';
