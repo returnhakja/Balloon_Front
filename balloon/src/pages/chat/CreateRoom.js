@@ -55,7 +55,7 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
           }}>
           등록
         </Button>
-        <Link to={`/chat?room=${roomId}`}>
+        <Link to={`/chatting?room=${roomId}`}>
           <Button
             variant="contained"
             onClick={() => onUserInvite(chatroomId, invite, client)}>

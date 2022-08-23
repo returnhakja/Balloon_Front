@@ -95,7 +95,7 @@ function ChatRoom() {
                                 )
                               );
 
-                              window.location.href = '/chatroom';
+                              window.location.href = '/chatlist';
                             };
 
                             return roomDelete();
