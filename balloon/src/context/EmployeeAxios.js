@@ -146,7 +146,7 @@ export const getEmpListInSameUnit = async (empId, setCEList) => {
 
 // 같은 부서내 결재 사원 출력(자신 제외, 인턴 제외)
 export const getApvrListInSameUnit = async (empId, setCEList) => {
-  const url = '/api/apvr/unit/list/';
+  const url = '/employee/apvr/unit/list/';
   const urlStr = url + empId;
   await axios
     .get(urlStr)
