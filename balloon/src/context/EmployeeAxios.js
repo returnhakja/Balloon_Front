@@ -144,6 +144,19 @@ export const getEmpListInSameUnit = async (empId, setCEList) => {
     .catch((error) => console.log(error));
 };
 
+// 같은 부서내 결재 사원 출력(자신 제외, 인턴 제외)
+export const getApvrListInSameUnit = async (empId, setCEList) => {
+  const url = '/api/apvr/unit/list/';
+  const urlStr = url + empId;
+  await axios
+    .get(urlStr)
+    .then((response) => response.data)
+    .then((data) => {
+      setCEList(data);
+    })
+    .catch((error) => console.log(error));
+};
+
 // 사원 수정
 export const updateEmployee = async (
   data

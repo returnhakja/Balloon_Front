@@ -190,6 +190,7 @@ function App() {
           <Route path="/management/employee" element={<ManagementEmployee />} />
           <Route path="/add/employee" element={<EmpAddPage />} />
           <Route path="/add/employees" element={<EmpListAddPage />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

@@ -22,7 +22,11 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
 import { FcDocument } from 'react-icons/fc';
-import { getLatestBizTP, insertBizTp } from '../../context/ApprovalAxios';
+import {
+  getLatestBizTP,
+  insertApproval,
+  insertBizTp,
+} from '../../context/ApprovalAxios';
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
   backgroundColor: blue[500],
@@ -51,6 +55,8 @@ function Trip() {
   const [inputData, setInputData] = useState({});
   const [docNum, setDocNum] = useState(0);
   const [docId, setDocId] = useState('');
+  const [approver, setApprover] = useState([]);
+  const [noApprover, setNoApprover] = useState([]);
 
   // 모달
   // const [openModal, setOpenModal] = useState(false);
@@ -66,10 +72,14 @@ function Trip() {
       : setDocId('출장계획-22-0000001');
   }, [docNum]);
 
+  useEffect(() => {
+    setNoApprover(noApprover);
+  }, [noApprover]);
+
   console.log(empInfo);
   console.log(docId);
 
-  const card = (
+  const DfCard = (
     <React.Fragment>
       <CardContent>
         <Typography
@@ -87,6 +97,29 @@ function Trip() {
           component="div"
           textAlign="center">
           {empInfo.empName}
+        </Typography>
+      </CardContent>
+    </React.Fragment>
+  );
+
+  const ApCard = (empName) => (
+    <React.Fragment>
+      <CardContent>
+        <Typography
+          sx={{ fontSize: 25 }}
+          color="#00AAFF"
+          gutterBottom
+          textAlign="center">
+          결재자
+        </Typography>
+        <hr />
+        <br />
+        <Typography
+          sx={{ fontSize: 20 }}
+          variant="h5"
+          component="div"
+          textAlign="center">
+          {empName}
         </Typography>
       </CardContent>
     </React.Fragment>
@@ -143,16 +176,34 @@ function Trip() {
             openapprovalModal={openapprovalModal}
             setOpenapprovalModal={setOpenapprovalModal}
             style={style}
+            setApprover={setApprover}
+            approver={approver}
+            setNoApprover={setNoApprover}
+            noApprover={noApprover}
           />
         )}
         <hr />
         <br />
-        <Card
-          variant="outlined"
-          sx={{ maxWidth: 150 }}
-          style={{ backgroundColor: '#F1F9FF' }}>
-          {card}
-        </Card>
+        <div className={styles.approvalCard}>
+          <Card
+            variant="outlined"
+            sx={{ maxWidth: 150 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {DfCard}
+          </Card>
+          {approver.map((empData) => {
+            console.log(empData);
+
+            return (
+              <Card
+                variant="outlined"
+                sx={{ maxWidth: 150 }}
+                style={{ backgroundColor: '#F1F9FF' }}>
+                {ApCard(empData.empName)}
+              </Card>
+            );
+          })}
+        </div>
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>
@@ -295,6 +346,13 @@ function Trip() {
                     endvalue,
                     setInputData
                   );
+                  {
+                    approver.map((data, index) => {
+                      console.log(data);
+                      console.log(index);
+                      insertApproval(docId, 0, data, inputData, empInfo);
+                    });
+                  }
                   window.location.href = 'http://localhost:3000/boxes';
                 }}>
                 임시저장

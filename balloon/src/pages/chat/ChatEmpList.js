@@ -124,8 +124,6 @@ function ChatEmpList({ invite, setInvite }) {
                               }}
                               checked={invite.includes(ce) ? true : false}
                             />
-                            {/* </div> */}
-                            {/* </div> */}
                             {/* <span>{ce.position}</span> */}
                           </div>
                         );
