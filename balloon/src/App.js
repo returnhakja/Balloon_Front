@@ -56,6 +56,7 @@ import DeclaredBusinessReportInfo from './pages/approval/DeclaredBusinessReportI
 import DeclaredBusinessTripInfo from './pages/approval/DeclaredBusinessTripInfo';
 import DeclaredPersonnelAppointmentInfo from './pages/approval/DeclaredPersonnelAppointmentInfo';
 import NotFound from './pages/NotFound';
+import PaymentDeclare from './pages/approval/PaymentDeclare';
 
 import NotFound from './pages/NotFound';
 
@@ -128,6 +129,7 @@ function App() {
           <Route path="/boxes/ac" element={<ApprovalComplete />} />
           <Route path="/boxes/ar" element={<ApprovalRefuse />} />
           <Route path="/boxes/dl" element={<DocumentList />} />
+          <Route path="/boxes/pd" element={<PaymentDeclare />} />
 
           {/* 상세 정보 */}
           <Route path="/doc/br/:docId" element={<BusinessReportInfo />} />
