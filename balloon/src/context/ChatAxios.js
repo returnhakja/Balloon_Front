@@ -6,6 +6,7 @@ export const onChatroom = async (setChatroom, empId) => {
   axios.get(`/chat/allchat/${empId}`).then((response) => {
     setChatroom(response.data);
     // console.log(response.data);
+    console.log('chatroom');
   });
 };
 

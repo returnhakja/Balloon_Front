@@ -24,6 +24,7 @@ function ChatRoom() {
   const client = Stomp.over(sock);
 
   //마지막으로 보낸 채팅list가져오기
+  console.log(empId);
   useEffect(() => {
     if (empId) {
       onChatroom(setChatroom, empId);
@@ -49,7 +50,7 @@ function ChatRoom() {
               console.log(chat.chatroom.chatroomName.substr(0, 15));
               return (
                 <div className={styles.roomcon} key={index}>
-                  <Link to={`/chat?room=${chat.chatroom.chatroomId}`}>
+                  <Link to={`/chatting?room=${chat.chatroom.chatroomId}`}>
                     <Box
                       className={styles.chatRoomBox}
                       sx={
