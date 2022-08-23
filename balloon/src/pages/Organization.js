@@ -15,13 +15,9 @@ function Organization() {
   const [childUnits2, setChildUnits2] = useState([]);
 
   useEffect(() => {
-    findUnitList(setUnits);
-    // console.log(units);
-  }, []);
-
-  useEffect(() => {
-    console.log(units);
-    if (units.length !== 0) {
+    if (units.length === 0) {
+      findUnitList(setUnits);
+    } else {
       findUnitByUnitId(units[0].unitCode, setUnit);
     }
   }, [units]);
@@ -48,8 +44,6 @@ function Organization() {
   //   }
   //   console.log(childUnits2);
   // }, []);
-
-  console.log(childUnits1);
 
   // return (
   //   <div>

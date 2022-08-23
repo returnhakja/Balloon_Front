@@ -156,43 +156,41 @@ function Chat() {
         <ChatSide />
         <div className={styles.chatconvimeline}>
           <div className={styles.chatroomname}>
-            <h3>
-              {chatroomName ? (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <TextField
-                    id="outlined-multiline-flexible"
-                    multiline
-                    label="-"
-                    maxRows={4}
-                    value={chatRoomTitle}
-                    onChange={onChangeTitle}
-                    onKeyPress={keyEnter}
-                    onClick={onClickChatRoomTitle}
-                  />
-                  {clickChk == 2 ? (
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        onUserUpdate(chatroomId, chatRoomTitle, headCount);
-                        setClickChk(0);
-                      }}>
-                      수정하기
-                    </Button>
-                  ) : (
-                    ''
-                  )}
-                </div>
-              ) : (
-                <h5 className=" mb-2 font-weight-bold text-gray-dark">
-                  {chatRoomTitle}{' '}
-                </h5>
-              )}
-            </h3>
+            {chatroomName ? (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <TextField
+                  id="outlined-multiline-flexible"
+                  multiline
+                  label="-"
+                  maxRows={4}
+                  value={chatRoomTitle}
+                  onChange={onChangeTitle}
+                  onKeyPress={keyEnter}
+                  onClick={onClickChatRoomTitle}
+                />
+                {clickChk == 2 ? (
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      onUserUpdate(chatroomId, chatRoomTitle, headCount);
+                      setClickChk(0);
+                    }}>
+                    수정하기
+                  </Button>
+                ) : (
+                  ''
+                )}
+              </div>
+            ) : (
+              <h5 className=" mb-2 font-weight-bold text-gray-dark">
+                {chatRoomTitle}{' '}
+              </h5>
+            )}
           </div>
 
           {/* <Link to={'/chatroom'}>
