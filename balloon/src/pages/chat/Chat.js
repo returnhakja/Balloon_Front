@@ -36,7 +36,6 @@ import ChatSide from './ChatSide';
 function Chat() {
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
-  console.log(empInfo);
 
   const chatroomId = new URL(document.location).searchParams.get('room');
   const [input, setInput] = useState([]);
@@ -262,9 +261,9 @@ function Chat() {
                 overflowY: 'scroll',
               }}>
               {chatempinfo &&
-                chatempinfo.map((data) => {
+                chatempinfo.map((data, index) => {
                   return (
-                    <List component="div" disablePadding>
+                    <List component="div" disablePadding key={index}>
                       <ListItemButton sx={{ pl: 4 }}>
                         <ListItemIcon>
                           {/* console.log(data.empId.empName); return{' '} */}

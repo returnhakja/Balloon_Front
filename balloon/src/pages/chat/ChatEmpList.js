@@ -73,7 +73,7 @@ function ChatEmpList({ invite, setInvite }) {
 
   return (
     <Container maxWidth="xs" className={styles.Listcontainer}>
-      <div className={styles.side}>
+      <div className={styles.side2}>
         <div className={styles.listcon}>
           <ChatSide />
           <div className={styles.list}>
@@ -103,29 +103,29 @@ function ChatEmpList({ invite, setInvite }) {
               </Grid>
             </div>
             <hr />
-            <ol className={styles.olList}>
+            <div className={styles.olList}>
               {chatUnitList.map((cu, index) => {
                 return (
-                  <div key={index}>
-                    <h2>{cu}</h2>
+                  <div key={index} className={styles.cuCon}>
+                    <p className={styles.cuName}>{cu}</p>
+
                     {chatEmpList.map((ce, index) => {
-                      // if (ce.unit.unitCode === cu) {
                       if (ce.unit.unitName === cu) {
                         return (
                           <div key={index} className={styles.fontlist}>
                             {/* <img src={ce.photo} alt="사원 이미지" /> */}
-                            {'  '}
-                            <div className={styles.liststyle}>
-                              {ce.empName} {ce.position}
-                              <Checkbox
-                                type="checkbox"
-                                onChange={(e) => {
-                                  onInvite(e.currentTarget.checked, ce);
-                                }}
-                                checked={invite.includes(ce) ? true : false}
-                              />
-                            </div>
-
+                            {/* <div className={styles.liststyle}> */}
+                            {/* <div className={styles.li}> */}
+                            {ce.empName} {ce.position}
+                            <Checkbox
+                              type="checkbox"
+                              onChange={(e) => {
+                                onInvite(e.currentTarget.checked, ce);
+                              }}
+                              checked={invite.includes(ce) ? true : false}
+                            />
+                            {/* </div> */}
+                            {/* </div> */}
                             {/* <span>{ce.position}</span> */}
                           </div>
                         );
@@ -134,7 +134,7 @@ function ChatEmpList({ invite, setInvite }) {
                   </div>
                 );
               })}
-            </ol>
+            </div>
           </div>
         </div>
       </div>

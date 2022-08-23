@@ -74,7 +74,7 @@
   font-size: 100px;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1200px) {
   .log {
     display: flex;
     position: absolute;
@@ -90,11 +90,12 @@
     position: absolute;
     /* display: block; */
     list-style: none;
-    background-color: #005469;
+    background-color: #d0ecf3;
     left: 0;
     top: 75px;
     transition: all 0.5s ease-out;
     width: 100%;
+    z-index: 2;
   }
 
   .approval,
@@ -105,12 +106,14 @@
   .login {
     color: black;
     text-align: center;
-    padding: 32px;
+    padding: 29px;
     width: 100%;
-    transition: all 0.5s ease;
+    transition: all 1s ease-in;
   }
+
   .signup {
     border: none;
+    background-color: red;
   }
   .mobile-menu-icon {
     display: block;
