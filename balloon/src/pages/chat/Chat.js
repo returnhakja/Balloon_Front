@@ -33,6 +33,8 @@ import GroupIcon from '@mui/icons-material/Group';
 
 import ChatSide from './ChatSide';
 
+import ScrollToBottom from 'react-scroll-to-bottom';
+
 function Chat() {
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
@@ -194,50 +196,6 @@ function Chat() {
               )}
             </h3>
           </div>
-
-          {/* <Link to={'/chatroom'}>
-              <Button variant="contained">채팅목록 이동</Button>
-            </Link> */}
-          {/* 
-          // {/* 채팅방 나가기 
-          <div className={styles.logoutBtn}>
-            <Link to={'/chatroom'}>
-              <Button
-                onClick={() =>
-                  onExitRoom(
-                    chatroomId,
-                    empId,
-                    sendExit(client, chatroomId, empInfo)
-                  )
-                }>
-                <LogoutIcon />
-              </Button>
-            </Link>
-          </div> */}
-
-          {/* 채팅방 인원수 & 이름수정 */}
-          {/* <div className={styles.updatename}>
-
-        <TextField
-          id="chatroomName"
-          variant="outlined"
-          placeholder="수정할 채팅방의 이름을 입력하세요"
-          defaultValue={chatroomName}
-        />
-        <br />
-        <Button
-          variant="contained"
-          onClick={() =>
-            onUserUpdate(
-              chatroomId,
-              document.getElementById('chatroomName'),
-              headCount
-            )
-          }>
-          수정하기
-        </Button>
-      </div> */}
-          {/* <div>{modalOpen == true ? <Modal /> : null}</div> */}
           <List>
             <ListItemButton onClick={handleClick}>
               <ListItemIcon>
@@ -291,22 +249,8 @@ function Chat() {
               </div>
             </Collapse>
           </List>
-          {/* <div>
-          <h3>채팅방에 있는 사람</h3>
-          {chatempinfo &&
-            chatempinfo.map((data) => {
-              console.log(data.empId.empName);
-              return <div>{data.empId.empName}</div>;
-            })}
-        </div> */}
 
-          {/* 채팅방에서 사원초대하기 */}
-          {/* <div>
-        <input id="empId" placeholder="초대할 사원의 사번을 입력하세요" />
-        <button onClick={onUserAdd}>사원초대하기</button>
-      </div> */}
-
-          <div className={styles.scrollbar}>
+          <ScrollToBottom className={styles.scrollbar}>
             {/* 채팅기록을 가져옴 */}
             {chatting.map((msg, index) => {
               const chatTime = msg.chatTime.substr(11, 5);
@@ -335,68 +279,10 @@ function Chat() {
                 </div>
               );
             })}
-          </div>
+          </ScrollToBottom>
 
           <div className={styles.scroll}>
-            <div className={styles.contain}>
-              {/* chatting내용 사용자에 따라 배치 */}
-
-              {/* {input.map((chat, index) => {
-
-
-            {/* {input.map((chat, index) => {
-
-
-              {/* {input.map((chat, index) => {
-
-
-            {/* {input.map((chat, index) => {
-
-            return (
-              <div key={chat.writer + index}>
-                {empInfo.empId === chat.writer.empId ? (
-                  <div className={styles.message}>
-                    <span className={styles.mytime}>{nowTime}</span>
-                    <span className={styles.mycontent}>{chat.chatContent}</span>
-                  </div>
-                ) : (
-                  <div className={styles.othermessage}>
-                    <div>{chat.writer.empName}</div>
-                    <span className={styles.othercontent}>
-                      {chat.chatContent}
-                    </span>
-                    <span className={styles.time}>{nowTime}</span>
-                  </div>
-                )}
-                <br />
-              </div>
-            );
-          })} */}
-
-              {/* {input.length !== 0 &&
-            input.map((chat, index) => {
-              console.log(chat);
-              return (
-                <div key={chat.writer + index}>
-                  {empInfo.empId === chat.writer ? (
-                    <div className={styles.message}>
-                      {nowTime}
-                      {chat.chatContent}
-                    </div>
-                  ) : (
-                    <div className={styles.othercon}>
-                      <div className={styles.othermessage}>
-                        {nowTime}
-                        {chat.chatContent}
-                      </div>
-                    </div>
-                  )}
-                  <br />
-                </div>
-              );
-            })}
-*/}
-            </div>
+            <div className={styles.contain}></div>
 
             <div className={styles.inputmain}>
               <input
@@ -405,15 +291,7 @@ function Chat() {
                 onKeyPress={onKeyPress}
                 placeholder="메시지를 입력하세요"
               />
-              {/* <Button
-            className={styles.inputbutton}
-            onClick={() => {
-              inputRef.current.value && send();
-              inputRef.current.focus();
-              inputRef.current.value = '';
-            }}>
-            보내기
-          </Button> */}
+
               <Button
                 variant="contained"
                 endIcon={<SendIcon />}
@@ -423,7 +301,6 @@ function Chat() {
                   inputRef.current.focus();
                   inputRef.current.value = '';
                 }}>
-                {' '}
                 전송
               </Button>
             </div>

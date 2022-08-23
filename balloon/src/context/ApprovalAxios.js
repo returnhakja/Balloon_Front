@@ -305,3 +305,66 @@ export const deletePA = async (docId) => {
   console.log(str);
   await axios.delete(str);
 };
+
+export const insertApproval = async (
+  docId,
+  docStatus,
+  apvr,
+  inputData,
+  empInfo
+) => {
+  const url = '/api/apvl';
+
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+  console.log(docId);
+  console.log(docStatus);
+  console.log(empInfo);
+
+  if (docId.includes('업무기안')) {
+    inputData = {
+      approvalStatus: docStatus,
+      approverName: apvr.empName,
+      position: apvr.position,
+      drafterName: empInfo && empInfo.empName,
+      emp: {
+        empId: empInfo && empInfo.empId,
+      },
+      businessReport: {
+        businessReportId: docId,
+      },
+    };
+  } else if (docId.includes('출장계획')) {
+    inputData = {
+      approvalStatus: docStatus,
+      approverName: apvr.empName,
+      position: apvr.position,
+      drafterName: empInfo && empInfo.empName,
+      emp: {
+        empId: empInfo && empInfo.empId,
+      },
+      businessTrip: {
+        businessTripId: docId,
+      },
+    };
+  } else if (docId.includes('인사명령')) {
+    inputData = {
+      approvalStatus: docStatus,
+      approverName: apvr.empName,
+      position: apvr.position,
+      drafterName: empInfo && empInfo.empName,
+      emp: {
+        empId: empInfo && empInfo.empId,
+      },
+      personnelAppointment: {
+        personnelAppointmentId: docId,
+      },
+    };
+  } else {
+    alert('문서가 잘못되었습니다.');
+  }
+
+  console.log(inputData);
+  await axios.post(url, inputData, { headers });
+};
