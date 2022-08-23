@@ -55,12 +55,20 @@ function Calendar() {
   };
 
   useEffect(() => {
-    if (list.length === 0) {
-      if (empInfo.length !== 0) {
-        getScheduleByEmp(empInfo.empId, setList);
-      }
+    if (empInfo.length !== 0) {
+      getScheduleByEmp(empInfo.empId, setList);
     }
-  }, [empInfo, openInsert, openUpdate, list]);
+  }, [empInfo]);
+
+  useEffect(() => {}, [openInsert, openUpdate, list]);
+
+  // useEffect(() => {
+  //   if (list.length === 0) {
+  //     if (empInfo.length !== 0) {
+  //       getScheduleByEmp(empInfo.empId, setList);
+  //     }
+  //   }
+  // }, [empInfo, openInsert, openUpdate, list]);
 
   // 즐겨찾기 캘린더
   // useEffect(() => {
