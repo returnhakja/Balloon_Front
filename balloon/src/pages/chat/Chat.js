@@ -241,13 +241,14 @@ function Chat() {
         </Button>
       </div> */}
           {/* <div>{modalOpen == true ? <Modal /> : null}</div> */}
+
           <List sx={{ zIndex: 5 }}>
             <ListItemButton onClick={handleClick}>
               <ListItemIcon>
                 <GroupIcon />
               </ListItemIcon>
               <ListItemText primary="채팅중인 사람" />
-              {/* 테[스트] */}
+
               {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </ListItemButton>
 
@@ -281,27 +282,22 @@ function Chat() {
               <div className={styles.logoutBtn}>
                 <Link to={'/chatlist'}>
                   <Button
-                    onClick={() =>
+                    onClick={() => (
                       onExitRoom(
                         chatroomId,
                         empId,
                         sendExit(client, chatroomId, empInfo)
-                      )
-                    }>
+                      ),
+                      onHCupdate(chatroomId, chatroomName, headCount)
+                    )}>
                     <LogoutIcon />
                   </Button>
                 </Link>
               </div>
             </Collapse>
           </List>
-          {/* <div>
-          <h3>채팅방에 있는 사람</h3>
-          {chatempinfo &&
-            chatempinfo.map((data) => {
-              console.log(data.empId.empName);
-              return <div>{data.empId.empName}</div>;
-            })}
-        </div> */}
+
+          {/* <ScrollToBottom className={styles.scrollbar}> */}
 
           {/* 채팅방에서 사원초대하기 */}
           {/* <div>
@@ -341,65 +337,7 @@ function Chat() {
           </ScrollToBottom>
 
           <div className={styles.scroll}>
-            <div className={styles.contain}>
-              {/* chatting내용 사용자에 따라 배치 */}
-
-              {/* {input.map((chat, index) => {
-
-
-            {/* {input.map((chat, index) => {
-
-
-              {/* {input.map((chat, index) => {
-
-
-            {/* {input.map((chat, index) => {
-
-            return (
-              <div key={chat.writer + index}>
-                {empInfo.empId === chat.writer.empId ? (
-                  <div className={styles.message}>
-                    <span className={styles.mytime}>{nowTime}</span>
-                    <span className={styles.mycontent}>{chat.chatContent}</span>
-                  </div>
-                ) : (
-                  <div className={styles.othermessage}>
-                    <div>{chat.writer.empName}</div>
-                    <span className={styles.othercontent}>
-                      {chat.chatContent}
-                    </span>
-                    <span className={styles.time}>{nowTime}</span>
-                  </div>
-                )}
-                <br />
-              </div>
-            );
-          })} */}
-
-              {/* {input.length !== 0 &&
-            input.map((chat, index) => {
-              console.log(chat);
-              return (
-                <div key={chat.writer + index}>
-                  {empInfo.empId === chat.writer ? (
-                    <div className={styles.message}>
-                      {nowTime}
-                      {chat.chatContent}
-                    </div>
-                  ) : (
-                    <div className={styles.othercon}>
-                      <div className={styles.othermessage}>
-                        {nowTime}
-                        {chat.chatContent}
-                      </div>
-                    </div>
-                  )}
-                  <br />
-                </div>
-              );
-            })}
-*/}
-            </div>
+            <div className={styles.contain}></div>
 
             <div className={styles.inputmain}>
               <input
@@ -408,15 +346,7 @@ function Chat() {
                 onKeyPress={onKeyPress}
                 placeholder="메시지를 입력하세요"
               />
-              {/* <Button
-            className={styles.inputbutton}
-            onClick={() => {
-              inputRef.current.value && send();
-              inputRef.current.focus();
-              inputRef.current.value = '';
-            }}>
-            보내기
-          </Button> */}
+
               <Button
                 variant="contained"
                 endIcon={<SendIcon />}
@@ -428,7 +358,6 @@ function Chat() {
                   // inputRef.current.scroll(0, 1000);
                   // scrollToBottom();
                 }}>
-                {' '}
                 전송
               </Button>
             </div>

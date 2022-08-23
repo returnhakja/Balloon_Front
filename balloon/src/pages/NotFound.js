@@ -25,7 +25,6 @@ function NotFound() {
   return (
     <Box>
       <Div>
-
         <div style={{ marginTop: '10%' }}>
           <img
             src={`${process.env.PUBLIC_URL}/asset/do.png`}
@@ -36,7 +35,6 @@ function NotFound() {
         <br />
         <h1 style={{ marginBottom: '5vh' }}>NotFound Page</h1>
         <p style={{ fontSize: '30px', color: 'red' }}>
-
           위 주소는 찾을 수 없거나 없는 페이지입니다.
         </p>
       </Div>

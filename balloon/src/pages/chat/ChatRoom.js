@@ -43,11 +43,11 @@ function ChatRoom() {
             <hr />
             <br />
             {chatroom.map((chat, index) => {
-              console.log(chat.chatTime.substr(11, 5));
+              // console.log(chat.chatTime.substr(11, 5));
               // const a = chat.chatContent.length;
               // console.log(a);
-              console.log(chat.chatContent.substr(0, 15));
-              console.log(chat.chatroom.chatroomName.substr(0, 15));
+              // console.log(chat.chatContent.substr(0, 15));
+              // console.log(chat.chatroom.chatroomName.substr(0, 15));
               return (
                 <div className={styles.roomcon} key={index}>
                   <Link to={`/chatting?room=${chat.chatroom.chatroomId}`}>
@@ -92,6 +92,11 @@ function ChatRoom() {
                                   client,
                                   chat.chatroom.chatroomId,
                                   empInfo
+                                ),
+                                onHCupdate(
+                                  chat.chatroom.chatroomId,
+                                  chat.chatroom.chatroomName,
+                                  chat.chatroom.headCount
                                 )
                               );
 
