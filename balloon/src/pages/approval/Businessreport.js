@@ -274,6 +274,13 @@ function Report() {
                     empInfo,
                     setInputData
                   );
+                  {
+                    approver.map((data, index) => {
+                      console.log(data);
+                      console.log(index);
+                      insertApproval(docId, 1, data, inputData, empInfo);
+                    });
+                  }
                   window.location.href = 'http://localhost:3000/boxes';
                 }}>
                 상신하기
