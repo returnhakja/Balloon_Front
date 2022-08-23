@@ -28,6 +28,7 @@ const SideNavigation = ({ children }) => {
   const styles = {
     sideBarHeight: {
       height: '150vh',
+      zIndex: 1,
     },
     menuIcon: {
       float: 'right',

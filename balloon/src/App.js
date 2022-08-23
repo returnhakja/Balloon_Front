@@ -57,6 +57,8 @@ import DeclaredBusinessTripInfo from './pages/approval/DeclaredBusinessTripInfo'
 import DeclaredPersonnelAppointmentInfo from './pages/approval/DeclaredPersonnelAppointmentInfo';
 import NotFound from './pages/NotFound';
 
+import NotFound from './pages/NotFound';
+
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
   const [isLogin, setLogin] = useState(null);
@@ -191,6 +193,7 @@ function App() {
           <Route path="/add/employees" element={<EmpListAddPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );

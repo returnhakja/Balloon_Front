@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import axios from 'axios';
 import { Link, useOutletContext } from 'react-router-dom';
 
 import Input from '@mui/material/Input';
@@ -14,18 +13,17 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
   const chatroomId = roomId;
 
   const [empInfo, setEmpInfo] = useOutletContext();
-  const empId = empInfo.empId;
 
   const handleClose = () => setopenCreatChat(false);
   // socket
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
-  const [input, setInput] = useState([]);
+  // const [input, setInput] = useState([]);
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, (data) => {
       const chat = JSON.parse(data.body);
-      setInput([...input, chat]);
+      // setInput([...input, chat]);
       disconnect();
     });
   });
@@ -34,75 +32,14 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
     client.disconnect();
   };
 
-  //채팅방만들기
-  // const onCreateChatroom = () => {
-  //   const chatroomName = document.getElementById('chatroomName');
-  // invite.push(empInfo);
-  // console.log(invite);
-  // axios
-  //   .post('http://localhost:8080/createChatroom', {
-  //     chatroomName: chatroomName.value,
-  //     headCount: invite.length,
-  //   })
-  //   .then((response) => {
-  //     console.log(response.data);
-  //     setRoomId(response.data);
-  //   });
-  // };
-
-  // {
-  //   invite &&
-  //     invite.map((data) => {
-  //       console.log(data);
-  //       console.log(data.empId);
-  //       console.log(data.empName);
-  //     });
-  // }
-
-  //사원초대하기
-  //chatroomEmployee T에 초대할 사람과 초대한 사람 넣어주기
-  // const onUserInvite = () => {
-  //   invite &&
-  //     axios
-  //       .post(
-  //         `http://localhost:8080/insertChatEmp/${chatroomId}`,
-  //         invite.map((data) => {
-  //           const inviteEnter = () => {
-  //             client.send(
-  //               '/app/chat/message',
-  //               {},
-  //               JSON.stringify({
-  //                 chatroomId: chatroomId,
-  //                 writer: data.empId,
-  //                 chatContent: data.empName + '님이 입장하셨습니다',
-  //               })
-  //             );
-  //           };
-  //           inviteEnter();
-  //           return {
-  //             empId: {
-  //               empId: data.empId,
-  //             },
-  //           };
-  //         })
-  //       )
-  //       .then((response) => {
-  //         console.log(response.data);
-  //       });
-  // };
-
   return (
     <Modal open={openCreatChat} onClose={handleClose}>
       <Box sx={style}>
-        {/* <Link to={'/chatemplist'}>
-          <Button variant="contained">사원리스트 이동</Button>
-        </Link> */}
         <br />
         <br />
         <h3>채팅방 만들기</h3>
         <br />
         <Input id="chatroomName" placeholder="채팅방 이름을 입력하세요" />
-
         <br />
         <br />
         <Button

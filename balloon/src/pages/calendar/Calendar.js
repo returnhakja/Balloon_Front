@@ -30,8 +30,8 @@ function Calendar() {
     state: false,
     scheduleId: null,
   });
-  const [eList, setCEList] = useState([]);
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [eList] = useState([]);
+  const [empInfo] = useOutletContext();
   const handleDateClick = () => {
     setOpenInsert(true);
   };
@@ -55,12 +55,20 @@ function Calendar() {
   };
 
   useEffect(() => {
-    if (list.length === 0) {
-      if (empInfo.length !== 0) {
-        getScheduleByEmp(empInfo.empId, setList);
-      }
+    if (empInfo.length !== 0) {
+      getScheduleByEmp(empInfo.empId, setList);
     }
-  }, [empInfo, openInsert, openUpdate, list]);
+  }, [empInfo]);
+
+  useEffect(() => {}, [openInsert, openUpdate, list]);
+
+  // useEffect(() => {
+  //   if (list.length === 0) {
+  //     if (empInfo.length !== 0) {
+  //       getScheduleByEmp(empInfo.empId, setList);
+  //     }
+  //   }
+  // }, [empInfo, openInsert, openUpdate, list]);
 
   // 즐겨찾기 캘린더
   // useEffect(() => {
@@ -71,8 +79,7 @@ function Calendar() {
   //모달
   return (
     <div className="container">
-      {/* <input type="checkbox" /> */}
-      {eList.map((emp, index) => {
+      {eList.map((emp) => {
         return (
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <input
