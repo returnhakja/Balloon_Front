@@ -90,6 +90,9 @@ const SideNavigation = ({ children }) => {
             <Menuitem icon={<FaFolderOpen />}>
               <Link to={'/boxes/dl'}>문서대장</Link>
             </Menuitem>
+            <Menuitem icon={<FaFolderOpen />}>
+              <Link to={'/boxes/pd'}>결재전확인페이지</Link>
+            </Menuitem>
           </Menu>
         </ProSidebar>
 
