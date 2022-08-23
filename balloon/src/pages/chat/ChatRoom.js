@@ -14,7 +14,6 @@ import { sendExit } from '../../utils/ChatUtils';
 import SockJS from 'sockjs-client';
 // import styles from '../../css/Chat/ChatRoom.module.css';
 import ChatSide from './ChatSide';
-import { Grid } from '@mui/material';
 import styles from '../../css/Chat/Chat.module.css';
 
 function ChatRoom() {
