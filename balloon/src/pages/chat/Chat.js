@@ -6,6 +6,7 @@ import { Link, useOutletContext, useParams } from 'react-router-dom';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import SendIcon from '@mui/icons-material/Send';
 import LogoutIcon from '@mui/icons-material/Logout';
+
 import {
   Button,
   Collapse,
@@ -196,12 +197,58 @@ function Chat() {
               </h5>
             )}
           </div>
+
+          {/* <Link to={'/chatroom'}>
+              <Button variant="contained">채팅목록 이동</Button>
+            </Link> */}
+          {/* 
+          // {/* 채팅방 나가기 
+          <div className={styles.logoutBtn}>
+            <Link to={'/chatroom'}>
+              <Button
+                onClick={() =>
+                  onExitRoom(
+                    chatroomId,
+                    empId,
+                    sendExit(client, chatroomId, empInfo)
+                  )
+                }>
+                <LogoutIcon />
+              </Button>
+            </Link>
+          </div> */}
+
+          {/* 채팅방 인원수 & 이름수정 */}
+          {/* <div className={styles.updatename}>
+
+        <TextField
+          id="chatroomName"
+          variant="outlined"
+          placeholder="수정할 채팅방의 이름을 입력하세요"
+          defaultValue={chatroomName}
+        />
+        <br />
+        <Button
+          variant="contained"
+          onClick={() =>
+            onUserUpdate(
+              chatroomId,
+              document.getElementById('chatroomName'),
+              headCount
+            )
+          }>
+          수정하기
+        </Button>
+      </div> */}
+          {/* <div>{modalOpen == true ? <Modal /> : null}</div> */}
+
           <List sx={{ zIndex: 5 }}>
             <ListItemButton onClick={handleClick}>
               <ListItemIcon>
                 <GroupIcon />
               </ListItemIcon>
               <ListItemText primary="채팅중인 사람" />
+
               {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </ListItemButton>
 

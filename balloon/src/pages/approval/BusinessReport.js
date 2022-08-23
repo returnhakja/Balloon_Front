@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
@@ -183,14 +183,15 @@ function Report() {
             style={{ backgroundColor: '#F1F9FF' }}>
             {DfCard}
           </Card>
-          {approver.map((empData) => {
+          {approver.map((empData, index) => {
             console.log(empData);
 
             return (
               <Card
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
-                style={{ backgroundColor: '#F1F9FF' }}>
+                style={{ backgroundColor: '#F1F9FF' }}
+                key={index}>
                 {ApCard(empData.empName)}
               </Card>
             );
@@ -240,48 +241,58 @@ function Report() {
 
           <div className={styles.savebutton}>
             <Box sx={{ button: { m: 1 } }}>
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={async () => {
-                  await insertBizRpt(
-                    docId,
-                    3,
-                    inputData,
-                    empInfo,
-                    setInputData
-                  );
-                  {
-                    approver.map(async (data, index) => {
-                      console.log(data);
-                      console.log(index);
-                      await insertApproval(docId, 0, data, inputData, empInfo);
-                    });
-                  }
-                  window.location.href = '/boxes';
-                }}>
-                임시저장
-              </Button>
-              <SaveButton
-                variant="contained"
-                color="success"
-                size="large"
-                onClick={async () => {
-                  if (approver != 0) {
+              <Link to={'/boxes/ds'}>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={async () => {
                     await insertBizRpt(
                       docId,
-                      1,
+                      3,
                       inputData,
                       empInfo,
                       setInputData
                     );
-                    window.location.href = '/boxes';
-                  } else {
-                    alert('결재선을 설정해주세요 !');
-                  }
-                }}>
-                상신하기
-              </SaveButton>
+                    {
+                      approver.map(async (data, index) => {
+                        console.log(data);
+                        console.log(index);
+                        await insertApproval(
+                          docId,
+                          0,
+                          data,
+                          inputData,
+                          empInfo
+                        );
+                      });
+                    }
+                    alert('문서가 임시저장되었습니다!');
+                  }}>
+                  임시저장
+                </Button>
+              </Link>
+              <Link to={'/boxes'}>
+                <SaveButton
+                  variant="contained"
+                  color="success"
+                  size="large"
+                  onClick={async () => {
+                    if (approver != 0) {
+                      await insertBizRpt(
+                        docId,
+                        1,
+                        inputData,
+                        empInfo,
+                        setInputData
+                      );
+                    } else {
+                      alert('결재선을 설정해주세요 !');
+                    }
+                    alert('문서가 상신되었습니다!');
+                  }}>
+                  상신하기
+                </SaveButton>
+              </Link>
             </Box>
           </div>
         </div>

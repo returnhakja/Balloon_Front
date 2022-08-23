@@ -10,7 +10,7 @@ export const onChatroom = async (setChatroom, empId) => {
   });
 };
 
-//채팅방 나가기
+//채팅방 삭제
 export const onDeleteRoom = async (chatroomId) => {
   axios
     .delete(`/chatroom/deletechatroom/${chatroomId}`)
