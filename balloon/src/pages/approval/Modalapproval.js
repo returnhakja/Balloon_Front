@@ -13,7 +13,10 @@ import {
   Box,
 } from '@mui/material';
 
-import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
+import {
+  getApvrListInSameUnit,
+  getEmpListInSameUnit,
+} from '../../context/EmployeeAxios';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -57,10 +60,12 @@ function Modalapproval({
 
   // 사원list 출력하기
   useEffect(() => {
-    getEmpListInSameUnit(empId, setCEList);
+    getApvrListInSameUnit(empId, setCEList);
   }, []);
   console.log(noApprover);
   console.log(approver);
+  console.log(right);
+  console.log(left);
 
   useEffect(() => {
     if (chatEmpList.length !== 0) {
@@ -69,7 +74,6 @@ function Modalapproval({
         arr.push(data);
       });
       if (approver.length !== 0) {
-        console.log();
         setLeft(noApprover);
         setRight(approver);
       } else setLeft(arr);
@@ -133,7 +137,10 @@ function Modalapproval({
                     }}
                   />
                 </ListItemIcon>
-                <ListItemText id={labelId} primary={`${value.empName}`} />
+                <ListItemText
+                  id={labelId}
+                  primary={`${value.empName}` + ' ' + `${value.position}`}
+                />
               </ListItem>
             );
           })}
