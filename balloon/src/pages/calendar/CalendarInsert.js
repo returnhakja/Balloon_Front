@@ -131,12 +131,10 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
   const [botRoom, setBotRoom] = useState([]);
   const botChatroom = () => {
-    axios
-      .post(`http://localhost:8080/botChatroom`, inviteSchedule)
-      .then((response) => {
-        console.log(response.data);
-        setBotRoom(response.data);
-      });
+    axios.post(`/cre/botchatroom`, inviteSchedule).then((response) => {
+      console.log(response.data);
+      setBotRoom(response.data);
+    });
   };
   // console.log(inviteSchedule);
   // console.log(botRoom);
@@ -223,12 +221,10 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         headCount: 2,
       });
     });
-    axios
-      .post('http://localhost:8080/createSchChatroom', arr)
-      .then((response) => {
-        console.log(response.data);
-        onSchUserInvite(response.data, invitepeople);
-      });
+    axios.post('/chatroom/createschchatroom', arr).then((response) => {
+      console.log(response.data);
+      onSchUserInvite(response.data, invitepeople);
+    });
     // botroomMsg();
     return arr;
   };
@@ -244,7 +240,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
       console.log(ad);
       axios
         .post(
-          `http://localhost:8080/insertChatEmp/${ad.chatroomId}`,
+          `/cre/insertchatemp/${ad.chatroomId}`,
           [
             {
               empId: {
@@ -303,7 +299,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
       );
     });
 
-
     console.log(scheduleListAdd);
 
     insertSchedulList(scheduleListAdd, setOpenInsert);
@@ -312,7 +307,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     onSchCreateChatroom(inviteSchedule);
 
     window.location.href = '/calendar';
-
   };
 
   return (

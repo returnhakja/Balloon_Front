@@ -12,9 +12,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
-  console.log(style);
-  console.log(openUpdate);
-  console.log(setOpenUpdate);
   const handleClose = () => {
     setOpenUpdate(false);
     window.location.href = '/calendar';
