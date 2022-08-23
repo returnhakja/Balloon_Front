@@ -104,7 +104,7 @@ function ChatRoom() {
                         </Button>
                       </div>
                       <div className={styles.content}>
-                        {chat.chatContent.length <= '30' ? (
+                        {chat.chatContent.length <= '15' ? (
                           <div className={styles.content}>
                             {chat.chatContent}
                             <div className={styles.LastTimecon}>
@@ -115,7 +115,7 @@ function ChatRoom() {
                           </div>
                         ) : (
                           <div className={styles.content}>
-                            {chat.chatContent.substr(0, 30)}...
+                            {chat.chatContent.substr(0, 25)}...
                             <div className={styles.LastTime}>
                               {chat.chatTime.substr(11, 5)}
                             </div>
