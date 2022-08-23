@@ -114,7 +114,7 @@ function ChatEmpList({ invite, setInvite }) {
                         return (
                           <div key={index} className={styles.fontlist}>
                             {/* <img src={ce.photo} alt="사원 이미지" /> */}
-                            {'  '}
+
                             <div className={styles.liststyle}>
                               {ce.empName} {ce.position}
                               <Checkbox
