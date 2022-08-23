@@ -74,7 +74,7 @@ function Modalapproval({
         setRight(approver);
       } else setLeft(arr);
     }
-  }, [chatEmpList]);
+  }, [chatEmpList, approver]);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
