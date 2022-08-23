@@ -6,6 +6,7 @@ import { Link, useOutletContext, useParams } from 'react-router-dom';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import SendIcon from '@mui/icons-material/Send';
 import LogoutIcon from '@mui/icons-material/Logout';
+
 import {
   Button,
   Collapse,
@@ -240,13 +241,13 @@ function Chat() {
         </Button>
       </div> */}
           {/* <div>{modalOpen == true ? <Modal /> : null}</div> */}
-          <List>
+          <List sx={{ zIndex: 5 }}>
             <ListItemButton onClick={handleClick}>
               <ListItemIcon>
                 <GroupIcon />
               </ListItemIcon>
               <ListItemText primary="채팅중인 사람" />
-
+              {/* 테[스트] */}
               {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </ListItemButton>
 
