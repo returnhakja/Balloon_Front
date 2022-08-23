@@ -30,8 +30,8 @@ function Calendar() {
     state: false,
     scheduleId: null,
   });
-  const [eList, setCEList] = useState([]);
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [eList] = useState([]);
+  const [empInfo] = useOutletContext();
   const handleDateClick = () => {
     setOpenInsert(true);
   };

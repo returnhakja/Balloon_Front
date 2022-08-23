@@ -40,7 +40,6 @@ function Chat() {
   // login할때 empId를 가져옴 -> 채팅방생성/채팅 시 사용가능
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
-  console.log(empInfo);
 
   //실시간 시간 가져오기
   const nowTime = moment().format('HH:mm');
@@ -354,9 +353,9 @@ function Chat() {
                 overflowY: 'scroll',
               }}>
               {chatempinfo &&
-                chatempinfo.map((data) => {
+                chatempinfo.map((data, index) => {
                   return (
-                    <List component="div" disablePadding>
+                    <List component="div" disablePadding key={index}>
                       <ListItemButton sx={{ pl: 4 }}>
                         <ListItemIcon>
                           {/* console.log(data.empId.empName); return{' '} */}

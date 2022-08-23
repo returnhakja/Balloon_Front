@@ -131,7 +131,8 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
   const [botRoom, setBotRoom] = useState([]);
   const botChatroom = () => {
-    axios.post(`/api/botChatroom`, inviteSchedule).then((response) => {
+
+    axios.post(`/cre/botchatroom`, inviteSchedule).then((response) => {
       console.log(response.data);
       setBotRoom(response.data);
     });
@@ -221,7 +222,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         headCount: 2,
       });
     });
-    axios.post('/api/createSchChatroom', arr).then((response) => {
+    axios.post('/chatroom/createschchatroom', arr).then((response) => {
       console.log(response.data);
       onSchUserInvite(response.data, invitepeople);
     });
@@ -240,7 +241,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
       console.log(ad);
       axios
         .post(
-          `api/insertChatEmp/${ad.chatroomId}`,
+          `/cre/insertchatemp/${ad.chatroomId}`,
           [
             {
               empId: {

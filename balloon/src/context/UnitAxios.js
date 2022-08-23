@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const findUnitByUnitId = async (unitCode, setUnit) => {
   console.log(unitCode);
-  const url = '/api/unit/';
+  const url = '/unit/';
   const urlStr = url + unitCode;
   await axios
     .get(urlStr)
@@ -13,7 +13,7 @@ export const findUnitByUnitId = async (unitCode, setUnit) => {
 
 // List로 unit 가져오기
 export const findUnitList = async (setUnits) => {
-  const url = '/api/unit/units';
+  const url = '/unit/units';
   await axios
     .get(url)
     .then((response) => response.data)
@@ -24,7 +24,7 @@ export const findUnitList = async (setUnits) => {
 export const insertUnitList = async (rows) => {
   console.log(rows);
   const header = { 'Content-Type': 'application/json' };
-  const url = '/api/unitlist';
+  const url = '/unit/add';
 
   const inputUnit = [];
   rows.forEach((element) => {
@@ -54,19 +54,20 @@ export const insertUnitList = async (rows) => {
   }
 };
 
-// 사번으로 사원 삭제
+// 조직번호로 조직 삭제
 export const deleteUnit = async (data) => {
   console.log(data);
   console.log(data.unitCode);
-  const url = '/api/unit/';
+  const url = '/unit/';
   const urlStr = url + data.unitCode;
   await axios.delete(urlStr).catch((error) => console.log(error));
   window.location.href = '/management/unit';
 };
 
+// 조직 번호로 조직 업데이트
 export const updateUnit = async (data) => {
   console.log(data);
-  // const url = '/api/unit';
+  // const url = '/unit/change';
   // await axios.put(url, data).catch((error) => console.log(error));
   window.location.href = '/management/unit';
 };
