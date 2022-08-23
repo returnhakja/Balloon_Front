@@ -57,6 +57,8 @@ import DeclaredBusinessTripInfo from './pages/approval/DeclaredBusinessTripInfo'
 import DeclaredPersonnelAppointmentInfo from './pages/approval/DeclaredPersonnelAppointmentInfo';
 import NotFound from './pages/NotFound';
 
+import NotFound from './pages/NotFound';
+
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
   const [isLogin, setLogin] = useState(null);
@@ -178,8 +180,8 @@ function App() {
             path="/chatemplist"
             element={<ChatEmpList invite={invite} setInvite={setInvite} />}
           />
-          <Route path="/chatroom" element={<ChatRoom />} />
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/chatlist" element={<ChatRoom />} />
+          <Route path="/chatting" element={<Chat />} />
           <Route path="/createroom" element={<CreateRoom invite={invite} />} />
           <Route path="/chatnotice" element={<ChatNotice />} />
           {/* 조직관리 */}
@@ -191,6 +193,7 @@ function App() {
           <Route path="/add/employees" element={<EmpListAddPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );

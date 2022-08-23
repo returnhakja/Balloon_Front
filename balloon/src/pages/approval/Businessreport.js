@@ -19,7 +19,11 @@ import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
 
 import { FcDocument } from 'react-icons/fc';
-import { getLatestBizRpt, insertBizRpt } from '../../context/ApprovalAxios';
+import {
+  getLatestBizRpt,
+  insertApproval,
+  insertBizRpt,
+} from '../../context/ApprovalAxios';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -247,6 +251,13 @@ function Report() {
                     empInfo,
                     setInputData
                   );
+                  {
+                    approver.map((data, index) => {
+                      console.log(data);
+                      console.log(index);
+                      insertApproval(docId, 0, data, inputData, empInfo);
+                    });
+                  }
                   window.location.href = 'http://localhost:3000/boxes';
                 }}>
                 임시저장
