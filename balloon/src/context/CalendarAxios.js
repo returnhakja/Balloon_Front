@@ -1,14 +1,14 @@
 import axios from 'axios';
 
 export const getScheduleByEmp = async (empId, setList) => {
-  const url = '/api/cal/';
+  const url = '/cal/';
   const str = url + empId;
   const list = await axios
     .get(str)
     .then((response) => {
       const arr = [];
       response.data.map((data) => {
-        arr.push({
+        return arr.push({
           scheduleId: data.scheduleId,
           title: data.scheduleTitle,
           start: data.scheduleStart,
@@ -25,7 +25,7 @@ export const getScheduleByEmp = async (empId, setList) => {
 };
 
 export const insertSchedule = async (inputdata, setOpen) => {
-  const url = '/api/cal/insert';
+  const url = '/cal/insert';
   const headers = {
     'Content-Type': 'application/json',
   };
@@ -39,7 +39,7 @@ export const insertSchedule = async (inputdata, setOpen) => {
 };
 
 export const insertSchedulList = async (schduleListAdd, setOpen) => {
-  const url = '/api/cal/schedule';
+  const url = '/cal/schedule';
   const headers = {
     'Content-Type': 'application/json',
   };
@@ -54,7 +54,7 @@ export const insertSchedulList = async (schduleListAdd, setOpen) => {
 // 일정 클릭 시 scheduleId 가져오기
 export const getScheduleIdInModal = async (scheduleId, headers, setList) => {
   await axios
-    .get(`/api/cal/all/${scheduleId}`, headers)
+    .get(`/cal/all/${scheduleId}`, headers)
     .then((response) => {
       setList(response.data);
     })
@@ -63,7 +63,7 @@ export const getScheduleIdInModal = async (scheduleId, headers, setList) => {
 
 // 일정 수정
 export const updateSchedule = async (inputdata, headers, setOpenUpdate) => {
-  const url = '/api/cal/update';
+  const url = '/cal/update';
 
   await axios
     .put(url, inputdata, {
@@ -77,7 +77,7 @@ export const updateSchedule = async (inputdata, headers, setOpenUpdate) => {
 // 일정 삭제
 export const deleteSchedule = async (scheduleId, handleClose) => {
   await axios
-    .delete(`/api/cal/delete/${scheduleId}`)
+    .delete(`/cal/delete/${scheduleId}`)
 
     .then(() => {
       handleClose(false);

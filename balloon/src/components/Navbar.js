@@ -143,38 +143,43 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
             <li className="unit">사원관리</li>
           </NavLink>
         ) : null}
-
+      </ul>
+      <ul>
         {isLogin ? (
-          <ul className={styles.namediv}>
-            <li className="login">
+          <div className={styles.namediv}>
+            <p className="login">
               {' '}
               {empInfo.empName} {empInfo.position}{' '}
               <Button
                 type="button"
                 variant="outlined"
+                size="small"
                 className={styles.btnnav}
                 onClick={() => logoutFunc(logout)}>
                 Logout
               </Button>
-            </li>
-          </ul>
+            </p>
+          </div>
         ) : (
-          <ul className={styles.namediv}>
+          <div className={styles.namediv}>
             <Link to={'/loginpage'}>
-              <li className="login">
-                <Button className={styles.btnnav} variant="contained">
+              <p className="login">
+                <Button
+                  className={styles.btnnav}
+                  variant="contained"
+                  size="small">
                   Login
                 </Button>
-              </li>
+              </p>
             </Link>
-          </ul>
+          </div>
         )}
+        <button
+          className="mobile-menu-icon"
+          onClick={() => setIsMobile(!isMobile)}>
+          {isMobile ? <ClearIcon /> : <MenuOpenIcon />}
+        </button>
       </ul>
-      <button
-        className="mobile-menu-icon"
-        onClick={() => setIsMobile(!isMobile)}>
-        {isMobile ? <ClearIcon /> : <MenuOpenIcon />}
-      </button>
     </nav>
   );
 }

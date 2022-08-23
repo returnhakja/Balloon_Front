@@ -30,8 +30,8 @@ function Calendar() {
     state: false,
     scheduleId: null,
   });
-  const [eList, setCEList] = useState([]);
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [eList] = useState([]);
+  const [empInfo] = useOutletContext();
   const handleDateClick = () => {
     setOpenInsert(true);
   };
@@ -95,7 +95,7 @@ function Calendar() {
           </Typography>
         );
       })}
-      <Container maxWidth="md">
+      <Container maxWidth="md" sx={{ zIndex: 2 }}>
         <Button
           onClick={() => {
             setOpenInsert(true);
