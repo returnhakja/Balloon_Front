@@ -125,10 +125,8 @@ export const onHCupdate = async (chatroomId, chatroomName, headCount) => {
 
 //채팅방에서 혼자나가기
 export const onExitRoom = async (chatroomId, empId, sendExit) => {
-  axios
-    .delete(`/chatroom/deleteroom/${chatroomId}/${empId}`)
-    .then((response) => {
-      console.log(response.data);
-    });
+  axios.delete(`/cre/deleteroom/${chatroomId}/${empId}`).then((response) => {
+    console.log(response.data);
+  });
   // sendExit();
 };

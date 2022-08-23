@@ -34,8 +34,6 @@ import GroupIcon from '@mui/icons-material/Group';
 
 import ChatSide from './ChatSide';
 
-// import ScrollToBottom from 'react-scroll-to-bottom';
-
 const scrollToBottom = () => {
   document.getElementById('scroller').scroll(0, 1000);
 };
@@ -198,13 +196,12 @@ function Chat() {
               </h5>
             )}
           </div>
-          <List>
+          <List sx={{ zIndex: 5 }}>
             <ListItemButton onClick={handleClick}>
               <ListItemIcon>
                 <GroupIcon />
               </ListItemIcon>
               <ListItemText primary="채팅중인 사람" />
-
               {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </ListItemButton>
 
@@ -238,13 +235,14 @@ function Chat() {
               <div className={styles.logoutBtn}>
                 <Link to={'/chatlist'}>
                   <Button
-                    onClick={() =>
+                    onClick={() => (
                       onExitRoom(
                         chatroomId,
                         empId,
                         sendExit(client, chatroomId, empInfo)
-                      )
-                    }>
+                      ),
+                      onHCupdate(chatroomId, chatroomName, headCount)
+                    )}>
                     <LogoutIcon />
                   </Button>
                 </Link>
