@@ -36,7 +36,7 @@ function ChatRoom() {
       <div className={styles.side1}>
         <div className={styles.chatRoomList}>
           <ChatSide />
-          <div className={styles.list}>
+          <div className={styles.listroom}>
             <div className={styles.chatfont}>
               <div className={styles.ChatText}>채팅 목록</div>
             </div>
@@ -115,7 +115,7 @@ function ChatRoom() {
                           </div>
                         ) : (
                           <div className={styles.content}>
-                            {chat.chatContent.substr(0, 25)}...
+                            {chat.chatContent.substr(0, 15)}...
                             <div className={styles.LastTime}>
                               {chat.chatTime.substr(11, 5)}
                             </div>
