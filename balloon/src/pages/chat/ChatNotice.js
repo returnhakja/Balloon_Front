@@ -14,9 +14,10 @@ import { sendExit } from '../../utils/ChatUtils';
 import SockJS from 'sockjs-client';
 // import styles from '../../css/Chat/ChatRoom.module.css';
 import ChatSide from './ChatSide';
+import { Grid } from '@mui/material';
 import styles from '../../css/Chat/Chat.module.css';
 
-function ChatRoom() {
+function ChatNotice() {
   const [chatroom, setChatroom] = useState([]);
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
@@ -24,7 +25,6 @@ function ChatRoom() {
   const client = Stomp.over(sock);
 
   //마지막으로 보낸 채팅list가져오기
-  console.log(empId);
   useEffect(() => {
     if (empId) {
       onChatroom(setChatroom, empId);
@@ -36,18 +36,18 @@ function ChatRoom() {
       <div className={styles.side1}>
         <div className={styles.chatRoomList}>
           <ChatSide />
-          <div className={styles.listroom}>
+          <div className={styles.list}>
             <div className={styles.chatfont}>
-              <div className={styles.ChatText}>채팅 목록</div>
+              <div className={styles.ChatText}>공지 사항</div>
             </div>
             <hr />
             <br />
             {chatroom.map((chat, index) => {
-              // console.log(chat.chatTime.substr(11, 5));
+              console.log(chat.chatTime.substr(11, 5));
               // const a = chat.chatContent.length;
               // console.log(a);
-              // console.log(chat.chatContent.substr(0, 15));
-              // console.log(chat.chatroom.chatroomName.substr(0, 15));
+              console.log(chat.chatContent.substr(0, 15));
+              console.log(chat.chatroom.chatroomName.substr(0, 15));
               return (
                 <div className={styles.roomcon} key={index}>
                   <Link to={`/chatting?room=${chat.chatroom.chatroomId}`}>
@@ -92,15 +92,10 @@ function ChatRoom() {
                                   client,
                                   chat.chatroom.chatroomId,
                                   empInfo
-                                ),
-                                onHCupdate(
-                                  chat.chatroom.chatroomId,
-                                  chat.chatroom.chatroomName,
-                                  chat.chatroom.headCount
                                 )
                               );
 
-                              window.location.href = '/chatlist';
+                              window.location.href = '/chatroom';
                             };
 
                             return roomDelete();
@@ -109,7 +104,7 @@ function ChatRoom() {
                         </Button>
                       </div>
                       <div className={styles.content}>
-                        {chat.chatContent.length <= '15' ? (
+                        {chat.chatContent.length <= '30' ? (
                           <div className={styles.content}>
                             {chat.chatContent}
                             <div className={styles.LastTimecon}>
@@ -120,7 +115,7 @@ function ChatRoom() {
                           </div>
                         ) : (
                           <div className={styles.content}>
-                            {chat.chatContent.substr(0, 15)}...
+                            {chat.chatContent.substr(0, 30)}...
                             <div className={styles.LastTime}>
                               {chat.chatTime.substr(11, 5)}
                             </div>
@@ -139,4 +134,4 @@ function ChatRoom() {
     </Container>
   );
 }
-export default ChatRoom;
+export default ChatNotice;

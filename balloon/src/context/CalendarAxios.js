@@ -1,17 +1,14 @@
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
 
 export const getScheduleByEmp = async (empId, setList) => {
-  console.log(empId);
-  console.log(empId);
-  const url = '/api/cal/';
+  const url = '/cal/';
   const str = url + empId;
   const list = await axios
     .get(str)
     .then((response) => {
       const arr = [];
       response.data.map((data) => {
-        arr.push({
+        return arr.push({
           scheduleId: data.scheduleId,
           title: data.scheduleTitle,
           start: data.scheduleStart,
@@ -22,30 +19,27 @@ export const getScheduleByEmp = async (empId, setList) => {
       });
       return arr;
     })
-    .catch((err) => console.log(err));
-
-  console.log(list);
+    .catch((error) => console.log(error));
 
   setList(list);
 };
 
 export const insertSchedule = async (inputdata, setOpen) => {
-  const url = '/api/cal/insert';
+  const url = '/cal/insert';
   const headers = {
     'Content-Type': 'application/json',
   };
-  console.log(inputdata);
   await axios
     .post(url, inputdata, {
       headers,
     })
-    .catch((err) => console.log(err));
+    .catch((error) => console.log(error));
 
   setOpen(false);
 };
 
 export const insertSchedulList = async (schduleListAdd, setOpen) => {
-  const url = '/api/cal/schedule';
+  const url = '/cal/schedule';
   const headers = {
     'Content-Type': 'application/json',
   };
@@ -53,24 +47,43 @@ export const insertSchedulList = async (schduleListAdd, setOpen) => {
     .post(url, schduleListAdd, {
       headers,
     })
-    .catch((err) => console.log(err));
+    .catch((error) => console.log(error));
   setOpen(false);
-  // <Navigate to={'/calendar'} />;
+  window.location.href('/calendar');
 };
 
-// 수정
+// 일정 클릭 시 scheduleId 가져오기
+export const getScheduleIdInModal = async (scheduleId, headers, setList) => {
+  await axios
+    .get(`/cal/all/${scheduleId}`, headers)
+    .then((response) => {
+      setList(response.data);
+    })
+    .catch((error) => console.log(error));
+};
 
-//삭제
-export const deletehandle = async (scheduleId, openUpdate, handleClose) => {
-  console.log(scheduleId);
+// 일정 수정
+export const updateSchedule = async (inputdata, headers, setOpenUpdate) => {
+  const url = '/cal/update';
 
   await axios
-    .delete(`http://localhost:8080/cal/delete/${scheduleId}`)
+    .put(url, inputdata, {
+      headers,
+    })
+    .catch((error) => console.log(error));
+  setOpenUpdate(false);
+  window.location.href = '/calendar';
+};
+
+// 일정 삭제
+export const deleteSchedule = async (scheduleId, handleClose) => {
+  await axios
+    .delete(`/cal/delete/${scheduleId}`)
 
     .then(() => {
       handleClose(false);
     })
-    .catch((err) => console.log(err));
+    .catch((error) => console.log(error));
 
   // window.location.href = '/calendar';
 };

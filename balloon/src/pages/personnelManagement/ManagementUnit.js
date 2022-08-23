@@ -1,43 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { updateCheck, deleteCheck } from '../../context/MuiRenderFunc';
 import { findUnitList, updateUnit, deleteUnit } from '../../context/UnitAxios';
-import {
-  DataGrid,
-  GridEditSingleSelectCell,
-  GridActionsCellItem,
-  useGridApiContext,
-  GridToolbar,
-} from '@mui/x-data-grid';
-import PropTypes from 'prop-types';
+import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/system';
 import Delete from '@mui/icons-material/Delete';
-import PersonAddIcon from '@mui/icons-material/PersonAddAlt1';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import QueueIcon from '@mui/icons-material/Queue';
 import SettingsIcon from '@mui/icons-material/Settings';
-
-import { Link } from 'react-router-dom';
-
-const CustomTypeEditComponent = (props) => {
-  const apiRef = useGridApiContext();
-
-  const handleValueChange = async () => {
-    await apiRef.current.setEditCellValue({
-      id: props.id,
-      field: 'account',
-      value: '',
-    });
-  };
-
-  return (
-    <GridEditSingleSelectCell onValueChange={handleValueChange} {...props} />
-  );
-};
-
-CustomTypeEditComponent.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-};
 
 function ManagementUnit() {
   const [unitList, setUnitList] = useState([]);
@@ -58,34 +28,23 @@ function ManagementUnit() {
   };
 
   useEffect(() => {
-    findUnitList(setUnitList);
-  }, []);
-
-  useEffect(() => {
-    if (unitList.length !== 0) {
-      console.log(unitList);
+    if (unitList.length === 0) {
+      findUnitList(setUnitList);
+    } else {
+      if (updateChk === true) {
+        updateUnit(rowData);
+        setUpdateChk(false);
+      }
+      if (deleteChk === true) {
+        deleteUnit(rowData);
+        setDeleteChk(false);
+      }
     }
-  }, [unitList]);
+  }, [unitList, rowData, updateChk, deleteChk]);
 
   function GetParentUnit(data) {
     return data.row.parentUnit ? data.row.parentUnit.id : data.row.parentUnit;
   }
-
-  useEffect(() => {}, [rowData]);
-
-  useEffect(() => {
-    if (updateChk === true) {
-      updateUnit(rowData);
-      setUpdateChk(false);
-    }
-  }, [updateChk]);
-
-  useEffect(() => {
-    if (deleteChk === true) {
-      deleteUnit(rowData);
-      setDeleteChk(false);
-    }
-  }, [deleteChk]);
 
   const columns = [
     { field: 'unitCode', headerName: '조직번호', width: 200 },
@@ -129,25 +88,23 @@ function ManagementUnit() {
 
   return (
     <div style={{ marginTop: 70, marginBottom: 50 }}>
-      <Container maxWidth="maxWidth">
+      <Container maxWidth="maxwidth">
         {/* <Link to={'/add/unit'}>
           <PersonAddIcon fontSize="large" color="action" />
         </Link> */}
 
         <Link to={'/add/units'}>
-          <QueueIcon
-            fontSize="large"
-            color="action"
-            // style={{ marginLeft: '20px' }}
-          />
+          <QueueIcon fontSize="large" color="action" />
         </Link>
 
-        <Box sx={{ width: '100%', height: 700 }}>
+        <Box sx={{ width: '100%', height: 700, display: 'flex' }}>
           <DataGrid
             sx={{
               '	.MuiDataGrid-filterForm': {
                 color: 'red',
               },
+              justifyContent: 'center',
+              alignContent: 'center',
             }}
             rows={unitList}
             columns={columns}

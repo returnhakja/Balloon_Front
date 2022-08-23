@@ -1,5 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
+import CalendarInsert from './CalendarInsert';
+import CalendarUpdate from './CalendarUpdate';
 import { getScheduleByEmp } from '../../context/CalendarAxios';
 import '../../css/Celendar.css';
 import { Button, Container, Typography } from '@mui/material';
@@ -7,10 +9,6 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interaction from '@fullcalendar/interaction';
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
-import CalendarInsert from './CalendarInsert';
-import CalendarUpdate from './CalendarUpdate';
-import axios from 'axios';
-import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 
 const style = {
   position: 'absolute',
@@ -32,10 +30,8 @@ function Calendar() {
     state: false,
     scheduleId: null,
   });
-  const [eList, setCEList] = useState([]);
-  const [empInfo, setEmpInfo] = useOutletContext();
-  const empId = empInfo.empId;
-  console.log(list);
+  const [eList] = useState([]);
+  const [empInfo] = useOutletContext();
   const handleDateClick = () => {
     setOpenInsert(true);
   };
@@ -64,13 +60,16 @@ function Calendar() {
     }
   }, [empInfo]);
 
-  useEffect(() => {
-    console.log('되나');
-  }, [openInsert, openUpdate]);
+  useEffect(() => {}, [openInsert, openUpdate, list]);
 
-  useEffect(() => {
-    console.log(list);
-  }, [list]);
+  // useEffect(() => {
+  //   if (list.length === 0) {
+  //     if (empInfo.length !== 0) {
+  //       getScheduleByEmp(empInfo.empId, setList);
+  //     }
+  //   }
+  // }, [empInfo, openInsert, openUpdate, list]);
+
   // 즐겨찾기 캘린더
   // useEffect(() => {
   //   getEmpListInSameUnit(empId, setCEList);
@@ -80,8 +79,7 @@ function Calendar() {
   //모달
   return (
     <div className="container">
-      {/* <input type="checkbox" /> */}
-      {eList.map((emp, index) => {
+      {eList.map((emp) => {
         return (
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <input
@@ -96,7 +94,7 @@ function Calendar() {
           </Typography>
         );
       })}
-      <Container maxWidth="md">
+      <Container maxWidth="md" sx={{ zIndex: 2 }}>
         <Button
           onClick={() => {
             setOpenInsert(true);
@@ -127,7 +125,7 @@ function Calendar() {
           <FullCalendar
             locale="ko"
             initialView="dayGridMonth"
-            initialEvents={list}
+            // initialEvents={list}
             height="70vh"
             handleWindowResize="50vw"
             plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
@@ -137,12 +135,12 @@ function Calendar() {
               right: 'today prevYear prev next nextYear',
             }}
             googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
-            eventSources={{
+            events={{
               googleCalendarId:
                 'ko.south_korea#holiday@group.v.calendar.google.com',
-              className: '대한민국 휴일',
               color: 'orange',
             }}
+            eventSources={[list]}
             eventBackgroundColor={'black'}
             eventSourceSuccess={() => console.log('Success EventSource')}
             eventSourceFailure={() => console.log('Failure EventSource')}
@@ -155,7 +153,7 @@ function Calendar() {
             <FullCalendar
               locale="ko"
               initialView="dayGridMonth"
-              initialEvents={list}
+              // initialEvents={list}
               height="70vh"
               handleWindowResize="50vw"
               plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
@@ -165,12 +163,12 @@ function Calendar() {
                 right: 'today prevYear prev next nextYear',
               }}
               googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
-              eventSources={{
+              events={{
                 googleCalendarId:
                   'ko.south_korea#holiday@group.v.calendar.google.com',
-                className: '대한민국 휴일',
                 color: 'orange',
               }}
+              eventSources={list}
               eventBackgroundColor={'black'}
               eventSourceSuccess={() => console.log('Success EventSource')}
               eventSourceFailure={() => console.log('Failure EventSource')}
@@ -179,7 +177,6 @@ function Calendar() {
             />
           </>
         )}
-
       </Container>
     </div>
   );

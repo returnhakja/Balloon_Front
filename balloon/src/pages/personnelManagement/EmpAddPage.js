@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { signupValidation, signup } from '../../context/AuthFunc';
 import { findUnitList } from '../../context/UnitAxios';
 import { selectEmpByEmpId } from '../../context/EmployeeAxios';
+import { positionArr, responseArr, gradeArr } from '../../context/EmpFunc';
 import { Container, Button, TextField, Typography, Box } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -19,56 +20,13 @@ const MenuProps = {
   },
 };
 
-const positionArr = [
-  '인턴',
-  '사원',
-  '주임',
-  '대리',
-  '과장',
-  '차장',
-  '부장',
-  '이사',
-  '상무',
-  '전무',
-  '부사장',
-  '사장',
-  '부회장',
-  '이사회 의장',
-  '회장',
-];
-
-const responseArr = [
-  '없음',
-  '파트장',
-  '팀장',
-  '지점장',
-  '본부장',
-  '그룹장',
-  '부서장',
-  '사업부장',
-  '부문장',
-  '센터장',
-  '실장',
-  '임원',
-  '상근고문',
-  '고문',
-  'CIO',
-  'COO',
-  'CMO',
-  'CFO',
-  'CTO',
-  'CEO',
-];
-
-const gradeArr = ['ROLE_GUEST', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN'];
-
 function EmpAddPage() {
   const [unitArr, setUnitArr] = useState([]);
   const [posi, setPosi] = useState('인턴');
   const [responsi, setResponsi] = useState('없음');
   const [unit, setUnit] = useState('');
   const [urg, setUrg] = useState('ROLE_USER');
-  const [birth, setBirth] = useState(null);
+  // const [birth, setBirth] = useState(null);
   const [hidePassword, setHidePassword] = useState(true);
   const [idChk, setIdChk] = useState(false);
   const [dataChk, setDataChk] = useState(false);
@@ -96,6 +54,7 @@ function EmpAddPage() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     const empId = document.getElementById('empId').value;
     const password = document.getElementById('password').value;
     const empName = document.getElementById('empName').value;
@@ -135,9 +94,7 @@ function EmpAddPage() {
       licensePlate,
       photo
     );
-    console.log(inputEmp);
 
-    console.log(dataChk);
     if (dataChk === true) {
       inputEmp.then((data) => signup(data));
     }
@@ -201,7 +158,6 @@ function EmpAddPage() {
             value={posi}
             onChange={(e) => {
               setPosi(e.target.value);
-              console.log(posi);
             }}
             input={<OutlinedInput label="position" />}
             MenuProps={MenuProps}
@@ -222,7 +178,6 @@ function EmpAddPage() {
             style={{ width: '100%' }}
             onChange={(e) => {
               setResponsi(e.target.value);
-              console.log(responsi);
             }}>
             {responseArr.map((responsibility) => (
               <MenuItem key={responsibility} value={responsibility}>
@@ -267,7 +222,6 @@ function EmpAddPage() {
             style={{ width: '100%' }}
             onChange={(e) => {
               setUnit(e.target.value);
-              console.log(unit);
             }}>
             {unitArr.map((unit) => (
               <MenuItem key={unit.unitCode} value={unit.unitCode}>
@@ -309,9 +263,7 @@ function EmpAddPage() {
             MenuProps={MenuProps}
             style={{ width: '100%' }}
             onChange={(e) => {
-              console.log(e.target.value);
               setUrg(e.target.value);
-              console.log(urg);
             }}>
             {gradeArr.map((userRoleGrade) => (
               <MenuItem key={userRoleGrade} value={userRoleGrade}>

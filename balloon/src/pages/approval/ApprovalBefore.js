@@ -15,9 +15,10 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 function ApprovalBefore() {
+  const [docList, setDocList] = useState([]);
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
   const [endvalue, setEndValue] = useState(null);
@@ -28,6 +29,16 @@ function ApprovalBefore() {
   const handleChange = (event) => {
     setForm(event.target.value);
   };
+  const columns = [
+    { field: 'docId', headerName: '문서번호', width: 160 },
+    {
+      field: 'documentTitle',
+      headerName: '문서제목',
+      width: 350,
+      // renderCell: getdocId,
+    },
+    { field: 'updateTime', headerName: '처리일자', width: 160 },
+  ];
 
   return (
     <>
@@ -36,8 +47,21 @@ function ApprovalBefore() {
           <p className={styles.sasinfont}>결재전</p>
           <br />
           <hr />
+
           <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
-            {/* <DataGrid /> */}
+            <DataGrid
+              getRowId={(docList) => docList.docId}
+              rows={docList}
+              columns={columns}
+              pageSize={10}
+              rowsPerPageOptions={[10]}
+              components={{ Toolbar: GridToolbar }}
+              initialState={{
+                sorting: {
+                  sortModel: [{ field: 'updateTime', sort: 'desc' }],
+                },
+              }}
+            />
           </div>
         </Container>
       </SideNavigation>

@@ -1,31 +1,17 @@
 import { useEffect, useState } from 'react';
-import styles from '../../css/Component.module.css';
-import axios from 'axios';
-import { deletehandle } from '../../context/CalendarAxios';
-import {
-  Box,
-  Button,
-  Input,
-  InputLabel,
-  Modal,
-  TextField,
-  Typography,
-} from '@mui/material';
-import {
-  DatePicker,
-  DateTimePicker,
-  LocalizationProvider,
-} from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useOutletContext } from 'react-router-dom';
+import {
+  getScheduleIdInModal,
+  updateSchedule,
+  deleteSchedule,
+} from '../../context/CalendarAxios';
+import styles from '../../css/Component.module.css';
 import { BsCalendarWeek } from 'react-icons/bs';
-import { ko } from 'date-fns/esm/locale';
+import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
-  console.log('sssss');
-  console.log(style);
-  console.log(openUpdate);
-  console.log(setOpenUpdate);
+function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
   const handleClose = () => {
     setOpenUpdate(false);
     window.location.href = '/calendar';
@@ -41,19 +27,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
     const headers = {
       'Content-Type': 'application/json',
     };
-
-    const data = async (list) => {
-      const response = await axios
-        .get(`/api/cal/all/${openUpdate.scheduleId}`, headers)
-
-        .then((response) => {
-          setList(response.data);
-        });
-    };
-
-    data();
-    console.log();
-    console.log(empInfo);
+    getScheduleIdInModal(openUpdate.scheduleId, headers, setList);
   }, []);
 
   useEffect(() => {
@@ -64,7 +38,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
   }, [list]);
 
   //업데이트
-  const updateHandle = () => {
+  const updateHandle = async () => {
     const scheduletitle = document.getElementById('scheduletitle').value;
     const CalendarContent = document.getElementById('CalendarContent').value;
     const CalendarLocation = document.getElementById('CalendarLocation').value;
@@ -82,44 +56,18 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
     const headers = {
       'Content-Type': 'application/json',
     };
-
-    const data = async (inputdata) => {
-      await axios
-        .put('/api/cal/update', inputdata, {
-          headers,
-        })
-        .catch((err) => console.log(err));
-      setOpenUpdate(false);
-      window.location.href = '/calendar';
-    };
-    data(inputdata);
-
-    window.location.href = '/calendar';
+    await updateSchedule(inputdata, headers, setOpenUpdate);
   };
 
-  const deletehandle1 = async () => {
+  const deletehandle = async () => {
     console.log(openUpdate.scheduleId);
-
-    await axios
-      .delete(`http://localhost:8080/api/cal/delete/${openUpdate.scheduleId}`)
-
-      .then(() => {
-        handleClose(false);
-      })
-      .catch((err) => console.log(err));
-
-    window.location.href = '/calendar';
+    await deleteSchedule(openUpdate.scheduleId, handleClose);
   };
-
-  console.log(list);
 
   return (
     <Modal
       open={openUpdate.length !== 0 && openUpdate.state}
-      onClose={() => handleClose()}
-      // aria-labelledby="modal-modal-title"
-      // aria-describedby="modal-modal-description"
-    >
+      onClose={() => handleClose()}>
       <Box sx={style}>
         <Typography
           id="modal-modal-title"
@@ -239,7 +187,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate }) {
           수정
         </Button>
         <Button
-          onClick={() => deletehandle1()}
+          onClick={() => deletehandle()}
           sx={{ fontSize: 30, border: 1, mt: 1 }}>
           삭제
         </Button>

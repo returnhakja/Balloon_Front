@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
@@ -221,14 +221,15 @@ function Pointment() {
             {DfCard}
           </Card>
 
-          {approver.map((empData) => {
+          {approver.map((empData, index) => {
             console.log(empData);
 
             return (
               <Card
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
-                style={{ backgroundColor: '#F1F9FF' }}>
+                style={{ backgroundColor: '#F1F9FF' }}
+                key={index}>
                 {ApCard(empData.empName)}
               </Card>
             );
@@ -304,8 +305,8 @@ function Pointment() {
                     // className={styles.inputtext}
                   >
                     {mEmpInfo &&
-                      mEmpInfo.map((mEmps) => (
-                        <MenuItem key={mEmps.empId} value={mEmps}>
+                      mEmpInfo.map((mEmps, index) => (
+                        <MenuItem key={index} value={mEmps}>
                           {mEmps.empName} ({mEmps.empId})
                         </MenuItem>
                       ))}
@@ -328,8 +329,8 @@ function Pointment() {
                     // className={styles.inputtext}
                   >
                     {units &&
-                      units.map((unitInfo) => (
-                        <MenuItem key={unitInfo.unitId} value={unitInfo}>
+                      units.map((unitInfo, index) => (
+                        <MenuItem key={index} value={unitInfo}>
                           {unitInfo.unitName}
                         </MenuItem>
                       ))}
@@ -351,8 +352,8 @@ function Pointment() {
 
                     // className={styles.inputtext}
                   >
-                    {positionArr.map((position) => (
-                      <MenuItem key={position} value={position}>
+                    {positionArr.map((position, index) => (
+                      <MenuItem key={index} value={position}>
                         {position}
                       </MenuItem>
                     ))}
@@ -383,52 +384,60 @@ function Pointment() {
 
           <div className={styles.savebutton}>
             <Box sx={{ '& button': { m: 1 } }}>
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={async () => {
-                  await insertPA(
-                    docId,
-                    3,
-                    inputData,
-                    empInfo,
-                    startValue,
-                    mEmp,
-                    unit,
-                    posi,
-                    setInputData
-                  );
-                  {
-                    approver.map((data, index) => {
-                      console.log(data);
-                      console.log(index);
-                      insertApproval(docId, 0, data, inputData, empInfo);
-                    });
-                  }
-                  window.location.href = 'http://localhost:3000/boxes';
-                }}>
-                임시저장
-              </Button>
-              <SaveButton
-                variant="contained"
-                color="success"
-                size="large"
-                onClick={async () => {
-                  await insertPA(
-                    docId,
-                    1,
-                    inputData,
-                    empInfo,
-                    startValue,
-                    mEmp,
-                    unit,
-                    posi,
-                    setInputData
-                  );
-                  window.location.href = 'http://localhost:3000/boxes';
-                }}>
-                상신하기
-              </SaveButton>
+              <Link to={'/boxes/ds'}>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={async () => {
+                    await insertPA(
+                      docId,
+                      3,
+                      inputData,
+                      empInfo,
+                      startValue,
+                      mEmp,
+                      unit,
+                      posi,
+                      setInputData
+                    );
+                    {
+                      approver.map((data, index) => {
+                        console.log(data);
+                        console.log(index);
+                        insertApproval(docId, 0, data, inputData, empInfo);
+                      });
+                    }
+                    alert('문서가 임시저장되었습니다!');
+                  }}>
+                  임시저장
+                </Button>
+              </Link>
+              <Link to={'/boxes'}>
+                <SaveButton
+                  variant="contained"
+                  color="success"
+                  size="large"
+                  onClick={async () => {
+                    if (approver != 0) {
+                      await insertPA(
+                        docId,
+                        1,
+                        inputData,
+                        empInfo,
+                        startValue,
+                        mEmp,
+                        unit,
+                        posi,
+                        setInputData
+                      );
+                    } else {
+                      alert('결재선을 설정해주세요 !');
+                    }
+                    alert('문서가 상신되었습니다!');
+                  }}>
+                  상신하기
+                </SaveButton>
+              </Link>
             </Box>
           </div>
         </div>
