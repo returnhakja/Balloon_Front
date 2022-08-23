@@ -252,13 +252,13 @@ function Report() {
                     setInputData
                   );
                   {
-                    approver.map((data, index) => {
+                    approver.map(async (data, index) => {
                       console.log(data);
                       console.log(index);
-                      insertApproval(docId, 0, data, inputData, empInfo);
+                      await insertApproval(docId, 0, data, inputData, empInfo);
                     });
                   }
-                  // window.location.href = 'http://localhost:3000/boxes';
+                  window.location.href = '/boxes';
                 }}>
                 임시저장
               </Button>
@@ -267,14 +267,18 @@ function Report() {
                 color="success"
                 size="large"
                 onClick={async () => {
-                  await insertBizRpt(
-                    docId,
-                    1,
-                    inputData,
-                    empInfo,
-                    setInputData
-                  );
-                  window.location.href = 'http://localhost:3000/boxes';
+                  if (approver != 0) {
+                    await insertBizRpt(
+                      docId,
+                      1,
+                      inputData,
+                      empInfo,
+                      setInputData
+                    );
+                    window.location.href = '/boxes';
+                  } else {
+                    alert('결재선을 설정해주세요 !');
+                  }
                 }}>
                 상신하기
               </SaveButton>

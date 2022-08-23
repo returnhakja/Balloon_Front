@@ -2,7 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import styles from '../../css/Chat/Chat.module.css';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext, useParams } from 'react-router-dom';
+import ScrollToBottom from 'react-scroll-to-bottom';
 import SendIcon from '@mui/icons-material/Send';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {
@@ -33,12 +34,15 @@ import GroupIcon from '@mui/icons-material/Group';
 
 import ChatSide from './ChatSide';
 
-import ScrollToBottom from 'react-scroll-to-bottom';
+// import ScrollToBottom from 'react-scroll-to-bottom';
+
+const scrollToBottom = () => {
+  document.getElementById('scroller').scroll(0, 1000);
+};
 
 function Chat() {
   const [empInfo, setEmpInfo] = useOutletContext();
   const empId = empInfo.empId;
-
   const chatroomId = new URL(document.location).searchParams.get('room');
   const [input, setInput] = useState([]);
   const inputRef = useRef();
@@ -158,43 +162,41 @@ function Chat() {
         <ChatSide />
         <div className={styles.chatconvimeline}>
           <div className={styles.chatroomname}>
-            <h3>
-              {chatroomName ? (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <TextField
-                    id="outlined-multiline-flexible"
-                    multiline
-                    label="-"
-                    maxRows={4}
-                    value={chatRoomTitle}
-                    onChange={onChangeTitle}
-                    onKeyPress={keyEnter}
-                    onClick={onClickChatRoomTitle}
-                  />
-                  {clickChk == 2 ? (
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        onUserUpdate(chatroomId, chatRoomTitle, headCount);
-                        setClickChk(0);
-                      }}>
-                      수정하기
-                    </Button>
-                  ) : (
-                    ''
-                  )}
-                </div>
-              ) : (
-                <h5 className=" mb-2 font-weight-bold text-gray-dark">
-                  {chatRoomTitle}{' '}
-                </h5>
-              )}
-            </h3>
+            {chatroomName ? (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <TextField
+                  id="outlined-multiline-flexible"
+                  multiline
+                  label="-"
+                  maxRows={4}
+                  value={chatRoomTitle}
+                  onChange={onChangeTitle}
+                  onKeyPress={keyEnter}
+                  onClick={onClickChatRoomTitle}
+                />
+                {clickChk == 2 ? (
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      onUserUpdate(chatroomId, chatRoomTitle, headCount);
+                      setClickChk(0);
+                    }}>
+                    수정하기
+                  </Button>
+                ) : (
+                  ''
+                )}
+              </div>
+            ) : (
+              <h5 className=" mb-2 font-weight-bold text-gray-dark">
+                {chatRoomTitle}{' '}
+              </h5>
+            )}
           </div>
           <List>
             <ListItemButton onClick={handleClick}>
@@ -234,7 +236,7 @@ function Chat() {
                 })}
               {/* 채팅방 나가기 */}
               <div className={styles.logoutBtn}>
-                <Link to={'/chatroom'}>
+                <Link to={'/chatlist'}>
                   <Button
                     onClick={() =>
                       onExitRoom(
@@ -250,7 +252,15 @@ function Chat() {
             </Collapse>
           </List>
 
-          <ScrollToBottom className={styles.scrollbar}>
+          {/* <ScrollToBottom className={styles.scrollbar}> */}
+
+          {/* 채팅방에서 사원초대하기 */}
+          {/* <div>
+        <input id="empId" placeholder="초대할 사원의 사번을 입력하세요" />
+        <button onClick={onUserAdd}>사원초대하기</button>
+      </div> */}
+
+          <ScrollToBottom className={styles.scrollbar} id="scroller">
             {/* 채팅기록을 가져옴 */}
             {chatting.map((msg, index) => {
               const chatTime = msg.chatTime.substr(11, 5);
@@ -300,6 +310,8 @@ function Chat() {
                   inputRef.current.value && send();
                   inputRef.current.focus();
                   inputRef.current.value = '';
+                  // inputRef.current.scroll(0, 1000);
+                  // scrollToBottom();
                 }}>
                 전송
               </Button>

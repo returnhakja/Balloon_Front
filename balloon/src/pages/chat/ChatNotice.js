@@ -50,7 +50,7 @@ function ChatNotice() {
               console.log(chat.chatroom.chatroomName.substr(0, 15));
               return (
                 <div className={styles.roomcon} key={index}>
-                  <Link to={`/chat?room=${chat.chatroom.chatroomId}`}>
+                  <Link to={`/chatting?room=${chat.chatroom.chatroomId}`}>
                     <Box
                       className={styles.chatRoomBox}
                       sx={

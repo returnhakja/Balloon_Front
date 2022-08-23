@@ -306,6 +306,8 @@ export const deletePA = async (docId) => {
   await axios.delete(str);
 };
 
+// 결재 생성 -------------------------------------------------
+
 export const insertApproval = async (
   docId,
   docStatus,

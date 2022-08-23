@@ -38,7 +38,7 @@ function intersection(a, b) {
   return a.filter((value) => b.indexOf(value) !== -1);
 }
 
-function Modalapproval({
+function ModalApproval({
   openapprovalModal,
   setOpenapprovalModal,
   setApprover,
@@ -78,7 +78,7 @@ function Modalapproval({
         setRight(approver);
       } else setLeft(arr);
     }
-  }, [chatEmpList]);
+  }, [chatEmpList, approver]);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -235,4 +235,4 @@ function Modalapproval({
   );
 }
 
-export default Modalapproval;
+export default ModalApproval;

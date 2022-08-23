@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   selectEmployees,
   updateEmployee,
@@ -6,42 +7,13 @@ import {
 } from '../../context/EmployeeAxios';
 import { updateCheck, deleteCheck } from '../../context/MuiRenderFunc';
 import { positionArr, responseArr, gradeArr } from '../../context/EmpFunc';
-import {
-  DataGrid,
-  GridEditSingleSelectCell,
-  GridActionsCellItem,
-  useGridApiContext,
-  GridToolbar,
-} from '@mui/x-data-grid';
-import PropTypes from 'prop-types';
+import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/system';
 import Delete from '@mui/icons-material/Delete';
 import PersonAddIcon from '@mui/icons-material/PersonAddAlt1';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
-
-import { Link } from 'react-router-dom';
-
-const CustomTypeEditComponent = (props) => {
-  const apiRef = useGridApiContext();
-
-  const handleValueChange = async () => {
-    await apiRef.current.setEditCellValue({
-      id: props.id,
-      field: 'account',
-      value: '',
-    });
-  };
-
-  return (
-    <GridEditSingleSelectCell onValueChange={handleValueChange} {...props} />
-  );
-};
-
-CustomTypeEditComponent.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-};
 
 function ManagementEmployee() {
   const [empList, setEmpList] = useState([]);
@@ -62,16 +34,17 @@ function ManagementEmployee() {
   };
 
   useEffect(() => {
-    !!empList && selectEmployees(setEmpList);
-
-    if (updateChk === true) {
-      Object.keys(rowData).length !== 0 && updateEmployee(rowData);
-      setUpdateChk(false);
-    }
-
-    if (deleteChk === true) {
-      Object.keys(rowData).length !== 0 && deleteEmployee(rowData);
-      setDeleteChk(false);
+    if (empList.length === 0) {
+      selectEmployees(setEmpList);
+    } else {
+      if (updateChk === true) {
+        Object.keys(rowData).length !== 0 && updateEmployee(rowData);
+        setUpdateChk(false);
+      }
+      if (deleteChk === true) {
+        Object.keys(rowData).length !== 0 && deleteEmployee(rowData);
+        setDeleteChk(false);
+      }
     }
   }, [empList, updateChk, deleteChk, rowData]);
 

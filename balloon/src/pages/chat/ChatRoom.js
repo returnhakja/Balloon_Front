@@ -24,6 +24,7 @@ function ChatRoom() {
   const client = Stomp.over(sock);
 
   //마지막으로 보낸 채팅list가져오기
+  console.log(empId);
   useEffect(() => {
     if (empId) {
       onChatroom(setChatroom, empId);
@@ -35,7 +36,7 @@ function ChatRoom() {
       <div className={styles.side1}>
         <div className={styles.chatRoomList}>
           <ChatSide />
-          <div className={styles.list}>
+          <div className={styles.listroom}>
             <div className={styles.chatfont}>
               <div className={styles.ChatText}>채팅 목록</div>
             </div>
@@ -49,7 +50,7 @@ function ChatRoom() {
               console.log(chat.chatroom.chatroomName.substr(0, 15));
               return (
                 <div className={styles.roomcon} key={index}>
-                  <Link to={`/chat?room=${chat.chatroom.chatroomId}`}>
+                  <Link to={`/chatting?room=${chat.chatroom.chatroomId}`}>
                     <Box
                       className={styles.chatRoomBox}
                       sx={
@@ -114,7 +115,7 @@ function ChatRoom() {
                           </div>
                         ) : (
                           <div className={styles.content}>
-                            {chat.chatContent.substr(0, 25)}...
+                            {chat.chatContent.substr(0, 15)}...
                             <div className={styles.LastTime}>
                               {chat.chatTime.substr(11, 5)}
                             </div>
