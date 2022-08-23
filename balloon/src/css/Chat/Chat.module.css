@@ -4,8 +4,6 @@
   padding-right: 10px;
   margin-bottom: 10px; */
   background-color: darkseagreen;
-
-  word-break: break-all;
   /* text-align: left; */
   /* width: 90%; */
   /* float: left; */
@@ -18,12 +16,14 @@
   left: 0;
   right: 0;
   bottom: -16px;
+  word-break: break-all;
 }
 
 .mycontent {
+  word-break: break-all;
   background-color: antiquewhite;
   text-align: right;
-  word-break: break-all;
+
   margin-left: 5px;
   /* width: 100%; */
 
@@ -80,6 +80,12 @@
   display: flex;
   justify-content: right;
   align-items: flex-end;
+}
+
+.scroll {
+  /* padding: 5% 0; */
+
+  /* flex: auto; */
 }
 
 /* .contain {
@@ -166,7 +172,7 @@
 }
 
 .scrollbar {
-  height: 510px;
+  height: 700px;
   margin-bottom: 5%;
   max-width: 400px;
   overflow-x: hidden;
@@ -224,12 +230,23 @@
   background-color: #d8dfe0;
   /* width: 70%; */
 }
+.cuCon {
+  /* float: left; */
+  /* display: flex; */
+
+  /* justify-content: center;
+  align-items: center; */
+  /* display: inline-block; */
+}
 
 .list {
   width: 100%;
-  height: 100%;
+  /* height: 90vh; */
 }
-
+.listroom {
+  width: 100%;
+  height: 80vh;
+}
 .listcon {
   width: 100%;
   height: 100%;
