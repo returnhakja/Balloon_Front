@@ -1,7 +1,8 @@
 .table {
   /* border: 1px solid red; */
   width: 100%;
-  border-top: 1px solid #444444;
+
+  border-top: 1px solid #686666;
   border-collapse: collapse;
 }
 
@@ -26,8 +27,8 @@
 .subtitle {
   font-size: 2rem;
   margin-top: 5%;
-
-  margin-left: 2%;
+  margin-bottom: 1%;
+  /* margin-left: 2%; */
 }
 
 .btnnav {
@@ -62,10 +63,6 @@
 
 .bodycontent {
   background-color: #f6faff;
-  /* width: 20%;
-  margin: 0 auto;
-  height: 20%;
-  margin: 30px 20% 30px 20%; */
 
   /*수정*/
   display: table;
@@ -102,12 +99,14 @@
 
 .inputtext {
   width: 80%;
+  /* border: 2px solid red; */
   text-align: left;
 }
 
 .giantitle {
   font-size: 2rem;
-  margin-bottom: 2%;
+  margin-bottom: 1%;
+  margin-top: 2%;
 }
 
 .tdright {
@@ -122,7 +121,7 @@
 }
 
 .fonttext {
-  margin-top: 5%;
+  margin-top: 1%;
 }
 
 .maininput {
@@ -181,4 +180,20 @@
 .centerfont {
   align-content: center;
   font-size: 2rem;
+}
+
+.tdleftpadding {
+  border: 1px solid black;
+  border-left: none;
+  width: 250px;
+  padding: 10px;
+  table-layout: 10%;
+}
+
+.datepicker {
+  width: 100%;
+}
+
+.approvalCard {
+  display: flex;
 }

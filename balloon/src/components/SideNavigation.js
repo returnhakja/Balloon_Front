@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
-import { FaCog, FaThList } from 'react-icons/fa';
+import { BsPencil, BsPencilFill } from 'react-icons/bs';
+import { FaBookReader, FaCog, FaFolderOpen, FaThList } from 'react-icons/fa';
 import {
   Menu,
   MenuItem,
@@ -12,7 +13,6 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import '../css/Sidebar.css';
-import 'react-pro-sidebar/dist/css/styles.css';
 import '../css/SidebarCustom.scss';
 
 const Menuitem = styled(MenuItem)`
@@ -27,7 +27,8 @@ const SideNavigation = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const styles = {
     sideBarHeight: {
-      height: '100vh',
+      height: '150vh',
+      zIndex: 1,
     },
     menuIcon: {
       float: 'right',
@@ -48,46 +49,49 @@ const SideNavigation = ({ children }) => {
           </SidebarHeader>
 
           <Menu iconShape="square">
-            <Menuitem icon={<FaCog />}>
-              <Link to={'/dratf/form'}>기안작성</Link>
+            <Menuitem icon={<BsPencilFill />}>
+              <Link to={'/draft/form'}>기안작성</Link>
             </Menuitem>
 
-            <SubMenu title="진행중" icon={<FaThList />}>
+            <SubMenu title="기안함" icon={<FaThList />}>
               <Menuitem>
-                <Link to={'/box/dd'}>상신한</Link>
+                <Link to={'/boxes/dd'}>상신한</Link>
               </Menuitem>
 
               <MenuItem>
-                <Link to={'/box/dc'}>완료된</Link>
+                <Link to={'/boxes/dc'}>완료된</Link>
               </MenuItem>
 
               <MenuItem>
-                <Link to={'/box/ds'}>저장된</Link>
+                <Link to={'/boxes/ds'}>저장된</Link>
               </MenuItem>
 
               <MenuItem>
-                <Link to={'/box/dr'}>반려된</Link>
+                <Link to={'/boxes/dr'}>반려된</Link>
               </MenuItem>
             </SubMenu>
-            <SubMenu title="결재함" icon={<FaThList />}>
+            <SubMenu title="결재함" icon={<FaBookReader />}>
               <Menuitem>
-                <Link to={'/box/ab'}>결재전</Link>
+                <Link to={'/boxes/ab'}>결재전</Link>
               </Menuitem>
 
               <MenuItem>
-                <Link to={'/box/ao'}>진행중</Link>
+                <Link to={'/boxes/ao'}>진행중</Link>
               </MenuItem>
 
               <MenuItem>
-                <Link to={'/box/ac'}>완료된</Link>
+                <Link to={'/boxes/ac'}>완료된</Link>
               </MenuItem>
 
               <MenuItem>
-                <Link to={'/box/ar'}>반려된</Link>
+                <Link to={'/boxes/ar'}>반려된</Link>
               </MenuItem>
             </SubMenu>
-            <Menuitem icon={<FaCog />}>
-              <Link to={'/box/dl'}>문서대장</Link>
+            <Menuitem icon={<FaFolderOpen />}>
+              <Link to={'/boxes/dl'}>문서대장</Link>
+            </Menuitem>
+            <Menuitem icon={<FaFolderOpen />}>
+              <Link to={'/boxes/pd'}>결재전확인페이지</Link>
             </Menuitem>
           </Menu>
         </ProSidebar>

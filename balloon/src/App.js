@@ -1,109 +1,202 @@
 import './App.css';
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { selectEmployeeByEmpId } from './context/EmployeeAxios';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import MainPage from './components/MainPage';
-
-import Boxs from './pages/Boxs';
-import Dashboard from './pages/Dashboard';
-import Declare from './pages/Declare';
-import Complete from './pages/Complete';
-import Save from './pages/Save';
-import Refuese from './pages/Refuese';
-import ApprovalBefore from './pages/ApprovalBefore';
-import Calendar from './pages/Calendar';
-import Businessreport from './pages/Businessreport';
-import Businesstrip from './pages/Businesstrip';
-import Persnelappointment from './pages/Persnelappointment';
-import ApprovalOngoing from './pages/ApprovalOngoing';
-import ApprovalComplete from './pages/ApprovalComplete';
-import ApprovalRefuse from './pages/ApprovalRefuse';
-import DocumentList from './pages/DocumentList';
-
-import LoginPage from './pages/LoginPage';
 import Home from './components/Home';
-import Organization from './pages/Organization';
+import MainPage from './components/MainPage';
 import PrivateRoutes from './components/PrivateRoutes';
-import ManagementUnit from './pages/ManagementUnit';
-import ManagementEmployee from './pages/ManagementEmployee';
+
+import LoginPage from './pages/login/LoginPage';
+
+import Boxes from './pages/approval/Boxes';
+import Dashboard from './pages/approval/Dashboard';
+import Declare from './pages/approval/Declare';
+import Complete from './pages/approval/Complete';
+import Save from './pages/approval/Save';
+import Refuese from './pages/approval/Refuese';
+import ApprovalBefore from './pages/approval/ApprovalBefore';
+import BusinessReport from './pages/approval/BusinessReport';
+
+import BusinessTrip from './pages/approval/BusinessTrip';
+import PersonnelAppointment from './pages/approval/PersonnelAppointment';
+import ApprovalOngoing from './pages/approval/ApprovalOngoing';
+import ApprovalComplete from './pages/approval/ApprovalComplete';
+import ApprovalRefuse from './pages/approval/ApprovalRefuse';
+import DocumentList from './pages/approval/DocumentList';
+import BusinessReportInfo from './pages/approval/BusinessReportInfo';
+import BusinessTripInfo from './pages/approval/BusinessTripInfo';
+import PersonnelAppointmentInfo from './pages/approval/PersonnelAppointmentInfo';
+
+import SavedBusinessReport from './pages/approval/SavedBusinessReport';
+import SavedBusinessTrip from './pages/approval/SavedBusinessTrip';
+import SavedPersonnelAppointment from './pages/approval/SavedPersonnelAppointment';
+
+import CompleteBusinessReportInfo from './pages/approval/CompleteBusinessReportInfo';
+import CompleteBusinessTripInfo from './pages/approval/CompleteBusinessTripInfo';
+import CompletePersonnelAppointmentInfo from './pages/approval/CompletePersonnelAppointmentInfo';
+
+import Calendar from './pages/calendar/Calendar';
+
+import Chat from './pages/chat/Chat';
+import ChatRoom from './pages/chat/ChatRoom';
+import CreateRoom from './pages/chat/CreateRoom';
+import ChatEmpList from './pages/chat/ChatEmpList';
+
+import Organization from './pages/Organization';
+
+import ManagementUnit from './pages/personnelManagement/ManagementUnit';
+import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
+import EmpAddPage from './pages/personnelManagement/EmpAddPage';
+import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
+import UnitListAddPage from './pages/personnelManagement/UnitListAddPage';
+import ChatNotice from './pages/chat/ChatNotice';
+
+import DeclaredBusinessReportInfo from './pages/approval/DeclaredBusinessReportInfo';
+import DeclaredBusinessTripInfo from './pages/approval/DeclaredBusinessTripInfo';
+import DeclaredPersonnelAppointmentInfo from './pages/approval/DeclaredPersonnelAppointmentInfo';
+
+import NotFound from './pages/NotFound';
+import PaymentDeclare from './pages/approval/PaymentDeclare';
+
 
 function App() {
-  const [empId, setEmpId] = useState('');
   const [empInfo, setEmpInfo] = useState([]);
-  const [isLogin, setLogin] = useState(false);
+  const [isLogin, setLogin] = useState(null);
+
+  // 채팅방 초대하기
+  const [invite, setInvite] = useState([]);
 
   useEffect(() => {
-    if (!!empId) {
-      if (empId.length !== 0) {
-        selectEmployeeByEmpId(empId, setEmpInfo);
-      }
-    } else {
-      // setLogin(false);
-      // console.log(isLogin);
-    }
-  }, [empId]);
+    const l = localStorage.getItem('logged');
+    l && JSON.parse(l) ? setLogin(true) : setLogin(false);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('logged', isLogin);
+  }, [isLogin]);
 
   return (
-    <Router>
-      <Routes>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Home
+            empInfo={empInfo}
+            setEmpInfo={setEmpInfo}
+            logout={() => setLogin(false)}
+            isLogin={isLogin}
+          />
+        }>
+        <Route index element={<MainPage />} />
+        {/* 로그인 */}
+        {!isLogin ? (
+          <Route
+            path="/loginpage"
+            element={<LoginPage authenticate={() => setLogin(true)} />}
+          />
+        ) : (
+          <Route path="/loginpage" element={<Navigate to="/" />} />
+        )}
+
+        {/* 조직도 */}
+        <Route path="/organization">
+          <Route index element={<Organization />} />
+        </Route>
+
+        {/* Private Routes */}
         <Route
-          path="/"
           element={
-            <Home
-              setEmpId={setEmpId}
+            <PrivateRoutes
               empInfo={empInfo}
               setEmpInfo={setEmpInfo}
+              isLogin={isLogin}
+              setLogin={setLogin}
             />
           }>
-          <Route index element={<MainPage />} />
-          {/* 로그인 */}
-          <Route path="/loginpage" element={<LoginPage />} />
-          {/* 조직도 */}
-          <Route path="/organization">
-            <Route index element={<Organization />} />
-          </Route>
-          {/* Private Routes */}
+          {/* 캘린더 */}
+          <Route element={<Calendar />} path="/calendar" exact />
 
+          {/* 결재관리 */}
+          <Route path="/boxes" element={<Boxes />} />
+          {/* <Route index  /> */}
+          <Route path="/boxes/dd" element={<Declare />} />
+          <Route path="/boxes/dc" element={<Complete />} />
+          <Route path="/boxes/ds" element={<Save />} />
+          <Route path="/boxes/dr" element={<Refuese />} />
+          <Route path="/boxes/ab" element={<ApprovalBefore />} />
+          <Route path="/boxes/ao" element={<ApprovalOngoing />} />
+          <Route path="/boxes/ac" element={<ApprovalComplete />} />
+          <Route path="/boxes/ar" element={<ApprovalRefuse />} />
+          <Route path="/boxes/dl" element={<DocumentList />} />
+          <Route path="/boxes/pd" element={<PaymentDeclare />} />
+
+          {/* 상세 정보 */}
+          <Route path="/doc/br/:docId" element={<BusinessReportInfo />} />
+          <Route path="/doc/tp/:docId" element={<BusinessTripInfo />} />
+          <Route path="/doc/pa/:docId" element={<PersonnelAppointmentInfo />} />
+
+          {/* 문서대장 상세 정보 */}
           <Route
-            element={
-              <PrivateRoutes
-                empId={empId}
-                setEmpId={setEmpId}
-                empInfo={empInfo}
-                setEmpInfo={setEmpInfo}
-              />
-            }>
-            {/* 캘린더 */}
-            <Route element={<Calendar />} path="/calendar" exact />
-            {/* 결재관리 */}
-            <Route path="/box" element={<Boxs />} />
-            <Route path="/box/dd" element={<Declare />} />
-            <Route path="/box/dc" element={<Complete />} />
-            <Route path="/box/ds" element={<Save />} />
-            <Route path="/box/dr" element={<Refuese />} />
-            <Route path="/box/ab" element={<ApprovalBefore />} />
-            <Route path="/box/ao" element={<ApprovalOngoing />} />
-            <Route path="/box/ac" element={<ApprovalComplete />} />
-            <Route path="/box/ar" element={<ApprovalRefuse />} />
-            <Route path="/box/dl" element={<DocumentList />} />
-            {/* 기안작성 */}
-            <Route path="/dratf/form" element={<Dashboard />} />
-            <Route path="/dratf/br" element={<Businessreport />} />
-            <Route path="/dratf/bt" element={<Businesstrip />} />
-            <Route path="/dratf/pa" element={<Persnelappointment />} />
-            {/* 조직관리 */}
-            <Route path="/management/unit" element={<ManagementUnit />} />
-            {/* 사원관리 */}
-            <Route
-              path="/management/employee"
-              element={<ManagementEmployee />}
-            />
-          </Route>
+            path="/doc/cpbr/:docId"
+            element={<CompleteBusinessReportInfo />}
+          />
+          <Route
+            path="/doc/cptp/:docId"
+            element={<CompleteBusinessTripInfo />}
+          />
+          <Route
+            path="/doc/cppa/:docId"
+            element={<CompletePersonnelAppointmentInfo />}
+          />
+
+          {/* 상신기안 상세 정보 */}
+          <Route
+            path="/doc/ddbr/:docId"
+            element={<DeclaredBusinessReportInfo />}
+          />
+          <Route
+            path="/doc/ddtp/:docId"
+            element={<DeclaredBusinessTripInfo />}
+          />
+          <Route
+            path="/doc/ddpa/:docId"
+            element={<DeclaredPersonnelAppointmentInfo />}
+          />
+
+          {/* </Route> */}
+          {/* 기안작성 */}
+          <Route path="/draft/form" element={<Dashboard />} />
+          <Route path="/draft/br" element={<BusinessReport />} />
+          <Route path="/draft/bt" element={<BusinessTrip />} />
+          <Route path="/draft/pa" element={<PersonnelAppointment />} />
+          {/* 저장된 기안 */}
+          <Route path="/draft/sdbr/:docId" element={<SavedBusinessReport />} />
+          <Route path="/draft/sdbt/:docId" element={<SavedBusinessTrip />} />
+          <Route
+            path="/draft/sdpa/:docId"
+            element={<SavedPersonnelAppointment />}
+          />
+          {/* 메신저 */}
+          <Route
+            path="/chatemplist"
+            element={<ChatEmpList invite={invite} setInvite={setInvite} />}
+          />
+          <Route path="/chatlist" element={<ChatRoom />} />
+          <Route path="/chatting" element={<Chat />} />
+          <Route path="/createroom" element={<CreateRoom invite={invite} />} />
+          <Route path="/chatnotice" element={<ChatNotice />} />
+          {/* 조직관리 */}
+          <Route path="/management/unit" element={<ManagementUnit />} />
+          <Route path="/add/units" element={<UnitListAddPage />} />
+          {/* 사원관리 */}
+          <Route path="/management/employee" element={<ManagementEmployee />} />
+          <Route path="/add/employee" element={<EmpAddPage />} />
+          <Route path="/add/employees" element={<EmpListAddPage />} />
+            <Route path="*" element={<NotFound />} />
         </Route>
-      </Routes>
-    </Router>
+      </Route>
+    </Routes>
   );
 }
 

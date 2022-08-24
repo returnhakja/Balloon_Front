@@ -6,14 +6,10 @@
 
 .container1 {
   display: flex;
-
-  /* margin-top: 6%; */
-  /* position: relative; */
 }
 
 main {
   width: 100%;
-  padding: 20px;
 }
 
 .sidebar {
@@ -21,7 +17,6 @@ main {
   color: rgb(0, 0, 0);
   height: 100vh;
   width: 200px;
-  /* transition: all 0.5s; 이거없는게 더 나음*/
 }
 
 .top_section {
@@ -53,12 +48,6 @@ main {
   background: lightskyblue;
   color: #000;
   transition: all 0.5s;
-}
-
-/*선택된 항목*/
-.active {
-  background: lightskyblue;
-  color: #000;
 }
 
 .icon,

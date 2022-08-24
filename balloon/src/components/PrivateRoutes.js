@@ -1,13 +1,28 @@
+import { useEffect, useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
-import { Link, useOutletContext } from 'react-router-dom';
-import { getCookie } from '../context/AuthFunc';
+import Cookies from 'universal-cookie';
 
-function PrivateRoutes({ empId, setEmpId, empInfo, setEmpInfo }) {
-  return !!empId ? (
-    <Outlet context={(setEmpId, empInfo, setEmpInfo)} />
-  ) : (
-    <Navigate to="/loginpage" />
-  );
+function PrivateRoutes({ empInfo, setEmpInfo, isLogin, setLogin }) {
+  const [check, setCheck] = useState(false);
+  const cookies = new Cookies();
+
+  useEffect(() => {
+    const l = localStorage.getItem('logged');
+    l && JSON.parse(l) ? setLogin(true) : setLogin(false);
+
+    setCheck(!check);
+  }, []);
+
+  return check ? (
+    isLogin ? (
+      <Outlet context={[empInfo, setEmpInfo]} />
+    ) : (
+      <>
+        {cookies.remove('accessToken')}
+        <Navigate to="/loginpage" />
+      </>
+    )
+  ) : null;
 }
 
 export default PrivateRoutes;
