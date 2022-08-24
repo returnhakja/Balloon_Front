@@ -19,7 +19,10 @@ import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
 
 import { FcDocument } from 'react-icons/fc';
-import { getBizRptByBizRptId } from '../../context/ApprovalAxios';
+import {
+  getApvlByApvrNameAnddocStatus,
+  getBizRptByBizRptId,
+} from '../../context/ApprovalAxios';
 import PaymentDeclareModal from './PaymentDecalreModal';
 
 const SaveButton = styled(Button)(({ theme }) => ({

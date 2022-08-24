@@ -370,3 +370,14 @@ export const insertApproval = async (
   console.log(inputData);
   await axios.post(url, inputData, { headers });
 };
+
+export const getApvlByApvrNameAnddocStatus = async (apporver, docStatus) => {
+  const url = '/api/apvl/';
+  const str = url + apporver + '/' + docStatus;
+  await axios.get(str).then((res) => {
+    console.log(res.data);
+    res.data.map((data) => {
+      console.log(data);
+    });
+  });
+};

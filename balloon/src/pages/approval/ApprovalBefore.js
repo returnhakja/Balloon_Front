@@ -1,5 +1,5 @@
 import { Container } from '@mui/system';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SideNavigation from '../../components/SideNavigation';
 import 'react-datepicker/dist/react-datepicker.css';
 import TextField from '@mui/material/TextField';
@@ -16,9 +16,13 @@ import {
   Select,
 } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { getApvlByApvrNameAnddocStatus } from '../../context/ApprovalAxios';
+import { useOutletContext } from 'react-router-dom';
 
 function ApprovalBefore() {
+  const [empInfo, setEmpInfo] = useOutletContext();
   const [docList, setDocList] = useState([]);
+
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
   const [endvalue, setEndValue] = useState(null);
@@ -29,6 +33,11 @@ function ApprovalBefore() {
   const handleChange = (event) => {
     setForm(event.target.value);
   };
+
+  useEffect(() => {
+    getApvlByApvrNameAnddocStatus(empInfo.empName, 1);
+  }, []);
+
   const columns = [
     { field: 'docId', headerName: '문서번호', width: 160 },
     {
