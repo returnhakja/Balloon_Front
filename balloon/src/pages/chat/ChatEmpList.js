@@ -62,7 +62,6 @@ function ChatEmpList({ invite, setInvite }) {
   }, [chatEmpList, chatUnitList]);
 
   //초대할 사원을 담아두는 메소드
-  // const [invite, setInvite] = useState([]);
   const onInvite = (checked, data) => {
     if (checked) {
       setInvite([...invite, data]);
