@@ -56,7 +56,9 @@ import DeclaredBusinessReportInfo from './pages/approval/DeclaredBusinessReportI
 import DeclaredBusinessTripInfo from './pages/approval/DeclaredBusinessTripInfo';
 import DeclaredPersonnelAppointmentInfo from './pages/approval/DeclaredPersonnelAppointmentInfo';
 
-// import NotFound from './pages/NotFound';
+import NotFound from './pages/NotFound';
+import PaymentDeclare from './pages/approval/PaymentDeclare';
+
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
@@ -127,6 +129,7 @@ function App() {
           <Route path="/boxes/ac" element={<ApprovalComplete />} />
           <Route path="/boxes/ar" element={<ApprovalRefuse />} />
           <Route path="/boxes/dl" element={<DocumentList />} />
+          <Route path="/boxes/pd" element={<PaymentDeclare />} />
 
           {/* 상세 정보 */}
           <Route path="/doc/br/:docId" element={<BusinessReportInfo />} />
@@ -190,6 +193,7 @@ function App() {
           <Route path="/management/employee" element={<ManagementEmployee />} />
           <Route path="/add/employee" element={<EmpAddPage />} />
           <Route path="/add/employees" element={<EmpListAddPage />} />
+            <Route path="*" element={<NotFound />} />
         </Route>
       </Route>
     </Routes>
