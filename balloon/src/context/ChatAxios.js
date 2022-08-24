@@ -114,7 +114,7 @@ export const onUserUpdate = async (chatroomId, chatroomName, headCount) => {
 //채팅방인원수 수정
 export const onHCupdate = async (chatroomId, chatroomName, headCount) => {
   axios
-    .put(`/chatroom/updateroom/${chatroomId}`, {
+    .put(`/chatroom/updatechatroom/${chatroomId}`, {
       chatroomName: chatroomName,
       headCount: headCount - 1,
     })
