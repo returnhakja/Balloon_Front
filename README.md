@@ -2,6 +2,7 @@
 🛠Tools🛠 <br><br>
 <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=flat-square&logo=Visual Studio Code&logoColor=white"/>
 <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/>
+<img src="https://img.shields.io/badge/Google Sheets-34A853?style=flat-square&logo=Google Sheets&logoColor=white"/>
 
 ⛏Technologies⛏ <br><br>
 <img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white"/>
