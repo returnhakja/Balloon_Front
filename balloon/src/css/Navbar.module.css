@@ -49,18 +49,22 @@
 }
 
 .img {
+  /* display: inline-block; */
   width: 100%;
-  height: 50vh;
+  height: 48vh;
+  min-width: 1200px;
+  min-height: 500px;
 }
 
 .logingo {
-  position: relative;
+  /* position: relative; */
+  display: inline-block;
   background-color: white;
   width: 70%;
-  height: 20vw;
-  /* display: inline-block; */
+  height: 30vw;
+
   margin-left: 50%;
-  margin-top: 10%;
+  margin-top: 12%;
   transform: translateX(-50%);
   min-width: 500px;
 }
