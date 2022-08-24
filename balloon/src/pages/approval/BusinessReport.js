@@ -288,6 +288,13 @@ function Report() {
                     } else {
                       alert('결재선을 설정해주세요 !');
                     }
+                    {
+                      approver.map((data, index) => {
+                        console.log(data);
+                        console.log(index);
+                        insertApproval(docId, 1, data, inputData, empInfo);
+                      });
+                    }
                     alert('문서가 상신되었습니다!');
                   }}>
                   상신하기
