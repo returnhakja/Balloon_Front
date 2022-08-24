@@ -8,7 +8,7 @@ function MainPage() {
     <div>
       <header className={styles.header}>
         <img
-          src={`${process.env.PUBLIC_URL}/asset/mainimg.png`}
+          src={`${process.env.PUBLIC_URL}/asset/banar.png`}
           alt="BALLOON"
           className={styles.img}></img>
       </header>
