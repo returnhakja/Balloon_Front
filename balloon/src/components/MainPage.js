@@ -1,6 +1,7 @@
 import styles from '../css/Navbar.module.css';
 import { Link, useOutletContext } from 'react-router-dom';
 import React from 'react';
+import Banner from './banner.svg';
 
 function MainPage() {
   const [empInfo, setEmpInfo] = useOutletContext();
@@ -8,7 +9,8 @@ function MainPage() {
     <div>
       <header className={styles.header}>
         <img
-          src={`${process.env.PUBLIC_URL}/asset/banar.png`}
+          // src={`${process.env.PUBLIC_URL}/asset/banner.png`}
+          src={Banner}
           alt="BALLOON"
           className={styles.img}></img>
       </header>
