@@ -22,9 +22,9 @@ export const onDeleteRoom = async (chatroomId) => {
 //채팅방 만들기
 export const onCreateChatroom = async (
   empInfo,
-  setRoomId,
   invite,
-  chatroomName
+  chatroomName,
+  client
 ) => {
   invite.push(empInfo);
   axios
@@ -34,7 +34,9 @@ export const onCreateChatroom = async (
     })
     .then((response) => {
       console.log(response.data);
-      setRoomId(response.data);
+      onUserInvite(response.data, invite, client);
+
+      window.location.href = `/chatting?room=${response.data}`;
     });
 };
 
