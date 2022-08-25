@@ -32,16 +32,18 @@ function ChatEmpList({ invite, setInvite }) {
 
   // 사원list 출력하기
   useEffect(() => {
-    if (chatUnitList.length === 0) {
-      if (chatEmpList.length === 0) {
-        getEmpListInSameUnit(empId, setCEList);
-        setInvite([]);
-      } else {
-        setCUList(chatEmpList.unit);
-        returnArr(chatEmpList, setCUList);
+    if (!!empId) {
+      if (chatUnitList.length === 0) {
+        if (chatEmpList.length === 0) {
+          getEmpListInSameUnit(empId, setCEList);
+          // setInvite([]);
+        } else {
+          setCUList(chatEmpList.unit);
+          returnArr(chatEmpList, setCUList);
+        }
       }
     }
-  }, [chatEmpList, chatUnitList]);
+  }, [empId, chatEmpList, chatUnitList]);
 
   //초대할 사원을 담아두는 메소드
   const onInvite = (checked, data) => {
@@ -51,7 +53,6 @@ function ChatEmpList({ invite, setInvite }) {
       setInvite(invite.filter((button) => button !== data));
     }
   };
-  console.log(invite);
 
   const eventClickHandle = () => {
     if (invite.length === 0) {
@@ -91,31 +92,33 @@ function ChatEmpList({ invite, setInvite }) {
             </div>
             <hr />
             <div className={styles.olList}>
-              {chatUnitList.map((cu, index) => {
-                return (
-                  <div key={index} className={styles.cuCon}>
-                    <p className={styles.cuName}>{cu}</p>
-                    {chatEmpList.map((ce, index) => {
-                      if (ce.unit.unitName === cu) {
-                        return (
-                          <div key={index} className={styles.fontlist}>
-                            {/* <img src={ce.photo} alt="사원 이미지" /> */}
-                            {ce.empName} {ce.position}
-                            <Checkbox
-                              type="checkbox"
-                              onChange={(e) => {
-                                onInvite(e.currentTarget.checked, ce);
-                                console.log(e.currentTarget.checked);
-                              }}
-                              checked={invite.includes(ce) ? true : false}
-                            />
-                          </div>
-                        );
-                      }
-                    })}
-                  </div>
-                );
-              })}
+              {chatUnitList.length !== 0 &&
+                chatUnitList.map((cu, index) => {
+                  return (
+                    <div key={index} className={styles.cuCon}>
+                      <p className={styles.cuName}>{cu}</p>
+                      {chatEmpList.length !== 0 &&
+                        chatEmpList.map((ce, index) => {
+                          if (ce.unit.unitName === cu) {
+                            return (
+                              <div key={index} className={styles.fontlist}>
+                                {/* <img src={ce.photo} alt="사원 이미지" /> */}
+                                {ce.empName} {ce.position}
+                                <Checkbox
+                                  type="checkbox"
+                                  onChange={(e) => {
+                                    onInvite(e.currentTarget.checked, ce);
+                                  }}
+                                  checked={invite.includes(ce) ? true : false}
+                                />
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>

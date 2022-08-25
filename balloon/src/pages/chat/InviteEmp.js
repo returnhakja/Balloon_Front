@@ -1,17 +1,17 @@
-import { Box, Button, Modal } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
-import styles from '../../css/Chat/Chat.module.css';
-import { Checkbox } from '@mui/material';
 import { useOutletContext } from 'react-router-dom';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 import {
   chatroomInfo,
   empIdInfo,
   onHCInvite,
   onUserInvite,
 } from '../../context/ChatAxios';
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
+import styles from '../../css/chat/Chat.module.css';
+import { Checkbox } from '@mui/material';
+import { Box, Button, Modal } from '@mui/material';
 
 function InviteEmp({ style, modalOpen, setModalOpen }) {
   const [chatEmpList, setCEList] = useState([]);
@@ -23,11 +23,9 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
   const [headCount, setHeadCount] = useState(0);
   const [chatempinfo, setChatempinfo] = useState([]);
 
-  const [disable, setDisable] = useState(false);
-
   const chatroomId = new URL(document.location).searchParams.get('room');
 
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
 
   // socket
