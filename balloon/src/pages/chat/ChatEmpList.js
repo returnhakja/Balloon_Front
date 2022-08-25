@@ -6,11 +6,7 @@ import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 import styles from '../../css/Chat/Chat.module.css';
 import Button from '@mui/material/Button';
 import { Checkbox, Container, Grid } from '@mui/material';
-// import ChatIcon from '@mui/icons-material/Chat';
-// import Search from 'antd/lib/transfer/search';
 import AddCommentIcon from '@mui/icons-material/AddComment';
-
-// import TextField from '@mui/material/TextField';
 
 const style = {
   position: 'absolute',
@@ -69,6 +65,7 @@ function ChatEmpList({ invite, setInvite }) {
       setInvite(invite.filter((button) => button !== data));
     }
   };
+  console.log(invite);
 
   return (
     <Container maxWidth="xs" className={styles.Listcontainer}>
@@ -84,12 +81,10 @@ function ChatEmpList({ invite, setInvite }) {
                   onClick={() => {
                     setopenCreatChat(true);
                   }}>
-                  {/* <Link to={'/createroom'}> */}
                   <AddCommentIcon
                     fontSize="large"
                     className={styles.creatIcon}
                   />
-                  {/* </Link> */}
                 </Button>
                 {openCreatChat && (
                   <CreateChatroom
@@ -107,7 +102,6 @@ function ChatEmpList({ invite, setInvite }) {
                 return (
                   <div key={index} className={styles.cuCon}>
                     <p className={styles.cuName}>{cu}</p>
-
                     {chatEmpList.map((ce, index) => {
                       if (ce.unit.unitName === cu) {
                         return (
@@ -120,6 +114,7 @@ function ChatEmpList({ invite, setInvite }) {
                               type="checkbox"
                               onChange={(e) => {
                                 onInvite(e.currentTarget.checked, ce);
+                                console.log(e.currentTarget.checked);
                               }}
                               checked={invite.includes(ce) ? true : false}
                             />
