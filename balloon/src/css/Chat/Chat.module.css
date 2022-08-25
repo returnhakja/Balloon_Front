@@ -116,7 +116,9 @@
 }
 
 .logoutBtn {
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .updatename {
@@ -180,7 +182,7 @@
 }
 
 .ChatText {
-  width: 300px;
+  width: 200px;
   height: 50px;
   display: flex;
   justify-content: left;
@@ -235,7 +237,7 @@
 
 .roomContanar {
   overflow-y: scroll;
-  height: 91.5%;
+  height: 85%;
 }
 
 .chatName {
@@ -247,7 +249,7 @@
 
 .olList {
   text-align: center;
-  margin-top: 6%;
+
   overflow-y: scroll;
 }
 
@@ -279,6 +281,7 @@
 }
 
 .chatfont {
+  /* display: flex; */
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid black;
@@ -308,6 +311,9 @@
   list-style: none;
 }
 
+.EmpAddIcon {
+  margin-left: 11.5%;
+}
 .inBox {
   margin-top: 15px;
   margin-bottom: 20px;
