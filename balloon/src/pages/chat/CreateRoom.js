@@ -32,6 +32,10 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
     client.disconnect();
   };
 
+  console.log(invite);
+
+  // console.log(storage);
+
   return (
     <Modal open={openCreatChat} onClose={handleClose}>
       <Box sx={style}>
