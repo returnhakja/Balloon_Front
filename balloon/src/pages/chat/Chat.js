@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import styles from '../../css/Chat/Chat.module.css';
@@ -37,9 +37,9 @@ import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import ChatSide from './ChatSide';
 import InviteEmp from './InviteEmp';
 
-const scrollToBottom = () => {
-  document.getElementById('scroller').scroll(0, 1000);
-};
+// const scrollToBottom = () => {
+//   document.getElementById('scroller').scroll(0, 1000);
+// };
 
 function Chat() {
   const [empInfo, setEmpInfo] = useOutletContext();
@@ -121,6 +121,8 @@ function Chat() {
   useEffect(() => {
     empIdInfo(chatroomId, setChatempinfo);
   }, []);
+
+  console.log(chatempinfo);
 
   //chatroom에 들어갔을 때 기록남게
   useEffect(() => {
