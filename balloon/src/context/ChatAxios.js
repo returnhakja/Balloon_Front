@@ -113,20 +113,30 @@ export const onUserUpdate = async (chatroomId, chatroomName, headCount) => {
 
 //채팅방인원수 수정
 export const onHCupdate = async (chatroomId, chatroomName, headCount) => {
-  axios
-    .put(`/chatroom/updatechatroom/${chatroomId}`, {
-      chatroomName: chatroomName,
-      headCount: headCount - 1,
-    })
-    .then((response) => {
-      console.log(response.data);
-    });
+  axios.put(`/chatroom/updatechatroom/${chatroomId}`, {
+    chatroomName: chatroomName,
+    headCount: headCount - 1,
+  });
+  if (headCount - 1 === 0) {
+    onDeleteRoom(chatroomId);
+  }
+};
+//이미 생성된 채팅방에서 인원수 +
+export const onHCInvite = async (
+  chatroomId,
+  chatroomName,
+  headCount,
+  invite
+) => {
+  axios.put(`/chatroom/updatechatroom/${chatroomId}`, {
+    chatroomName: chatroomName,
+    headCount: headCount + invite.length,
+  });
 };
 
 //채팅방에서 혼자나가기
-export const onExitRoom = async (chatroomId, empId, sendExit) => {
+export const onExitRoom = async (chatroomId, empId) => {
   axios.delete(`/cre/deleteroom/${chatroomId}/${empId}`).then((response) => {
     console.log(response.data);
   });
-  // sendExit();
 };
