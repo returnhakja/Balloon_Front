@@ -250,10 +250,12 @@ function Chat() {
                 })}
               {/* 채팅방 나가기 */}
               <div className={styles.logoutBtn}>
-                <BsFillPersonPlusFill
-                  size="20px"
-                  className={styles.EmpAddIcon}
-                />
+                <Button
+                  onClick={() => {
+                    setModalOpen(true);
+                  }}>
+                  <PersonAddAlt1Icon />
+                </Button>
                 <Link to={'/chatlist'}>
                   <Button
                     onClick={() => (
@@ -270,12 +272,7 @@ function Chat() {
               </div>
             </Collapse>
           </List>
-          <Button
-            onClick={() => {
-              setModalOpen(true);
-            }}>
-            <PersonAddAlt1Icon />
-          </Button>
+
           {modalOpen && (
             <InviteEmp
               style={style}
