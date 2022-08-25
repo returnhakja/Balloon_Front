@@ -15,7 +15,7 @@ import SockJS from 'sockjs-client';
 // import styles from '../../css/Chat/ChatRoom.module.css';
 import ChatSide from './ChatSide';
 import { Grid } from '@mui/material';
-import styles from '../../css/Chat/Chat.module.css';
+import styles from '../../css/chat/Chat.module.css';
 
 function ChatNotice() {
   const [chatroom, setChatroom] = useState([]);
@@ -36,98 +36,100 @@ function ChatNotice() {
       <div className={styles.side1}>
         <div className={styles.chatRoomList}>
           <ChatSide />
-          <div className={styles.list}>
+          <div className={styles.listroom}>
             <div className={styles.chatfont}>
               <div className={styles.ChatText}>공지 사항</div>
             </div>
-            <hr />
-            <br />
-            {chatroom.map((chat, index) => {
-              console.log(chat.chatTime.substr(11, 5));
-              // const a = chat.chatContent.length;
-              // console.log(a);
-              console.log(chat.chatContent.substr(0, 15));
-              console.log(chat.chatroom.chatroomName.substr(0, 15));
-              return (
-                <div className={styles.roomcon} key={index}>
-                  <Link to={`/chatting?room=${chat.chatroom.chatroomId}`}>
-                    <Box
-                      className={styles.chatRoomBox}
-                      sx={
-                        {
-                          // border: 0.5,
-                          // borderColor: '#8b8b8b',
-                          // marginBottom: 0.1,
-                        }
-                      }>
-                      {/* {chat.chatroom.chatroomName}({chat.chatroom.headCount}) */}
+            {/* <hr />
+            <br /> */}
+            <div className={styles.roomContanar}>
+              {chatroom.map((chat, index) => {
+                console.log(chat.chatTime.substr(11, 5));
+                // const a = chat.chatContent.length;
+                // console.log(a);
+                console.log(chat.chatContent.substr(0, 15));
+                console.log(chat.chatroom.chatroomName.substr(0, 15));
+                return (
+                  <div className={styles.roomcon} key={index}>
+                    <Link to={`/chatting?room=${chat.chatroom.chatroomId}`}>
+                      <Box
+                        className={styles.chatRoomBox}
+                        sx={
+                          {
+                            // border: 0.5,
+                            // borderColor: '#8b8b8b',
+                            // marginBottom: 0.1,
+                          }
+                        }>
+                        {/* {chat.chatroom.chatroomName}({chat.chatroom.headCount}) */}
 
-                      {chat.chatroom.chatroomName.length <= '15' ? (
-                        <div>
-                          <span className={styles.chatName}>
-                            {chat.chatroom.chatroomName}(
-                            {chat.chatroom.headCount})
-                          </span>
-                        </div>
-                      ) : (
-                        <div>
-                          <span className={styles.chatName}>
-                            {chat.chatroom.chatroomName.substr(0, 12)}...(
-                            {chat.chatroom.headCount})
-                          </span>
-                        </div>
-                      )}
+                        {chat.chatroom.chatroomName.length <= '15' ? (
+                          <div>
+                            <span className={styles.chatName}>
+                              {chat.chatroom.chatroomName}(
+                              {chat.chatroom.headCount})
+                            </span>
+                          </div>
+                        ) : (
+                          <div>
+                            <span className={styles.chatName}>
+                              {chat.chatroom.chatroomName.substr(0, 12)}...(
+                              {chat.chatroom.headCount})
+                            </span>
+                          </div>
+                        )}
 
-                      <div className={styles.DeleteBtn}>
-                        <Button
-                          variant="text"
-                          disableElevation
-                          onClick={(e) => {
-                            const roomDelete = () => {
-                              e.preventDefault();
-                              onExitRoom(
-                                chat.chatroom.chatroomId,
-                                empInfo.empId,
-                                sendExit(
-                                  client,
+                        <div className={styles.DeleteBtn}>
+                          <Button
+                            variant="text"
+                            disableElevation
+                            onClick={(e) => {
+                              const roomDelete = () => {
+                                e.preventDefault();
+                                onExitRoom(
                                   chat.chatroom.chatroomId,
-                                  empInfo
-                                )
-                              );
+                                  empInfo.empId,
+                                  sendExit(
+                                    client,
+                                    chat.chatroom.chatroomId,
+                                    empInfo
+                                  )
+                                );
 
-                              window.location.href = '/chatroom';
-                            };
+                                window.location.href = '/chatroom';
+                              };
 
-                            return roomDelete();
-                          }}>
-                          <DeleteIcon />
-                        </Button>
-                      </div>
-                      <div className={styles.content}>
-                        {chat.chatContent.length <= '30' ? (
-                          <div className={styles.content}>
-                            {chat.chatContent}
-                            <div className={styles.LastTimecon}>
+                              return roomDelete();
+                            }}>
+                            <DeleteIcon />
+                          </Button>
+                        </div>
+                        <div className={styles.content}>
+                          {chat.chatContent.length <= '30' ? (
+                            <div className={styles.content}>
+                              {chat.chatContent}
+                              <div className={styles.LastTimecon}>
+                                <div className={styles.LastTime}>
+                                  {chat.chatTime.substr(11, 5)}
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className={styles.content}>
+                              {chat.chatContent.substr(0, 30)}...
                               <div className={styles.LastTime}>
                                 {chat.chatTime.substr(11, 5)}
                               </div>
                             </div>
-                          </div>
-                        ) : (
-                          <div className={styles.content}>
-                            {chat.chatContent.substr(0, 30)}...
-                            <div className={styles.LastTime}>
-                              {chat.chatTime.substr(11, 5)}
-                            </div>
-                          </div>
-                        )}
-                        {/* {chat.chatContent.substr(0, 15)}... */}
-                      </div>
-                    </Box>
-                  </Link>
-                </div>
-              );
-            })}
+                          )}
+                          {/* {chat.chatContent.substr(0, 15)}... */}
+                        </div>
+                      </Box>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

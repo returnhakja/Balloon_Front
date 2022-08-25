@@ -3,37 +3,23 @@ import { useOutletContext } from 'react-router-dom';
 import ChatSide from './ChatSide';
 import CreateChatroom from './CreateRoom';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
-import styles from '../../css/Chat/Chat.module.css';
+import styles from '../../css/chat/Chat.module.css';
 import Button from '@mui/material/Button';
 import { Checkbox, Container, Grid } from '@mui/material';
 import AddCommentIcon from '@mui/icons-material/AddComment';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 300,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  textAlign: 'center',
-};
 
 function ChatEmpList({ invite, setInvite }) {
   const [chatEmpList, setCEList] = useState([]);
   const [chatUnitList, setCUList] = useState([]);
   const [openCreatChat, setopenCreatChat] = useState(false);
 
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
 
   const returnArr = (list, setCUList) => {
     const arr = [];
 
     list.map((row) => {
-      // return arr.push(row.unit.unitCode);
       return arr.push(row.unit.unitName);
     });
 
@@ -67,6 +53,14 @@ function ChatEmpList({ invite, setInvite }) {
   };
   console.log(invite);
 
+  const eventClickHandle = () => {
+    if (invite.length === 0) {
+      alert('사원을 선택해주세요!!');
+    } else {
+      setopenCreatChat(true);
+    }
+  };
+
   return (
     <Container maxWidth="xs" className={styles.Listcontainer}>
       <div className={styles.side2}>
@@ -79,7 +73,7 @@ function ChatEmpList({ invite, setInvite }) {
                 <Button
                   className="chatIcon"
                   onClick={() => {
-                    setopenCreatChat(true);
+                    eventClickHandle();
                   }}>
                   <AddCommentIcon
                     fontSize="large"
@@ -88,10 +82,9 @@ function ChatEmpList({ invite, setInvite }) {
                 </Button>
                 {openCreatChat && (
                   <CreateChatroom
-                    style={style}
+                    invite={invite}
                     openCreatChat={openCreatChat}
                     setopenCreatChat={setopenCreatChat}
-                    invite={invite}
                   />
                 )}
               </Grid>
@@ -107,8 +100,6 @@ function ChatEmpList({ invite, setInvite }) {
                         return (
                           <div key={index} className={styles.fontlist}>
                             {/* <img src={ce.photo} alt="사원 이미지" /> */}
-                            {/* <div className={styles.liststyle}> */}
-                            {/* <div className={styles.li}> */}
                             {ce.empName} {ce.position}
                             <Checkbox
                               type="checkbox"
@@ -118,7 +109,6 @@ function ChatEmpList({ invite, setInvite }) {
                               }}
                               checked={invite.includes(ce) ? true : false}
                             />
-                            {/* <span>{ce.position}</span> */}
                           </div>
                         );
                       }
