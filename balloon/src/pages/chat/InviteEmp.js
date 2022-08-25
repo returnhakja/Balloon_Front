@@ -14,7 +14,20 @@ import styles from '../../css/chat/Chat.module.css';
 import { Checkbox } from '@mui/material';
 import { Box, Button, Modal } from '@mui/material';
 
-function InviteEmp({ style, modalOpen, setModalOpen }) {
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 300,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  textAlign: 'center',
+};
+
+function InviteEmp({ modalOpen, setModalOpen }) {
   const [chatEmpList, setCEList] = useState([]);
   const [chatUnitList, setCUList] = useState([]);
   const [newInvite, setNewInvite] = useState([]);
@@ -35,7 +48,6 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, (data) => {
-      const chat = JSON.parse(data.body);
       disconnect();
     });
   });
@@ -47,7 +59,7 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
   ////////////////////////////////////////////////////////////
   const existEmp = [];
   chatempinfo.map((info) => {
-    existEmp.push(info.empId.empId);
+    return existEmp.push(info.empId.empId);
   });
   console.log(existEmp);
 
@@ -74,13 +86,17 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
 
   //사원정보가져오기
   useEffect(() => {
-    chatroomInfo(chatroomId, setChatroomName, setHeadCount);
-    empIdInfo(chatroomId, setChatempinfo);
-  }, []);
+    if (chatroomId.length === 0) {
+      chatroomInfo(chatroomId, setChatroomName, setHeadCount);
+      empIdInfo(chatroomId, setChatempinfo);
+    }
+  }, [chatroomId]);
 
   //채팅방에 없는 사원list
   const ChatEmpHandle = (chatEmpList, setECEList) => {
+    console.log();
     const arr = chatEmpList.filter((list) => !existEmp.includes(list.empId));
+    console.log(arr);
     setECEList(arr);
   };
 
@@ -96,6 +112,8 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
 
         ChatEmpHandle(chatEmpList, setECEList);
       }
+    } else {
+      console.log(existChatEmp);
     }
   }, [chatEmpList, chatUnitList, existChatEmp]);
 

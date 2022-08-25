@@ -7,22 +7,6 @@ import styles from '../../css/chat/Chat.module.css';
 import Button from '@mui/material/Button';
 import { Checkbox, Container, Grid } from '@mui/material';
 import AddCommentIcon from '@mui/icons-material/AddComment';
-import { Box } from '@mui/system';
-
-const style = {
-  position: 'absolute',
-
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 300,
-  height: 150,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 10,
-  textAlign: 'center',
-};
 
 function ChatEmpList({ invite, setInvite }) {
   const [chatEmpList, setCEList] = useState([]);
@@ -52,7 +36,6 @@ function ChatEmpList({ invite, setInvite }) {
       if (chatUnitList.length === 0) {
         if (chatEmpList.length === 0) {
           getEmpListInSameUnit(empId, setCEList);
-          // setInvite([]);
         } else {
           setCUList(chatEmpList.unit);
           returnArr(chatEmpList, setCUList);

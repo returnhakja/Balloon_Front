@@ -13,7 +13,6 @@ import { sendExit } from '../../utils/ChatUtils';
 import SockJS from 'sockjs-client';
 // import styles from '../../css/Chat/ChatRoom.module.css';
 import ChatSide from './ChatSide';
-import { Grid } from '@mui/material';
 import styles from '../../css/chat/Chat.module.css';
 
 function ChatNotice() {
@@ -39,29 +38,15 @@ function ChatNotice() {
             <div className={styles.chatfont}>
               <div className={styles.ChatText}>공지 사항</div>
             </div>
-            {/* <hr />
-            <br /> */}
             <div className={styles.roomContanar}>
               {chatroom.map((chat, index) => {
                 console.log(chat.chatTime.substr(11, 5));
-                // const a = chat.chatContent.length;
-                // console.log(a);
                 console.log(chat.chatContent.substr(0, 15));
                 console.log(chat.chatroom.chatroomName.substr(0, 15));
                 return (
                   <div className={styles.roomcon} key={index}>
                     <Link to={`/chatting?room=${chat.chatroom.chatroomId}`}>
-                      <Box
-                        className={styles.chatRoomBox}
-                        sx={
-                          {
-                            // border: 0.5,
-                            // borderColor: '#8b8b8b',
-                            // marginBottom: 0.1,
-                          }
-                        }>
-                        {/* {chat.chatroom.chatroomName}({chat.chatroom.headCount}) */}
-
+                      <Box className={styles.chatRoomBox}>
                         {chat.chatroom.chatroomName.length <= '15' ? (
                           <div>
                             <span className={styles.chatName}>
@@ -121,7 +106,6 @@ function ChatNotice() {
                               </div>
                             </div>
                           )}
-                          {/* {chat.chatContent.substr(0, 15)}... */}
                         </div>
                       </Box>
                     </Link>
