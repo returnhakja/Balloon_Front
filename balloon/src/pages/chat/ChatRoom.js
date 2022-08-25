@@ -8,7 +8,12 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Container } from '@mui/system';
 
-import { onChatroom, onExitRoom, onHCupdate } from '../../context/ChatAxios';
+import {
+  onChatroom,
+  onDeleteRoom,
+  onExitRoom,
+  onHCupdate,
+} from '../../context/ChatAxios';
 import Stomp from 'stompjs';
 import { sendExit } from '../../utils/ChatUtils';
 import SockJS from 'sockjs-client';
@@ -51,17 +56,7 @@ function ChatRoom() {
               return (
                 <div className={styles.roomcon} key={index}>
                   <Link to={`/chatting?room=${chat.chatroom.chatroomId}`}>
-                    <Box
-                      className={styles.chatRoomBox}
-                      sx={
-                        {
-                          // border: 0.5,
-                          // borderColor: '#8b8b8b',
-                          // marginBottom: 0.1,
-                        }
-                      }>
-                      {/* {chat.chatroom.chatroomName}({chat.chatroom.headCount}) */}
-
+                    <Box className={styles.chatRoomBox}>
                       {chat.chatroom.chatroomName.length <= '15' ? (
                         <div>
                           <span className={styles.chatName}>
@@ -85,6 +80,7 @@ function ChatRoom() {
                           onClick={(e) => {
                             const roomDelete = () => {
                               e.preventDefault();
+
                               onExitRoom(
                                 chat.chatroom.chatroomId,
                                 empInfo.empId,
@@ -126,7 +122,6 @@ function ChatRoom() {
                             </div>
                           </div>
                         )}
-                        {/* {chat.chatContent.substr(0, 15)}... */}
                       </div>
                     </Box>
                   </Link>
