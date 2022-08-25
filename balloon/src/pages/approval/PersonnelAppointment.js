@@ -292,25 +292,25 @@ function Pointment() {
               <td className={styles.tdreaui}>
                 <FormControl fullWidth>
                   <InputLabel>구성원을 설정해주세요</InputLabel>
-                  <Select
-                    id="mEmp"
-                    label="구성원을 선택하세요"
-                    value={mEmp}
-                    placeholder="구성원을 선택하세요"
-                    onChange={(e) => {
-                      setMEmp(e.target.value);
-                      console.log(mEmp);
-                    }}
-
-                    // className={styles.inputtext}
-                  >
-                    {mEmpInfo &&
-                      mEmpInfo.map((mEmps, index) => (
-                        <MenuItem key={index} value={mEmps}>
-                          {mEmps.empName} ({mEmps.empId})
-                        </MenuItem>
-                      ))}
-                  </Select>
+                  <div className={styles.select}>
+                    <Select
+                      id="mEmp"
+                      label="구성원을 선택하세요"
+                      value={mEmp}
+                      placeholder="구성원을 선택하세요"
+                      onChange={(e) => {
+                        setMEmp(e.target.value);
+                        console.log(mEmp);
+                      }}
+                      className={styles.select}>
+                      {mEmpInfo &&
+                        mEmpInfo.map((mEmps, index) => (
+                          <MenuItem key={index} value={mEmps}>
+                            {mEmps.empName} ({mEmps.empId})
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </div>
                 </FormControl>
               </td>
               <td className={styles.tdreaui}>

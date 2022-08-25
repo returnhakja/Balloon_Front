@@ -35,13 +35,13 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
   return (
     <Modal open={openCreatChat} onClose={handleClose}>
       <Box sx={style}>
-        <br />
-        <br />
+        {/* <br />
+        <br /> */}
         <h3>채팅방 만들기</h3>
-        <br />
+        {/* <br /> */}
         <Input id="chatroomName" placeholder="채팅방 이름을 입력하세요" />
-        <br />
-        <br />
+        {/* <br />
+        <br /> */}
         <Button
           variant="contained"
           sx={{ marginRight: 2 }}

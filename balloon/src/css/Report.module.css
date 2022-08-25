@@ -1,5 +1,4 @@
 .table {
-  /* border: 1px solid red; */
   width: 100%;
 
   border-top: 1px solid #686666;
@@ -28,7 +27,6 @@
   font-size: 2rem;
   margin-top: 5%;
   margin-bottom: 1%;
-  /* margin-left: 2%; */
 }
 
 .btnnav {
@@ -98,11 +96,17 @@
 }
 
 .inputtext {
-  width: 80%;
-  /* border: 2px solid red; */
+  width: 90%;
+  height: 30px;
   text-align: left;
+  border-radius: 10px;
+  /* background-color: #cac7c7; */
+  outline: none;
 }
-
+.select {
+  border-radius: 10px;
+  width: 100%;
+}
 .giantitle {
   font-size: 2rem;
   margin-bottom: 1%;
@@ -196,4 +200,8 @@
 
 .approvalCard {
   display: flex;
+}
+
+.card {
+  margin-right: 20px;
 }

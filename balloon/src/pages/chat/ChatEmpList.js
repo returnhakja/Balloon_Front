@@ -5,23 +5,26 @@ import CreateChatroom from './CreateRoom';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 import styles from '../../css/Chat/Chat.module.css';
 import Button from '@mui/material/Button';
-import { Checkbox, Container, Grid } from '@mui/material';
+import { Checkbox, Container, Grid, Modal } from '@mui/material';
 // import ChatIcon from '@mui/icons-material/Chat';
 // import Search from 'antd/lib/transfer/search';
 import AddCommentIcon from '@mui/icons-material/AddComment';
+import { Box } from '@mui/system';
 
 // import TextField from '@mui/material/TextField';
 
 const style = {
   position: 'absolute',
+
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 300,
+  height: 150,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4,
+  p: 10,
   textAlign: 'center',
 };
 

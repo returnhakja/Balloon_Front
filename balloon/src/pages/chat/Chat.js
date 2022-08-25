@@ -32,8 +32,8 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
-
 import ChatSide from './ChatSide';
+import { BsFillPersonPlusFill } from 'react-icons/bs';
 
 const scrollToBottom = () => {
   document.getElementById('scroller').scroll(0, 1000);
@@ -280,6 +280,10 @@ function Chat() {
                 })}
               {/* 채팅방 나가기 */}
               <div className={styles.logoutBtn}>
+                <BsFillPersonPlusFill
+                  size="20px"
+                  className={styles.EmpAddIcon}
+                />
                 <Link to={'/chatlist'}>
                   <Button
                     onClick={() => (

@@ -180,20 +180,23 @@ function Report() {
           <Card
             variant="outlined"
             sx={{ maxWidth: 150 }}
-            style={{ backgroundColor: '#F1F9FF' }}>
+            style={{ backgroundColor: '#F1F9FF' }}
+            className={styles.card}>
             {DfCard}
           </Card>
           {approver.map((empData, index) => {
             console.log(empData);
 
             return (
-              <Card
-                variant="outlined"
-                sx={{ maxWidth: 150 }}
-                style={{ backgroundColor: '#F1F9FF' }}
-                key={index}>
-                {ApCard(empData.empName)}
-              </Card>
+              <div className={styles.card}>
+                <Card
+                  variant="outlined"
+                  sx={{ maxWidth: 150 }}
+                  style={{ backgroundColor: '#F1F9FF' }}
+                  key={index}>
+                  {ApCard(empData.empName)}
+                </Card>
+              </div>
             );
           })}
         </div>

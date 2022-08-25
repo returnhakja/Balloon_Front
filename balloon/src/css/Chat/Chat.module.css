@@ -148,7 +148,10 @@
 }
 
 .logoutBtn {
-  text-align: right;
+  /* text-align: right; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .updatename {
@@ -335,4 +338,8 @@
 
 .li {
   list-style: none;
+}
+
+.EmpAddIcon {
+  margin-left: 11.5%;
 }
