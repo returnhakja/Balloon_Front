@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from './ChatSide.module.css';
-import { BsPerson } from 'react-icons/bs';
-import { Box, Button } from '@mui/material';
+import styles from '../../css/chat/ChatSide.module.css';
 import PersonIcon from '@mui/icons-material/Person';
 import ChatIcon from '@mui/icons-material/Chat';
 import SettingsIcon from '@mui/icons-material/Settings';

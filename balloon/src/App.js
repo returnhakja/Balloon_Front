@@ -1,6 +1,5 @@
 import './App.css';
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 
 import Home from './components/Home';
@@ -17,7 +16,6 @@ import Save from './pages/approval/Save';
 import Refuese from './pages/approval/Refuese';
 import ApprovalBefore from './pages/approval/ApprovalBefore';
 import BusinessReport from './pages/approval/BusinessReport';
-
 import BusinessTrip from './pages/approval/BusinessTrip';
 import PersonnelAppointment from './pages/approval/PersonnelAppointment';
 import ApprovalOngoing from './pages/approval/ApprovalOngoing';
@@ -42,6 +40,7 @@ import Chat from './pages/chat/Chat';
 import ChatRoom from './pages/chat/ChatRoom';
 import CreateRoom from './pages/chat/CreateRoom';
 import ChatEmpList from './pages/chat/ChatEmpList';
+import ChatNotice from './pages/chat/ChatNotice';
 
 import Organization from './pages/Organization';
 
@@ -50,15 +49,12 @@ import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
 import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
 import UnitListAddPage from './pages/personnelManagement/UnitListAddPage';
-import ChatNotice from './pages/chat/ChatNotice';
 
 import DeclaredBusinessReportInfo from './pages/approval/DeclaredBusinessReportInfo';
 import DeclaredBusinessTripInfo from './pages/approval/DeclaredBusinessTripInfo';
 import DeclaredPersonnelAppointmentInfo from './pages/approval/DeclaredPersonnelAppointmentInfo';
 
 import NotFound from './pages/NotFound';
-
-import PaymentDeclare from './pages/approval/PaymentDeclare';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
@@ -129,7 +125,6 @@ function App() {
           <Route path="/boxes/ac" element={<ApprovalComplete />} />
           <Route path="/boxes/ar" element={<ApprovalRefuse />} />
           <Route path="/boxes/dl" element={<DocumentList />} />
-          <Route path="/boxes/pd" element={<PaymentDeclare />} />
 
           {/* 상세 정보 */}
           <Route path="/doc/br/:docId" element={<BusinessReportInfo />} />
@@ -193,9 +188,8 @@ function App() {
           <Route path="/management/employee" element={<ManagementEmployee />} />
           <Route path="/add/employee" element={<EmpAddPage />} />
           <Route path="/add/employees" element={<EmpListAddPage />} />
-
-          <Route path="*" element={<NotFound />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );

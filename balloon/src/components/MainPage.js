@@ -2,6 +2,7 @@ import styles from '../css/Navbar.module.css';
 import { Link, useOutletContext } from 'react-router-dom';
 import React from 'react';
 import Banner from './banner.svg';
+
 function MainPage() {
   const [empInfo, setEmpInfo] = useOutletContext();
   return (

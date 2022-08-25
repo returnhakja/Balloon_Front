@@ -1,12 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useOutletContext } from 'react-router-dom';
+import ScrollToBottom from 'react-scroll-to-bottom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import styles from '../../css/Chat/Chat.module.css';
-import { Link, useOutletContext, useParams } from 'react-router-dom';
-import ScrollToBottom from 'react-scroll-to-bottom';
-import SendIcon from '@mui/icons-material/Send';
-import LogoutIcon from '@mui/icons-material/Logout';
-
+import ChatSide from './ChatSide';
+import InviteEmp from './InviteEmp';
+import { sendExit } from '../../utils/ChatUtils';
+import {
+  chatRecord,
+  chatroomInfo,
+  empIdInfo,
+  onExitRoom,
+  onHCupdate,
+  onUserUpdate,
+} from '../../context/ChatAxios';
+import styles from '../../css/chat/Chat.module.css';
 import {
   Button,
   Collapse,
@@ -17,23 +25,14 @@ import {
   ListItemText,
 } from '@mui/material';
 import { TextField } from '@mui/material';
-import {
-  chatRecord,
-  chatroomInfo,
-  empIdInfo,
-  onExitRoom,
-  onHCupdate,
-  onUserUpdate,
-} from '../../context/ChatAxios';
-
-import { sendExit } from '../../utils/ChatUtils';
-
+import SendIcon from '@mui/icons-material/Send';
+import LogoutIcon from '@mui/icons-material/Logout';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
-import ChatSide from './ChatSide';
 import { BsFillPersonPlusFill } from 'react-icons/bs';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 const scrollToBottom = () => {
   document.getElementById('scroller').scroll(0, 1000);
@@ -55,12 +54,25 @@ function Chat() {
     setOpen(!open);
   };
 
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 300,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    textAlign: 'center',
+  };
+
   client.connect({}, () => {
     client.subscribe(`/topic/message`, (data) => {
       const chat = JSON.parse(data.body);
       console.log(chat);
       setInput([...input, chat]);
-      console.log(input);
+      console.log(...input);
       disconnect();
     });
   });
@@ -71,21 +83,23 @@ function Chat() {
     client.disconnect();
   };
 
-  const send = (e) => {
-    client.send(
-      '/app/chat/message',
-      {},
-      JSON.stringify({
-        chatroomId: chatroomId,
-        writer: empInfo,
-        chatContent: inputRef.current.value,
-      })
-    );
+  const send = () => {
+    if (inputRef.current.value.trim() !== '') {
+      client.send(
+        '/app/chat/message',
+        {},
+        JSON.stringify({
+          chatroomId: chatroomId,
+          writer: empInfo,
+          chatContent: inputRef.current.value,
+        })
+      );
+    }
   };
 
   //엔터키
   const onKeyPress = (e) => {
-    if (e.key == 'Enter') {
+    if (e.key === 'Enter') {
       send();
       inputRef.current.value = '';
     }
@@ -106,6 +120,8 @@ function Chat() {
     empIdInfo(chatroomId, setChatempinfo);
   }, []);
 
+  console.log(chatempinfo);
+
   //chatroom에 들어갔을 때 기록남게
   useEffect(() => {
     chatRecord(chatroomId, setChatting);
@@ -114,17 +130,11 @@ function Chat() {
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  const closemodal = () => {
-    setModalOpen(!modalOpen);
-  };
-
   // 채팅방 이름 바꾸기
   const [chatRoomTitle, setChatRoomTitle] = useState(chatroomName);
-  const [changeTitle, setChangeTitle] = useState(false);
   const [clickChk, setClickChk] = useState(0);
 
   const onChangeTitle = (event) => {
-    // console.log(event);
     setChatRoomTitle(event.target.value);
   };
 
@@ -138,22 +148,27 @@ function Chat() {
 
   const onClickChatRoomTitle = () => {
     setClickChk(clickChk + 1);
-    // setChangeTitle(true);
     console.log(clickChk);
     if (clickChk > 1) {
-      // setChangeTitle(false);
-      // onChangeTitle();
       setClickChk(0);
     }
   };
 
   const keyEnter = (e) => {
-    if (e.key == 'Enter') {
+    if (e.key === 'Enter') {
       setClickChk(0);
       onChangeTitle();
-      // setChangeTitle(false);
     }
   };
+
+  console.log(chatting);
+  // const [chatSearch, setChatSearch] = useState('');
+  // const onChangeSearch = (e) => {
+  //   setChatSearch(e.target.value);
+  // };
+  // const filterChatting = () => {
+  //   chatting.filter((chat) => chat.chatContent.includes(chatSearch));
+  // };
 
   return (
     <Container maxWidth="xs" className={styles.Listcontainer}>
@@ -198,50 +213,6 @@ function Chat() {
             )}
           </div>
 
-          {/* <Link to={'/chatroom'}>
-              <Button variant="contained">채팅목록 이동</Button>
-            </Link> */}
-          {/* 
-          // {/* 채팅방 나가기 
-          <div className={styles.logoutBtn}>
-            <Link to={'/chatroom'}>
-              <Button
-                onClick={() =>
-                  onExitRoom(
-                    chatroomId,
-                    empId,
-                    sendExit(client, chatroomId, empInfo)
-                  )
-                }>
-                <LogoutIcon />
-              </Button>
-            </Link>
-          </div> */}
-
-          {/* 채팅방 인원수 & 이름수정 */}
-          {/* <div className={styles.updatename}>
-
-        <TextField
-          id="chatroomName"
-          variant="outlined"
-          placeholder="수정할 채팅방의 이름을 입력하세요"
-          defaultValue={chatroomName}
-        />
-        <br />
-        <Button
-          variant="contained"
-          onClick={() =>
-            onUserUpdate(
-              chatroomId,
-              document.getElementById('chatroomName'),
-              headCount
-            )
-          }>
-          수정하기
-        </Button>
-      </div> */}
-          {/* <div>{modalOpen == true ? <Modal /> : null}</div> */}
-
           <List sx={{ zIndex: 5 }}>
             <ListItemButton onClick={handleClick}>
               <ListItemIcon>
@@ -270,7 +241,6 @@ function Chat() {
                     <List component="div" disablePadding key={index}>
                       <ListItemButton sx={{ pl: 4 }}>
                         <ListItemIcon>
-                          {/* console.log(data.empId.empName); return{' '} */}
                           <PersonIcon />
                         </ListItemIcon>
                         <ListItemText primary={data.empId.empName} />
@@ -300,21 +270,23 @@ function Chat() {
               </div>
             </Collapse>
           </List>
-
-          {/* <ScrollToBottom className={styles.scrollbar}> */}
-
-          {/* 채팅방에서 사원초대하기 */}
-          {/* <div>
-        <input id="empId" placeholder="초대할 사원의 사번을 입력하세요" />
-        <button onClick={onUserAdd}>사원초대하기</button>
-      </div> */}
-
+          <Button
+            onClick={() => {
+              setModalOpen(true);
+            }}>
+            <PersonAddAlt1Icon />
+          </Button>
+          {modalOpen && (
+            <InviteEmp
+              style={style}
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+            />
+          )}
           <ScrollToBottom className={styles.scrollbar} id="scroller">
             {/* 채팅기록을 가져옴 */}
             {chatting.map((msg, index) => {
               const chatTime = msg.chatTime.substr(11, 5);
-              console.log(msg.chatTime.substr(11, 5));
-
               return (
                 <div key={index}>
                   {msg.employee.empId === empInfo.empId ? (
@@ -359,8 +331,6 @@ function Chat() {
                   inputRef.current.value && send();
                   inputRef.current.focus();
                   inputRef.current.value = '';
-                  // inputRef.current.scroll(0, 1000);
-                  // scrollToBottom();
                 }}>
                 전송
               </Button>
