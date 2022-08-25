@@ -58,8 +58,6 @@ import DeclaredPersonnelAppointmentInfo from './pages/approval/DeclaredPersonnel
 
 import NotFound from './pages/NotFound';
 
-import PaymentDeclare from './pages/approval/PaymentDeclare';
-
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
   const [isLogin, setLogin] = useState(null);

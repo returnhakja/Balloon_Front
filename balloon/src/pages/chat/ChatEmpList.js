@@ -51,6 +51,7 @@ function ChatEmpList({ invite, setInvite }) {
       setInvite(invite.filter((button) => button !== data));
     }
   };
+  console.log(invite);
 
   const eventClickHandle = () => {
     if (invite.length === 0) {
@@ -94,7 +95,6 @@ function ChatEmpList({ invite, setInvite }) {
                 return (
                   <div key={index} className={styles.cuCon}>
                     <p className={styles.cuName}>{cu}</p>
-
                     {chatEmpList.map((ce, index) => {
                       if (ce.unit.unitName === cu) {
                         return (
@@ -105,6 +105,7 @@ function ChatEmpList({ invite, setInvite }) {
                               type="checkbox"
                               onChange={(e) => {
                                 onInvite(e.currentTarget.checked, ce);
+                                console.log(e.currentTarget.checked);
                               }}
                               checked={invite.includes(ce) ? true : false}
                             />

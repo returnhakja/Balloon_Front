@@ -30,6 +30,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 function Chat() {
   const [empInfo, setEmpInfo] = useOutletContext();
@@ -47,12 +48,25 @@ function Chat() {
     setOpen(!open);
   };
 
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 300,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    textAlign: 'center',
+  };
+
   client.connect({}, () => {
     client.subscribe(`/topic/message`, (data) => {
       const chat = JSON.parse(data.body);
       console.log(chat);
       setInput([...input, chat]);
-      console.log(input);
+      console.log(...input);
       disconnect();
     });
   });
@@ -64,15 +78,16 @@ function Chat() {
   };
 
   const send = (e) => {
-    client.send(
-      '/app/chat/message',
-      {},
-      JSON.stringify({
-        chatroomId: chatroomId,
-        writer: empInfo,
-        chatContent: inputRef.current.value,
-      })
-    );
+    if (inputRef.current.value.trim() != '')
+      client.send(
+        '/app/chat/message',
+        {},
+        JSON.stringify({
+          chatroomId: chatroomId,
+          writer: empInfo,
+          chatContent: inputRef.current.value,
+        })
+      );
   };
 
   //엔터키
@@ -97,6 +112,8 @@ function Chat() {
   useEffect(() => {
     empIdInfo(chatroomId, setChatempinfo);
   }, []);
+
+  console.log(chatempinfo);
 
   //chatroom에 들어갔을 때 기록남게
   useEffect(() => {
@@ -134,6 +151,15 @@ function Chat() {
       onChangeTitle();
     }
   };
+
+  console.log(chatting);
+  // const [chatSearch, setChatSearch] = useState('');
+  // const onChangeSearch = (e) => {
+  //   setChatSearch(e.target.value);
+  // };
+  // const filterChatting = () => {
+  //   chatting.filter((chat) => chat.chatContent.includes(chatSearch));
+  // };
 
   return (
     <Container maxWidth="xs" className={styles.Listcontainer}>
@@ -236,8 +262,8 @@ function Chat() {
             {/* 채팅기록을 가져옴 */}
             {chatting.map((msg, index) => {
               const chatTime = msg.chatTime.substr(11, 5);
-              console.log(msg.chatTime.substr(11, 5));
-
+              // console.log(msg.chatTime.substr(11, 5));
+              // console.log(msg.chatContent);
               return (
                 <div key={index}>
                   {msg.employee.empId === empInfo.empId ? (

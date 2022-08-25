@@ -131,7 +131,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   //이미 존재하는 사람들
   const [botRoom, setBotRoom] = useState([]);
   const botChatroom = () => {
-
     axios.post(`/cre/botchatroom`, inviteSchedule).then((response) => {
       console.log(response.data);
       setBotRoom(response.data);
@@ -177,8 +176,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
       console.log(ad);
       axios
         .post(
-
-        /*  `/api/insertChatEmp/${ad.chatroomId}`,*/
+          /*  `/api/insertChatEmp/${ad.chatroomId}`,*/
 
           `/cre/insertchatemp/${ad.chatroomId}`,
 

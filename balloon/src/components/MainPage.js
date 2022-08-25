@@ -9,7 +9,6 @@ function MainPage() {
     <div>
       <header className={styles.header}>
         <img
-          // src={`${process.env.PUBLIC_URL}/asset/banner.png`}
           src={Banner}
           alt="BALLOON"
           className={styles.img}></img>
