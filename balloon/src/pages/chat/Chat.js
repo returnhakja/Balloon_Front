@@ -31,7 +31,12 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
+import { BsFillPersonPlusFill } from 'react-icons/bs';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+
+const scrollToBottom = () => {
+  document.getElementById('scroller').scroll(0, 1000);
+};
 
 function Chat() {
   const [empInfo, setEmpInfo] = useOutletContext();
@@ -245,6 +250,12 @@ function Chat() {
                 })}
               {/* 채팅방 나가기 */}
               <div className={styles.logoutBtn}>
+                <Button
+                  onClick={() => {
+                    setModalOpen(true);
+                  }}>
+                  <PersonAddAlt1Icon />
+                </Button>
                 <Link to={'/chatlist'}>
                   <Button
                     onClick={() => (
@@ -261,12 +272,7 @@ function Chat() {
               </div>
             </Collapse>
           </List>
-          <Button
-            onClick={() => {
-              setModalOpen(true);
-            }}>
-            <PersonAddAlt1Icon />
-          </Button>
+
           {modalOpen && (
             <InviteEmp
               style={style}
