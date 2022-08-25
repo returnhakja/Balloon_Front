@@ -7,7 +7,7 @@
 [SJHeon]:https://github.com/SJHeon
 [UIJIN]:https://github.com/kki45
 
-👨‍🦲 [DoHeon] | 🤠 [Uno] | 🐁 [SJHeon] | 😎 [UIJIN] <br><br><br>
+🧑 [DoHeon] | 🤠 [Uno] | 🙍‍♂️ [SJHeon] | 👱‍♀️ [UIJIN] <br><br><br>
 
 
 ## IDE
