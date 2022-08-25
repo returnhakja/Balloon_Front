@@ -4,6 +4,7 @@ import ScrollToBottom from 'react-scroll-to-bottom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import ChatSide from './ChatSide';
+import InviteEmp from './InviteEmp';
 import { sendExit } from '../../utils/ChatUtils';
 import {
   chatRecord,
@@ -77,8 +78,8 @@ function Chat() {
     client.disconnect();
   };
 
-  const send = (e) => {
-    if (inputRef.current.value.trim() != '')
+  const send = () => {
+    if (inputRef.current.value.trim() !== '') {
       client.send(
         '/app/chat/message',
         {},
@@ -88,6 +89,7 @@ function Chat() {
           chatContent: inputRef.current.value,
         })
       );
+    }
   };
 
   //엔터키
@@ -120,6 +122,8 @@ function Chat() {
     chatRecord(chatroomId, setChatting);
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
   }, [input]);
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   // 채팅방 이름 바꾸기
   const [chatRoomTitle, setChatRoomTitle] = useState(chatroomName);
@@ -257,13 +261,23 @@ function Chat() {
               </div>
             </Collapse>
           </List>
-
+          <Button
+            onClick={() => {
+              setModalOpen(true);
+            }}>
+            <PersonAddAlt1Icon />
+          </Button>
+          {modalOpen && (
+            <InviteEmp
+              style={style}
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+            />
+          )}
           <ScrollToBottom className={styles.scrollbar} id="scroller">
             {/* 채팅기록을 가져옴 */}
             {chatting.map((msg, index) => {
               const chatTime = msg.chatTime.substr(11, 5);
-              // console.log(msg.chatTime.substr(11, 5));
-              // console.log(msg.chatContent);
               return (
                 <div key={index}>
                   {msg.employee.empId === empInfo.empId ? (

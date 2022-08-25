@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
@@ -22,6 +22,7 @@ const styleBox = {
 };
 
 function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
+  const inputRef = useRef();
   const [empInfo] = useOutletContext();
   // socket
   const sock = new SockJS('http://localhost:8080/chatstart');
@@ -46,15 +47,24 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
   const eventChatHandle = () => {
     const input = document.getElementById('chatroomName');
     console.log(input.value);
-    if (input.value.length === 0) {
-      alert('채팅방 이름을 입력해주세요!!');
+    if (input.value.trim() !== '') {
+      console.log(input.value);
+      if (input.value.length === 0) {
+        inputRef.current.focus();
+        input.value = '';
+        alert('채팅방 이름을 입력해주세요!!');
+      } else {
+        onCreateChatroom(
+          empInfo,
+          invite,
+          document.getElementById('chatroomName'),
+          client
+        );
+      }
     } else {
-      onCreateChatroom(
-        empInfo,
-        invite,
-        document.getElementById('chatroomName'),
-        client
-      );
+      inputRef.current.focus();
+      input.value = '';
+      alert('채팅방 이름을 입력해주세요!!');
     }
   };
 
@@ -68,6 +78,7 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
           <Input
             id="chatroomName"
             className={styles.inBox}
+            ref={inputRef}
             onKeyPress={keyEnter}
             placeholder="채팅방 이름을 입력하세요"
           />
@@ -75,6 +86,8 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
             variant="contained"
             onClick={() => {
               eventChatHandle();
+
+              // inputRef.current.value = '';
             }}>
             <div>채팅하기</div>
           </Button>

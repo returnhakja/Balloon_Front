@@ -19,7 +19,6 @@ function ChatRoom() {
   const client = Stomp.over(sock);
 
   //마지막으로 보낸 채팅list가져오기
-  console.log(empId);
   useEffect(() => {
     if (empId) {
       onChatroom(setChatroom, empId);
