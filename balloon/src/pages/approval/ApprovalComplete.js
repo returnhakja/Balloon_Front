@@ -1,21 +1,9 @@
-import { Container } from '@mui/system';
 import React, { useState } from 'react';
 import SideNavigation from '../../components/SideNavigation';
-import 'react-datepicker/dist/react-datepicker.css';
-import TextField from '@mui/material/TextField';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import styles from '../../css/Component.module.css';
-import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-} from '@mui/material';
+import { Container } from '@mui/system';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import 'react-datepicker/dist/react-datepicker.css';
 
 function ApprovalComplete() {
   const [docList, setDocList] = useState([]);
@@ -29,6 +17,7 @@ function ApprovalComplete() {
   const handleChange = (event) => {
     setForm(event.target.value);
   };
+
   const columns = [
     { field: 'docId', headerName: '문서번호', width: 160 },
     {

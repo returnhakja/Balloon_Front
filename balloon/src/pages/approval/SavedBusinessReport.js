@@ -1,30 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
-import SideNavigation from '../../components/SideNavigation';
-import styles from '../../css/Report.module.css';
-import '../../css/Modal.css';
 import ModalApproval from './ModalApproval';
-import {
-  Button,
-  Card,
-  CardContent,
-  Container,
-  Paper,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { Box } from '@mui/system';
-
-import { styled } from '@mui/material/styles';
-import { blue } from '@mui/material/colors';
-
-import { FcDocument } from 'react-icons/fc';
+import SideNavigation from '../../components/SideNavigation';
+import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import {
   deleteBizRpt,
+  getApvlByDocId,
   getBizRptByBizRptId,
-  getLatestBizRpt,
+  insertApproval,
   insertBizRpt,
 } from '../../context/ApprovalAxios';
+import styles from '../../css/Report.module.css';
+import '../../css/Modal.css';
+import { FcDocument } from 'react-icons/fc';
+import { Button, Card, Container, Paper, TextField } from '@mui/material';
+import { Box } from '@mui/system';
+import { styled } from '@mui/material/styles';
+import { blue } from '@mui/material/colors';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -34,24 +26,12 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  textAlign: 'center',
-};
-
 function SavedBusinessReport() {
   // 사원 정보 context
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
+  const [approver, setApprover] = useState([]);
 
   const params = useParams();
 
@@ -59,31 +39,8 @@ function SavedBusinessReport() {
 
   useEffect(() => {
     getBizRptByBizRptId(params.docId, setInputData);
-    console.log(inputData);
-  }, []);
-
-  const card = (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          기안자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {empInfo.empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
+    getApvlByDocId(params.docId, setApprover);
+  }, [params, inputData.length]);
 
   // const [openModal, setOpenModal] = useState(false);
   console.log(empInfo);
@@ -135,18 +92,35 @@ function SavedBusinessReport() {
             <ModalApproval
               openapprovalModal={openapprovalModal}
               setOpenapprovalModal={setOpenapprovalModal}
-              style={style}
             />
           )}
         </div>
         <hr />
         <br />
-        <Card
-          variant="outlined"
-          sx={{ maxWidth: 150 }}
-          style={{ backgroundColor: '#F1F9FF' }}>
-          {card}
-        </Card>
+        <div className={styles.approvalCard}>
+          <Card
+            variant="outlined"
+            sx={{ maxWidth: 150 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            <DfCard drafterName={empInfo.empName} />
+          </Card>
+          {approver.map((empData, index) => {
+            console.log(empData);
+            // if (apvl.length === 0) {
+            //   setApvl(empData);
+            // }
+
+            return (
+              <Card
+                variant="outlined"
+                sx={{ maxWidth: 150 }}
+                style={{ backgroundColor: '#F1F9FF' }}
+                key={index}>
+                <ApCard approverName={empData.approverName} />
+              </Card>
+            );
+          })}
+        </div>
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>
@@ -205,37 +179,69 @@ function SavedBusinessReport() {
                   삭제하기
                 </Button>
               </Link>
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={async () => {
-                  await insertBizRpt(
-                    params.docId,
-                    3,
-                    inputData,
-                    empInfo,
-                    setInputData
-                  );
-                  window.location.href = 'http://localhost:3000/boxes';
+              <Link to={'/boxes/ds'}>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={async () => {
+                    await insertBizRpt(
+                      params.docId,
+                      3,
+                      inputData,
+                      empInfo,
+                      setInputData
+                    );
+
+                    approver.map(async (data, index) => {
+                      console.log(data);
+                      console.log(index);
+                      await insertApproval(
+                        params.docId,
+                        0,
+                        data,
+                        inputData,
+                        empInfo
+                      );
+                    });
+
+                    alert('문서가 임시저장되었습니다!');
+                  }}>
+                  임시저장
+                </Button>
+              </Link>
+              <Link
+                to={'/boxes'}
+                onClick={async (e) => {
+                  if (approver.length !== 0) {
+                    await insertBizRpt(
+                      params.docId,
+                      1,
+                      inputData,
+                      empInfo,
+                      setInputData
+                    );
+                    alert('문서가 상신되었습니다!');
+                  } else {
+                    alert('결재선을 설정해주세요 !');
+                    e.preventDefault();
+                  }
+
+                  approver.map((data, index) => {
+                    console.log(data);
+                    console.log(index);
+                    return insertApproval(
+                      params.docId,
+                      1,
+                      data,
+                      inputData,
+                      empInfo
+                    );
+                  });
                 }}>
-                임시저장
-              </Button>
-              <SaveButton
-                variant="contained"
-                color="success"
-                size="large"
-                onClick={async () => {
-                  await insertBizRpt(
-                    params.docId,
-                    1,
-                    inputData,
-                    empInfo,
-                    setInputData
-                  );
-                  window.location.href = 'http://localhost:3000/boxes';
-                }}>
-                상신하기
-              </SaveButton>
+                <SaveButton variant="contained" color="success" size="large">
+                  상신하기
+                </SaveButton>
+              </Link>
             </Box>
           </div>
         </div>

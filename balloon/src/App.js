@@ -9,30 +9,38 @@ import PrivateRoutes from './components/PrivateRoutes';
 import LoginPage from './pages/login/LoginPage';
 
 import Boxes from './pages/approval/Boxes';
-import Dashboard from './pages/approval/Dashboard';
 import Declare from './pages/approval/Declare';
 import Complete from './pages/approval/Complete';
 import Save from './pages/approval/Save';
 import Refuese from './pages/approval/Refuese';
 import ApprovalBefore from './pages/approval/ApprovalBefore';
-import BusinessReport from './pages/approval/BusinessReport';
-import BusinessTrip from './pages/approval/BusinessTrip';
-import PersonnelAppointment from './pages/approval/PersonnelAppointment';
 import ApprovalOngoing from './pages/approval/ApprovalOngoing';
 import ApprovalComplete from './pages/approval/ApprovalComplete';
 import ApprovalRefuse from './pages/approval/ApprovalRefuse';
 import DocumentList from './pages/approval/DocumentList';
+
 import BusinessReportInfo from './pages/approval/BusinessReportInfo';
 import BusinessTripInfo from './pages/approval/BusinessTripInfo';
 import PersonnelAppointmentInfo from './pages/approval/PersonnelAppointmentInfo';
+
+import CompleteBusinessReportInfo from './pages/approval/CompleteBusinessReportInfo';
+import CompleteBusinessTripInfo from './pages/approval/CompleteBusinessTripInfo';
+import CompletePersonnelAppointmentInfo from './pages/approval/CompletePersonnelAppointmentInfo';
+
+import DeclaredBusinessReportInfo from './pages/approval/DeclaredBusinessReportInfo';
+import DeclaredBusinessTripInfo from './pages/approval/DeclaredBusinessTripInfo';
+import DeclaredPersonnelAppointmentInfo from './pages/approval/DeclaredPersonnelAppointmentInfo';
+
+import Dashboard from './pages/approval/Dashboard';
+import BusinessReport from './pages/approval/BusinessReport';
+import BusinessTrip from './pages/approval/BusinessTrip';
+import PersonnelAppointment from './pages/approval/PersonnelAppointment';
 
 import SavedBusinessReport from './pages/approval/SavedBusinessReport';
 import SavedBusinessTrip from './pages/approval/SavedBusinessTrip';
 import SavedPersonnelAppointment from './pages/approval/SavedPersonnelAppointment';
 
-import CompleteBusinessReportInfo from './pages/approval/CompleteBusinessReportInfo';
-import CompleteBusinessTripInfo from './pages/approval/CompleteBusinessTripInfo';
-import CompletePersonnelAppointmentInfo from './pages/approval/CompletePersonnelAppointmentInfo';
+import ApprovalDeclare from './pages/approval/ApprovalDeclare';
 
 import Calendar from './pages/calendar/Calendar';
 
@@ -45,14 +53,11 @@ import ChatNotice from './pages/chat/ChatNotice';
 import Organization from './pages/Organization';
 
 import ManagementUnit from './pages/personnelManagement/ManagementUnit';
+import UnitListAddPage from './pages/personnelManagement/UnitListAddPage';
+
 import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
 import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
-import UnitListAddPage from './pages/personnelManagement/UnitListAddPage';
-
-import DeclaredBusinessReportInfo from './pages/approval/DeclaredBusinessReportInfo';
-import DeclaredBusinessTripInfo from './pages/approval/DeclaredBusinessTripInfo';
-import DeclaredPersonnelAppointmentInfo from './pages/approval/DeclaredPersonnelAppointmentInfo';
 
 import NotFound from './pages/NotFound';
 
@@ -110,12 +115,8 @@ function App() {
               setLogin={setLogin}
             />
           }>
-          {/* 캘린더 */}
-          <Route element={<Calendar />} path="/calendar" exact />
-
           {/* 결재관리 */}
           <Route path="/boxes" element={<Boxes />} />
-          {/* <Route index  /> */}
           <Route path="/boxes/dd" element={<Declare />} />
           <Route path="/boxes/dc" element={<Complete />} />
           <Route path="/boxes/ds" element={<Save />} />
@@ -159,7 +160,6 @@ function App() {
             element={<DeclaredPersonnelAppointmentInfo />}
           />
 
-          {/* </Route> */}
           {/* 기안작성 */}
           <Route path="/draft/form" element={<Dashboard />} />
           <Route path="/draft/br" element={<BusinessReport />} />
@@ -173,6 +173,13 @@ function App() {
             path="/draft/sdpa/:docId"
             element={<SavedPersonnelAppointment />}
           />
+
+          {/* 결재 상세 정보 */}
+          <Route path="/apvl/pd/:docId" element={<ApprovalDeclare />} />
+
+          {/* 캘린더 */}
+          <Route element={<Calendar />} path="/calendar" exact />
+
           {/* 메신저 */}
           <Route
             path="/chatemplist"
@@ -182,14 +189,17 @@ function App() {
           <Route path="/chatting" element={<Chat />} />
           <Route path="/createroom" element={<CreateRoom invite={invite} />} />
           <Route path="/chatnotice" element={<ChatNotice />} />
+
           {/* 조직관리 */}
           <Route path="/management/unit" element={<ManagementUnit />} />
           <Route path="/add/units" element={<UnitListAddPage />} />
+
           {/* 사원관리 */}
           <Route path="/management/employee" element={<ManagementEmployee />} />
           <Route path="/add/employee" element={<EmpAddPage />} />
           <Route path="/add/employees" element={<EmpListAddPage />} />
         </Route>
+
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

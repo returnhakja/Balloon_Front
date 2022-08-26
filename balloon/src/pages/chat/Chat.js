@@ -31,15 +31,10 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
-import { BsFillPersonPlusFill } from 'react-icons/bs';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
-const scrollToBottom = () => {
-  document.getElementById('scroller').scroll(0, 1000);
-};
-
 function Chat() {
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
   const chatroomId = new URL(document.location).searchParams.get('room');
   const [input, setInput] = useState([]);
@@ -54,7 +49,7 @@ function Chat() {
     setOpen(!open);
   };
 
-  const style = {
+  const styleBox = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -77,8 +72,6 @@ function Chat() {
     });
   });
 
-  console.log(input);
-
   const disconnect = () => {
     client.disconnect();
   };
@@ -97,14 +90,6 @@ function Chat() {
     }
   };
 
-  //엔터키
-  const onKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      send();
-      inputRef.current.value = '';
-    }
-  };
-
   //채팅방 채팅기록
   const [chatting, setChatting] = useState([]);
 
@@ -116,27 +101,20 @@ function Chat() {
   //채팅방에 어떤사람이 남아있는지 알려주기 위해서
   const [chatempinfo, setChatempinfo] = useState([]);
 
-  useEffect(() => {
-    empIdInfo(chatroomId, setChatempinfo);
-  }, []);
-
-  console.log(chatempinfo);
-
-  //chatroom에 들어갔을 때 기록남게
-  useEffect(() => {
-    chatRecord(chatroomId, setChatting);
-    chatroomInfo(chatroomId, setChatroomName, setHeadCount);
-  }, [input]);
-
   const [modalOpen, setModalOpen] = useState(false);
 
   // 채팅방 이름 바꾸기
   const [chatRoomTitle, setChatRoomTitle] = useState(chatroomName);
   const [clickChk, setClickChk] = useState(0);
 
-  const onChangeTitle = (event) => {
-    setChatRoomTitle(event.target.value);
-  };
+  useEffect(() => {
+    if (!!chatroomId) {
+      empIdInfo(chatroomId, setChatempinfo);
+    }
+    //chatroom에 들어갔을 때 기록남게
+    chatRecord(chatroomId, setChatting);
+    chatroomInfo(chatroomId, setChatroomName, setHeadCount);
+  }, [chatroomId, input]);
 
   useEffect(() => {
     setChatRoomTitle(chatroomName);
@@ -146,6 +124,16 @@ function Chat() {
     setClickChk(clickChk);
   }, [clickChk]);
 
+  useEffect(() => {
+    if (chatempinfo.length !== 0) {
+      // empIdInfo(chatroomId, setChatempinfo);
+    }
+  }, [chatempinfo]);
+
+  const onChangeTitle = (event) => {
+    setChatRoomTitle(event.target.value);
+  };
+
   const onClickChatRoomTitle = () => {
     setClickChk(clickChk + 1);
     console.log(clickChk);
@@ -154,10 +142,11 @@ function Chat() {
     }
   };
 
-  const keyEnter = (e) => {
+  //엔터키
+  const chatEnter = (e) => {
     if (e.key === 'Enter') {
-      setClickChk(0);
-      onChangeTitle();
+      send();
+      inputRef.current.value = '';
     }
   };
 
@@ -190,7 +179,6 @@ function Chat() {
                   maxRows={4}
                   value={chatRoomTitle}
                   onChange={onChangeTitle}
-                  onKeyPress={keyEnter}
                   onClick={onClickChatRoomTitle}
                 />
                 {clickChk == 2 ? (
@@ -275,9 +263,10 @@ function Chat() {
 
           {modalOpen && (
             <InviteEmp
-              style={style}
+              style={styleBox}
               modalOpen={modalOpen}
               setModalOpen={setModalOpen}
+              setChatempinfo={setChatempinfo}
             />
           )}
           <ScrollToBottom className={styles.scrollbar} id="scroller">
@@ -316,7 +305,7 @@ function Chat() {
               <input
                 className={styles.inputform}
                 ref={inputRef}
-                onKeyPress={onKeyPress}
+                onKeyPress={chatEnter}
                 placeholder="메시지를 입력하세요"
               />
 

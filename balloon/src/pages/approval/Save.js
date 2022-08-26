@@ -1,35 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { useOutletContext, Link } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
+import { getDocsByEmp } from '../../context/ApprovalAxios';
 import styles from '../../css/Component.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-} from '@mui/material';
 import { Container } from '@mui/system';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import TextField from '@mui/material/TextField';
-import { useOutletContext, Link } from 'react-router-dom';
-import { Space, Table, Pagination } from 'antd';
-import { getDocsByEmp } from '../../context/ApprovalAxios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 function Save() {
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
 
   const [docList, setDocList] = useState([]);
 
   const docStatus = 3;
 
   // 날짜 관련
-  const [startValue, setStartValue] = useState(null);
-  const [endvalue, setEndValue] = useState(null);
+  // const [startValue, setStartValue] = useState(null);
+  // const [endvalue, setEndValue] = useState(null);
 
   //기안양식
   const [form, setForm] = useState('');
@@ -39,12 +26,13 @@ function Save() {
   };
 
   useEffect(() => {
-    console.log(empInfo);
-    getDocsByEmp(empInfo.empId, docStatus, setDocList);
-    console.log(docList);
-  }, []);
+    if (docList.length === 0) {
+      console.log(empInfo);
+      getDocsByEmp(empInfo.empId, docStatus, setDocList);
+    }
+  }, [empInfo, docList.length]);
 
-  const [bottomcenter, setBottomCenter] = useState('bottomcenter');
+  // const [bottomcenter, setBottomCenter] = useState('bottomcenter');
   // const data = [
   //   // 기안 제목 , 상신일 , 문서번호
   //   {
