@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
 
-export const StatusCard = ({ index, status, count, link }) => (
+export const StatusCard = ({ status, count, link }) => (
   <Link to={link}>
     <CardActionArea
       sx={{
@@ -13,8 +13,7 @@ export const StatusCard = ({ index, status, count, link }) => (
       <Card
         variant="outlined"
         sx={{ minWidth: 250, height: 200 }}
-        style={{ backgroundColor: '#F1F9FF' }}
-        key={index}>
+        style={{ backgroundColor: '#F1F9FF' }}>
         <React.Fragment>
           <CardContent>
             <Typography

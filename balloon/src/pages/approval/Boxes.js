@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import { StatusCard } from './approvalCards/ApprovalStatusCard';
 import { getDCount } from '../../context/ApprovalFunc';
-import { Card, CardActionArea, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import { Box } from '@mui/system';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -40,7 +40,7 @@ function Boxes() {
     } else {
       getDCount(empInfo.empId, setDDCount, setDCCount, setDSCount, setDRCount);
     }
-  }, [DDCount, DCCount, DSCount, DRCount, countArr]);
+  }, [empInfo.empId, DDCount, DCCount, DSCount, DRCount, countArr]);
 
   return (
     <SideNavigation>
@@ -72,7 +72,7 @@ function Boxes() {
                 //     style={{ backgroundColor: '#F1F9FF' }}
                 //     key={index}>
                 <StatusCard
-                  index={index}
+                  key={index}
                   status={status}
                   count={countArr[index]}
                   link={linkArr[index]}
