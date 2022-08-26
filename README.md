@@ -1,5 +1,11 @@
 # 🎈 Balloon_Front
 
+# 프로젝트 레이아웃 및 기능
+<ul> 
+<li> UI 작업 >> Adobe XD </li>
+
+</ul>
+
 # Team Members
 
 [DoHeon]:https://github.com/returnhakja
