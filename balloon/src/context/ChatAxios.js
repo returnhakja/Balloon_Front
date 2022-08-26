@@ -70,6 +70,16 @@ export const onUserInvite = async (chatroomId, invite, client) => {
       .catch((error) => console.log(error));
 };
 
+// 일정봇과 채팅 보내기
+
+// 이미 일정봇과 채팅이 존재하는 사원 찾기
+export const botChatroom = async (inviteSchedule, setBotRoom) => {
+  axios.post(`/cre/botchatroom`, inviteSchedule).then((response) => {
+    console.log(response.data);
+    setBotRoom(response.data);
+  });
+};
+
 //////////////////////////////////////////////////////
 //Chat.js
 //chatroomEmployee T에 chatroomId로 사원정보 가져오기
@@ -109,8 +119,11 @@ export const chatroomInfo = async (
 
 //채팅방이름 수정
 export const onUserUpdate = async (chatroomId, chatroomName, headCount) => {
+  console.log(chatroomId);
+  console.log(headCount);
+  console.log(chatroomName);
   await axios
-    .put(`/chatroom/updateroom/${chatroomId}`, {
+    .put(`/chatroom/updatechatroom/${chatroomId}`, {
       chatroomName: chatroomName,
       headCount: headCount,
     })

@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useOutletContext } from 'react-router-dom';
-
+import { Link, useOutletContext } from 'react-router-dom';
+import Stomp from 'stompjs';
+import SockJS from 'sockjs-client';
+import ChatSide from './ChatSide';
+import { onChatroom, onExitRoom } from '../../context/ChatAxios';
+import { sendExit } from '../../utils/ChatUtils';
+import styles from '../../css/chat/Chat.module.css';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Container } from '@mui/system';
-
-import { onChatroom, onExitRoom, onHCupdate } from '../../context/ChatAxios';
-import Stomp from 'stompjs';
-import { sendExit } from '../../utils/ChatUtils';
-import SockJS from 'sockjs-client';
-// import styles from '../../css/Chat/ChatRoom.module.css';
-import ChatSide from './ChatSide';
-import styles from '../../css/chat/Chat.module.css';
 
 function ChatNotice() {
   const [chatroom, setChatroom] = useState([]);

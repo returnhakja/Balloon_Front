@@ -9,36 +9,21 @@ import {
   onHCInvite,
   onUserInvite,
 } from '../../context/ChatAxios';
-
 import styles from '../../css/chat/Chat.module.css';
 import { Checkbox } from '@mui/material';
 import { Box, Button, Modal } from '@mui/material';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 300,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  textAlign: 'center',
-};
-
-function InviteEmp({ modalOpen, setModalOpen }) {
+function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
   const [chatEmpList, setCEList] = useState([]);
   const [chatUnitList, setCUList] = useState([]);
   const [newInvite, setNewInvite] = useState([]);
   const [existChatEmp, setECEList] = useState([]);
+
   //채팅방 정보 불러오기
   const [chatroomName, setChatroomName] = useState('');
   const [headCount, setHeadCount] = useState(0);
-  const [chatempinfo, setChatempinfo] = useState([]);
-
+  const [chatAddEmpInfo, setChatAddEmpInfo] = useState([]);
   const chatroomId = new URL(document.location).searchParams.get('room');
-
   const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
 
@@ -58,15 +43,13 @@ function InviteEmp({ modalOpen, setModalOpen }) {
 
   ////////////////////////////////////////////////////////////
   const existEmp = [];
-  chatempinfo.map((info) => {
-    return existEmp.push(info.empId.empId);
+  chatAddEmpInfo.map((info) => {
+    existEmp.push(info.empId.empId);
   });
-  console.log(existEmp);
 
   const returnArr = (list, setCUList) => {
     const arr = [];
     list.map((row) => {
-      // return arr.push(row.unit.unitCode);
       return arr.push(row.unit.unitName);
     });
     const array = arr.filter((row, index) => {
@@ -84,38 +67,31 @@ function InviteEmp({ modalOpen, setModalOpen }) {
     }
   };
 
-  //사원정보가져오기
   useEffect(() => {
-    if (chatroomId.length === 0) {
+    if (!!chatroomId) {
+      //사원정보가져오기
       chatroomInfo(chatroomId, setChatroomName, setHeadCount);
-      empIdInfo(chatroomId, setChatempinfo);
+      empIdInfo(chatroomId, setChatAddEmpInfo);
+      if (chatUnitList.length === 0) {
+        if (chatEmpList.length === 0) {
+          // 사원list 출력하기
+          getEmpListInSameUnit(empId, setCEList);
+          setNewInvite([]);
+        } else {
+          setCUList(chatEmpList.unit);
+          returnArr(chatEmpList, setCUList);
+
+          ChatEmpHandle(chatEmpList, setECEList);
+        }
+      }
     }
-  }, [chatroomId]);
+  }, [chatroomId, chatEmpList, chatUnitList, existChatEmp]);
 
   //채팅방에 없는 사원list
   const ChatEmpHandle = (chatEmpList, setECEList) => {
-    console.log();
     const arr = chatEmpList.filter((list) => !existEmp.includes(list.empId));
-    console.log(arr);
     setECEList(arr);
   };
-
-  // 사원list 출력하기
-  useEffect(() => {
-    if (chatUnitList.length === 0) {
-      if (chatEmpList.length === 0) {
-        getEmpListInSameUnit(empId, setCEList);
-        setNewInvite([]);
-      } else {
-        setCUList(chatEmpList.unit);
-        returnArr(chatEmpList, setCUList);
-
-        ChatEmpHandle(chatEmpList, setECEList);
-      }
-    } else {
-      console.log(existChatEmp);
-    }
-  }, [chatEmpList, chatUnitList, existChatEmp]);
 
   const closemodal = () => {
     setModalOpen(false);
@@ -131,7 +107,6 @@ function InviteEmp({ modalOpen, setModalOpen }) {
               return (
                 <div key={index} className={styles.cuCon}>
                   <p className={styles.cuName}>{cu}</p>
-
                   {existChatEmp.length !== 0 &&
                     existChatEmp.map((ce, index) => {
                       if (ce.unit.unitName === cu) {
@@ -158,7 +133,8 @@ function InviteEmp({ modalOpen, setModalOpen }) {
           onClick={() => (
             onUserInvite(chatroomId, newInvite, client),
             onHCInvite(chatroomId, chatroomName, headCount, newInvite),
-            closemodal()
+            closemodal(),
+            empIdInfo(chatroomId, setChatempinfo)
           )}>
           초대하기
         </Button>

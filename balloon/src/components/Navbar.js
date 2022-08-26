@@ -1,17 +1,17 @@
-import styles from '../css/Navbar.module.css';
+import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { logoutFunc, getCookie } from '../context/AuthFunc';
 import { getMe } from '../context/EmployeeAxios';
-import { useEffect, useState } from 'react';
+import styles from '../css/nav/Navbar.module.css';
+import '../css/nav/Navbar.css';
 import { Button } from '@mui/material';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-
 import ClearIcon from '@mui/icons-material/Clear';
-import './Navbar.css';
 
 function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   const cookies = new Cookies();
+  const [isMobile, setIsMobile] = useState(false);
 
   function activeStyle({ isActive }) {
     return {
@@ -28,15 +28,12 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
 
       if (cookies.cookies.accessToken) {
         getMe(setEmpInfo);
-        // console.log(empInfo);
       } else {
         logoutFunc(logout);
         localStorage.setItem('logged', false);
       }
     }
   }, [isLogin]);
-
-  const [isMobile, setIsMobile] = useState(false);
 
   return (
     <nav className="navbar">

@@ -199,7 +199,11 @@ export const insertBizTp = async (
   const bizTpContent = document.getElementById('bizTpContent');
   const destination = document.getElementById('destination');
   const visitingPurpose = document.getElementById('visitingPurpose');
+  // const startValue = document.getElementById('startValue');
+  // const endValue = document.getElementById('endValue');
 
+  console.log(startDate);
+  console.log(endDate);
   const url = '/api/biztp';
 
   const headers = {
@@ -323,11 +327,13 @@ export const insertApproval = async (
   console.log(docId);
   console.log(docStatus);
   console.log(empInfo);
+  console.log(apvr);
+  console.log(apvr.approverName);
 
   if (docId.includes('업무기안')) {
     inputData = {
       approvalStatus: docStatus,
-      approverName: apvr.empName,
+      approverName: apvr.empName ? apvr.empName : apvr.approverName,
       position: apvr.position,
       drafterName: empInfo && empInfo.empName,
       emp: {
@@ -371,13 +377,151 @@ export const insertApproval = async (
   await axios.post(url, inputData, { headers });
 };
 
-export const getApvlByApvrNameAnddocStatus = async (apporver, docStatus) => {
+export const getApvlByApvrNameAnddocStatus = async (
+  apporver,
+  docStatus,
+  setDocList
+) => {
   const url = '/api/apvl/';
   const str = url + apporver + '/' + docStatus;
   await axios.get(str).then((res) => {
     console.log(res.data);
+    const docList = [];
     res.data.map((data) => {
-      console.log(data);
+      if (data.businessReport != null) {
+        const bizRptDoc = {
+          docId: data.businessReport.businessReportId,
+          documentTitle: data.businessReport.documentTitle,
+          updateTime: data.businessReport.updateDate,
+        };
+        docList.push(bizRptDoc);
+      } else if (data.businessTrip != null) {
+        const bizTpDoc = {
+          docId: data.businessTrip.businessTripId,
+          documentTitle: data.businessTrip.documentTitle,
+          updateTime: data.businessTrip.updateDate,
+        };
+        docList.push(bizTpDoc);
+      } else if (data.personnelAppointment != null) {
+        const PADoc = {
+          docId: data.personnelAppointment.personnelAppointmentId,
+          documentTitle: data.personnelAppointment.documentTitle,
+          updateTime: data.personnelAppointment.updateDate,
+        };
+        docList.push(PADoc);
+      } else {
+        alert('유요하지 않은 요청');
+      }
     });
+    console.log(docList);
+    setDocList(docList);
   });
+};
+
+export const getApvlByDocId = async (docId, setApprover) => {
+  const url = '/api/apvl/';
+  const str = url + docId;
+
+  await axios.get(str).then((res) => {
+    console.log(res.data);
+    setApprover(res.data);
+  });
+};
+
+// 결재하는 axios
+export const updateApproval = async (apvl, state) => {
+  const apvlCom = document.getElementById('apvlContent');
+  let inputData = {};
+  console.log(apvl);
+  console.log(state);
+  console.log(apvl.approvalId);
+  console.log(apvl.businessReport);
+  const url = '/api/apvl';
+  // const str = url + apvl.approvalId;
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+
+  if (apvl.businessReport != null) {
+    inputData = {
+      approvalId: apvl.approvalId,
+      approvalStatus: state,
+      approvalComment: apvlCom.value,
+      approverName: apvl.approverName,
+      position: apvl.position,
+      drafterName: apvl.drafterName,
+      emp: {
+        empId: apvl && apvl.emp.empId,
+      },
+      businessReport: {
+        businessReportId: apvl && apvl.businessReport.businessReportId,
+      },
+    };
+  } else if (apvl.businessTrip != null) {
+    inputData = {
+      approvalId: apvl.approverId,
+      approvalStatus: state,
+      approvalComment: apvlCom.value,
+      approverName: apvl.approverName,
+      position: apvl.position,
+      drafterName: apvl.drafterName,
+      emp: {
+        empId: apvl && apvl.emp.empId,
+      },
+      businessTrip: {
+        businessTripId: apvl && apvl.businessTrip.businessTripId,
+      },
+    };
+  } else if (apvl.personnelAppointment != null) {
+    inputData = {
+      approvalId: apvl.approverId,
+      approvalStatus: state,
+      approvalComment: apvlCom.value,
+      approverName: apvl.approverName,
+      position: apvl.position,
+      drafterName: apvl.drafterName,
+      emp: {
+        empId: apvl && apvl.emp.empId,
+      },
+      personnelAppointment: {
+        personnelAppointmentId:
+          apvl && apvl.personnelAppointment.personnelAppointmentId,
+      },
+    };
+  } else {
+    alert('문서가 잘못되었습니다.');
+  }
+  console.log(inputData);
+  await axios.post(url, inputData, { headers });
+};
+
+export const updateApvlBizRpt = async (apvl, state) => {
+  const bizRpt = apvl.businessReport;
+  const url = '/api/bizrpt';
+  let inputData = {};
+  console.log(apvl);
+  console.log(bizRpt);
+
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+
+  inputData = {
+    businessReportId: bizRpt.businessReportId,
+    documentTitle: bizRpt.documentTitle,
+    documentContent: bizRpt.documentContent,
+    documentStatus: state,
+    empName: bizRpt.empName,
+    position: bizRpt.position,
+    unitName: bizRpt.unitName,
+    unit: {
+      unitCode: apvl && apvl.emp.unit.unitCode,
+    },
+    emp: {
+      empId: apvl && apvl.emp.empId,
+    },
+  };
+  console.log(inputData);
+
+  await axios.post(url, inputData, { headers });
 };

@@ -1,38 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
+import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
+import { deletePA, getPAByPAId } from '../../context/ApprovalAxios';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import ModalApproval from './ModalApproval';
-import {
-  Button,
-  Card,
-  CardContent,
-  Container,
-  Paper,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { Box } from '@mui/system';
 import { FcDocument } from 'react-icons/fc';
+import { Button, Card, Container, Paper, TextField } from '@mui/material';
+import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
-import { deletePA, getPAByPAId } from '../../context/ApprovalAxios';
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  textAlign: 'center',
-};
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -44,45 +24,22 @@ const SaveButton = styled(Button)(({ theme }) => ({
 
 function DeclaredPersonnelAppointmentInfo() {
   // 날짜 관련
-  const [startValue, setStartValue] = useState(null);
+  // const [startValue, setStartValue] = useState(null);
 
   // 모달
   // const [openModal, setOpenModal] = useState(false);
-  const [openapprovalModal, setOpenapprovalModal] = useState(false);
+  // const [openapprovalModal, setOpenapprovalModal] = useState(false);
 
   // 사원 정보 context
-  const [empInfo, setEmpInfo] = useOutletContext();
+  // const [empInfo, setEmpInfo] = useOutletContext();
 
   const [paInfo, setPaInfo] = useState({});
 
   const params = useParams();
 
   useEffect(() => {
-    getPAByPAId(params.docId, setPaInfo);
-  }, []);
-
-  const card = (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          기안자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {paInfo.empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
+    !!params && getPAByPAId(params.docId, setPaInfo);
+  }, [params]);
 
   return (
     <SideNavigation>
@@ -126,7 +83,7 @@ function DeclaredPersonnelAppointmentInfo() {
           variant="outlined"
           sx={{ maxWidth: 150 }}
           style={{ backgroundColor: '#F1F9FF' }}>
-          {card}
+          {!!paInfo && <DfCard drafterName={paInfo.empName} />}
         </Card>
         <hr className={styles.hrmargins} />
 
@@ -150,7 +107,7 @@ function DeclaredPersonnelAppointmentInfo() {
                   <DatePicker
                     disabled
                     label="명령 일자"
-                    value={paInfo.personnelDate}
+                    value={paInfo.personnelDate && paInfo.personnelDate}
                     type=" date"
                     inputFormat={'yyyy-MM-dd'}
                     className={styles.datepicker}
