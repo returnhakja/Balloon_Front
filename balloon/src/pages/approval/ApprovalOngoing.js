@@ -1,27 +1,16 @@
-import { Container } from '@mui/system';
 import React, { useState } from 'react';
 import SideNavigation from '../../components/SideNavigation';
 import 'react-datepicker/dist/react-datepicker.css';
-import TextField from '@mui/material/TextField';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import styles from '../../css/Component.module.css';
-import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-} from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { Container } from '@mui/system';
 
 function ApprovalOngoing() {
   const [docList, setDocList] = useState([]);
+
   // 날짜 관련
-  const [startValue, setStartValue] = useState(null);
-  const [endvalue, setEndValue] = useState(null);
+  // const [startValue, setStartValue] = useState(null);
+  // const [endvalue, setEndValue] = useState(null);
 
   //기안양식
   const [form, setForm] = useState('');

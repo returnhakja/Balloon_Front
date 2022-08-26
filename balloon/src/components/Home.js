@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import Navbar from './Navbar';
 import { Outlet } from 'react-router-dom';
+import Navbar from './Navbar';
 import Footer from './Footer';
-
-import AddIcon from '@mui/icons-material/Add';
-import { Fab } from '@mui/material';
 import styles from '../css/Home.module.css';
-import ChatEmpList from '../pages/chat/ChatEmpList';
+import { Fab } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+
 function Home({ empInfo, setEmpInfo, logout, isLogin }) {
   return (
     <>
