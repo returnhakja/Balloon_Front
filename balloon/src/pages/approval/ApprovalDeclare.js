@@ -21,9 +21,10 @@ import { blue } from '@mui/material/colors';
 import { FcDocument } from 'react-icons/fc';
 import {
   getApvlByApvrNameAnddocStatus,
+  getApvlByDocId,
   getBizRptByBizRptId,
 } from '../../context/ApprovalAxios';
-import PaymentDeclareModal from './PaymentDecalreModal';
+import ApprovalDeclareModal from './ApprovalDecalreModal';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -46,12 +47,13 @@ const style = {
   textAlign: 'center',
 };
 
-function PaymentDeclare() {
+function ApprovalDeclare() {
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [bizRptInfo, setBizRptInfo] = useState({});
-
+  const [approver, setApprover] = useState([]);
+  const [apvl, setApvl] = useState({});
   const params = useParams();
   console.log(params);
   console.log(empInfo);
@@ -59,9 +61,10 @@ function PaymentDeclare() {
 
   useEffect(() => {
     getBizRptByBizRptId(params.docId, setBizRptInfo);
+    getApvlByDocId(params.docId, setApprover);
   }, []);
 
-  const card = (
+  const DfCard = (
     <React.Fragment>
       <CardContent>
         <Typography
@@ -79,6 +82,29 @@ function PaymentDeclare() {
           component="div"
           textAlign="center">
           {bizRptInfo.empName}
+        </Typography>
+      </CardContent>
+    </React.Fragment>
+  );
+
+  const ApCard = (empName) => (
+    <React.Fragment>
+      <CardContent>
+        <Typography
+          sx={{ fontSize: 25 }}
+          color="#00AAFF"
+          gutterBottom
+          textAlign="center">
+          결재자
+        </Typography>
+        <hr />
+        <br />
+        <Typography
+          sx={{ fontSize: 20 }}
+          variant="h5"
+          component="div"
+          textAlign="center">
+          {empName}
         </Typography>
       </CardContent>
     </React.Fragment>
@@ -124,12 +150,30 @@ function PaymentDeclare() {
         </div>
         <hr />
         <br />
-        <Card
-          variant="outlined"
-          sx={{ maxWidth: 150 }}
-          style={{ backgroundColor: '#F1F9FF' }}>
-          {card}
-        </Card>
+        <div className={styles.approvalCard}>
+          <Card
+            variant="outlined"
+            sx={{ maxWidth: 150 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {DfCard}
+          </Card>
+          {approver.map((empData, index) => {
+            console.log(empData.approvalId);
+            if (apvl.length === 0) {
+              setApvl(empData);
+            }
+            return (
+              <Card
+                variant="outlined"
+                sx={{ maxWidth: 150 }}
+                style={{ backgroundColor: '#F1F9FF' }}
+                key={index}>
+                {ApCard(empData.approverName)}
+              </Card>
+            );
+          })}
+        </div>
+
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>
@@ -185,10 +229,14 @@ function PaymentDeclare() {
                 결재하기
               </Button>
               {openModal && (
-                <PaymentDeclareModal
+                <ApprovalDeclareModal
                   style={style}
                   openModal={openModal}
                   setOpenModal={setOpenModal}
+                  // docId={params.docId}
+                  approver={approver}
+                  // empInfo={empInfo}
+                  apvl={apvl}
                 />
               )}
               {/* </Link> */}
@@ -200,4 +248,4 @@ function PaymentDeclare() {
   );
 }
 
-export default PaymentDeclare;
+export default ApprovalDeclare;

@@ -51,7 +51,7 @@ const style = {
 function Trip() {
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
-  const [endvalue, setEndValue] = useState(null);
+  const [endValue, setEndValue] = useState(null);
   const [inputData, setInputData] = useState({});
   const [docNum, setDocNum] = useState(0);
   const [docId, setDocId] = useState('');
@@ -124,6 +124,7 @@ function Trip() {
       </CardContent>
     </React.Fragment>
   );
+  console.log(endValue);
 
   return (
     <SideNavigation>
@@ -263,6 +264,19 @@ function Trip() {
             <tr>
               <td className={styles.tdreaui}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  {/* <TextField
+                  id="startValue"
+                  label="시작일"
+                  type="datetime-local"
+                  defaultValue={startValue}
+                  onChange={(newValue) => {
+                    setStartValue(newValue);
+                  }}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                /> */}
                   <DatePicker
                     label="시작일"
                     value={startValue}
@@ -276,10 +290,25 @@ function Trip() {
                 </LocalizationProvider>
 
                 <span className={styles.centerfont}> : </span>
+
+                {/* <TextField
+                  id="endValue"
+                  label="끝나는일"
+                  type="datetime-local"
+                  defaultValue={endValue}
+                  onChange={(newValue) => {
+                    setEndValue(newValue);
+                  }}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                /> */}
+
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     label="끝나는일"
-                    value={endvalue}
+                    value={endValue}
                     inputFormat={'yyyy-MM-dd'}
                     onChange={(newValue) => {
                       setEndValue(newValue);
@@ -340,12 +369,12 @@ function Trip() {
                   size="large"
                   onClick={async () => {
                     await insertBizTp(
-                      docId && docId,
+                      docId,
                       3,
                       inputData,
                       empInfo,
                       startValue,
-                      endvalue,
+                      endValue,
                       setInputData
                     );
                     {
@@ -360,27 +389,33 @@ function Trip() {
                   임시저장
                 </Button>
               </Link>
-              <Link to={'/boxes'}>
-                <SaveButton
-                  variant="contained"
-                  color="success"
-                  size="large"
-                  onClick={async () => {
-                    if (approver != 0) {
-                      await insertBizTp(
-                        docId && docId,
-                        1,
-                        inputData,
-                        empInfo,
-                        startValue,
-                        endvalue,
-                        setInputData
-                      );
-                    } else {
-                      alert('결재선을 설정해주세요 !');
-                    }
+              <Link
+                to={'/boxes'}
+                onClick={async (e) => {
+                  if (approver != 0) {
+                    await insertBizTp(
+                      docId && docId,
+                      1,
+                      inputData,
+                      empInfo,
+                      startValue.value,
+                      endValue,
+                      setInputData
+                    );
                     alert('문서가 상신되었습니다!');
-                  }}>
+                  } else {
+                    alert('결재선을 설정해주세요 !');
+                    e.preventDefault();
+                  }
+                  {
+                    approver.map((data, index) => {
+                      console.log(data);
+                      console.log(index);
+                      insertApproval(docId, 1, data, inputData, empInfo);
+                    });
+                  }
+                }}>
+                <SaveButton variant="contained" color="success" size="large">
                   상신하기
                 </SaveButton>
               </Link>

@@ -21,8 +21,10 @@ import { blue } from '@mui/material/colors';
 import { FcDocument } from 'react-icons/fc';
 import {
   deleteBizRpt,
+  getApvlByDocId,
   getBizRptByBizRptId,
   getLatestBizRpt,
+  insertApproval,
   insertBizRpt,
 } from '../../context/ApprovalAxios';
 
@@ -52,6 +54,7 @@ function SavedBusinessReport() {
   const [empInfo, setEmpInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
+  const [approver, setApprover] = useState([]);
 
   const params = useParams();
 
@@ -59,10 +62,11 @@ function SavedBusinessReport() {
 
   useEffect(() => {
     getBizRptByBizRptId(params.docId, setInputData);
+    getApvlByDocId(params.docId, setApprover);
     console.log(inputData);
   }, []);
 
-  const card = (
+  const DfCard = (
     <React.Fragment>
       <CardContent>
         <Typography
@@ -80,6 +84,29 @@ function SavedBusinessReport() {
           component="div"
           textAlign="center">
           {empInfo.empName}
+        </Typography>
+      </CardContent>
+    </React.Fragment>
+  );
+
+  const ApCard = (empName) => (
+    <React.Fragment>
+      <CardContent>
+        <Typography
+          sx={{ fontSize: 25 }}
+          color="#00AAFF"
+          gutterBottom
+          textAlign="center">
+          결재자
+        </Typography>
+        <hr />
+        <br />
+        <Typography
+          sx={{ fontSize: 20 }}
+          variant="h5"
+          component="div"
+          textAlign="center">
+          {empName}
         </Typography>
       </CardContent>
     </React.Fragment>
@@ -141,12 +168,30 @@ function SavedBusinessReport() {
         </div>
         <hr />
         <br />
-        <Card
-          variant="outlined"
-          sx={{ maxWidth: 150 }}
-          style={{ backgroundColor: '#F1F9FF' }}>
-          {card}
-        </Card>
+        <div className={styles.approvalCard}>
+          <Card
+            variant="outlined"
+            sx={{ maxWidth: 150 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {DfCard}
+          </Card>
+          {approver.map((empData, index) => {
+            console.log(empData);
+            // if (apvl.length === 0) {
+            //   setApvl(empData);
+            // }
+
+            return (
+              <Card
+                variant="outlined"
+                sx={{ maxWidth: 150 }}
+                style={{ backgroundColor: '#F1F9FF' }}
+                key={index}>
+                {ApCard(empData.approverName)}
+              </Card>
+            );
+          })}
+        </div>
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>
@@ -205,37 +250,64 @@ function SavedBusinessReport() {
                   삭제하기
                 </Button>
               </Link>
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={async () => {
-                  await insertBizRpt(
-                    params.docId,
-                    3,
-                    inputData,
-                    empInfo,
-                    setInputData
-                  );
-                  window.location.href = 'http://localhost:3000/boxes';
+              <Link to={'/boxes/ds'}>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={async () => {
+                    await insertBizRpt(
+                      params.docId,
+                      3,
+                      inputData,
+                      empInfo,
+                      setInputData
+                    );
+                    {
+                      approver.map(async (data, index) => {
+                        console.log(data);
+                        console.log(index);
+                        await insertApproval(
+                          params.docId,
+                          0,
+                          data,
+                          inputData,
+                          empInfo
+                        );
+                      });
+                    }
+                    alert('문서가 임시저장되었습니다!');
+                  }}>
+                  임시저장
+                </Button>
+              </Link>
+              <Link
+                to={'/boxes'}
+                onClick={async (e) => {
+                  if (approver != 0) {
+                    await insertBizRpt(
+                      params.docId,
+                      1,
+                      inputData,
+                      empInfo,
+                      setInputData
+                    );
+                    alert('문서가 상신되었습니다!');
+                  } else {
+                    alert('결재선을 설정해주세요 !');
+                    e.preventDefault();
+                  }
+                  {
+                    approver.map((data, index) => {
+                      console.log(data);
+                      console.log(index);
+                      insertApproval(params.docId, 1, data, inputData, empInfo);
+                    });
+                  }
                 }}>
-                임시저장
-              </Button>
-              <SaveButton
-                variant="contained"
-                color="success"
-                size="large"
-                onClick={async () => {
-                  await insertBizRpt(
-                    params.docId,
-                    1,
-                    inputData,
-                    empInfo,
-                    setInputData
-                  );
-                  window.location.href = 'http://localhost:3000/boxes';
-                }}>
-                상신하기
-              </SaveButton>
+                <SaveButton variant="contained" color="success" size="large">
+                  상신하기
+                </SaveButton>
+              </Link>
             </Box>
           </div>
         </div>

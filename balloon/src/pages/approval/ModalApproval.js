@@ -73,7 +73,7 @@ function ModalApproval({
       chatEmpList.map((data) => {
         arr.push(data);
       });
-      if (approver.length !== 0) {
+      if (approver && approver.length !== 0) {
         setLeft(noApprover);
         setRight(approver);
       } else setLeft(arr);

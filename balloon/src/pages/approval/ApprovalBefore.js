@@ -17,7 +17,8 @@ import {
 } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { getApvlByApvrNameAnddocStatus } from '../../context/ApprovalAxios';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
+import { getApvlByDocId } from '../../context/ApprovalAxios';
 
 function ApprovalBefore() {
   const [empInfo, setEmpInfo] = useOutletContext();
@@ -33,10 +34,36 @@ function ApprovalBefore() {
   const handleChange = (event) => {
     setForm(event.target.value);
   };
+  console.log(empInfo);
 
   useEffect(() => {
-    getApvlByApvrNameAnddocStatus(empInfo.empName, 1);
+    getApvlByApvrNameAnddocStatus(empInfo.empName, 1, setDocList);
   }, []);
+
+  function getdocId(params) {
+    let documentId = params.row.docId;
+    if (documentId.includes('업무기안')) {
+      return (
+        <Link to={`/apvl/pd/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else if (documentId.includes('출장계획')) {
+      return (
+        <Link to={`/doc/ddtp/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else if (documentId.includes('인사명령')) {
+      return (
+        <Link to={`/doc/ddpa/${params.row.docId}`}>
+          {params.row && params.row.documentTitle}
+        </Link>
+      );
+    } else {
+      alert('있었는데 아니 없어요.');
+    }
+  }
 
   const columns = [
     { field: 'docId', headerName: '문서번호', width: 160 },
@@ -44,7 +71,7 @@ function ApprovalBefore() {
       field: 'documentTitle',
       headerName: '문서제목',
       width: 350,
-      // renderCell: getdocId,
+      renderCell: getdocId,
     },
     { field: 'updateTime', headerName: '처리일자', width: 160 },
   ];

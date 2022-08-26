@@ -412,29 +412,35 @@ function Pointment() {
                   임시저장
                 </Button>
               </Link>
-              <Link to={'/boxes'}>
-                <SaveButton
-                  variant="contained"
-                  color="success"
-                  size="large"
-                  onClick={async () => {
-                    if (approver != 0) {
-                      await insertPA(
-                        docId,
-                        1,
-                        inputData,
-                        empInfo,
-                        startValue,
-                        mEmp,
-                        unit,
-                        posi,
-                        setInputData
-                      );
-                    } else {
-                      alert('결재선을 설정해주세요 !');
-                    }
+              <Link
+                to={'/boxes'}
+                onClick={async (e) => {
+                  if (approver != 0) {
+                    await insertPA(
+                      docId,
+                      1,
+                      inputData,
+                      empInfo,
+                      startValue,
+                      mEmp,
+                      unit,
+                      posi,
+                      setInputData
+                    );
                     alert('문서가 상신되었습니다!');
-                  }}>
+                  } else {
+                    alert('결재선을 설정해주세요 !');
+                    e.preventDefault();
+                  }
+                  {
+                    approver.map((data, index) => {
+                      console.log(data);
+                      console.log(index);
+                      insertApproval(docId, 1, data, inputData, empInfo);
+                    });
+                  }
+                }}>
+                <SaveButton variant="contained" color="success" size="large">
                   상신하기
                 </SaveButton>
               </Link>
