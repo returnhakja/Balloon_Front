@@ -1,29 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import SideNavigation from '../../components/SideNavigation';
-import styles from '../../css/Report.module.css';
-import '../../css/Modal.css';
 import ModalApproval from './ModalApproval';
-import {
-  Button,
-  Card,
-  CardContent,
-  Container,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { Box } from '@mui/system';
-import { FcDocument } from 'react-icons/fc';
-import { styled } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { blue } from '@mui/material/colors';
+import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
+import SideNavigation from '../../components/SideNavigation';
 import { findUnitList } from '../../context/UnitAxios';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 import {
@@ -31,18 +10,27 @@ import {
   insertApproval,
   insertPA,
 } from '../../context/ApprovalAxios';
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  textAlign: 'center',
-};
+import { positionArr } from '../../context/EmpFunc';
+import styles from '../../css/Report.module.css';
+import '../../css/Modal.css';
+import { FcDocument } from 'react-icons/fc';
+import {
+  Button,
+  Card,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+} from '@mui/material';
+import { Box } from '@mui/system';
+import { styled } from '@mui/material/styles';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { blue } from '@mui/material/colors';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -53,23 +41,6 @@ const SaveButton = styled(Button)(({ theme }) => ({
 }));
 
 function Pointment() {
-  const positionArr = [
-    '인턴',
-    '사원',
-    '주임',
-    '대리',
-    '과장',
-    '차장',
-    '부장',
-    '이사',
-    '상무',
-    '전무',
-    '부사장',
-    '사장',
-    '부회장',
-    '이사회 의장',
-    '회장',
-  ];
   const [posi, setPosi] = useState('');
   const [units, setUnits] = useState('');
   const [unit, setUnit] = useState('');
@@ -88,72 +59,28 @@ function Pointment() {
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
 
   // 사원 정보 context
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   const [inputData, setInputData] = useState({});
 
   useEffect(() => {
-    findUnitList(setUnits);
-    getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
-    console.log(mEmpInfo);
-  }, []);
+    if (units.length === 0) {
+      findUnitList(setUnits);
 
-  useEffect(() => {
-    getLatestPA(setDocNum);
-    console.log(docNum);
-    docNum !== 0
-      ? setDocId('인사명령' + '-22-' + ('0000000' + (docNum + 1)).slice(-7))
-      : setDocId('인사명령-22-0000001');
-  }, [docNum]);
+      if (mEmpInfo.length === 0) {
+        getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
+      }
+    } else {
+      if (docNum === 0) {
+        getLatestPA(setDocNum);
+        setDocId('인사명령-22-0000001');
+      } else {
+        console.log(docNum);
+        setDocId('인사명령' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
+      }
 
-  useEffect(() => {
-    setNoApprover(noApprover);
-  }, [noApprover]);
-
-  const DfCard = (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          기안자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {empInfo.empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
-
-  const ApCard = (empName) => (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          결재자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
+      noApprover.length === 0 && setNoApprover(noApprover);
+    }
+  }, [units, empInfo, mEmpInfo, docNum, noApprover]);
 
   return (
     <SideNavigation>
@@ -204,7 +131,6 @@ function Pointment() {
           <ModalApproval
             openapprovalModal={openapprovalModal}
             setOpenapprovalModal={setOpenapprovalModal}
-            style={style}
             setApprover={setApprover}
             approver={approver}
             setNoApprover={setNoApprover}
@@ -218,7 +144,7 @@ function Pointment() {
             variant="outlined"
             sx={{ maxWidth: 150 }}
             style={{ backgroundColor: '#F1F9FF' }}>
-            {DfCard}
+            {!!empInfo && <DfCard drafterName={empInfo.empName} />}
           </Card>
 
           {approver.map((empData, index) => {
@@ -226,11 +152,11 @@ function Pointment() {
 
             return (
               <Card
+                key={index}
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
-                style={{ backgroundColor: '#F1F9FF' }}
-                key={index}>
-                {ApCard(empData.empName)}
+                style={{ backgroundColor: '#F1F9FF' }}>
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}
@@ -304,7 +230,7 @@ function Pointment() {
 
                     // className={styles.inputtext}
                   >
-                    {mEmpInfo &&
+                    {mEmpInfo.length !== 0 &&
                       mEmpInfo.map((mEmps, index) => (
                         <MenuItem key={index} value={mEmps}>
                           {mEmps.empName} ({mEmps.empId})
@@ -400,41 +326,46 @@ function Pointment() {
                       posi,
                       setInputData
                     );
-                    {
-                      approver.map((data, index) => {
-                        console.log(data);
-                        console.log(index);
-                        insertApproval(docId, 0, data, inputData, empInfo);
-                      });
-                    }
+
+                    approver.map((data, index) => {
+                      console.log(data);
+                      console.log(index);
+                      return insertApproval(docId, 0, data, inputData, empInfo);
+                    });
+
                     alert('문서가 임시저장되었습니다!');
                   }}>
                   임시저장
                 </Button>
               </Link>
-              <Link to={'/boxes'}>
-                <SaveButton
-                  variant="contained"
-                  color="success"
-                  size="large"
-                  onClick={async () => {
-                    if (approver != 0) {
-                      await insertPA(
-                        docId,
-                        1,
-                        inputData,
-                        empInfo,
-                        startValue,
-                        mEmp,
-                        unit,
-                        posi,
-                        setInputData
-                      );
-                    } else {
-                      alert('결재선을 설정해주세요 !');
-                    }
+              <Link
+                to={'/boxes'}
+                onClick={async (e) => {
+                  if (approver.length !== 0) {
+                    await insertPA(
+                      docId,
+                      1,
+                      inputData,
+                      empInfo,
+                      startValue,
+                      mEmp,
+                      unit,
+                      posi,
+                      setInputData
+                    );
                     alert('문서가 상신되었습니다!');
-                  }}>
+                  } else {
+                    alert('결재선을 설정해주세요 !');
+                    e.preventDefault();
+                  }
+
+                  approver.map((data, index) => {
+                    console.log(data);
+                    console.log(index);
+                    return insertApproval(docId, 1, data, inputData, empInfo);
+                  });
+                }}>
+                <SaveButton variant="contained" color="success" size="large">
                   상신하기
                 </SaveButton>
               </Link>

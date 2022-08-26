@@ -1,15 +1,17 @@
-import styles from '../css/Navbar.module.css';
-import { Link, useOutletContext } from 'react-router-dom';
 import React from 'react';
+import { Link, useOutletContext } from 'react-router-dom';
+import Banner from './banner.svg';
+import styles from '../css/nav/Navbar.module.css';
 
 function MainPage() {
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   return (
     <div>
       <header className={styles.header}>
         <img
-          src={`${process.env.PUBLIC_URL}/asset/banner.png`}
-          alt="BALLOON"
+          // src={`${process.env.PUBLIC_URL}/asset/banner.svg`}
+          src={Banner}
+          alt="BANNER"
           className={styles.img}></img>
       </header>
       <div className={styles.logingo}>
@@ -30,7 +32,7 @@ function MainPage() {
               <p className={styles.pbottom}>
                 오신것을 환영합니다. 먼저 로그인을 하세요.
               </p>
-              <Link to={'/LoginPage'}>
+              <Link to={'/loginpage'}>
                 <button className={styles.btn}> 로그인하러가기</button>
               </Link>
             </>

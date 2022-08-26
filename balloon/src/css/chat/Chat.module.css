@@ -237,7 +237,7 @@
 
 .roomContanar {
   overflow-y: scroll;
-  height: 87%;
+  height: 85%;
 }
 
 .chatName {
@@ -248,8 +248,8 @@
 }
 
 .olList {
+  margin-top: 25px;
   text-align: center;
-
   overflow-y: scroll;
 }
 

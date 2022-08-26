@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
+import ApprovalDeclareModal from './ApprovalDeclareModal';
+import {
+  getApvlByDocId,
+  getBizRptByBizRptId,
+} from '../../context/ApprovalAxios';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import ModalApproval from './ModalApproval';
+import { FcDocument } from 'react-icons/fc';
 import {
   Button,
   Card,
@@ -14,16 +19,8 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-
 import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
-
-import { FcDocument } from 'react-icons/fc';
-import {
-  getApvlByApvrNameAnddocStatus,
-  getBizRptByBizRptId,
-} from '../../context/ApprovalAxios';
-import PaymentDeclareModal from './PaymentDecalreModal';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -46,22 +43,22 @@ const style = {
   textAlign: 'center',
 };
 
-function PaymentDeclare() {
+function ApprovalDeclare() {
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
-  const [openapprovalModal, setOpenapprovalModal] = useState(false);
+  //   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [bizRptInfo, setBizRptInfo] = useState({});
-
+  const [approver, setApprover] = useState([]);
+  const [apvl, setApvl] = useState({});
   const params = useParams();
-  console.log(params);
-  console.log(empInfo);
-  console.log(bizRptInfo);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     getBizRptByBizRptId(params.docId, setBizRptInfo);
+    getApvlByDocId(params.docId, setApprover);
   }, []);
 
-  const card = (
+  const DfCard = (
     <React.Fragment>
       <CardContent>
         <Typography
@@ -84,9 +81,29 @@ function PaymentDeclare() {
     </React.Fragment>
   );
 
-  const [openModal, setOpenModal] = useState(false);
+  const ApCard = (empName) => (
+    <React.Fragment>
+      <CardContent>
+        <Typography
+          sx={{ fontSize: 25 }}
+          color="#00AAFF"
+          gutterBottom
+          textAlign="center">
+          결재자
+        </Typography>
+        <hr />
+        <br />
+        <Typography
+          sx={{ fontSize: 20 }}
+          variant="h5"
+          component="div"
+          textAlign="center">
+          {empName}
+        </Typography>
+      </CardContent>
+    </React.Fragment>
+  );
 
-  console.log(empInfo);
   return (
     <SideNavigation>
       <Container>
@@ -124,12 +141,30 @@ function PaymentDeclare() {
         </div>
         <hr />
         <br />
-        <Card
-          variant="outlined"
-          sx={{ maxWidth: 150 }}
-          style={{ backgroundColor: '#F1F9FF' }}>
-          {card}
-        </Card>
+        <div className={styles.approvalCard}>
+          <Card
+            variant="outlined"
+            sx={{ maxWidth: 150 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {DfCard}
+          </Card>
+          {approver.map((empData, index) => {
+            console.log(empData.approvalId);
+            if (apvl.length === 0) {
+              setApvl(empData);
+            }
+            return (
+              <Card
+                variant="outlined"
+                sx={{ maxWidth: 150 }}
+                style={{ backgroundColor: '#F1F9FF' }}
+                key={index}>
+                {ApCard(empData.approverName)}
+              </Card>
+            );
+          })}
+        </div>
+
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>
@@ -174,7 +209,6 @@ function PaymentDeclare() {
                 </SaveButton>
               </Link>
 
-              {/* <Link to="/boxes/ab"> */}
               <Button
                 variant="contained"
                 color="success"
@@ -185,13 +219,14 @@ function PaymentDeclare() {
                 결재하기
               </Button>
               {openModal && (
-                <PaymentDeclareModal
+                <ApprovalDeclareModal
                   style={style}
                   openModal={openModal}
                   setOpenModal={setOpenModal}
+                  approver={approver}
+                  apvl={apvl}
                 />
               )}
-              {/* </Link> */}
             </Box>
           </div>
         </div>
@@ -200,4 +235,4 @@ function PaymentDeclare() {
   );
 }
 
-export default PaymentDeclare;
+export default ApprovalDeclare;
