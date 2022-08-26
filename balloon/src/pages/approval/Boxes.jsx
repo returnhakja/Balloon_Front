@@ -123,79 +123,76 @@ function Boxes() {
 
   console.log(DDCount, DCCount, DSCount, DRCount);
   return (
-    <div>
-      <SideNavigation>
-        <main>
-          <Container maxWidth="xl">
-            {/* <p style={{ fontSize: "25px" }}>나의 현황</p> */}
-            <p style={{ fontSize: '25px' }}>나의 현황</p>
-            <hr />
-            <Box
-              sx={{
-                display: 'flex',
+    <SideNavigation>
+      <Container maxWidth>
+        {/* <Container maxWidth="xl"> */}
+        {/* <p style={{ fontSize: "25px" }}>나의 현황</p> */}
+        <p style={{ fontSize: '25px' }}>나의 현황</p>
+        <hr />
+        <Box
+          sx={{
+            display: 'flex',
 
-                width: 1500,
-                height: 200,
+            height: 200,
 
-                justifyContent: 'space-around',
-                p: 1,
-                m: 1,
-                bgcolor: 'background.paper',
-                borderRadius: 1,
-              }}>
-              <Card
-                variant="outlined"
-                sx={{ minWidth: 250 }}
-                style={{ backgroundColor: '#F1F9FF' }}>
-                {card}
-              </Card>
-              <Card
-                variant="outlined"
-                sx={{ minWidth: 250 }}
-                style={{ backgroundColor: '#F1F9FF' }}>
-                {card1}
-              </Card>
-              <Card
-                variant="outlined"
-                sx={{ minWidth: 250 }}
-                style={{ backgroundColor: '#F1F9FF' }}>
-                {card2}
-              </Card>
-              <Card
-                variant="outlined"
-                sx={{ minWidth: 250 }}
-                style={{ backgroundColor: '#F1F9FF' }}>
-                {card3}
-              </Card>
+            justifyContent: 'space-around',
+            p: 1,
+            m: 1,
+            bgcolor: 'background.paper',
+            borderRadius: 1,
+          }}>
+          <Card
+            variant="outlined"
+            sx={{ minWidth: 250 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {card}
+          </Card>
+          <Card
+            variant="outlined"
+            sx={{ minWidth: 250 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {card1}
+          </Card>
+          <Card
+            variant="outlined"
+            sx={{ minWidth: 250 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {card2}
+          </Card>
+          <Card
+            variant="outlined"
+            sx={{ minWidth: 250 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {card3}
+          </Card>
+        </Box>
+        {/* </Container> */}
+
+        <Box sx={{ width: '100%', typography: 'body1', marginTop: 30 }}>
+          <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <TabList onChange={handleChange}>
+                <Tab label="내가 상신한 문서" value="1" />
+                <Tab label="내가 결재한 문서" value="2" />
+                <Tab label="최근 결재한 문서" value="3" />
+              </TabList>
             </Box>
-          </Container>
-
-          <Box sx={{ width: '100%', typography: 'body1', marginTop: 30 }}>
-            <TabContext value={value}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <TabList onChange={handleChange}>
-                  <Tab label="내가 상신한 문서" value="1" />
-                  <Tab label="내가 결재한 문서" value="2" />
-                  <Tab label="최근 결재한 문서" value="3" />
-                </TabList>
-              </Box>
-              <TabPanel value="1">
-                (나중에 테이블만들때 여기다가 적용하면 될듯 각각)내가 상신한
-                문서에 대한 테이블
-              </TabPanel>
-              <TabPanel value="2">
-                (나중에 테이블만들때 여기다가 적용하면 될듯 각각)내가 결재한
-                문서에 대한 테이블
-              </TabPanel>
-              <TabPanel value="3">
-                (나중에 테이블만들때 여기다가 적용하면 될듯 각각)최근 결재한
-                문서에 대한 테이블
-              </TabPanel>
-            </TabContext>
-          </Box>
-        </main>
-      </SideNavigation>
-    </div>
+            <TabPanel value="1">
+              (나중에 테이블만들때 여기다가 적용하면 될듯 각각)내가 상신한
+              문서에 대한 테이블
+            </TabPanel>
+            <TabPanel value="2">
+              (나중에 테이블만들때 여기다가 적용하면 될듯 각각)내가 결재한
+              문서에 대한 테이블
+            </TabPanel>
+            <TabPanel value="3">
+              (나중에 테이블만들때 여기다가 적용하면 될듯 각각)최근 결재한
+              문서에 대한 테이블
+            </TabPanel>
+          </TabContext>
+        </Box>
+      </Container>
+    </SideNavigation>
   );
 }
 

@@ -165,6 +165,7 @@ function App() {
           <Route path="/draft/br" element={<BusinessReport />} />
           <Route path="/draft/bt" element={<BusinessTrip />} />
           <Route path="/draft/pa" element={<PersonnelAppointment />} />
+
           {/* 저장된 기안 */}
           <Route path="/draft/sdbr/:docId" element={<SavedBusinessReport />} />
           <Route path="/draft/sdbt/:docId" element={<SavedBusinessTrip />} />
