@@ -23,8 +23,6 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
   const [headCount, setHeadCount] = useState(0);
   const [chatempinfo, setChatempinfo] = useState([]);
 
-  const [disable, setDisable] = useState(false);
-
   const chatroomId = new URL(document.location).searchParams.get('room');
 
   const [empInfo, setEmpInfo] = useOutletContext();
@@ -46,16 +44,15 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
   };
 
   ////////////////////////////////////////////////////////////
+  //이미 채팅방에 초대 된 사원들 -> existEmp
   const existEmp = [];
   chatempinfo.map((info) => {
     existEmp.push(info.empId.empId);
   });
-  console.log(existEmp);
-
+  //Unit이름 띄우기
   const returnArr = (list, setCUList) => {
     const arr = [];
     list.map((row) => {
-      // return arr.push(row.unit.unitCode);
       return arr.push(row.unit.unitName);
     });
     const array = arr.filter((row, index) => {

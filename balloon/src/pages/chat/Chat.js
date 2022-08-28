@@ -168,7 +168,8 @@ function Chat() {
     }
   };
 
-  console.log(chatting);
+  //////////////////////////////////////////////////
+  // 채팅내용 검색 - 지우지마세요!!!!!!!!!!!!! 추후구현
   // const [chatSearch, setChatSearch] = useState('');
   // const onChangeSearch = (e) => {
   //   setChatSearch(e.target.value);

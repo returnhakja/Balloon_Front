@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { Link, useOutletContext } from 'react-router-dom';
 
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
-import { onCreateChatroom, onUserInvite } from '../../context/ChatAxios';
+import {
+  onAllChatEmp,
+  onCreateChatroom,
+  onUserInvite,
+} from '../../context/ChatAxios';
 import { Box, Modal } from '@mui/material';
 
 function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
@@ -18,12 +22,9 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
   // socket
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
-  // const [input, setInput] = useState([]);
 
   client.connect({}, () => {
-    client.subscribe(`/topic/message`, (data) => {
-      const chat = JSON.parse(data.body);
-      // setInput([...input, chat]);
+    client.subscribe(`/topic/message`, () => {
       disconnect();
     });
   });
@@ -33,9 +34,36 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
   };
 
   console.log(invite);
+  //1:1채팅일 때 이미있는 채팅방 예외처리
+  const alreadyInvite = [];
+  invite.map((vite) => {
+    alreadyInvite.push(vite.empId);
+  });
+  console.log(alreadyInvite);
 
-  // console.log(storage);
+  const [allChatEmp, setAllChatEmp] = useState([]);
 
+  useEffect(() => {
+    onAllChatEmp(setAllChatEmp);
+  }, []);
+
+  console.log(allChatEmp);
+  let allChatEmpId = [];
+  allChatEmpId = allChatEmp.filter((emp) => emp.empId.empId !== empInfo.empId);
+  console.log(allChatEmpId);
+
+  const checkChatEmp = (allChatEmpId, alreadyInvite) => {
+    let check = true;
+    allChatEmpId.map((id) => {
+      if (id.empId.empId == alreadyInvite) {
+        alert('이미 있는 채팅방입니다');
+        check = false;
+      }
+    });
+    return check;
+  };
+
+  /////////////////////////////////////////////////////
   return (
     <Modal open={openCreatChat} onClose={handleClose}>
       <Box sx={style}>
@@ -50,12 +78,23 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
           variant="contained"
           sx={{ marginRight: 2 }}
           onClick={() => {
-            onCreateChatroom(
-              empInfo,
-              setRoomId,
-              invite,
-              document.getElementById('chatroomName')
-            );
+            if (alreadyInvite.length === 1) {
+              const check = checkChatEmp(allChatEmpId, alreadyInvite[0]);
+              check &&
+                onCreateChatroom(
+                  empInfo,
+                  setRoomId,
+                  invite,
+                  document.getElementById('chatroomName')
+                );
+            } else {
+              onCreateChatroom(
+                empInfo,
+                setRoomId,
+                invite,
+                document.getElementById('chatroomName')
+              );
+            }
           }}>
           등록
         </Button>

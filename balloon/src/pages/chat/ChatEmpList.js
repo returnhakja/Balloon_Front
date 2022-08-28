@@ -114,7 +114,6 @@ function ChatEmpList({ invite, setInvite }) {
                               type="checkbox"
                               onChange={(e) => {
                                 onInvite(e.currentTarget.checked, ce);
-                                console.log(e.currentTarget.checked);
                               }}
                               checked={invite.includes(ce) ? true : false}
                             />
