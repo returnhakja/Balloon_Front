@@ -137,7 +137,7 @@ export const onUserUpdate = async (chatroomId, chatroomName, headCount) => {
     });
 };
 
-//채팅방인원수 수정
+//채팅방인원수 -
 export const onHCupdate = async (chatroomId, chatroomName, headCount) => {
   axios
     .put(`/chatroom/updatechatroom/${chatroomId}`, {
