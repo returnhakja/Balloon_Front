@@ -60,6 +60,9 @@ import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
 
 import NotFound from './pages/NotFound';
+import RefuseReport from './pages/approval/RefuseReport';
+import RefuseBusinessTrip from './pages/approval/RefuseBusinessTrip';
+import RefusePersonnelAppointment from './pages/approval/RefusePersonnelAppointment';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
