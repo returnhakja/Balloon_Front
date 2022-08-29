@@ -96,28 +96,29 @@ function ChatEmpList({ invite, setInvite }) {
                   return (
                     <div key={index} className={styles.cuCon}>
                       <p className={styles.cuName}>{cu}</p>
-                      {chatEmpList.length !== 0 &&
-                        chatEmpList.map((ce, index) => {
-                          if (ce.unit.unitName === cu) {
-                            return (
-                              <div key={index} className={styles.fontlist}>
-                                {/* <img src={ce.photo} alt="사원 이미지" /> */}
-                                {ce.empName} {ce.position}
-                                <Checkbox
-                                  type="checkbox"
-                                  onChange={(e) => {
-                                    onInvite(e.currentTarget.checked, ce);
-                                  }}
-                                  checked={invite.includes(ce) ? true : false}
-                                />
-                              </div>
-                            );
-                          }
-                          return null;
-                        })}
+                      {chatEmpList.map((ce, index) => {
+                        if (ce.unit.unitName === cu) {
+                          return (
+                            <div key={index} className={styles.fontlist}>
+                              {/* <img src={ce.photo} alt="사원 이미지" /> */}
+                              {/* <div className={styles.liststyle}> */}
+                              {/* <div className={styles.li}> */}
+                              {ce.empName} {ce.position}
+                              <Checkbox
+                                type="checkbox"
+                                onChange={(e) => {
+                                  onInvite(e.currentTarget.checked, ce);
+                                }}
+                                checked={invite.includes(ce) ? true : false}
+                              />
+                              {/* <span>{ce.position}</span> */}
+                            </div>
+                          );
+                        }
+                      })}
                     </div>
                   );
-                })}
+              })}
             </div>
           </div>
         </div>
