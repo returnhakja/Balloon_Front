@@ -15,7 +15,7 @@ function Home({ empInfo, setEmpInfo, logout, isLogin }) {
         logout={logout}
         isLogin={isLogin}
       />
-      <Outlet context={[empInfo, setEmpInfo]} />
+      <Outlet context={[empInfo]} />
 
       <Fab color="primary" aria-label="add" className={styles.Icon}>
         <AddIcon />

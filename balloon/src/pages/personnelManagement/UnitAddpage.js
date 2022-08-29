@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { findHigherOrganization, insertUnit } from '../../context/UnitAxios';
 import { Container, Button, TextField, Typography, Box } from '@mui/material';
-import './styles.css';
+// import styles from './styles.module.css';
+import styles from './unit.module.css';
 
 const Input = ({ label, register, required }) => (
   <>
@@ -13,7 +14,7 @@ const Input = ({ label, register, required }) => (
 
 const Select = React.forwardRef(({ onChange, name, label, higher }, ref) => (
   <>
-    <label>{label}</label>
+    <label className={styles.label}>{label}</label>
     <select name={name} ref={ref} onChange={onChange}>
       {higher.length !== 0 &&
         higher.map((data, index) => (
@@ -59,26 +60,33 @@ function UnitAddpage() {
         <Typography component="h1" variant="h5">
           조직추가
         </Typography>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           {/* register your input into the hook by invoking the "register" function */}
-          <label>조직코드</label>
-          <input {...register('unitCode', { required: true, maxLength: 8 })} />
+          <label className={styles.label}>조직코드</label>
+          <input
+            className={styles.input}
+            {...register('unitCode', { required: true, maxLength: 8 })}
+          />
           {errors.unitCode && errors.unitCode.type === 'required' && (
             <p>This field is required</p>
           )}
           {errors.unitCode && errors.unitCode.type === 'maxLength' && (
             <p>최대 글자 수를 넘었습니다.</p>
           )}
-          <label>조직이름</label>
-          <input {...register('unitName', { required: true, maxLength: 10 })} />
+          <label className={styles.label}>조직이름</label>
+          <input
+            className={styles.input}
+            {...register('unitName', { required: true, maxLength: 10 })}
+          />
           {errors.unitName && errors.unitName.type === 'required' && (
             <p>This field is required</p>
           )}
           {errors.unitName && errors.unitName.type === 'maxLength' && (
             <p>최대 글자 수를 넘었습니다.</p>
           )}
-          <label>조직전화번호</label>
+          <label className={styles.label}>조직전화번호</label>
           <input
+            className={styles.input}
             {...register('bell', {
               required: true,
               maxLength: 15,
@@ -100,7 +108,7 @@ function UnitAddpage() {
             {...register('parentUnit')}
             higher={higher}
           />
-          <input type="submit" value="추가" />
+          <input className={styles.submit} type="submit" value="추가" />
         </form>
       </Box>
     </Container>

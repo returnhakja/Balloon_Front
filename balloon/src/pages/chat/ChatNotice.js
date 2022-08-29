@@ -13,7 +13,7 @@ import { Container } from '@mui/system';
 
 function ChatNotice() {
   const [chatroom, setChatroom] = useState([]);
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
