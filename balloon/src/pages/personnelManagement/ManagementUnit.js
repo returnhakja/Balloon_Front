@@ -24,6 +24,7 @@ function ManagementUnit() {
   const handleClick = (data) => {
     setRowData(data.row);
     console.log(data.row);
+    console.log(openUpdate);
   };
 
   const handleUpdate = (setUpdateChk) => {
@@ -91,6 +92,7 @@ function ManagementUnit() {
             handleUpdate(setUpdateChk);
           }}
         />,
+
         <GridActionsCellItem
           icon={<Delete />}
           label="Delete"
