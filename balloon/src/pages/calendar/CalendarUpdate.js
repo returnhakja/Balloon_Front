@@ -21,7 +21,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
   const [startValue, setStartValue] = useState(list.scheduleStart);
   const [endvalue, setEndValue] = useState(list.scheduleEnd);
   console.log(list.scheduleStart);
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
 
   useEffect(() => {
     const headers = {

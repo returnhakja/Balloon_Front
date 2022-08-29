@@ -45,7 +45,7 @@ const style = {
 
 function ApprovalDeclare() {
   // 사원 정보 context
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   //   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [bizRptInfo, setBizRptInfo] = useState({});
   const [approver, setApprover] = useState([]);

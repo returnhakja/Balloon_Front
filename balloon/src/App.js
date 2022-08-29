@@ -53,6 +53,7 @@ import ChatNotice from './pages/chat/ChatNotice';
 import Organization from './pages/Organization';
 
 import ManagementUnit from './pages/personnelManagement/ManagementUnit';
+import UnitAddpage from './pages/personnelManagement/UnitAddpage';
 import UnitListAddPage from './pages/personnelManagement/UnitListAddPage';
 
 import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
@@ -192,6 +193,7 @@ function App() {
           {/* 조직관리 */}
           <Route path="/management/unit" element={<ManagementUnit />} />
           <Route path="/add/units" element={<UnitListAddPage />} />
+          <Route path="/add/unit" element={<UnitAddpage />} />
 
           {/* 사원관리 */}
           <Route path="/management/employee" element={<ManagementEmployee />} />

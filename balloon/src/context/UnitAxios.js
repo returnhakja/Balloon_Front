@@ -21,8 +21,30 @@ export const findUnitList = async (setUnits) => {
     .catch((error) => console.log(error));
 };
 
+export const findHigherOrganization = async (setHigher) => {
+  const url = '/unit/higherorganization';
+  await axios
+    .get(url)
+    .then((response) => response.data)
+    .then((data) => setHigher(data))
+    .catch((error) => console.log(error));
+};
+
+export const insertUnit = async (unitInfo) => {
+  console.log(unitInfo);
+  const inputUnit = {
+    unitCode: unitInfo.unitCode,
+    unitName: unitInfo.unitName,
+    bell: unitInfo.bell,
+    parentUnit: { unitCode: unitInfo.parentUnit },
+  };
+  const header = { 'Content-Type': 'application/json' };
+  const url = '/unit/add';
+
+  await axios.post(url, inputUnit, header).catch((error) => console.log(error));
+};
+
 export const insertUnitList = async (rows) => {
-  console.log(rows);
   const header = { 'Content-Type': 'application/json' };
   const url = '/unit/list';
 
