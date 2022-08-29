@@ -76,9 +76,8 @@ export const getMe = async (setEmpInfo) => {
   const url = '/employee/me';
   await axios
     .get(url, config)
-    .then((data) => {
-      setEmpInfoByEmpId(data.data.empId, setEmpInfo);
-    })
+    .then((response) => response.data)
+    .then((data) => setEmpInfo(data))
     .catch((error) => console.log(error));
 };
 

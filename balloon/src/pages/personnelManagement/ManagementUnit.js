@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import UnitUpdate from './UnitUpdate';
 import { updateCheck, deleteCheck } from '../../context/MuiRenderFunc';
 import { findUnitList, updateUnit, deleteUnit } from '../../context/UnitAxios';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/system';
-import Delete from '@mui/icons-material/Delete';
-import QueueIcon from '@mui/icons-material/Queue';
 import SettingsIcon from '@mui/icons-material/Settings';
+import Delete from '@mui/icons-material/Delete';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import QueueIcon from '@mui/icons-material/Queue';
 
 function ManagementUnit() {
   const [unitList, setUnitList] = useState([]);
   const [rowData, setRowData] = useState({});
   const [deleteChk, setDeleteChk] = useState(false);
   const [updateChk, setUpdateChk] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState({
+    state: false,
+    unitCode: null,
+  });
 
   const handleClick = (data) => {
     setRowData(data.row);
+    console.log(data.row);
   };
 
   const handleUpdate = (setUpdateChk) => {
@@ -32,8 +39,12 @@ function ManagementUnit() {
       findUnitList(setUnitList);
     } else {
       if (updateChk === true) {
-        updateUnit(rowData);
-        setUpdateChk(false);
+        // <UnitUpdate
+        //   unitCode={rowData.unitCode}
+        //   setOpenUpdate={setOpenUpdate}
+        // />;
+        // updateUnit(rowData);
+        // setUpdateChk(false);
       }
       if (deleteChk === true) {
         deleteUnit(rowData);
@@ -48,18 +59,23 @@ function ManagementUnit() {
 
   const columns = [
     { field: 'unitCode', headerName: '조직번호', width: 200 },
-    { field: 'unitName', headerName: '조직명', width: 180, editable: true },
+    {
+      field: 'unitName',
+      headerName: '조직명',
+      width: 180,
+      //  editable: true
+    },
     {
       field: 'bell',
       headerName: '조직 전화번호',
       width: 250,
-      editable: true,
+      // editable: true,
     },
     {
       field: 'parentUnit',
       headerName: '상위조직',
       width: 300,
-      editable: true,
+      // editable: true,
       valueGetter: GetParentUnit,
     },
 
@@ -89,10 +105,9 @@ function ManagementUnit() {
   return (
     <div style={{ marginTop: 70, marginBottom: 50 }}>
       <Container maxWidth="maxwidth">
-        {/* <Link to={'/add/unit'}>
-          <PersonAddIcon fontSize="large" color="action" />
-        </Link> */}
-
+        <Link to={'/add/unit'}>
+          <AddBoxIcon fontSize="large" color="action" />
+        </Link>
         <Link to={'/add/units'}>
           <QueueIcon fontSize="large" color="action" />
         </Link>

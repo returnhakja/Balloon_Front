@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import { onCreateChatroom } from '../../context/ChatAxios';
+import { onCreateChatroom, onAllChatEmp } from '../../context/ChatAxios';
 import styles from '../../css/chat/Chat.module.css';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
@@ -44,6 +44,35 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     }
   };
 
+  //1:1채팅일 때 이미있는 채팅방 예외처리
+  const alreadyInvite = [];
+  invite.map((vite) => {
+    alreadyInvite.push(vite.empId);
+  });
+  console.log(alreadyInvite);
+
+  const [allChatEmp, setAllChatEmp] = useState([]);
+
+  useEffect(() => {
+    onAllChatEmp(setAllChatEmp);
+  }, []);
+
+  console.log(allChatEmp);
+  let allChatEmpId = [];
+  allChatEmpId = allChatEmp.filter((emp) => emp.empId.empId !== empInfo.empId);
+  console.log(allChatEmpId);
+
+  const checkChatEmp = (allChatEmpId, alreadyInvite) => {
+    let check = true;
+    allChatEmpId.map((id) => {
+      if (id.empId.empId == alreadyInvite) {
+        alert('이미 있는 채팅방입니다');
+        check = false;
+      }
+    });
+    return check;
+  };
+
   const eventChatHandle = () => {
     const input = document.getElementById('chatroomName');
     console.log(input.value);
@@ -54,12 +83,27 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
         input.value = '';
         alert('채팅방 이름을 입력해주세요!!');
       } else {
-        onCreateChatroom(
-          empInfo,
-          invite,
-          document.getElementById('chatroomName'),
-          client
-        );
+        if (alreadyInvite.length === 1) {
+          console.log('dddddddddddddddddddddddddd', alreadyInvite);
+          console.log(alreadyInvite.length);
+          const check = checkChatEmp(allChatEmpId, alreadyInvite[0]);
+          check &&
+            onCreateChatroom(
+              empInfo,
+              invite,
+              document.getElementById('chatroomName'),
+              client
+            );
+        } else {
+          console.log('ssssssssssssssssssssssssss', alreadyInvite);
+          console.log(alreadyInvite.length);
+          onCreateChatroom(
+            empInfo,
+            invite,
+            document.getElementById('chatroomName'),
+            client
+          );
+        }
       }
     } else {
       inputRef.current.focus();
