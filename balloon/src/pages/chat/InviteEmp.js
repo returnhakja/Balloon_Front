@@ -22,7 +22,7 @@ function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
   //채팅방 정보 불러오기
   const [chatroomName, setChatroomName] = useState('');
   const [headCount, setHeadCount] = useState(0);
-  const [chatempinfo, setChatempinfo] = useState([]);
+  // const [chatempinfo, setChatempinfo] = useState([]);
   const [chatAddEmpInfo, setChatAddEmpInfo] = useState([]);
   const chatroomId = new URL(document.location).searchParams.get('room');
   const [empInfo] = useOutletContext();

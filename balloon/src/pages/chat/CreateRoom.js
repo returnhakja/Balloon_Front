@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import { onCreateChatroom } from '../../context/ChatAxios';
+import { onCreateChatroom, onAllChatEmp } from '../../context/ChatAxios';
 import styles from '../../css/chat/Chat.module.css';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
-import {
-  onAllChatEmp,
-  onCreateChatroom,
-  onUserInvite,
-} from '../../context/ChatAxios';
 import { Box, Modal } from '@mui/material';
 
 const styleBox = {
@@ -34,7 +29,7 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
   const client = Stomp.over(sock);
 
   client.connect({}, () => {
-    client.subscribe(`/topic/message`, () => {
+    client.subscribe(`/topic/message`, (data) => {
       disconnect();
     });
   });
@@ -43,7 +38,12 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     client.disconnect();
   };
 
-  console.log(invite);
+  const keyEnter = (e) => {
+    if (e.key === 'Enter') {
+      eventChatHandle();
+    }
+  };
+
   //1:1채팅일 때 이미있는 채팅방 예외처리
   const alreadyInvite = [];
   invite.map((vite) => {
@@ -73,41 +73,59 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     return check;
   };
 
+  const eventChatHandle = () => {
+    const input = document.getElementById('chatroomName');
+    console.log(input.value);
+    if (input.value.trim() !== '') {
+      console.log(input.value);
+      if (input.value.length === 0) {
+        inputRef.current.focus();
+        input.value = '';
+        alert('채팅방 이름을 입력해주세요!!');
+      } else {
+        if (alreadyInvite.length === 1) {
+          console.log('dddddddddddddddddddddddddd', alreadyInvite);
+          console.log(alreadyInvite.length);
+          const check = checkChatEmp(allChatEmpId, alreadyInvite[0]);
+          check &&
+            onCreateChatroom(
+              empInfo,
+              invite,
+              document.getElementById('chatroomName'),
+              client
+            );
+        } else {
+          console.log('ssssssssssssssssssssssssss', alreadyInvite);
+          console.log(alreadyInvite.length);
+          onCreateChatroom(
+            empInfo,
+            invite,
+            document.getElementById('chatroomName'),
+            client
+          );
+        }
+      }
+    } else {
+      inputRef.current.focus();
+      input.value = '';
+      alert('채팅방 이름을 입력해주세요!!');
+    }
+  };
+
+  const handleClose = () => setopenCreatChat(false);
+
   return (
     <Modal open={openCreatChat} onClose={handleClose}>
-      <Box sx={style}>
-        <br />
-        <br />
-        <h3>채팅방 만들기</h3>
-        <br />
-        <Input id="chatroomName" placeholder="채팅방 이름을 입력하세요" />
-        <br />
-        <br />
-        <Button
-          variant="contained"
-          sx={{ marginRight: 2 }}
-          onClick={() => {
-            if (alreadyInvite.length === 1) {
-              const check = checkChatEmp(allChatEmpId, alreadyInvite[0]);
-              check &&
-                onCreateChatroom(
-                  empInfo,
-                  setRoomId,
-                  invite,
-                  document.getElementById('chatroomName')
-                );
-            } else {
-              onCreateChatroom(
-                empInfo,
-                setRoomId,
-                invite,
-                document.getElementById('chatroomName')
-              );
-            }
-          }}>
-          등록
-        </Button>
-        <Link to={`/chatting?room=${roomId}`}>
+      <Box sx={styleBox}>
+        <h3 className={styles.inBox}>채팅방 만들기</h3>
+        <div>
+          <Input
+            id="chatroomName"
+            className={styles.inBox}
+            ref={inputRef}
+            onKeyPress={keyEnter}
+            placeholder="채팅방 이름을 입력하세요"
+          />
           <Button
             variant="contained"
             onClick={() => {
