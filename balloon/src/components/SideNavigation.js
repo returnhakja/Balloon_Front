@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { AiOutlineMenu } from 'react-icons/ai';
-import { BsPencil, BsPencilFill } from 'react-icons/bs';
-import { FaBookReader, FaCog, FaFolderOpen, FaThList } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import {
   Menu,
   MenuItem,
@@ -10,10 +8,12 @@ import {
   SubMenu,
 } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import '../css/Sidebar.css';
 import '../css/SidebarCustom.scss';
+import { FaBookReader, FaFolderOpen, FaThList } from 'react-icons/fa';
+import { AiOutlineMenu } from 'react-icons/ai';
+import { BsPencilFill } from 'react-icons/bs';
 
 const Menuitem = styled(MenuItem)`
   :hover {

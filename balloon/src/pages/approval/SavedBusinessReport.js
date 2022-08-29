@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
+import ModalApproval from './ModalApproval';
 import SideNavigation from '../../components/SideNavigation';
+import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
+import {
+  deleteBizRpt,
+  getApvlByDocId,
+  getBizRptByBizRptId,
+  insertApproval,
+  insertBizRpt,
+} from '../../context/ApprovalAxios';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import ModalApproval from './ModalApproval';
+import { FcDocument } from 'react-icons/fc';
 import {
   Button,
   Card,
@@ -14,19 +23,8 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-
 import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
-
-import { FcDocument } from 'react-icons/fc';
-import {
-  deleteBizRpt,
-  getApvlByDocId,
-  getBizRptByBizRptId,
-  getLatestBizRpt,
-  insertApproval,
-  insertBizRpt,
-} from '../../context/ApprovalAxios';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -36,22 +34,9 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  textAlign: 'center',
-};
-
 function SavedBusinessReport() {
   // 사원 정보 context
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
   const [approver, setApprover] = useState([]);
@@ -63,31 +48,7 @@ function SavedBusinessReport() {
   useEffect(() => {
     getBizRptByBizRptId(params.docId, setInputData);
     getApvlByDocId(params.docId, setApprover);
-    console.log(inputData);
-  }, []);
-
-  const DfCard = (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          기안자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {empInfo.empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
+  }, [params, inputData.length]);
 
   const ApCard = (empName) => (
     <React.Fragment>
@@ -162,7 +123,6 @@ function SavedBusinessReport() {
             <ModalApproval
               openapprovalModal={openapprovalModal}
               setOpenapprovalModal={setOpenapprovalModal}
-              style={style}
             />
           )}
         </div>
@@ -173,7 +133,7 @@ function SavedBusinessReport() {
             variant="outlined"
             sx={{ maxWidth: 150 }}
             style={{ backgroundColor: '#F1F9FF' }}>
-            {DfCard}
+            <DfCard drafterName={empInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
             console.log(empData);
@@ -187,7 +147,7 @@ function SavedBusinessReport() {
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}
                 key={index}>
-                {ApCard(empData.approverName)}
+                <ApCard approverName={empData.approverName} />
               </Card>
             );
           })}
@@ -262,19 +222,19 @@ function SavedBusinessReport() {
                       empInfo,
                       setInputData
                     );
-                    {
-                      approver.map(async (data, index) => {
-                        console.log(data);
-                        console.log(index);
-                        await insertApproval(
-                          params.docId,
-                          0,
-                          data,
-                          inputData,
-                          empInfo
-                        );
-                      });
-                    }
+
+                    approver.map(async (data, index) => {
+                      console.log(data);
+                      console.log(index);
+                      await insertApproval(
+                        params.docId,
+                        0,
+                        data,
+                        inputData,
+                        empInfo
+                      );
+                    });
+
                     alert('문서가 임시저장되었습니다!');
                   }}>
                   임시저장
@@ -283,7 +243,7 @@ function SavedBusinessReport() {
               <Link
                 to={'/boxes'}
                 onClick={async (e) => {
-                  if (approver != 0) {
+                  if (approver.length !== 0) {
                     await insertBizRpt(
                       params.docId,
                       1,
@@ -296,13 +256,18 @@ function SavedBusinessReport() {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
-                  {
-                    approver.map((data, index) => {
-                      console.log(data);
-                      console.log(index);
-                      insertApproval(params.docId, 1, data, inputData, empInfo);
-                    });
-                  }
+
+                  approver.map((data, index) => {
+                    console.log(data);
+                    console.log(index);
+                    return insertApproval(
+                      params.docId,
+                      1,
+                      data,
+                      inputData,
+                      empInfo
+                    );
+                  });
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기

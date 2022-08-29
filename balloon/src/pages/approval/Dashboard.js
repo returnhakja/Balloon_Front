@@ -1,81 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
-import {
-  Card,
-  CardActionArea,
-  CardContent,
-  Container,
-  Typography,
-} from '@mui/material';
+import { DBCard } from './approvalCards/DashboardCards';
+import { Card, Container } from '@mui/material';
 import { Box } from '@mui/system';
 
-const card = (
-  <React.Fragment>
-    <CardContent>
-      <Typography
-        sx={{ fontSize: 25 }}
-        color="#00AAFF"
-        gutterBottom
-        textAlign="center">
-        업무기안
-      </Typography>
-      <hr />
-      <br />
-      <Typography
-        sx={{ fontSize: 20 }}
-        variant="h5"
-        component="div"
-        textAlign="center">
-        업무기안입니다.
-      </Typography>
-    </CardContent>
-  </React.Fragment>
-);
-const card1 = (
-  <React.Fragment>
-    <CardContent>
-      <Typography
-        sx={{ fontSize: 25 }}
-        color="#00AAFF"
-        gutterBottom
-        textAlign="center">
-        출장계획서
-      </Typography>
-      <hr />
-      <br />
-      <Typography
-        sx={{ fontSize: 20 }}
-        variant="h5"
-        component="div"
-        textAlign="center">
-        출장계획서입니다.
-      </Typography>
-    </CardContent>
-  </React.Fragment>
-);
-const card2 = (
-  <React.Fragment>
-    <CardContent>
-      <Typography
-        sx={{ fontSize: 25 }}
-        color="#00AAFF"
-        gutterBottom
-        textAlign="center">
-        인사명령
-      </Typography>
-      <hr />
-      <br />
-      <Typography
-        sx={{ fontSize: 20 }}
-        variant="h5"
-        component="div"
-        textAlign="center">
-        인사명령입니다.
-      </Typography>
-    </CardContent>
-  </React.Fragment>
-);
+const linkArr = ['/draft/br', '/draft/bt', '/draft/pa'];
+const titleArr = ['업무기안', '출장계획서', '인사명령'];
+const contentArr = ['업무기안입니다.', '출장계획서입니다.', '인사명령입니다.'];
 
 function Dashboard() {
   return (
@@ -90,44 +21,21 @@ function Dashboard() {
           sx={{
             display: 'flex',
             height: 200,
-
             justifyContent: 'space-around',
             p: 1,
             m: 1,
             bgcolor: 'background.paper',
           }}>
-          <Link to={'/draft/br'}>
-            <CardActionArea>
-              <Card
-                variant="outlined"
-                sx={{ minWidth: 250, height: 200 }}
-                style={{ backgroundColor: '#F1F9FF' }}>
-                {card}
-              </Card>
-            </CardActionArea>
-          </Link>
-
-          <Link to={'/draft/bt'}>
-            <CardActionArea>
-              <Card
-                variant="outlined"
-                sx={{ minWidth: 250, height: 200 }}
-                style={{ backgroundColor: '#F1F9FF' }}>
-                {card1}
-              </Card>
-            </CardActionArea>
-          </Link>
-
-          <Link to={'/draft/pa'}>
-            <CardActionArea>
-              <Card
-                variant="outlined"
-                sx={{ minWidth: 250, height: 200 }}
-                style={{ backgroundColor: '#F1F9FF' }}>
-                {card2}
-              </Card>
-            </CardActionArea>
-          </Link>
+          {linkArr.map((data, index) => {
+            return (
+              <DBCard
+                key={index}
+                link={data}
+                title={titleArr[index]}
+                content={contentArr[index]}
+              />
+            );
+          })}
         </Box>
       </Container>
     </SideNavigation>

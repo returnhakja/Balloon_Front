@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
+import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
+import {
+  deleteBizRpt,
+  getApvlByDocId,
+  getBizRptByBizRptId,
+} from '../../context/ApprovalAxios';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import ModalApproval from './ModalApproval';
+import { FcDocument } from 'react-icons/fc';
 import {
   Button,
   Card,
@@ -14,16 +20,8 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-
 import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
-
-import { FcDocument } from 'react-icons/fc';
-import {
-  deleteBizRpt,
-  getApvlByDocId,
-  getBizRptByBizRptId,
-} from '../../context/ApprovalAxios';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -33,23 +31,10 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  textAlign: 'center',
-};
-
 function DeclaredBusinessReportInfo() {
   // 사원 정보 context
-  const [empInfo, setEmpInfo] = useOutletContext();
-  const [openapprovalModal, setOpenapprovalModal] = useState(false);
+  const [empInfo] = useOutletContext();
+  // const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [bizRptInfo, setBizRptInfo] = useState({});
   const [approver, setApprover] = useState([]);
   const [apvl, setApvl] = useState({});
@@ -60,32 +45,11 @@ function DeclaredBusinessReportInfo() {
   console.log(bizRptInfo);
 
   useEffect(() => {
-    getBizRptByBizRptId(params.docId, setBizRptInfo);
-    getApvlByDocId(params.docId, setApprover);
-  }, []);
-
-  const DfCard = (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          기안자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {bizRptInfo.empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
+    if (!!params) {
+      getBizRptByBizRptId(params.docId, setBizRptInfo);
+      getApvlByDocId(params.docId, setApprover);
+    }
+  }, [params]);
 
   const ApCard = (empName) => (
     <React.Fragment>
@@ -110,7 +74,6 @@ function DeclaredBusinessReportInfo() {
     </React.Fragment>
   );
   // const [openModal, setOpenModal] = useState(false);
-  console.log(empInfo);
   return (
     <SideNavigation>
       <Container>
@@ -153,7 +116,7 @@ function DeclaredBusinessReportInfo() {
             variant="outlined"
             sx={{ maxWidth: 150 }}
             style={{ backgroundColor: '#F1F9FF' }}>
-            {DfCard}
+            {!!bizRptInfo && <DfCard drafterName={bizRptInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
             console.log(empData.approvalId);
@@ -162,11 +125,11 @@ function DeclaredBusinessReportInfo() {
             }
             return (
               <Card
+                key={index}
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
-                style={{ backgroundColor: '#F1F9FF' }}
-                key={index}>
-                {ApCard(empData.approverName)}
+                style={{ backgroundColor: '#F1F9FF' }}>
+                <ApCard approverName={empData.approverName} />
               </Card>
             );
           })}

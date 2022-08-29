@@ -1,27 +1,14 @@
-import { Container } from '@mui/system';
 import React, { useEffect, useState } from 'react';
-import SideNavigation from '../../components/SideNavigation';
-import 'react-datepicker/dist/react-datepicker.css';
-import TextField from '@mui/material/TextField';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import styles from '../../css/Component.module.css';
-import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-} from '@mui/material';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { getApvlByApvrNameAnddocStatus } from '../../context/ApprovalAxios';
 import { Link, useOutletContext } from 'react-router-dom';
-import { getApvlByDocId } from '../../context/ApprovalAxios';
+import SideNavigation from '../../components/SideNavigation';
+import { getApvlByApvrNameAnddocStatus } from '../../context/ApprovalAxios';
+import styles from '../../css/Component.module.css';
+import 'react-datepicker/dist/react-datepicker.css';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { Container } from '@mui/system';
 
 function ApprovalBefore() {
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   const [docList, setDocList] = useState([]);
 
   // 날짜 관련
@@ -75,7 +62,6 @@ function ApprovalBefore() {
     },
     { field: 'updateTime', headerName: '처리일자', width: 160 },
   ];
-
   return (
     <>
       <SideNavigation>

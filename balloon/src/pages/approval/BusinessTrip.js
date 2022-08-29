@@ -1,32 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
-import styles from '../../css/Report.module.css';
-import '../../css/Modal.css';
 import ModalApproval from './ModalApproval';
-import {
-  Button,
-  Card,
-  CardContent,
-  Container,
-  Paper,
-  TextField,
-  ToggleButtonGroup,
-  Typography,
-} from '@mui/material';
-import { Box } from '@mui/system';
-
-import { styled } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { blue } from '@mui/material/colors';
-import { FcDocument } from 'react-icons/fc';
+import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import {
   getLatestBizTP,
   insertApproval,
   insertBizTp,
 } from '../../context/ApprovalAxios';
+import styles from '../../css/Report.module.css';
+import '../../css/Modal.css';
+import { FcDocument } from 'react-icons/fc';
+import { Button, Card, Container, Paper, TextField } from '@mui/material';
+import { Box } from '@mui/system';
+import { styled } from '@mui/material/styles';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { blue } from '@mui/material/colors';
+
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
   backgroundColor: blue[500],
@@ -34,19 +26,6 @@ const SaveButton = styled(Button)(({ theme }) => ({
     backgroundColor: blue[700],
   },
 }));
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  textAlign: 'center',
-};
 
 function Trip() {
   // 날짜 관련
@@ -62,69 +41,20 @@ function Trip() {
   // const [openModal, setOpenModal] = useState(false);
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
 
   useEffect(() => {
-    getLatestBizTP(setDocNum);
-    console.log(docNum);
-    docNum !== 0
-      ? setDocId('출장계획' + '-22-' + ('0000000' + (docNum + 1)).slice(-7))
-      : setDocId('출장계획-22-0000001');
-  }, [docNum]);
+    if (docNum === 0) {
+      getLatestBizTP(setDocNum);
+      setDocId('출장계획-22-0000001');
+    } else {
+      setDocId('출장계획' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
+    }
 
-  useEffect(() => {
-    setNoApprover(noApprover);
-  }, [noApprover]);
-
-  console.log(empInfo);
-  console.log(docId);
-
-  const DfCard = (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          기안자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {empInfo.empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
-
-  const ApCard = (empName) => (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          결재자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
-  console.log(endValue);
+    if (noApprover.length === 0) {
+      setNoApprover(noApprover);
+    }
+  }, [docNum, noApprover]);
 
   return (
     <SideNavigation>
@@ -176,7 +106,6 @@ function Trip() {
           <ModalApproval
             openapprovalModal={openapprovalModal}
             setOpenapprovalModal={setOpenapprovalModal}
-            style={style}
             setApprover={setApprover}
             approver={approver}
             setNoApprover={setNoApprover}
@@ -190,18 +119,16 @@ function Trip() {
             variant="outlined"
             sx={{ maxWidth: 150 }}
             style={{ backgroundColor: '#F1F9FF' }}>
-            {DfCard}
+            {!!empInfo && <DfCard drafterName={empInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
-
             return (
               <Card
+                key={index}
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
-                style={{ backgroundColor: '#F1F9FF' }}
-                key={index}>
-                {ApCard(empData.empName)}
+                style={{ backgroundColor: '#F1F9FF' }}>
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}
@@ -291,20 +218,6 @@ function Trip() {
 
                 <span className={styles.centerfont}> : </span>
 
-                {/* <TextField
-                  id="endValue"
-                  label="끝나는일"
-                  type="datetime-local"
-                  defaultValue={endValue}
-                  onChange={(newValue) => {
-                    setEndValue(newValue);
-                  }}
-                  sx={{ width: 250 }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                /> */}
-
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     label="끝나는일"
@@ -377,13 +290,13 @@ function Trip() {
                       endValue,
                       setInputData
                     );
-                    {
-                      approver.map((data, index) => {
-                        console.log(data);
-                        console.log(index);
-                        insertApproval(docId, 0, data, inputData, empInfo);
-                      });
-                    }
+
+                    approver.map((data, index) => {
+                      console.log(data);
+                      console.log(index);
+                      return insertApproval(docId, 0, data, inputData, empInfo);
+                    });
+
                     alert('문서가 임시저장되었습니다!');
                   }}>
                   임시저장
@@ -392,13 +305,13 @@ function Trip() {
               <Link
                 to={'/boxes'}
                 onClick={async (e) => {
-                  if (approver != 0) {
+                  if (approver.length !== 0) {
                     await insertBizTp(
-                      docId && docId,
+                      docId,
                       1,
                       inputData,
                       empInfo,
-                      startValue.value,
+                      startValue,
                       endValue,
                       setInputData
                     );
@@ -407,13 +320,11 @@ function Trip() {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
-                  {
-                    approver.map((data, index) => {
-                      console.log(data);
-                      console.log(index);
-                      insertApproval(docId, 1, data, inputData, empInfo);
-                    });
-                  }
+                  approver.map((data, index) => {
+                    console.log(data);
+                    console.log(index);
+                    return insertApproval(docId, 1, data, inputData, empInfo);
+                  });
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기

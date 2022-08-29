@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
+import ApprovalDeclareModal from './ApprovalDeclareModal';
+import {
+  getApvlByDocId,
+  getBizRptByBizRptId,
+} from '../../context/ApprovalAxios';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import ModalApproval from './ModalApproval';
+import { FcDocument } from 'react-icons/fc';
 import {
   Button,
   Card,
@@ -14,17 +19,8 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-
 import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
-
-import { FcDocument } from 'react-icons/fc';
-import {
-  getApvlByApvrNameAnddocStatus,
-  getApvlByDocId,
-  getBizRptByBizRptId,
-} from '../../context/ApprovalAxios';
-import ApprovalDeclareModal from './ApprovalDecalreModal';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -50,14 +46,12 @@ const style = {
 function ApprovalDeclare() {
   // 사원 정보 context
   const [empInfo, setEmpInfo] = useOutletContext();
-  const [openapprovalModal, setOpenapprovalModal] = useState(false);
+  //   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [bizRptInfo, setBizRptInfo] = useState({});
   const [approver, setApprover] = useState([]);
   const [apvl, setApvl] = useState({});
   const params = useParams();
-  console.log(params);
-  console.log(empInfo);
-  console.log(bizRptInfo);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     getBizRptByBizRptId(params.docId, setBizRptInfo);
@@ -110,9 +104,6 @@ function ApprovalDeclare() {
     </React.Fragment>
   );
 
-  const [openModal, setOpenModal] = useState(false);
-
-  console.log(empInfo);
   return (
     <SideNavigation>
       <Container>
@@ -218,7 +209,6 @@ function ApprovalDeclare() {
                 </SaveButton>
               </Link>
 
-              {/* <Link to="/boxes/ab"> */}
               <Button
                 variant="contained"
                 color="success"
@@ -233,13 +223,10 @@ function ApprovalDeclare() {
                   style={style}
                   openModal={openModal}
                   setOpenModal={setOpenModal}
-                  // docId={params.docId}
                   approver={approver}
-                  // empInfo={empInfo}
                   apvl={apvl}
                 />
               )}
-              {/* </Link> */}
             </Box>
           </div>
         </div>

@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
+import ModalApproval from './ModalApproval';
+import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
+import {
+  deleteBizTp,
+  getApvlByDocId,
+  getBizTpByBizTpId,
+  insertApproval,
+  insertBizTp,
+} from '../../context/ApprovalAxios';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import ModalApproval from './ModalApproval';
+import { FcDocument } from 'react-icons/fc';
 import {
   Button,
   Card,
@@ -11,25 +20,15 @@ import {
   Container,
   Paper,
   TextField,
-  ToggleButtonGroup,
-  Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-
 import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
-import { FcDocument } from 'react-icons/fc';
-import {
-  deleteBizTp,
-  getApvlByDocId,
-  getBizTpByBizTpId,
-  getLatestBizTP,
-  insertApproval,
-  insertBizTp,
-} from '../../context/ApprovalAxios';
+import { Typography } from 'antd';
+
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
   backgroundColor: blue[500],
@@ -37,19 +36,6 @@ const SaveButton = styled(Button)(({ theme }) => ({
     backgroundColor: blue[700],
   },
 }));
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  textAlign: 'center',
-};
 
 function SavedBusinessTrip() {
   const [empInfo, setEmpInfo] = useOutletContext();
@@ -61,36 +47,17 @@ function SavedBusinessTrip() {
 
   const params = useParams();
   useEffect(() => {
-    getBizTpByBizTpId(params.docId, setInputData);
-    setStartValue(inputData.startDate);
-    setEndValue(inputData.endDate);
-    getApvlByDocId(params.docId, setApprover);
-    console.log(approver);
-  }, [startValue, endValue]);
-
-  console.log(endValue);
-  const DfCard = (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          기안자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {empInfo.empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
+    if (!!params) {
+      if (Object.keys(inputData).length === 0) {
+        getBizTpByBizTpId(params.docId, setInputData);
+        getApvlByDocId(params.docId, setApprover);
+      } else {
+        setStartValue(inputData.startDate);
+        setEndValue(inputData.endDate);
+        approver.length !== 0 && console.log(approver);
+      }
+    }
+  }, [params, inputData, startValue, endValue, approver.length]);
 
   const ApCard = (empName) => (
     <React.Fragment>
@@ -165,7 +132,6 @@ function SavedBusinessTrip() {
           <ModalApproval
             openapprovalModal={openapprovalModal}
             setOpenapprovalModal={setOpenapprovalModal}
-            style={style}
           />
         )}
         <hr />
@@ -175,7 +141,7 @@ function SavedBusinessTrip() {
             variant="outlined"
             sx={{ maxWidth: 150 }}
             style={{ backgroundColor: '#F1F9FF' }}>
-            {DfCard}
+            {!!empInfo && <DfCard drafterName={empInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
             console.log(empData);
@@ -185,11 +151,11 @@ function SavedBusinessTrip() {
 
             return (
               <Card
+                key={index}
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
-                style={{ backgroundColor: '#F1F9FF' }}
-                key={index}>
-                {ApCard(empData.approverName)}
+                style={{ backgroundColor: '#F1F9FF' }}>
+                <ApCard approverName={empData.approverName} />
               </Card>
             );
           })}
@@ -400,7 +366,7 @@ function SavedBusinessTrip() {
                 onClick={async (e) => {
                   console.log(startValue);
                   console.log(endValue);
-                  if (approver != 0) {
+                  if (approver.length !== 0) {
                     await insertBizTp(
                       params.docId,
                       1,

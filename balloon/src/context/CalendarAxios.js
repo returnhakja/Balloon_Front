@@ -49,7 +49,8 @@ export const insertSchedulList = async (schduleListAdd, setOpen) => {
     })
     .catch((error) => console.log(error));
   setOpen(false);
-  window.location.href('/calendar');
+
+  window.location.href = '/calendar';
 };
 
 // 일정 클릭 시 scheduleId 가져오기

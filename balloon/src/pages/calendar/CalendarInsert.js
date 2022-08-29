@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
-import { insertSchedule, insertSchedulList } from '../../context/CalendarAxios';
-import styles from '../../css/Component.module.css';
-import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+import { insertSchedulList } from '../../context/CalendarAxios';
 import {
   getEmpByEmpId,
   getEmpListInSameUnit,
-  setEmpInfoByEmpId,
 } from '../../context/EmployeeAxios';
+import { botChatroom } from '../../context/ChatAxios';
+import styles from '../../css/Component.module.css';
 import { BsCalendarWeek } from 'react-icons/bs';
+import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
 import axios from 'axios';
 
 function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
@@ -41,10 +40,10 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   };
 
   const handleempAddClose = () => {
-    if (inviteSchedule == 0) {
+    if (inviteSchedule.length === 0) {
       alert('사원을 추가 해 주세요');
     } else {
-      botChatroom();
+      botChatroom(inviteSchedule, setBotRoom);
       setOpen(false);
     }
   };
@@ -130,13 +129,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
   //이미 존재하는 사람들
   const [botRoom, setBotRoom] = useState([]);
-  const botChatroom = () => {
-
-    axios.post(`/cre/botchatroom`, inviteSchedule).then((response) => {
-      console.log(response.data);
-      setBotRoom(response.data);
-    });
-  };
 
   const botroomExist = [];
   const botroomId = [];
@@ -177,8 +169,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
       console.log(ad);
       axios
         .post(
-
-        /*  `/api/insertChatEmp/${ad.chatroomId}`,*/
+          /*  `/api/insertChatEmp/${ad.chatroomId}`,*/
 
           `/cre/insertchatemp/${ad.chatroomId}`,
 
