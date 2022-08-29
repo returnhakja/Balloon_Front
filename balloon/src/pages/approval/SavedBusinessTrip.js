@@ -1,33 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
+import ModalApproval from './ModalApproval';
+import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
+import {
+  deleteBizTp,
+  getApvlByDocId,
+  getBizTpByBizTpId,
+  insertApproval,
+  insertBizTp,
+} from '../../context/ApprovalAxios';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import ModalApproval from './ModalApproval';
-import {
-  Button,
-  Card,
-  CardContent,
-  Container,
-  Paper,
-  TextField,
-  ToggleButtonGroup,
-  Typography,
-} from '@mui/material';
+import { FcDocument } from 'react-icons/fc';
+import { Button, Card, Container, Paper, TextField } from '@mui/material';
 import { Box } from '@mui/system';
-
 import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
-import { FcDocument } from 'react-icons/fc';
-import {
-  deleteBizTp,
-  getBizTpByBizTpId,
-  getLatestBizTP,
-  insertBizTp,
-} from '../../context/ApprovalAxios';
+
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
   backgroundColor: blue[500],
@@ -36,63 +29,27 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  textAlign: 'center',
-};
-
 function SavedBusinessTrip() {
-  // 날짜 관련
-  const [startValue, setStartValue] = useState(null);
-  const [endvalue, setEndValue] = useState(null);
+  const [empInfo] = useOutletContext();
+  const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
+  const [startValue, setStartValue] = useState(null);
+  const [endValue, setEndValue] = useState(null);
+  const [approver, setApprover] = useState([]);
 
   const params = useParams();
-
-  // 모달
-  // const [openModal, setOpenModal] = useState(false);
-  const [openapprovalModal, setOpenapprovalModal] = useState(false);
-  // 사원 정보 context
-  const [empInfo, setEmpInfo] = useOutletContext();
-
   useEffect(() => {
-    getBizTpByBizTpId(params.docId, setInputData);
-    setStartValue(params.startDate);
-    setEndValue(params.endDate);
-    console.log(startValue);
-  }, []);
-
-  console.log(empInfo);
-  const card = (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          기안자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {empInfo.empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
+    if (!!params) {
+      if (Object.keys(inputData).length === 0) {
+        getBizTpByBizTpId(params.docId, setInputData);
+        getApvlByDocId(params.docId, setApprover);
+      } else {
+        setStartValue(inputData.startDate);
+        setEndValue(inputData.endDate);
+        approver.length !== 0 && console.log(approver);
+      }
+    }
+  }, [params, inputData, startValue, endValue, approver.length]);
 
   return (
     <SideNavigation>
@@ -144,19 +101,35 @@ function SavedBusinessTrip() {
           <ModalApproval
             openapprovalModal={openapprovalModal}
             setOpenapprovalModal={setOpenapprovalModal}
-            style={style}
           />
         )}
         <hr />
         <br />
-        <Card
-          variant="outlined"
-          sx={{ maxWidth: 150 }}
-          style={{ backgroundColor: '#F1F9FF' }}>
-          {card}
-        </Card>
-        <hr className={styles.hrmargins} />
+        <div className={styles.approvalCard}>
+          <Card
+            variant="outlined"
+            sx={{ maxWidth: 150 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {!!empInfo && <DfCard drafterName={empInfo.empName} />}
+          </Card>
+          {approver.map((empData, index) => {
+            console.log(empData);
+            // if (apvl.length === 0) {
+            //   setApvl(empData);
+            // }
 
+            return (
+              <Card
+                key={index}
+                variant="outlined"
+                sx={{ maxWidth: 150 }}
+                style={{ backgroundColor: '#F1F9FF' }}>
+                <ApCard approverName={empData.approverName} />
+              </Card>
+            );
+          })}
+        </div>
+        <hr className={styles.hrmargins} />
         <p className={styles.giantitle}>기안내용</p>
         <table className={styles.table}>
           <thead>
@@ -229,7 +202,7 @@ function SavedBusinessTrip() {
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     label="끝나는일"
-                    value={endvalue}
+                    value={endValue}
                     inputFormat={'yyyy-MM-dd'}
                     onChange={(newValue) => {
                       setEndValue(newValue);
@@ -299,41 +272,96 @@ function SavedBusinessTrip() {
                   삭제하기
                 </Button>
               </Link>
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={async () => {
-                  await insertBizTp(
-                    params.docId,
-                    3,
-                    inputData,
-                    empInfo,
-                    startValue,
-                    endvalue,
-                    setInputData
-                  );
-                  window.location.href = 'http://localhost:3000/boxes';
+              <Link to={'/boxes/ds'}>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={async () => {
+                    await insertBizTp(
+                      params.docId,
+                      3,
+                      inputData,
+                      empInfo,
+                      startValue,
+                      endValue,
+                      setInputData
+                    );
+                    {
+                      approver.map(async (data, index) => {
+                        console.log(data);
+                        console.log(index);
+                        await insertApproval(
+                          params.docId,
+                          0,
+                          data,
+                          inputData,
+                          empInfo
+                        );
+                      });
+                    }
+                    alert('문서가 임시저장되었습니다!');
+                  }}>
+                  임시저장
+                </Button>
+              </Link>
+              {/* <Link
+                to="/boxes"
+                onClick={async (e) => {
+                  if (approver != 0) {
+                    await insertBizTp(
+                      params.docId,
+                      1,
+                      inputData,
+                      empInfo,
+                      startValue,
+                      endValue,
+                      setInputData
+                    );
+                    alert('문서가 상신되었습니다!');
+                  } else {
+                    alert('결재선을 설정해주세요 !');
+                    e.preventDefault();
+                  }
+                  {
+                    approver.map((data, index) => {
+                      console.log(data);
+                      console.log(index);
+                      insertApproval(params.docId, 1, data, inputData, empInfo);
+                    });
+                  }
+                }}> */}
+              <Link
+                to="/boxes"
+                onClick={async (e) => {
+                  console.log(startValue);
+                  console.log(endValue);
+                  if (approver.length !== 0) {
+                    await insertBizTp(
+                      params.docId,
+                      1,
+                      inputData,
+                      empInfo,
+                      startValue,
+                      endValue,
+                      setInputData
+                    );
+                    alert('문서가 상신되었습니다!');
+                  } else {
+                    alert('결재선을 설정해주세요 !');
+                    e.preventDefault();
+                  }
+                  {
+                    approver.map((data, index) => {
+                      console.log(data);
+                      console.log(index);
+                      insertApproval(params.docId, 1, data, inputData, empInfo);
+                    });
+                  }
                 }}>
-                임시저장
-              </Button>
-              <SaveButton
-                variant="contained"
-                color="success"
-                size="large"
-                onClick={async () => {
-                  await insertBizTp(
-                    params.docId,
-                    1,
-                    inputData,
-                    empInfo,
-                    startValue,
-                    endvalue,
-                    setInputData
-                  );
-                  window.location.href = 'http://localhost:3000/boxes';
-                }}>
-                상신하기
-              </SaveButton>
+                <SaveButton variant="contained" color="success" size="large">
+                  상신하기
+                </SaveButton>
+              </Link>
             </Box>
           </div>
         </div>

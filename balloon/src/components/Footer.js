@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from '../css/Footer.module.css';
-import AddIcon from '@mui/icons-material/Add';
-import { Fab } from '@mui/material';
+
 const Footer = () => {
   return (
     <footer className={styles.footer}>

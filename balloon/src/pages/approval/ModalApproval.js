@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
+import { getApvrListInSameUnit } from '../../context/EmployeeAxios';
 import {
   Modal,
   Button,
@@ -13,10 +14,6 @@ import {
   Box,
 } from '@mui/material';
 
-import {
-  getApvrListInSameUnit,
-  getEmpListInSameUnit,
-} from '../../context/EmployeeAxios';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -47,7 +44,7 @@ function ModalApproval({
   noApprover,
 }) {
   const [chatEmpList, setCEList] = useState([]);
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
   const [checked, setChecked] = useState([]);
   const [left, setLeft] = useState([]);
@@ -60,25 +57,25 @@ function ModalApproval({
 
   // 사원list 출력하기
   useEffect(() => {
-    getApvrListInSameUnit(empId, setCEList);
-  }, []);
-  console.log(noApprover);
-  console.log(approver);
-  console.log(right);
-  console.log(left);
-
-  useEffect(() => {
-    if (chatEmpList.length !== 0) {
-      const arr = [];
-      chatEmpList.map((data) => {
-        arr.push(data);
-      });
-      if (approver.length !== 0) {
-        setLeft(noApprover);
-        setRight(approver);
-      } else setLeft(arr);
+    if (!!empId) {
+      if (chatEmpList.length === 0) {
+        getApvrListInSameUnit(empId, setCEList);
+      } else {
+        const arr = [];
+        chatEmpList.map((data) => {
+          arr.push(data);
+        });
+        if (approver && approver.length !== 0) {
+          setLeft(noApprover);
+          setRight(approver);
+        } else setLeft(arr);
+      }
     }
-  }, [chatEmpList]);
+  }, [empId, chatEmpList, noApprover, approver]);
+  // console.log(noApprover);
+  // console.log(approver);
+  // console.log(right);
+  // console.log(left);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -150,12 +147,7 @@ function ModalApproval({
   );
 
   return (
-    <Modal
-      open={openapprovalModal}
-      onClose={handleClose}
-      // aria-labelledby="modal-modal-title"
-      // aria-desribedby="modal-modal-description"
-    >
+    <Modal open={openapprovalModal} onClose={handleClose}>
       <Box sx={style}>
         <h1>결재선 설정</h1>
         <br />
@@ -223,7 +215,6 @@ function ModalApproval({
             sx={{ fontSize: 20, border: 1, mt: 3 }}
             onClick={() => {
               setApprover(right);
-              console.log(left);
               setNoApprover(left);
               handleClose(false);
             }}>

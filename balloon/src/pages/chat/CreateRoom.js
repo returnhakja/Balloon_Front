@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import { Link, useOutletContext } from 'react-router-dom';
-
+import { onCreateChatroom } from '../../context/ChatAxios';
+import styles from '../../css/chat/Chat.module.css';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import {
@@ -12,13 +13,22 @@ import {
 } from '../../context/ChatAxios';
 import { Box, Modal } from '@mui/material';
 
-function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
-  const [roomId, setRoomId] = useState();
-  const chatroomId = roomId;
+const styleBox = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 300,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  textAlign: 'center',
+  padding: 4,
+};
 
-  const [empInfo, setEmpInfo] = useOutletContext();
-
-  const handleClose = () => setopenCreatChat(false);
+function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
+  const inputRef = useRef();
+  const [empInfo] = useOutletContext();
   // socket
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
@@ -63,7 +73,6 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
     return check;
   };
 
-  /////////////////////////////////////////////////////
   return (
     <Modal open={openCreatChat} onClose={handleClose}>
       <Box sx={style}>
@@ -101,10 +110,14 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
         <Link to={`/chatting?room=${roomId}`}>
           <Button
             variant="contained"
-            onClick={() => onUserInvite(chatroomId, invite, client)}>
+            onClick={() => {
+              eventChatHandle();
+
+              // inputRef.current.value = '';
+            }}>
             <div>채팅하기</div>
           </Button>
-        </Link>
+        </div>
       </Box>
     </Modal>
   );

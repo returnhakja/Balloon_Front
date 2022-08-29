@@ -1,31 +1,31 @@
-import { Box, Button, Modal } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
-import styles from '../../css/Chat/Chat.module.css';
-import { Checkbox } from '@mui/material';
 import { useOutletContext } from 'react-router-dom';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 import {
   chatroomInfo,
   empIdInfo,
   onHCInvite,
   onUserInvite,
 } from '../../context/ChatAxios';
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
+import styles from '../../css/chat/Chat.module.css';
+import { Checkbox } from '@mui/material';
+import { Box, Button, Modal } from '@mui/material';
 
-function InviteEmp({ style, modalOpen, setModalOpen }) {
+function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
   const [chatEmpList, setCEList] = useState([]);
   const [chatUnitList, setCUList] = useState([]);
   const [newInvite, setNewInvite] = useState([]);
   const [existChatEmp, setECEList] = useState([]);
+
   //채팅방 정보 불러오기
   const [chatroomName, setChatroomName] = useState('');
   const [headCount, setHeadCount] = useState(0);
   const [chatempinfo, setChatempinfo] = useState([]);
-
+  const [chatAddEmpInfo, setChatAddEmpInfo] = useState([]);
   const chatroomId = new URL(document.location).searchParams.get('room');
-
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
 
   // socket
@@ -34,7 +34,6 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, (data) => {
-      const chat = JSON.parse(data.body);
       disconnect();
     });
   });
@@ -46,9 +45,10 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
   ////////////////////////////////////////////////////////////
   //이미 채팅방에 초대 된 사원들 -> existEmp
   const existEmp = [];
-  chatempinfo.map((info) => {
+  chatAddEmpInfo.map((info) => {
     existEmp.push(info.empId.empId);
   });
+
   //Unit이름 띄우기
   const returnArr = (list, setCUList) => {
     const arr = [];
@@ -70,32 +70,31 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
     }
   };
 
-  //사원정보가져오기
   useEffect(() => {
-    chatroomInfo(chatroomId, setChatroomName, setHeadCount);
-    empIdInfo(chatroomId, setChatempinfo);
-  }, []);
+    if (!!chatroomId) {
+      //사원정보가져오기
+      chatroomInfo(chatroomId, setChatroomName, setHeadCount);
+      empIdInfo(chatroomId, setChatAddEmpInfo);
+      if (chatUnitList.length === 0) {
+        if (chatEmpList.length === 0) {
+          // 사원list 출력하기
+          getEmpListInSameUnit(empId, setCEList);
+          setNewInvite([]);
+        } else {
+          setCUList(chatEmpList.unit);
+          returnArr(chatEmpList, setCUList);
+
+          ChatEmpHandle(chatEmpList, setECEList);
+        }
+      }
+    }
+  }, [chatroomId, chatEmpList, chatUnitList, existChatEmp]);
 
   //채팅방에 없는 사원list
   const ChatEmpHandle = (chatEmpList, setECEList) => {
     const arr = chatEmpList.filter((list) => !existEmp.includes(list.empId));
     setECEList(arr);
   };
-
-  // 사원list 출력하기
-  useEffect(() => {
-    if (chatUnitList.length === 0) {
-      if (chatEmpList.length === 0) {
-        getEmpListInSameUnit(empId, setCEList);
-        setNewInvite([]);
-      } else {
-        setCUList(chatEmpList.unit);
-        returnArr(chatEmpList, setCUList);
-
-        ChatEmpHandle(chatEmpList, setECEList);
-      }
-    }
-  }, [chatEmpList, chatUnitList, existChatEmp]);
 
   const closemodal = () => {
     setModalOpen(false);
@@ -111,7 +110,6 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
               return (
                 <div key={index} className={styles.cuCon}>
                   <p className={styles.cuName}>{cu}</p>
-
                   {existChatEmp.length !== 0 &&
                     existChatEmp.map((ce, index) => {
                       if (ce.unit.unitName === cu) {
@@ -138,7 +136,8 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
           onClick={() => (
             onUserInvite(chatroomId, newInvite, client),
             onHCInvite(chatroomId, chatroomName, headCount, newInvite),
-            closemodal()
+            closemodal(),
+            empIdInfo(chatroomId, setChatempinfo)
           )}>
           초대하기
         </Button>
