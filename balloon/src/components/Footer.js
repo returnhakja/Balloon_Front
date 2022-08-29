@@ -1,7 +1,5 @@
 import React from 'react';
 import styles from '../css/Footer.module.css';
-import { Fab } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 
 const Footer = () => {
   return (

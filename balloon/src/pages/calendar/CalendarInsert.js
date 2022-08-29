@@ -53,10 +53,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const client = Stomp.over(sock);
 
   client.connect({}, () => {
-    client.subscribe(`/topic/message`, (data) => {
-      const chat = JSON.parse(data.body);
-      console.log(chat);
-
+    client.subscribe(`/topic/message`, () => {
       disconnect();
     });
   });
@@ -166,11 +163,8 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   //chatroomEmployee T에 새로운 값넣고 채팅보내는 부분
   const onSchUserInvite = (add, invitepeople) => {
     add.map((ad, index) => {
-      console.log(ad);
       axios
         .post(
-          /*  `/api/insertChatEmp/${ad.chatroomId}`,*/
-
           `/cre/insertchatemp/${ad.chatroomId}`,
 
           [
@@ -191,7 +185,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
             JSON.stringify({
               chatroomId: ad.chatroomId,
               writer: botInfo,
-              chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
+              chatContent: '새로운 일정이 등록되었습니다',
             })
           )
         )
@@ -205,7 +199,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   // 이미생성된 채팅방에 알림보내기
   const botroomMsg = () => {
     botroomId.map((id) => {
-      console.log(id);
       client.send(
         '/app/chat/message',
         {},
@@ -302,12 +295,11 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
                     onChange={(e) => {
                       console.log(e);
                       onInviteSchedule(e.currentTarget.checked, emp.empId);
-                      // console.log(e);
                     }}
                     checked={inviteSchedule.includes(emp.empId) ? true : false}
                   />
                   {emp.empName}
-                  {emp.position}{' '}
+                  {emp.position}
                 </Typography>
               );
             })}

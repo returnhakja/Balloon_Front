@@ -38,7 +38,7 @@ const SaveButton = styled(Button)(({ theme }) => ({
 }));
 
 function SavedBusinessTrip() {
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
   const [startValue, setStartValue] = useState(null);
