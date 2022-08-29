@@ -167,13 +167,17 @@ function ChatCopy({ empInfo, roomId }) {
             style={{
               display: 'flex',
               alignItems: 'center',
+              height: '33px',
               justifyContent: 'center',
             }}>
             <TextField
               id="outlined-multiline-flexible"
               multiline
-              label="-"
-              maxRows={4}
+              sx={{
+                '& .MuiInputBase-root': {
+                  height: 20,
+                },
+              }}
               value={chatRoomTitle}
               onChange={onChangeTitle}
               onClick={onClickChatRoomTitle}
@@ -181,6 +185,7 @@ function ChatCopy({ empInfo, roomId }) {
             {clickChk == 2 ? (
               <Button
                 variant="contained"
+                sx={{ height: 30 }}
                 onClick={() => {
                   onUserUpdate(chatroomId, chatRoomTitle, headCount);
                   setClickChk(0);
@@ -217,6 +222,7 @@ function ChatCopy({ empInfo, roomId }) {
             width: '100%',
             background: 'lightgray',
             paddingTop: 2,
+
             maxHeight: 200,
             overflowY: 'scroll',
           }}>

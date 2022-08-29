@@ -10,6 +10,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Delete from '@mui/icons-material/Delete';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import QueueIcon from '@mui/icons-material/Queue';
+import Test from '../chat copy/Test';
+import Test1 from './Test1';
 
 function ManagementUnit() {
   const [unitList, setUnitList] = useState([]);
@@ -20,6 +22,7 @@ function ManagementUnit() {
     state: false,
     unitCode: null,
   });
+  const [open, setOpen] = React.useState(false);
 
   const handleClick = (data) => {
     setRowData(data.row);
@@ -28,7 +31,15 @@ function ManagementUnit() {
   };
 
   const handleUpdate = (setUpdateChk) => {
-    updateCheck(setUpdateChk);
+    // updateCheck(setUpdateChk);
+    // setOpenUpdate(true);
+    // if (!!setUpdateChk) {
+    //   setOpenUpdate({
+    //     state: true,
+    //     setUpdateChk: setUpdateChk,
+    //   });
+    // }
+    setOpen(true);
   };
 
   const handleDelete = (setDeleteChk) => {
@@ -53,6 +64,8 @@ function ManagementUnit() {
       }
     }
   }, [unitList, rowData, updateChk, deleteChk]);
+
+  console.log(rowData);
 
   function GetParentUnit(data) {
     return data.row.parentUnit ? data.row.parentUnit.id : data.row.parentUnit;
@@ -89,7 +102,7 @@ function ManagementUnit() {
           icon={<SettingsIcon />}
           label="update"
           onClick={() => {
-            handleUpdate(setUpdateChk);
+            handleUpdate();
           }}
         />,
 
@@ -137,6 +150,9 @@ function ManagementUnit() {
             }}
           />
         </Box>
+        {open && (
+          <Test1 open={open} setOpen={setOpen} unitCode={rowData.unitCode} />
+        )}
       </Container>
     </div>
   );
