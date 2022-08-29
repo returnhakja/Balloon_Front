@@ -81,8 +81,6 @@ function CRMCopy({ empInfo }) {
                                 chat.chatroom.headCount
                               )
                             );
-
-                            window.location.href = '/chatlist';
                           };
 
                           return roomDelete();

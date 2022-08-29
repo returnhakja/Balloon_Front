@@ -3,7 +3,7 @@ import { Link, useOutletContext } from 'react-router-dom';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import InviteEmp from './InviteEmp';
+import InviteEmpCopy from './InviteEmpCopy';
 import { sendExit } from '../../utils/ChatUtils';
 import {
   chatRecord,
@@ -167,13 +167,17 @@ function ChatCopy({ empInfo, roomId }) {
             style={{
               display: 'flex',
               alignItems: 'center',
+              height: '33px',
               justifyContent: 'center',
             }}>
             <TextField
               id="outlined-multiline-flexible"
               multiline
-              label="-"
-              maxRows={4}
+              sx={{
+                '& .MuiInputBase-root': {
+                  height: 20,
+                },
+              }}
               value={chatRoomTitle}
               onChange={onChangeTitle}
               onClick={onClickChatRoomTitle}
@@ -181,6 +185,7 @@ function ChatCopy({ empInfo, roomId }) {
             {clickChk == 2 ? (
               <Button
                 variant="contained"
+                sx={{ height: 30 }}
                 onClick={() => {
                   onUserUpdate(chatroomId, chatRoomTitle, headCount);
                   setClickChk(0);
@@ -217,6 +222,7 @@ function ChatCopy({ empInfo, roomId }) {
             width: '100%',
             background: 'lightgray',
             paddingTop: 2,
+
             maxHeight: 200,
             overflowY: 'scroll',
           }}>
@@ -241,25 +247,24 @@ function ChatCopy({ empInfo, roomId }) {
               }}>
               <PersonAddAlt1Icon />
             </Button>
-            <Link to={'/chatlist'}>
-              <Button
-                onClick={() => (
-                  onExitRoom(
-                    chatroomId,
-                    empId,
-                    sendExit(client, chatroomId, empInfo)
-                  ),
-                  onHCupdate(chatroomId, chatroomName, headCount)
-                )}>
-                <LogoutIcon />
-              </Button>
-            </Link>
+
+            <Button
+              onClick={() => (
+                onExitRoom(
+                  chatroomId,
+                  empId,
+                  sendExit(client, chatroomId, empInfo)
+                ),
+                onHCupdate(chatroomId, chatroomName, headCount)
+              )}>
+              <LogoutIcon />
+            </Button>
           </div>
         </Collapse>
       </List>
 
       {modalOpen && (
-        <InviteEmp
+        <InviteEmpCopy
           style={styleBox}
           modalOpen={modalOpen}
           setModalOpen={setModalOpen}
