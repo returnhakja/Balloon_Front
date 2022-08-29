@@ -15,6 +15,7 @@ function ChatRoom() {
   const [chatroom, setChatroom] = useState([]);
   const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
+  //socket
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
 

@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import { onCreateChatroom } from '../../context/ChatAxios';
+import { onCreateChatroom, onAllChatEmp } from '../../context/ChatAxios';
 import styles from '../../css/chat/Chat.module.css';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
-import {
-  onAllChatEmp,
-  onCreateChatroom,
-  onUserInvite,
-} from '../../context/ChatAxios';
 import { Box, Modal } from '@mui/material';
 
 const styleBox = {
@@ -29,6 +24,7 @@ const styleBox = {
 function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
   const inputRef = useRef();
   const [empInfo] = useOutletContext();
+  const [allChatEmp, setAllChatEmp] = useState([]);
   // socket
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
@@ -43,25 +39,28 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     client.disconnect();
   };
 
-  console.log(invite);
-  //1:1채팅일 때 이미있는 채팅방 예외처리
+  const keyEnter = (e) => {
+    if (e.key === 'Enter') {
+      eventChatHandle();
+    }
+  };
+
+  //초대할 사원
   const alreadyInvite = [];
   invite.map((vite) => {
     alreadyInvite.push(vite.empId);
   });
-  console.log(alreadyInvite);
 
-  const [allChatEmp, setAllChatEmp] = useState([]);
-
+  //headCount가 2인 chatroomEmployee T 정보 가져옴
   useEffect(() => {
     onAllChatEmp(setAllChatEmp);
   }, []);
 
-  console.log(allChatEmp);
+  //onAllChatEmp에서 로그인한 사원의 정보를 뺌
   let allChatEmpId = [];
   allChatEmpId = allChatEmp.filter((emp) => emp.empId.empId !== empInfo.empId);
-  console.log(allChatEmpId);
 
+  //1:1채팅일 때 이미있는 채팅방 예외처리
   const checkChatEmp = (allChatEmpId, alreadyInvite) => {
     let check = true;
     allChatEmpId.map((id) => {
@@ -73,47 +72,60 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     return check;
   };
 
+  //채팅방이름 공백처리
+  //1:1채팅일 때 이미있는 채팅방 예외처리
+  const eventChatHandle = () => {
+    const input = document.getElementById('chatroomName');
+    if (input.value.trim() !== '') {
+      if (input.value.length === 0) {
+        inputRef.current.focus();
+        input.value = '';
+        alert('채팅방 이름을 입력해주세요!!');
+      } else {
+        if (alreadyInvite.length === 1) {
+          const check = checkChatEmp(allChatEmpId, alreadyInvite[0]);
+          check &&
+            onCreateChatroom(
+              empInfo,
+              invite,
+              document.getElementById('chatroomName'),
+              client
+            );
+        } else {
+          onCreateChatroom(
+            empInfo,
+            invite,
+            document.getElementById('chatroomName'),
+            client
+          );
+        }
+      }
+    } else {
+      inputRef.current.focus();
+      input.value = '';
+      alert('채팅방 이름을 입력해주세요!!');
+    }
+  };
+
+  //채팅방모달
+  const handleClose = () => setopenCreatChat(false);
+
   return (
     <Modal open={openCreatChat} onClose={handleClose}>
-      <Box sx={style}>
-        <br />
-        <br />
-        <h3>채팅방 만들기</h3>
-        <br />
-        <Input id="chatroomName" placeholder="채팅방 이름을 입력하세요" />
-        <br />
-        <br />
-        <Button
-          variant="contained"
-          sx={{ marginRight: 2 }}
-          onClick={() => {
-            if (alreadyInvite.length === 1) {
-              const check = checkChatEmp(allChatEmpId, alreadyInvite[0]);
-              check &&
-                onCreateChatroom(
-                  empInfo,
-                  setRoomId,
-                  invite,
-                  document.getElementById('chatroomName')
-                );
-            } else {
-              onCreateChatroom(
-                empInfo,
-                setRoomId,
-                invite,
-                document.getElementById('chatroomName')
-              );
-            }
-          }}>
-          등록
-        </Button>
-        <Link to={`/chatting?room=${roomId}`}>
+      <Box sx={styleBox}>
+        <h3 className={styles.inBox}>채팅방 만들기</h3>
+        <div>
+          <Input
+            id="chatroomName"
+            // className={styles.inBox}
+            ref={inputRef}
+            onKeyPress={keyEnter}
+            placeholder="채팅방 이름을 입력하세요"
+          />
           <Button
             variant="contained"
             onClick={() => {
               eventChatHandle();
-
-              // inputRef.current.value = '';
             }}>
             <div>채팅하기</div>
           </Button>
