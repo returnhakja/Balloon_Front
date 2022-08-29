@@ -13,7 +13,7 @@ import styles from '../../css/chat/Chat.module.css';
 import { Checkbox } from '@mui/material';
 import { Box, Button, Modal } from '@mui/material';
 
-function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
+function InviteEmp({ style, modalOpen, setModalOpen }) {
   const [chatEmpList, setCEList] = useState([]);
   const [chatUnitList, setCUList] = useState([]);
   const [newInvite, setNewInvite] = useState([]);
@@ -22,8 +22,7 @@ function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
   //채팅방 정보 불러오기
   const [chatroomName, setChatroomName] = useState('');
   const [headCount, setHeadCount] = useState(0);
-  // const [chatempinfo, setChatempinfo] = useState([]);
-  const [chatAddEmpInfo, setChatAddEmpInfo] = useState([]);
+  const [chatempinfo, setChatempinfo] = useState([]);
   const chatroomId = new URL(document.location).searchParams.get('room');
   const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
@@ -33,7 +32,7 @@ function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
   const client = Stomp.over(sock);
 
   client.connect({}, () => {
-    client.subscribe(`/topic/message`, (data) => {
+    client.subscribe(`/topic/message`, () => {
       disconnect();
     });
   });
@@ -45,7 +44,7 @@ function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
   ////////////////////////////////////////////////////////////
   //이미 채팅방에 초대 된 사원들 -> existEmp
   const existEmp = [];
-  chatAddEmpInfo.map((info) => {
+  chatempinfo.map((info) => {
     existEmp.push(info.empId.empId);
   });
 
@@ -70,11 +69,17 @@ function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
     }
   };
 
+  //채팅방에 없는 사원list
+  const ChatEmpHandle = (chatEmpList, setECEList) => {
+    const arr = chatEmpList.filter((list) => !existEmp.includes(list.empId));
+    setECEList(arr);
+  };
+
   useEffect(() => {
     if (!!chatroomId) {
       //사원정보가져오기
       chatroomInfo(chatroomId, setChatroomName, setHeadCount);
-      empIdInfo(chatroomId, setChatAddEmpInfo);
+      empIdInfo(chatroomId, setChatempinfo);
       if (chatUnitList.length === 0) {
         if (chatEmpList.length === 0) {
           // 사원list 출력하기
@@ -83,18 +88,11 @@ function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
         } else {
           setCUList(chatEmpList.unit);
           returnArr(chatEmpList, setCUList);
-
           ChatEmpHandle(chatEmpList, setECEList);
         }
       }
     }
   }, [chatroomId, chatEmpList, chatUnitList, existChatEmp]);
-
-  //채팅방에 없는 사원list
-  const ChatEmpHandle = (chatEmpList, setECEList) => {
-    const arr = chatEmpList.filter((list) => !existEmp.includes(list.empId));
-    setECEList(arr);
-  };
 
   const closemodal = () => {
     setModalOpen(false);
@@ -136,8 +134,7 @@ function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
           onClick={() => (
             onUserInvite(chatroomId, newInvite, client),
             onHCInvite(chatroomId, chatroomName, headCount, newInvite),
-            closemodal(),
-            empIdInfo(chatroomId, setChatempinfo)
+            closemodal()
           )}>
           초대하기
         </Button>

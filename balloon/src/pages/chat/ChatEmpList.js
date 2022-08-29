@@ -9,22 +9,26 @@ import { Checkbox, Container, Grid } from '@mui/material';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 
 function ChatEmpList({ invite, setInvite }) {
+  //채팅할사원
   const [chatEmpList, setCEList] = useState([]);
+  //조직이름
   const [chatUnitList, setCUList] = useState([]);
+  //채팅방모달
   const [openCreatChat, setopenCreatChat] = useState(false);
-
+  //로그인 한 사원정보
   const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
 
-  const returnArr = (list, setCUList) => {
-    const arr = [];
+  //로그인 한 사원이 속한 조직빼오기
+  const returnUnit = (chatEmpList, setCUList) => {
+    const unitname = [];
 
-    list.map((row) => {
-      return arr.push(row.unit.unitName);
+    chatEmpList.map((row) => {
+      return unitname.push(row.unit.unitName);
     });
 
-    const array = arr.filter((row, index) => {
-      return arr.indexOf(row) === index;
+    const array = unitname.filter((row, index) => {
+      return unitname.indexOf(row) === index;
     });
 
     return setCUList(array);
@@ -39,7 +43,7 @@ function ChatEmpList({ invite, setInvite }) {
           getEmpListInSameUnit(empId, setCEList);
         } else {
           setCUList(chatEmpList.unit);
-          returnArr(chatEmpList, setCUList);
+          returnUnit(chatEmpList, setCUList);
         }
       }
     }
@@ -54,6 +58,7 @@ function ChatEmpList({ invite, setInvite }) {
     }
   };
 
+  //사원 미선택 시 알림창
   const eventClickHandle = () => {
     if (invite.length === 0) {
       alert('사원을 선택해주세요!!');
@@ -101,9 +106,6 @@ function ChatEmpList({ invite, setInvite }) {
                         if (ce.unit.unitName === cu) {
                           return (
                             <div key={index} className={styles.fontlist}>
-                              {/* <img src={ce.photo} alt="사원 이미지" /> */}
-                              {/* <div className={styles.liststyle}> */}
-                              {/* <div className={styles.li}> */}
                               {ce.empName} {ce.position}
                               <Checkbox
                                 type="checkbox"
@@ -112,7 +114,6 @@ function ChatEmpList({ invite, setInvite }) {
                                 }}
                                 checked={invite.includes(ce) ? true : false}
                               />
-                              {/* <span>{ce.position}</span> */}
                             </div>
                           );
                         }
