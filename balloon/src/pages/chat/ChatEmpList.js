@@ -32,6 +32,7 @@ function ChatEmpList({ invite, setInvite }) {
 
   // 사원list 출력하기
   useEffect(() => {
+    setInvite([]);
     if (!!empId) {
       if (chatUnitList.length === 0) {
         if (chatEmpList.length === 0) {
@@ -118,7 +119,7 @@ function ChatEmpList({ invite, setInvite }) {
                       })}
                     </div>
                   );
-              })}
+                })}
             </div>
           </div>
         </div>
