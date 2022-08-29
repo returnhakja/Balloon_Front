@@ -15,11 +15,12 @@ function Home({ empInfo, setEmpInfo, logout, isLogin }) {
         logout={logout}
         isLogin={isLogin}
       />
+      <div className={styles.Icon}>
+        <Fab color="secondary" aria-label="add">
+          <AddIcon />
+        </Fab>
+      </div>
       <Outlet context={[empInfo]} />
-
-      <Fab color="primary" aria-label="add" className={styles.Icon}>
-        <AddIcon />
-      </Fab>
 
       <Footer />
     </>
