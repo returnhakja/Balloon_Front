@@ -162,7 +162,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
   //chatroomEmployee T에 새로운 값넣고 채팅보내는 부분
   const onSchUserInvite = (add, invitepeople) => {
-    console.log(add);
+    console.log(add.chatroomId);
     add.map((ad, index) => {
       axios
         .post(
@@ -293,7 +293,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
                   <input
                     type="checkbox"
                     onChange={(e) => {
-                      console.log(e);
                       onInviteSchedule(e.currentTarget.checked, emp.empId);
                     }}
                     checked={inviteSchedule.includes(emp.empId) ? true : false}

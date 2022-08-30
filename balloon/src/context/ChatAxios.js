@@ -78,8 +78,10 @@ export const botChatroom = async (inviteSchedule, setBotRoom) => {
 };
 
 // 채팅방인원이 2명인 정보 가져오기
-export const onAllChatEmp = async (setAllChatEmp) => {
-  axios.get('/cre/allchatemp').then((response) => setAllChatEmp(response.data));
+export const onAllChatEmp = async (setAllChatEmp, empId) => {
+  axios
+    .get(`/cre/allchatemp/${empId}`)
+    .then((response) => setAllChatEmp(response.data));
 };
 
 //////////////////////////////////////////////////////

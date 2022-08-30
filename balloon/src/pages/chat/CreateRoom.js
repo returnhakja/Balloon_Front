@@ -24,6 +24,7 @@ const styleBox = {
 function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
   const inputRef = useRef();
   const [empInfo] = useOutletContext();
+  const empId = empInfo.empId;
   const [allChatEmp, setAllChatEmp] = useState([]);
   // socket
   const sock = new SockJS('http://localhost:8080/chatstart');
@@ -53,17 +54,18 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
 
   //headCount가 2인 chatroomEmployee T 정보 가져옴
   useEffect(() => {
-    onAllChatEmp(setAllChatEmp);
+    onAllChatEmp(setAllChatEmp, empId);
   }, []);
 
   //onAllChatEmp에서 로그인한 사원의 정보를 뺌
-  let allChatEmpId = [];
-  allChatEmpId = allChatEmp.filter((emp) => emp.empId.empId !== empInfo.empId);
+  // let allChatEmpId = [];
+  // allChatEmpId = allChatEmp.filter((emp) => emp.empId.empId);
+  // console.log(allChatEmpId);
 
   //1:1채팅일 때 이미있는 채팅방 예외처리
-  const checkChatEmp = (allChatEmpId, alreadyInvite) => {
+  const checkChatEmp = (allChatEmp, alreadyInvite) => {
     let check = true;
-    allChatEmpId.map((id) => {
+    allChatEmp.map((id) => {
       if (id.empId.empId == alreadyInvite) {
         alert('이미 있는 채팅방입니다');
         check = false;
@@ -83,7 +85,7 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
         alert('채팅방 이름을 입력해주세요!!');
       } else {
         if (alreadyInvite.length === 1) {
-          const check = checkChatEmp(allChatEmpId, alreadyInvite[0]);
+          const check = checkChatEmp(allChatEmp, alreadyInvite[0]);
           check &&
             onCreateChatroom(
               empInfo,
