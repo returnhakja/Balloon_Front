@@ -17,12 +17,14 @@ function UnitUpdate({ unitCode, openUpdate, setOpenUpdate }) {
     const bell = document.getElementById('bell').value;
     const parentUnit = document.getElementById('parentUnit').value;
 
-    const updatedata = {
+    const updateData = {
       unitCode: unitCode,
       unitName: unitName,
       bell: bell,
       parentUnit: { unitCode: parentUnit },
     };
+
+    console.log(updateData);
   };
 
   useEffect(() => {
@@ -69,14 +71,14 @@ function UnitUpdate({ unitCode, openUpdate, setOpenUpdate }) {
           sx={{ mb: 2, mt: 2 }}>
           조직 이름
         </Typography>
-        <TextField
+        <input
           id="unitName"
           // label="시작일"
-          type="datetime-local"
+          // type="datetime-local"
           defaultValue={unit.unitName}
           // value="테스트"
           sx={{ width: 250 }}
-          inputProps={{ readOnly: true }}
+          // inputProps={{ readOnly: true }}
         />
         <Typography
           id="modal-modal-title"
@@ -88,11 +90,11 @@ function UnitUpdate({ unitCode, openUpdate, setOpenUpdate }) {
         <TextField
           id="bell"
           // label="끝나는 일"
-          type="datetime-local"
+          // type="datetime-local"
           // defaultValue={endvalue}
           value="051-111-1111"
           sx={{ width: 250 }}
-          inputProps={{ readOnly: true }}
+          // inputProps={{ readOnly: true }}
         />
 
         <Typography
@@ -117,7 +119,7 @@ function UnitUpdate({ unitCode, openUpdate, setOpenUpdate }) {
         {/* 채팅방만드는 부분 */}
         <Button
           onClick={() => {
-            // updateHandle();
+            updateHandle();
           }}
           sx={{ fontSize: 30, border: 1, mt: 1 }}>
           수정
