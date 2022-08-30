@@ -101,6 +101,7 @@ export default function CECopy({ open, setOpen, empInfo }) {
                       setopenCreatChat={setopenCreatChat}
                       empInfo={empInfo}
                       setChatStatus={setChatStatus}
+                      setInvite={setInvite}
                     />
                   )}
                 </Grid>

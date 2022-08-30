@@ -94,7 +94,7 @@ export default function Test({ open, setOpen, empInfo }) {
             {chatStatus === 'chatEmpList' ? (
               <CECopy open={open} setOpen={setOpen} empInfo={empInfo} />
             ) : chatStatus === 'chatList' ? (
-              <CRMCopy empInfo={empInfo} />
+              <CRMCopy empInfo={empInfo} setChatStatus={setChatStatus} />
             ) : chatStatus === 'chatNotice' ? (
               <CNCopy setChatStatus={setChatStatus} empInfo={empInfo} />
             ) : (

@@ -13,7 +13,14 @@ import styles from '../../css/chat/Chat.module.css';
 import { Checkbox } from '@mui/material';
 import { Box, Button, Modal } from '@mui/material';
 
-function InviteEmpCopy({ style, modalOpen, setModalOpen, setChatempinfo }) {
+function InviteEmpCopy({
+  style,
+  modalOpen,
+  setModalOpen,
+  setChatempinfo,
+  empInfo,
+  chatroomId,
+}) {
   const [chatEmpList, setCEList] = useState([]);
   const [chatUnitList, setCUList] = useState([]);
   const [newInvite, setNewInvite] = useState([]);
@@ -24,8 +31,6 @@ function InviteEmpCopy({ style, modalOpen, setModalOpen, setChatempinfo }) {
   const [headCount, setHeadCount] = useState(0);
   // const [chatempinfo, setChatempinfo] = useState([]);
   const [chatAddEmpInfo, setChatAddEmpInfo] = useState([]);
-  const chatroomId = new URL(document.location).searchParams.get('room');
-  const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
 
   // socket

@@ -69,6 +69,7 @@ export const onUserInvite = async (chatroomId, invite, client) => {
       )
       .catch((error) => console.log(error));
 };
+
 //채팅방 만들기
 export const onCreateChatroom2 = async (
   empInfo,
@@ -87,7 +88,6 @@ export const onCreateChatroom2 = async (
       onUserInvite(response.data, invite, client);
 
       setChatStatus('chatList');
-      // window.location.href = `/chatting?room=${response.data}`;
     })
     .catch((error) => console.log(error));
 };
@@ -121,19 +121,11 @@ export const onUserInvite2 = async (chatroomId, invite, client) => {
       .catch((error) => console.log(error));
 };
 
-// 일정봇과 채팅 보내기
-
 // 이미 일정봇과 채팅이 존재하는 사원 찾기
 export const botChatroom = async (inviteSchedule, setBotRoom) => {
   axios.post(`/cre/botchatroom`, inviteSchedule).then((response) => {
-    console.log(response.data);
     setBotRoom(response.data);
   });
-};
-
-// 채팅방인원이 2명인 정보 가져오기
-export const onAllChatEmp = async (setAllChatEmp) => {
-  axios.get('/cre/allchatemp').then((response) => setAllChatEmp(response.data));
 };
 
 //////////////////////////////////////////////////////

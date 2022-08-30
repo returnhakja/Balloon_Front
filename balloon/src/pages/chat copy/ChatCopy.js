@@ -32,7 +32,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
-function ChatCopy({ empInfo, roomId }) {
+function ChatCopy({ empInfo, roomId, setChatStatus }) {
   // const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
   const chatroomId = roomId;
@@ -149,6 +149,12 @@ function ChatCopy({ empInfo, roomId }) {
     }
   };
 
+  const roomExit = () => {
+    onExitRoom(chatroomId, empId, sendExit(client, chatroomId, empInfo));
+    onHCupdate(chatroomId, chatroomName, headCount);
+    setChatStatus('chatEmpList');
+  };
+
   //////////////////////////////////////////////////
   // 채팅내용 검색 - 지우지마세요!!!!!!!!!!!!! 추후구현
   // const [chatSearch, setChatSearch] = useState('');
@@ -239,7 +245,7 @@ function ChatCopy({ empInfo, roomId }) {
                 </List>
               );
             })}
-          {/* 채팅방 나가기 */}
+          {/* 채팅방 추가 */}
           <div className={styles.logoutBtn}>
             <Button
               onClick={() => {
@@ -248,15 +254,11 @@ function ChatCopy({ empInfo, roomId }) {
               <PersonAddAlt1Icon />
             </Button>
 
+            {/* 채팅방 나가기 */}
             <Button
-              onClick={() => (
-                onExitRoom(
-                  chatroomId,
-                  empId,
-                  sendExit(client, chatroomId, empInfo)
-                ),
-                onHCupdate(chatroomId, chatroomName, headCount)
-              )}>
+              onClick={() => {
+                roomExit();
+              }}>
               <LogoutIcon />
             </Button>
           </div>
@@ -269,6 +271,8 @@ function ChatCopy({ empInfo, roomId }) {
           modalOpen={modalOpen}
           setModalOpen={setModalOpen}
           setChatempinfo={setChatempinfo}
+          empInfo={empInfo}
+          chatroomId={chatroomId}
         />
       )}
       <ScrollToBottom className={styles.scrollbar} id="scroller">

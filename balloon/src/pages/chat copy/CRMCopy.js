@@ -11,7 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Container } from '@mui/system';
 import ChatCopy from './ChatCopy';
 
-function CRMCopy({ empInfo }) {
+function CRMCopy({ empInfo, setChatStatus }) {
   const [chatroom, setChatroom] = useState([]);
   const empId = empInfo.empId;
   const sock = new SockJS('http://localhost:8080/chatstart');
@@ -27,6 +27,7 @@ function CRMCopy({ empInfo }) {
 
   useEffect(() => {}, [roomId]);
 
+  // console.log(chatStatus);
   return (
     <div className={styles.listroom}>
       {roomId === 0 ? (
@@ -81,6 +82,7 @@ function CRMCopy({ empInfo }) {
                                 chat.chatroom.headCount
                               )
                             );
+                            setChatStatus('chatEmpList');
                           };
 
                           return roomDelete();
@@ -114,7 +116,11 @@ function CRMCopy({ empInfo }) {
           </div>
         </>
       ) : (
-        <ChatCopy empInfo={empInfo} roomId={roomId} />
+        <ChatCopy
+          empInfo={empInfo}
+          roomId={roomId}
+          setChatStatus={setChatStatus}
+        />
       )}
     </div>
   );
