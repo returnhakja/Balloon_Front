@@ -30,7 +30,7 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
   const client = Stomp.over(sock);
 
   client.connect({}, () => {
-    client.subscribe(`/topic/message`, (data) => {
+    client.subscribe(`/topic/message`, () => {
       disconnect();
     });
   });
@@ -44,7 +44,6 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
       eventChatHandle();
     }
   };
-
 
   //초대할 사원
   const alreadyInvite = [];
@@ -72,7 +71,6 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     });
     return check;
   };
-
 
   //채팅방이름 공백처리
   //1:1채팅일 때 이미있는 채팅방 예외처리
@@ -108,7 +106,6 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
       alert('채팅방 이름을 입력해주세요!!');
     }
   };
-
 
   //채팅방모달
   const handleClose = () => setopenCreatChat(false);

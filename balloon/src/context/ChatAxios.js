@@ -73,7 +73,6 @@ export const onUserInvite = async (chatroomId, invite, client) => {
 // 이미 일정봇과 채팅이 존재하는 사원 찾기
 export const botChatroom = async (inviteSchedule, setBotRoom) => {
   axios.post(`/cre/botchatroom`, inviteSchedule).then((response) => {
-    console.log(response.data);
     setBotRoom(response.data);
   });
 };
