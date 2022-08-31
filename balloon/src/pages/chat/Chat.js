@@ -117,7 +117,7 @@ function Chat() {
   //chatroom에 들어갔을 때 기록남게
   useEffect(() => {
     empIdInfo(chatroomId, setChatempinfo);
-    chatRecord(chatroomId, setChatting);
+    chatRecord(chatroomId, setChatting, empId);
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
   }, [input]);
 

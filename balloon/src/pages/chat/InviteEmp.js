@@ -12,6 +12,7 @@ import {
 import styles from '../../css/chat/Chat.module.css';
 import { Checkbox } from '@mui/material';
 import { Box, Button, Modal } from '@mui/material';
+import moment from 'moment';
 
 function InviteEmp({ style, modalOpen, setModalOpen }) {
   const [chatEmpList, setCEList] = useState([]);
@@ -40,6 +41,12 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
   const disconnect = () => {
     client.disconnect();
   };
+
+  //채팅방 입장시간
+  const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
+  let data = 'T';
+  let inTime = [nowTime.slice(0, 10), data, nowTime.slice(10)].join('');
+  let inTime2 = inTime.replace(/(\s*)/g, '');
 
   ////////////////////////////////////////////////////////////
   //이미 채팅방에 초대 된 사원들 -> existEmp
@@ -132,7 +139,7 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
         <Button
           variant="contained"
           onClick={() => (
-            onUserInvite(chatroomId, newInvite, client),
+            onUserInvite(chatroomId, newInvite, client, inTime2),
             onHCInvite(chatroomId, chatroomName, headCount, newInvite),
             closemodal()
           )}>

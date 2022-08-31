@@ -1,4 +1,11 @@
 import axios from 'axios';
+import moment from 'moment';
+
+//채팅방 입장시간
+const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
+let data = 'T';
+let inTime = [nowTime.slice(0, 10), data, nowTime.slice(10)].join('');
+let inTime2 = inTime.replace(/(\s*)/g, '');
 
 //ChatRoom.js
 //마지막으로 보낸 채팅list가져오기
@@ -11,7 +18,7 @@ export const onChatroom = async (setChatroom, empId) => {
     .catch((error) => console.log(error));
 };
 
-//채팅방 삭제
+//headCount가 0일 때 채팅방 삭제
 export const onDeleteRoom = async (chatroomId) => {
   axios
     .delete(`/chatroom/deletechatroom/${chatroomId}`)
@@ -34,7 +41,7 @@ export const onCreateChatroom = async (
       headCount: invite.length,
     })
     .then((response) => {
-      onUserInvite(response.data, invite, client);
+      onUserInvite(response.data, invite, client, inTime2);
 
       window.location.href = `/chatting?room=${response.data}`;
     })
@@ -42,7 +49,8 @@ export const onCreateChatroom = async (
 };
 
 //chatroomEmployee T에 초대할 사람과 초대한 사람 넣어주기
-export const onUserInvite = async (chatroomId, invite, client) => {
+export const onUserInvite = async (chatroomId, invite, client, inTime2) => {
+  console.log(inTime2);
   invite &&
     axios
       .post(
@@ -56,6 +64,7 @@ export const onUserInvite = async (chatroomId, invite, client) => {
                 chatroomId: chatroomId,
                 writer: data,
                 chatContent: data.empName + '님이 입장하셨습니다',
+                inTime: inTime2,
               })
             );
           };
@@ -97,9 +106,9 @@ export const empIdInfo = async (chatroomId, setChatempinfo) => {
 };
 
 //이전에 채팅했던 기록보이게
-export const chatRecord = async (chatroomId, setChatting) => {
+export const chatRecord = async (chatroomId, setChatting, empId) => {
   axios
-    .get(`/chat/chatrecord/${chatroomId}`)
+    .get(`/chat/chatrecord/${chatroomId}/${empId}`)
     .then((response) => {
       setChatting(response.data);
     })
