@@ -1,11 +1,4 @@
 import axios from 'axios';
-import moment from 'moment';
-
-//채팅방 입장시간
-const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
-let data = 'T';
-let inTime = [nowTime.slice(0, 10), data, nowTime.slice(10)].join('');
-let inTime2 = inTime.replace(/(\s*)/g, '');
 
 //ChatRoom.js
 //마지막으로 보낸 채팅list가져오기
@@ -41,7 +34,7 @@ export const onCreateChatroom = async (
       headCount: invite.length,
     })
     .then((response) => {
-      onUserInvite(response.data, invite, client, inTime2);
+      onUserInvite(response.data, invite, client);
 
       window.location.href = `/chatting?room=${response.data}`;
     })
@@ -49,8 +42,7 @@ export const onCreateChatroom = async (
 };
 
 //chatroomEmployee T에 초대할 사람과 초대한 사람 넣어주기
-export const onUserInvite = async (chatroomId, invite, client, inTime2) => {
-  console.log(inTime2);
+export const onUserInvite = async (chatroomId, invite, client) => {
   invite &&
     axios
       .post(
@@ -64,7 +56,6 @@ export const onUserInvite = async (chatroomId, invite, client, inTime2) => {
                 chatroomId: chatroomId,
                 writer: data,
                 chatContent: data.empName + '님이 입장하셨습니다',
-                inTime: inTime2,
               })
             );
           };

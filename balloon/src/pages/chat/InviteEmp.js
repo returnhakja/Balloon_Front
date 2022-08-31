@@ -42,12 +42,6 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
     client.disconnect();
   };
 
-  //채팅방 입장시간
-  const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
-  let data = 'T';
-  let inTime = [nowTime.slice(0, 10), data, nowTime.slice(10)].join('');
-  let inTime2 = inTime.replace(/(\s*)/g, '');
-
   ////////////////////////////////////////////////////////////
   //이미 채팅방에 초대 된 사원들 -> existEmp
   const existEmp = [];
@@ -139,7 +133,7 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
         <Button
           variant="contained"
           onClick={() => (
-            onUserInvite(chatroomId, newInvite, client, inTime2),
+            onUserInvite(chatroomId, newInvite, client),
             onHCInvite(chatroomId, chatroomName, headCount, newInvite),
             closemodal()
           )}>
