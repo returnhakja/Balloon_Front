@@ -26,7 +26,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
   const handleClose = () => {
     setOpenInsert(false);
-    // window.location.href = '/calendar';
   };
 
   //사원추가 모달을 위한 open
@@ -129,6 +128,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   });
   console.log(botroomExist);
   console.log(botroomId);
+  console.log(inviteSchedule);
 
   //새로운 채팅방이 생성되어야할 사람들
   let invitepeople;
@@ -155,11 +155,11 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
   //chatroomEmployee T에 새로운 값넣고 채팅보내는 부분
   const onSchUserInvite = (add, invitepeople) => {
+    console.log(add.chatroomId);
     add.map((ad, index) => {
       axios
         .post(
           `/cre/insertchatemp/${ad.chatroomId}`,
-
           [
             {
               empId: {

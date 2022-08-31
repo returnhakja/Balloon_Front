@@ -1,20 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
-import ScrollToBottom from 'react-scroll-to-bottom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import ChatSide from './ChatSide';
-import InviteEmp from './InviteEmp';
-import { sendExit } from '../../utils/ChatUtils';
-import {
-  chatRecord,
-  chatroomInfo,
-  empIdInfo,
-  onExitRoom,
-  onHCupdate,
-  onUserUpdate,
-} from '../../context/ChatAxios';
 import styles from '../../css/chat/Chat.module.css';
+import { Link, useOutletContext, useParams } from 'react-router-dom';
+import ScrollToBottom from 'react-scroll-to-bottom';
+import SendIcon from '@mui/icons-material/Send';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 import {
   Button,
   Collapse,
@@ -25,13 +17,25 @@ import {
   ListItemText,
 } from '@mui/material';
 import { TextField } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
-import LogoutIcon from '@mui/icons-material/Logout';
+import {
+  chatRecord,
+  chatroomInfo,
+  empIdInfo,
+  onExitRoom,
+  onHCupdate,
+  onUserUpdate,
+} from '../../context/ChatAxios';
+
+import { sendExit } from '../../utils/ChatUtils';
+
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+
+import ChatSide from './ChatSide';
+import InviteEmp from './InviteEmp';
 
 function Chat() {
   const [empInfo] = useOutletContext();
@@ -41,15 +45,30 @@ function Chat() {
   const inputRef = useRef();
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
+  const [modalOpen, setModalOpen] = useState(false);
+  //채팅방 채팅기록
+  const [chatting, setChatting] = useState([]);
 
-  //채팅방 사람 확인 state
+  //채팅중인 사람 확인 state
   const [open, setOpen] = useState(false);
+
+  //채팅방 정보 불러오기
+  const [chatroomName, setChatroomName] = useState('');
+  const [headCount, setHeadCount] = useState(0);
+
+  //chatroomEmployee T에 chatroomId로 사원정보 가져오기
+  //채팅방에 어떤사람이 남아있는지 알려주기 위해서
+  const [chatempinfo, setChatempinfo] = useState([]);
+
+  // 채팅방 이름 바꾸기
+  const [chatRoomTitle, setChatRoomTitle] = useState(chatroomName);
+  const [clickChk, setClickChk] = useState(0);
 
   const handleClick = () => {
     setOpen(!open);
   };
 
-  const styleBox = {
+  const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -65,9 +84,7 @@ function Chat() {
   client.connect({}, () => {
     client.subscribe(`/topic/message`, (data) => {
       const chat = JSON.parse(data.body);
-      console.log(chat);
       setInput([...input, chat]);
-      console.log(...input);
       disconnect();
     });
   });
@@ -77,7 +94,7 @@ function Chat() {
   };
 
   const send = () => {
-    if (inputRef.current.value.trim() !== '') {
+    if (inputRef.current.value.trim() != '')
       client.send(
         '/app/chat/message',
         {},
@@ -87,52 +104,31 @@ function Chat() {
           chatContent: inputRef.current.value,
         })
       );
+  };
+
+  //엔터키
+  const onKeyPress = (e) => {
+    if (e.key == 'Enter') {
+      send();
+      inputRef.current.value = '';
     }
   };
 
-  //채팅방 채팅기록
-  const [chatting, setChatting] = useState([]);
-
-  //채팅방 정보 불러오기
-  const [chatroomName, setChatroomName] = useState('');
-  const [headCount, setHeadCount] = useState(0);
-
-  //chatroomEmployee T에 chatroomId로 사원정보 가져오기
-  //채팅방에 어떤사람이 남아있는지 알려주기 위해서
-  const [chatempinfo, setChatempinfo] = useState([]);
-
-  const [modalOpen, setModalOpen] = useState(false);
-
-  // 채팅방 이름 바꾸기
-  const [chatRoomTitle, setChatRoomTitle] = useState(chatroomName);
-  const [clickChk, setClickChk] = useState(0);
-
+  //chatroom에 들어갔을 때 기록남게
   useEffect(() => {
-    if (!!chatroomId) {
-      empIdInfo(chatroomId, setChatempinfo);
-    }
-    //chatroom에 들어갔을 때 기록남게
-    chatRecord(chatroomId, setChatting);
+    empIdInfo(chatroomId, setChatempinfo);
+    chatRecord(chatroomId, setChatting, empId);
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
-  }, [chatroomId, input]);
+  }, [input]);
 
-  useEffect(() => {
-    setChatRoomTitle(chatroomName);
-  }, [chatroomName]);
-
-  useEffect(() => {
-    setClickChk(clickChk);
-  }, [clickChk]);
-
-  useEffect(() => {
-    if (chatempinfo.length !== 0) {
-      // empIdInfo(chatroomId, setChatempinfo);
-    }
-  }, [chatempinfo]);
-
+  //채팅방 이름수정
   const onChangeTitle = (event) => {
     setChatRoomTitle(event.target.value);
   };
+  useEffect(() => {
+    setChatRoomTitle(chatroomName);
+    setClickChk(clickChk);
+  }, [chatroomName, clickChk]);
 
   const onClickChatRoomTitle = () => {
     setClickChk(clickChk + 1);
@@ -142,11 +138,10 @@ function Chat() {
     }
   };
 
-  //엔터키
-  const chatEnter = (e) => {
-    if (e.key === 'Enter') {
-      send();
-      inputRef.current.value = '';
+  const keyEnter = (e) => {
+    if (e.key == 'Enter') {
+      setClickChk(0);
+      onChangeTitle();
     }
   };
 
@@ -180,6 +175,7 @@ function Chat() {
                   maxRows={4}
                   value={chatRoomTitle}
                   onChange={onChangeTitle}
+                  onKeyPress={keyEnter}
                   onClick={onClickChatRoomTitle}
                 />
                 {clickChk == 2 ? (
@@ -197,7 +193,7 @@ function Chat() {
               </div>
             ) : (
               <h5 className=" mb-2 font-weight-bold text-gray-dark">
-                {chatRoomTitle}{' '}
+                {chatRoomTitle}
               </h5>
             )}
           </div>
@@ -239,12 +235,6 @@ function Chat() {
                 })}
               {/* 채팅방 나가기 */}
               <div className={styles.logoutBtn}>
-                <Button
-                  onClick={() => {
-                    setModalOpen(true);
-                  }}>
-                  <PersonAddAlt1Icon />
-                </Button>
                 <Link to={'/chatlist'}>
                   <Button
                     onClick={() => (
@@ -261,13 +251,18 @@ function Chat() {
               </div>
             </Collapse>
           </List>
-
+          {/* 사원추가 */}
+          <Button
+            onClick={() => {
+              setModalOpen(true);
+            }}>
+            <PersonAddAlt1Icon />
+          </Button>
           {modalOpen && (
             <InviteEmp
-              style={styleBox}
+              style={style}
               modalOpen={modalOpen}
               setModalOpen={setModalOpen}
-              setChatempinfo={setChatempinfo}
             />
           )}
           <ScrollToBottom className={styles.scrollbar} id="scroller">
@@ -306,7 +301,7 @@ function Chat() {
               <input
                 className={styles.inputform}
                 ref={inputRef}
-                onKeyPress={chatEnter}
+                onKeyPress={onKeyPress}
                 placeholder="메시지를 입력하세요"
               />
 
