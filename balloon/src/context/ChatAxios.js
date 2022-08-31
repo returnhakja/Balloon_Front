@@ -11,7 +11,7 @@ export const onChatroom = async (setChatroom, empId) => {
     .catch((error) => console.log(error));
 };
 
-//채팅방 삭제
+//headCount가 0일 때 채팅방 삭제
 export const onDeleteRoom = async (chatroomId) => {
   axios
     .delete(`/chatroom/deletechatroom/${chatroomId}`)
@@ -97,9 +97,9 @@ export const empIdInfo = async (chatroomId, setChatempinfo) => {
 };
 
 //이전에 채팅했던 기록보이게
-export const chatRecord = async (chatroomId, setChatting) => {
+export const chatRecord = async (chatroomId, setChatting, empId) => {
   axios
-    .get(`/chat/chatrecord/${chatroomId}`)
+    .get(`/chat/chatrecord/${chatroomId}/${empId}`)
     .then((response) => {
       setChatting(response.data);
     })

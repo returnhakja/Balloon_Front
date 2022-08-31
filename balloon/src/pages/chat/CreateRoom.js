@@ -7,6 +7,7 @@ import styles from '../../css/chat/Chat.module.css';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import { Box, Modal } from '@mui/material';
+import moment from 'moment';
 
 const styleBox = {
   position: 'absolute',
@@ -29,6 +30,10 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
   // socket
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
+
+  //moment
+  const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
+  console.log(nowTime);
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, () => {
@@ -56,11 +61,6 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
   useEffect(() => {
     onAllChatEmp(setAllChatEmp, empId);
   }, []);
-
-  //onAllChatEmp에서 로그인한 사원의 정보를 뺌
-  // let allChatEmpId = [];
-  // allChatEmpId = allChatEmp.filter((emp) => emp.empId.empId);
-  // console.log(allChatEmpId);
 
   //1:1채팅일 때 이미있는 채팅방 예외처리
   const checkChatEmp = (allChatEmp, alreadyInvite) => {
