@@ -37,6 +37,8 @@ import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import ChatSide from './ChatSide';
 import InviteEmp from './InviteEmp';
 
+// const sock = new SockJS('http://localhost:8080/chatstart');
+// const client = Stomp.over(sock);
 function Chat() {
   const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
@@ -68,6 +70,8 @@ function Chat() {
     setOpen(!open);
   };
 
+  console.log(input);
+
   const style = {
     position: 'absolute',
     top: '50%',
@@ -83,6 +87,7 @@ function Chat() {
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, (data) => {
+      console.log(data);
       const chat = JSON.parse(data.body);
       setInput([...input, chat]);
       disconnect();
@@ -269,15 +274,17 @@ function Chat() {
             {/* 채팅기록을 가져옴 */}
             {chatting.map((msg, index) => {
               const chatTime = msg.chatTime.substr(11, 5);
-              return (
-                <div key={index}>
-                  {msg.employee.empId === empInfo.empId ? (
-                    <div className={styles.message}>
-                      <div className={styles.mytime}>{chatTime}</div>
-                      <div className={styles.mycontent}>{msg.chatContent}</div>
-                    </div>
-                  ) : (
-                    <div>
+              if (msg.status === 1) {
+                return (
+                  <div key={index}>
+                    {msg.employee.empId === empInfo.empId ? (
+                      <div className={styles.message}>
+                        <div className={styles.mytime}>{chatTime}</div>
+                        <div className={styles.mycontent}>
+                          {msg.chatContent}
+                        </div>
+                      </div>
+                    ) : (
                       <div className={styles.othermessage}>
                         <div>{msg.employee.empName}</div>
                         <div className={styles.contentContan}>
@@ -287,16 +294,34 @@ function Chat() {
                           <div className={styles.time}>{chatTime}</div>
                         </div>
                       </div>
+                    )}
+                  </div>
+                );
+              } else if (msg.status === 2) {
+                const scheduleContent = JSON.parse(msg.chatContent);
+                let startValue = scheduleContent.Startvalue.replace('T', ' ');
+                let endValue = scheduleContent.endvalue.replace('T', ' ');
+                return (
+                  <>
+                    <div key={index} className={styles.othermessage}>
+                      <div>{msg.employee.empName}</div>
+                      <div className={styles.scheduleContent}>
+                        <div>일정제목 : {scheduleContent.scheduletitle}</div>
+                        <div>일정내용 : {scheduleContent.CalendarContent}</div>
+                        <div>장소 : {scheduleContent.CalendarLocation}</div>
+                        <div>시작일자 : {startValue}</div>
+                        <div>종료일자 : {endValue}</div>
+                      </div>
+                      <div className={styles.time}>{chatTime}</div>
                     </div>
-                  )}
-                </div>
-              );
+                  </>
+                );
+              }
             })}
           </ScrollToBottom>
 
           <div className={styles.scroll}>
             <div className={styles.contain}></div>
-
             <div className={styles.inputmain}>
               <input
                 className={styles.inputform}

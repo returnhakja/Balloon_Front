@@ -1,4 +1,10 @@
 import axios from 'axios';
+import moment from 'moment';
+//채팅방 입장시간
+const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
+let data = 'T';
+let inTime = [nowTime.slice(0, 10), data, nowTime.slice(10)].join('');
+let inTime2 = inTime.replace(/(\s*)/g, '');
 
 //ChatRoom.js
 //마지막으로 보낸 채팅list가져오기
@@ -64,6 +70,7 @@ export const onUserInvite = async (chatroomId, invite, client) => {
             empId: {
               empId: data.empId,
             },
+            inTime: inTime2,
           };
         })
       )
