@@ -14,7 +14,7 @@ const Input = ({ label, register, required }) => (
 const Select = React.forwardRef(({ onChange, name, label, higher }, ref) => (
   <>
     <label className={styles.label}>{label}</label>
-    <select name={name} ref={ref} onChange={onChange}>
+    <select className={styles.input} name={name} ref={ref} onChange={onChange}>
       {higher.length !== 0 &&
         higher.map((data, index) => (
           <option key={index} value={data.unitCode}>

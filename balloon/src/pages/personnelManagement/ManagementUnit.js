@@ -10,8 +10,6 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Delete from '@mui/icons-material/Delete';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import QueueIcon from '@mui/icons-material/Queue';
-import Test from '../chat copy/Test';
-import Test1 from './Test1';
 
 function ManagementUnit() {
   const [unitList, setUnitList] = useState([]);
@@ -65,7 +63,7 @@ function ManagementUnit() {
     }
   }, [unitList, rowData, updateChk, deleteChk]);
 
-  console.log(rowData);
+  // console.log(rowData);
 
   function GetParentUnit(data) {
     return data.row.parentUnit ? data.row.parentUnit.id : data.row.parentUnit;
@@ -151,7 +149,11 @@ function ManagementUnit() {
           />
         </Box>
         {open && (
-          <Test1 open={open} setOpen={setOpen} unitCode={rowData.unitCode} />
+          <UnitUpdate
+            open={open}
+            setOpen={setOpen}
+            unitCode={rowData.unitCode}
+          />
         )}
       </Container>
     </div>
