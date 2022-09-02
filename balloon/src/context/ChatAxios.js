@@ -77,6 +77,58 @@ export const onUserInvite = async (chatroomId, invite, client) => {
       .catch((error) => console.log(error));
 };
 
+
+//채팅방 만들기
+export const onCreateChatroom2 = async (
+  empInfo,
+  invite,
+  chatroomName,
+  client,
+  setChatStatus
+) => {
+  invite.push(empInfo);
+  axios
+    .post('/chatroom/createchatroom', {
+      chatroomName: chatroomName.value,
+      headCount: invite.length,
+    })
+    .then((response) => {
+      onUserInvite(response.data, invite, client);
+
+      setChatStatus('chatList');
+    })
+    .catch((error) => console.log(error));
+};
+
+//chatroomEmployee T에 초대할 사람과 초대한 사람 넣어주기
+export const onUserInvite2 = async (chatroomId, invite, client) => {
+  invite &&
+    axios
+      .post(
+        `/cre/insertchatemp/${chatroomId}`,
+        invite.map((data) => {
+          const inviteEnter = () => {
+            client.send(
+              '/app/chat/message',
+              {},
+              JSON.stringify({
+                chatroomId: chatroomId,
+                writer: data,
+                chatContent: data.empName + '님이 입장하셨습니다',
+              })
+            );
+          };
+          inviteEnter();
+          return {
+            empId: {
+              empId: data.empId,
+            },
+          };
+        })
+      )
+      .catch((error) => console.log(error));
+};
+
 // 이미 일정봇과 채팅이 존재하는 사원 찾기
 export const botChatroom = async (inviteSchedule, setBotRoom) => {
   axios.post(`/cre/botchatroom`, inviteSchedule).then((response) => {

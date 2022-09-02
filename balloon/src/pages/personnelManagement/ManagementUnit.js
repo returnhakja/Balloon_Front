@@ -20,14 +20,24 @@ function ManagementUnit() {
     state: false,
     unitCode: null,
   });
+  const [open, setOpen] = React.useState(false);
 
   const handleClick = (data) => {
     setRowData(data.row);
     console.log(data.row);
+    console.log(openUpdate);
   };
 
   const handleUpdate = (setUpdateChk) => {
-    updateCheck(setUpdateChk);
+    // updateCheck(setUpdateChk);
+    // setOpenUpdate(true);
+    // if (!!setUpdateChk) {
+    //   setOpenUpdate({
+    //     state: true,
+    //     setUpdateChk: setUpdateChk,
+    //   });
+    // }
+    setOpen(true);
   };
 
   const handleDelete = (setDeleteChk) => {
@@ -52,6 +62,8 @@ function ManagementUnit() {
       }
     }
   }, [unitList, rowData, updateChk, deleteChk]);
+
+  // console.log(rowData);
 
   function GetParentUnit(data) {
     return data.row.parentUnit ? data.row.parentUnit.id : data.row.parentUnit;
@@ -88,9 +100,10 @@ function ManagementUnit() {
           icon={<SettingsIcon />}
           label="update"
           onClick={() => {
-            handleUpdate(setUpdateChk);
+            handleUpdate();
           }}
         />,
+
         <GridActionsCellItem
           icon={<Delete />}
           label="Delete"
@@ -135,6 +148,13 @@ function ManagementUnit() {
             }}
           />
         </Box>
+        {open && (
+          <UnitUpdate
+            open={open}
+            setOpen={setOpen}
+            unitCode={rowData.unitCode}
+          />
+        )}
       </Container>
     </div>
   );

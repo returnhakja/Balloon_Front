@@ -306,17 +306,21 @@ export const insertSignupList = async (rows) => {
 
 // 로그인
 export const login = async (empId, password, authenticate) => {
+  const cookies = new Cookies();
   const header = { 'Content-Type': 'application/json' };
   const url = '/auth/login';
   const inputLogin = {
     empId: empId,
     password: password,
   };
-  const loggi = await axios.post(url, inputLogin, header).catch((error) => {});
+  const loggi = await axios.post(url, inputLogin, header).catch((error) => {
+    console.log(error);
+  });
 
   if (!!loggi) {
     authenticate();
   } else {
+    cookies.remove('JSESSIONID');
     alert('아이디 혹은 비밀번호가 틀립니다.');
   }
 };
@@ -324,8 +328,9 @@ export const login = async (empId, password, authenticate) => {
 // 로그아웃
 export const logoutFunc = (logout) => {
   const cookies = new Cookies();
-  logout();
   cookies.remove('accessToken');
+  cookies.remove('JSESSIONID');
+  logout();
   window.location.href = '/';
 };
 
