@@ -28,7 +28,7 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
 
   const chatroomId = new URL(document.location).searchParams.get('room');
 
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
 
   // socket
