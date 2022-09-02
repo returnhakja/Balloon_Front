@@ -159,7 +159,7 @@ function Calendar() {
             eventBackgroundColor={'black'}
             eventSourceSuccess={() => console.log('Success EventSource')}
             eventSourceFailure={() => console.log('Failure EventSource')}
-            dateClick={() => handleDateClick()}
+            dateClick={(e) => handleDateClick(e)}
             eventClick={(e) => handleEventClick(e)}
           />
         ) : (
