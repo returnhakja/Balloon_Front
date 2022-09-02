@@ -13,7 +13,7 @@ import {
   onHCupdate,
   onUserUpdate,
 } from '../../context/ChatAxios';
-import styles from '../../css/chat/Chat.module.css';
+import styles from '../../css/chat/ChatCopy.module.css';
 import {
   Button,
   Collapse,
