@@ -1,7 +1,7 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function (app) {
-   app.use(
+  app.use(
     '/api',
     createProxyMiddleware({
       // target: 'http://15.164.224.26:8080',
@@ -64,5 +64,5 @@ module.exports = function (app) {
       target: 'http://localhost:8080',
       changeOrigin: true,
     })
-  });
+  );
 };
