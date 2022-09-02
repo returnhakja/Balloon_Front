@@ -305,6 +305,17 @@
   list-style: none;
 }
 
+
+.scheduleContent {
+  background-color: rgb(249, 255, 205);
+  margin-right: 5px;
+  border-radius: 15px;
+  left: 0;
+  right: 0;
+  bottom: -16px;
+  word-break: break-all;
+}
+
 .EmpAddIcon {
   margin-left: 11.5%;
 }

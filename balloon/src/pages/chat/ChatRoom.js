@@ -11,13 +11,17 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Container } from '@mui/system';
 
+//socket
+const sock = new SockJS('http://localhost:8080/chatstart');
+const client = Stomp.over(sock);
+
 function ChatRoom() {
   const [chatroom, setChatroom] = useState([]);
   const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
   //socket
-  const sock = new SockJS('http://localhost:8080/chatstart');
-  const client = Stomp.over(sock);
+  // const sock = new SockJS('http://localhost:8080/chatstart');
+  // const client = Stomp.over(sock);
 
   //마지막으로 보낸 채팅list가져오기
   useEffect(() => {

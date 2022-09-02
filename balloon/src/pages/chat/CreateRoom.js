@@ -7,7 +7,6 @@ import styles from '../../css/chat/Chat.module.css';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import { Box, Modal } from '@mui/material';
-import moment from 'moment';
 
 const styleBox = {
   position: 'absolute',
@@ -22,18 +21,17 @@ const styleBox = {
   padding: 4,
 };
 
+const sock = new SockJS('http://localhost:8080/chatstart');
+const client = Stomp.over(sock);
+
 function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
   const inputRef = useRef();
   const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
   const [allChatEmp, setAllChatEmp] = useState([]);
   // socket
-  const sock = new SockJS('http://localhost:8080/chatstart');
-  const client = Stomp.over(sock);
-
-  //moment
-  const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
-  console.log(nowTime);
+  // const sock = new SockJS('http://localhost:8080/chatstart');
+  // const client = Stomp.over(sock);
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, () => {

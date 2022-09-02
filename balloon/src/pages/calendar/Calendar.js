@@ -58,7 +58,7 @@ function Calendar() {
     if (empInfo.length !== 0) {
       getScheduleByEmp(empInfo.empId, setList);
     }
-  }, [empInfo, openInsert]);
+  }, [empInfo]);
 
   useEffect(() => {}, [openInsert, openUpdate, list]);
 
