@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import CalendarInsertModal from './CalendarInsertModal';
 import { insertSchedulList } from '../../context/CalendarAxios';
 import {
   getEmpByEmpId,
@@ -11,6 +10,7 @@ import { botChatroom } from '../../context/ChatAxios';
 import styles from '../../css/Component.module.css';
 import { BsCalendarWeek } from 'react-icons/bs';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+
 import axios from 'axios';
 import moment from 'moment';
 //채팅방 입장시간
@@ -19,20 +19,11 @@ let data = 'T';
 let inTime = [nowTime.slice(0, 10), data, nowTime.slice(10)].join('');
 let inTime2 = inTime.replace(/(\s*)/g, '');
 
-// const sock = new SockJS('http://localhost:8080/chatstart');
-// const client = Stomp.over(sock);
+const sock = new SockJS('http://localhost:8080/chatstart');
+const client = Stomp.over(sock);
 
-function CalendarInsert({
-  style,
-  openInsert,
-  setOpenInsert,
-  empInfo,
-  dateStr,
-}) {
-  console.log(dateStr);
-  console.log(new Date());
-  console.log(new Date(dateStr));
-  const [startValue, setStartValue] = useState(dateStr);
+function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
+  const [startValue, setStartValue] = useState();
   const [endValue, setEndValue] = useState();
   const [eList, setCEList] = useState([]);
   const [botInfo, setBotInfo] = useState([]);
@@ -42,7 +33,6 @@ function CalendarInsert({
   const scheduleListAdd = [];
 
   const calendarBot = 'Y0000001';
-
   console.log(inTime2);
 
   let scheduletitle = '';
@@ -75,25 +65,25 @@ function CalendarInsert({
   };
 
   //일정보내기
-  //socket
-  const [clients, setClients] = useState();
-  // const sock = new SockJS('/chatstart');
+  // const sock = new SockJS('http://localhost:8080/chatstart');
   // const client = Stomp.over(sock);
-  useEffect(() => {
-    const sock = new SockJS('http://localhost:8080/chatstart');
-    const client = Stomp.over(sock);
-    setClients(client);
-  }, []);
 
-  clients &&
-    clients.connect({}, () => {
-      clients.subscribe(`/topic/message`, () => {
-        disconnect();
-      });
+  client.connect({}, () => {
+    client.subscribe(`/topic/message`, () => {
+      disconnect();
     });
+  });
 
   const disconnect = () => {
-    clients.disconnect();
+    client.disconnect();
+  };
+
+  const onInviteSchedule = (checked, data) => {
+    if (checked) {
+      setInviteSchedule([...inviteSchedule, data]);
+    } else {
+      setInviteSchedule(inviteSchedule.filter((button) => button !== data));
+    }
   };
 
   const insertHandle = () => {
@@ -203,7 +193,7 @@ function CalendarInsert({
               inTime: inTime2,
             },
           ],
-          clients.send(
+          client.send(
             '/app/chat/message',
             {},
             JSON.stringify({
@@ -224,7 +214,7 @@ function CalendarInsert({
   // 이미생성된 채팅방에 알림보내기
   const botroomMsg = () => {
     botroomId.map((id) => {
-      clients.send(
+      client.send(
         '/app/chat/message',
         {},
         JSON.stringify({
@@ -233,7 +223,7 @@ function CalendarInsert({
           chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
         })
       );
-      clients.send(
+      client.send(
         '/app/chat/message',
         {},
         JSON.stringify({
@@ -290,7 +280,7 @@ function CalendarInsert({
   //일정내용보내기
   const scheduleChatContent = (add) => {
     add.map((add) => {
-      clients.send(
+      client.send(
         '/app/chat/message',
         {},
         JSON.stringify({
@@ -393,6 +383,7 @@ function CalendarInsert({
             shrink: true,
           }}
         />
+
         <span className={styles.centerfont}> : </span>
         <TextField
           id="endvalue"
@@ -410,16 +401,36 @@ function CalendarInsert({
         <br />
         <br />
         <Button onClick={handleOpen}>사원추가</Button>
-        <CalendarInsertModal
+        <Modal
           open={open}
-          handleClose={handleClose}
-          style={style}
-          eList={eList}
-          inviteSchedule={inviteSchedule}
-          handleListClose={handleListClose}
-          handleempAddClose={handleempAddClose}
-          setInviteSchedule={setInviteSchedule}
-        />
+          onClose={handleClose}
+          aria-labelledby="parent-modal-title"
+          aria-describedby="parent-modal-description">
+          <Box sx={{ ...style, width: 400 }}>
+            {eList.map((emp, index) => {
+              return (
+                <Typography
+                  id="modal-modal-description"
+                  sx={{ mt: 2 }}
+                  key={index}>
+                  <input
+                    type="checkbox"
+                    onChange={(e) => {
+                      onInviteSchedule(e.currentTarget.checked, emp.empId);
+                    }}
+                    checked={inviteSchedule.includes(emp.empId) ? true : false}
+                  />
+                  {emp.empName}
+                  {emp.position}
+                </Typography>
+              );
+            })}
+            <br />
+            <Button onClick={handleListClose}>취소하기</Button>
+            <Button onClick={handleempAddClose}>추가하기</Button>
+            {/* <ChildModal /> */}
+          </Box>
+        </Modal>
 
         <Typography id="modal-modal-description" variant="h6" sx={{ mt: 2 }}>
           MEMO
