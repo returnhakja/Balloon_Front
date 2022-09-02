@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import { onCreateChatroom, onAllChatEmp } from '../../context/ChatAxios';
+import { onCreateChatroom2, onAllChatEmp } from '../../context/ChatAxios';
 import styles from '../../css/chat/Chat.module.css';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
@@ -10,9 +10,9 @@ import { Box, Modal } from '@mui/material';
 
 const styleBox = {
   position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  top: '80%',
+  left: '97%',
+  transform: 'translate(-90%, -90%)',
   width: 300,
   bgcolor: 'background.paper',
   border: '2px solid #000',
@@ -21,14 +21,20 @@ const styleBox = {
   padding: 4,
 };
 
-function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
+function CRCopy({
+  invite,
+  openCreatChat,
+  setopenCreatChat,
+  empInfo,
+  setChatStatus,
+}) {
   const inputRef = useRef();
-  const [empInfo] = useOutletContext();
+  // const [empInfo] = useOutletContext();
   // socket
   // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
   //   transport: ['websocket'],
   // });
-  const sock = new SockJS('/chatstart');
+  const sock = new SockJS('http://15.164.224.26:8080/chatstart');
   const client = Stomp.over(sock);
 
   client.connect({}, () => {
@@ -76,6 +82,8 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     return check;
   };
 
+  const handleClose = () => setopenCreatChat(false);
+
   const eventChatHandle = () => {
     const input = document.getElementById('chatroomName');
     console.log(input.value);
@@ -91,21 +99,24 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
           console.log(alreadyInvite.length);
           const check = checkChatEmp(allChatEmpId, alreadyInvite[0]);
           check &&
-            onCreateChatroom(
+            onCreateChatroom2(
               empInfo,
               invite,
               document.getElementById('chatroomName'),
-              client
+              client,
+              setChatStatus
             );
         } else {
           console.log('ssssssssssssssssssssssssss', alreadyInvite);
           console.log(alreadyInvite.length);
-          onCreateChatroom(
+          onCreateChatroom2(
             empInfo,
             invite,
             document.getElementById('chatroomName'),
             client
           );
+
+          handleClose();
         }
       }
     } else {
@@ -114,8 +125,6 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
       alert('채팅방 이름을 입력해주세요!!');
     }
   };
-
-  const handleClose = () => setopenCreatChat(false);
 
   return (
     <Modal open={openCreatChat} onClose={handleClose}>
@@ -143,4 +152,4 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     </Modal>
   );
 }
-export default CreateChatroom;
+export default CRCopy;

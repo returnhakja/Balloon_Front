@@ -20,7 +20,6 @@ function Dashboard() {
         <Box
           sx={{
             display: 'flex',
-
             height: 200,
             justifyContent: 'space-around',
             p: 1,

@@ -38,7 +38,6 @@ function Trip() {
   const [noApprover, setNoApprover] = useState([]);
 
   // 모달
-  // const [openModal, setOpenModal] = useState(false);
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
   const [empInfo] = useOutletContext();
@@ -94,14 +93,13 @@ function Trip() {
             type="button"
             className={styles.btnnav}
             onClick={() => {
-              // setOpenModal(true);
               setOpenapprovalModal(true);
             }}
             id="cancelBtn">
             결재선설정
           </button>
         </div>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
+
         {openapprovalModal && (
           <ModalApproval
             openapprovalModal={openapprovalModal}

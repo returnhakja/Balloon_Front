@@ -13,7 +13,14 @@ import styles from '../../css/chat/Chat.module.css';
 import { Checkbox } from '@mui/material';
 import { Box, Button, Modal } from '@mui/material';
 
-function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
+function InviteEmp({
+  style,
+  modalOpen,
+  setModalOpen,
+  setChatempinfo,
+  empInfo,
+  chatroomId,
+}) {
   const [chatEmpList, setCEList] = useState([]);
   const [chatUnitList, setCUList] = useState([]);
   const [newInvite, setNewInvite] = useState([]);
@@ -22,17 +29,18 @@ function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
   //채팅방 정보 불러오기
   const [chatroomName, setChatroomName] = useState('');
   const [headCount, setHeadCount] = useState(0);
-  // const [chatempinfo, setChatempinfo] = useState([]);
   const [chatAddEmpInfo, setChatAddEmpInfo] = useState([]);
-  const chatroomId = new URL(document.location).searchParams.get('room');
-  const [empInfo] = useOutletContext();
+  // const [chatempinfo, setChatempinfo] = useState([]);
+  // const chatroomId = new URL(document.location).searchParams.get('room');
+  // const [empInfo] = useOutletContext();
+
   const empId = empInfo.empId;
 
   // socket
   // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
   //   transport: ['websocket'],
   // });
-  const sock = new SockJS('/chatstart');
+  const sock = new SockJS('http://15.164.224.26:8080/chatstart');
   const client = Stomp.over(sock);
 
   client.connect({}, () => {
@@ -51,8 +59,8 @@ function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
   chatAddEmpInfo.map((info) => {
     existEmp.push(info.empId.empId);
   });
-
   //Unit이름 띄우기
+
   const returnArr = (list, setCUList) => {
     const arr = [];
     list.map((row) => {

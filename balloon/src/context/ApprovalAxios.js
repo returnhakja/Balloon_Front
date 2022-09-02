@@ -98,7 +98,7 @@ export const getPAByPAId = async (PAId, setPAInfo) => {
 // 최근 문서번호 가져오기 ------------------------------------------------
 // 가장 최근 업무기안 번호 가져옴
 export const getLatestBizRpt = async (setDocNum) => {
-  const url = '/api/bizrpt/wd';
+  const url = '/bizrpt/wd';
   await axios.get(url).then((res) => {
     const docId = res.data.businessReportId;
     console.log(docId);

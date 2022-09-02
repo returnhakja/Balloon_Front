@@ -39,7 +39,10 @@ function Chat() {
   const chatroomId = new URL(document.location).searchParams.get('room');
   const [input, setInput] = useState([]);
   const inputRef = useRef();
-  const sock = new SockJS('http://localhost:8080/chatstart');
+  // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
+  //   transport: ['websocket'],
+  // });
+  const sock = new SockJS('/chatstart');
   const client = Stomp.over(sock);
 
   //채팅방 사람 확인 state

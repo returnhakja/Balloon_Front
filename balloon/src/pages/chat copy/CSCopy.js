@@ -4,45 +4,42 @@ import styles from '../../css/chat/ChatSide.module.css';
 import PersonIcon from '@mui/icons-material/Person';
 import ChatIcon from '@mui/icons-material/Chat';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { Badge } from '@mui/material';
 
-function ChatSide({ children, setChatStatus }) {
+function CSCopy({ children, setChatStatus }) {
   return (
     <div className={styles.constainer}>
       <div className={styles.iconcon}>
         <ul className={styles.constainer}>
-          {/* <Link to={'/chatemplist'}> */}
           <li
             className={styles.listyle}
             onClick={() => setChatStatus('chatEmpList')}>
             <PersonIcon fontSize="large" />
           </li>
-          {/* </Link> */}
-          {/* <Link to={'/chatlist'}> */}
           <li
             className={styles.listyle}
             onClick={() => setChatStatus('chatList')}>
-            <ChatIcon fontSize="large" />
+            <Badge
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              color="secondary"
+              badgeContent={501}
+              max={500}>
+              <ChatIcon fontSize="large" />
+            </Badge>
           </li>
-          {/* </Link> */}
-          {/* <Link to={'/chatnotice'}> */}
           <li
             className={styles.listyle}
             onClick={() => setChatStatus('chatNotice')}>
             <SettingsIcon fontSize="large" />
           </li>
-          {/* </Link> */}
         </ul>
-        {/* <div>
-          <PersonIcon />
-        </div>
-
-        <div>
-          <ChatIcon />
-        </div> */}
       </div>
       <main>{children}</main>
     </div>
   );
 }
 
-export default ChatSide;
+export default CSCopy;

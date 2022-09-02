@@ -62,10 +62,13 @@
 }
 
 .inputmain {
-  width: 100%;
-  height: 8%; /* footer의 높이 */
+  width: 85%;
+  /* height: 8%; */
+  /* margin-top: 18%; */
+  position: absolute;
+  /* footer의 높이 */
   bottom: 0;
-  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
 }
@@ -133,18 +136,12 @@
   background-color: rgb(255, 205, 212);
 }
 
-.time {
-  background-color: white;
-}
-
 .chatconvimeline {
   width: 100%;
 }
 
 .scrollbar {
-  height: 700px;
-  margin-bottom: 5%;
-  max-width: 400px;
+  height: 32vh;
   overflow-x: hidden;
 }
 
@@ -155,8 +152,8 @@
 
 .side2 {
   display: flex;
-  border: 1px solid black;
-  height: 80vh;
+  /* border: 1px solid black; */
+  height: 50vh;
 }
 
 .chatList {
@@ -205,11 +202,16 @@
 }
 
 .list {
-  width: 100%;
+  /* width: 100%; */
+  width: 300px;
+  background-color: #d0eef7;
 }
+
 .listroom {
-  width: 100%;
-  height: 80vh;
+  width: 300px;
+
+  /* height: 40vh; */
+  background-color: #d0eef7;
 }
 
 .listcon {
@@ -237,7 +239,8 @@
 
 .roomContanar {
   overflow-y: scroll;
-  height: 85%;
+  /* height: 380px; */
+  height: 80%;
 }
 
 .chatName {
@@ -248,8 +251,8 @@
 }
 
 .olList {
-  margin-top: 25px;
   text-align: center;
+  height: 43vh;
   overflow-y: scroll;
 }
 
@@ -314,6 +317,7 @@
 .EmpAddIcon {
   margin-left: 11.5%;
 }
+
 .inBox {
   margin-top: 15px;
   margin-bottom: 20px;

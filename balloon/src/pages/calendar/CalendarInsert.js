@@ -13,8 +13,17 @@ import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 
 import axios from 'axios';
 
-function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
-  const [startValue, setStartValue] = useState();
+function CalendarInsert({
+  style,
+  openInsert,
+  setOpenInsert,
+  empInfo,
+  dateStr,
+}) {
+  console.log(dateStr);
+  console.log(new Date());
+  console.log(new Date(dateStr));
+  const [startValue, setStartValue] = useState(dateStr);
   const [endvalue, setEndValue] = useState();
   const [eList, setCEList] = useState([]);
   const [botInfo, setBotInfo] = useState([]);
@@ -23,7 +32,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const scheduleListAdd = [];
 
   const calendarBot = 'Y0000001';
-
   const handleClose = () => {
     setOpenInsert(false);
     // window.location.href = '/calendar';
@@ -49,7 +57,10 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   };
 
   //일정보내기
-  const sock = new SockJS('http://localhost:8080/chatstart');
+  // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
+  //   transport: ['websocket'],
+  // });
+  const sock = new SockJS('/chatstart');
   const client = Stomp.over(sock);
 
   client.connect({}, () => {
