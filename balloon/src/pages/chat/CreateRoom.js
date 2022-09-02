@@ -8,7 +8,18 @@ import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import { Box, Modal } from '@mui/material';
 
-
+const styleBox = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 300,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  textAlign: 'center',
+  padding: 4,
+};
 const sock = new SockJS('http://localhost:8080/chatstart');
 const client = Stomp.over(sock);
 
