@@ -128,7 +128,7 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
             }}>
             <div>채팅하기</div>
           </Button>
-        </Link>
+        </div>
       </Box>
     </Modal>
   );
