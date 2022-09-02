@@ -19,9 +19,6 @@ let data = 'T';
 let inTime = [nowTime.slice(0, 10), data, nowTime.slice(10)].join('');
 let inTime2 = inTime.replace(/(\s*)/g, '');
 
-const sock = new SockJS('http://localhost:8080/chatstart');
-const client = Stomp.over(sock);
-
 function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const [startValue, setStartValue] = useState();
   const [endValue, setEndValue] = useState();
@@ -65,17 +62,24 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   };
 
   //일정보내기
-  // const sock = new SockJS('http://localhost:8080/chatstart');
-  // const client = Stomp.over(sock);
+  //socket
+  const [clients, setClients] = useState();
 
-  client.connect({}, () => {
-    client.subscribe(`/topic/message`, () => {
-      disconnect();
+  useEffect(() => {
+    const sock = new SockJS('http://localhost:8080/chatstart');
+    const client = Stomp.over(sock);
+    setClients(client);
+  }, []);
+
+  clients &&
+    clients.connect({}, () => {
+      clients.subscribe(`/topic/message`, () => {
+        disconnect();
+      });
     });
-  });
 
   const disconnect = () => {
-    client.disconnect();
+    clients.disconnect();
   };
 
   const insertHandle = () => {
@@ -186,7 +190,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
               inTime: inTime2,
             },
           ],
-          client.send(
+          clients.send(
             '/app/chat/message',
             {},
             JSON.stringify({
@@ -207,7 +211,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   // 이미생성된 채팅방에 알림보내기
   const botroomMsg = () => {
     botroomId.map((id) => {
-      client.send(
+      clients.send(
         '/app/chat/message',
         {},
         JSON.stringify({
@@ -216,7 +220,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
           chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
         })
       );
-      client.send(
+      clients.send(
         '/app/chat/message',
         {},
         JSON.stringify({
@@ -273,7 +277,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   //일정내용보내기
   const scheduleChatContent = (add) => {
     add.map((add) => {
-      client.send(
+      clients.send(
         '/app/chat/message',
         {},
         JSON.stringify({
