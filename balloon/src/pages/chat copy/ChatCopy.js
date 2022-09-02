@@ -3,6 +3,7 @@ import { Link, useOutletContext } from 'react-router-dom';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import InviteEmp from './InviteEmp';
 import InviteEmpCopy from './InviteEmpCopy';
 import { sendExit } from '../../utils/ChatUtils';
 import {
@@ -38,7 +39,14 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
   const chatroomId = roomId;
   const [input, setInput] = useState([]);
   const inputRef = useRef();
-  const sock = new SockJS('http://localhost:8080/chatstart');
+
+  // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
+  //   transport: ['websocket'],
+  // });
+  const sock = new SockJS('http://15.164.224.26:8080/chatstart');
+
+  // const sock = new SockJS('http://localhost:8080/chatstart');
+
   const client = Stomp.over(sock);
 
   //채팅방 사람 확인 state
@@ -149,11 +157,13 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
     }
   };
 
+
   const roomExit = () => {
     onExitRoom(chatroomId, empId, sendExit(client, chatroomId, empInfo));
     onHCupdate(chatroomId, chatroomName, headCount);
     setChatStatus('chatEmpList');
   };
+
 
   //////////////////////////////////////////////////
   // 채팅내용 검색 - 지우지마세요!!!!!!!!!!!!! 추후구현
@@ -228,7 +238,6 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
             width: '100%',
             background: 'lightgray',
             paddingTop: 2,
-
             maxHeight: 200,
             overflowY: 'scroll',
           }}>
@@ -245,6 +254,7 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
                 </List>
               );
             })}
+
           {/* 채팅방 추가 */}
           <div className={styles.logoutBtn}>
             <Button
@@ -253,6 +263,7 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
               }}>
               <PersonAddAlt1Icon />
             </Button>
+
 
             {/* 채팅방 나가기 */}
             <Button
@@ -266,6 +277,7 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
       </List>
 
       {modalOpen && (
+        // <InviteEmp
         <InviteEmpCopy
           style={styleBox}
           modalOpen={modalOpen}
@@ -275,6 +287,7 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
           chatroomId={chatroomId}
         />
       )}
+
       <ScrollToBottom className={styles.scrollbar} id="scroller">
         {/* 채팅기록을 가져옴 */}
         {chatting.map((msg, index) => {

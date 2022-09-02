@@ -13,7 +13,14 @@ import { Container } from '@mui/system';
 function CNCopy({ setChatStatus, empInfo }) {
   const [chatroom, setChatroom] = useState([]);
   const empId = empInfo.empId;
-  const sock = new SockJS('http://localhost:8080/chatstart');
+
+  // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
+  //   transport: ['websocket'],
+  // });
+  const sock = new SockJS('http://15.164.224.26:8080/chatstart');
+
+  // const sock = new SockJS('http://localhost:8080/chatstart');
+
   const client = Stomp.over(sock);
 
   //마지막으로 보낸 채팅list가져오기

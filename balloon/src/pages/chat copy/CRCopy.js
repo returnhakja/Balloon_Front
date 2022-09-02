@@ -10,9 +10,9 @@ import { Box, Modal } from '@mui/material';
 
 const styleBox = {
   position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  top: '80%',
+  left: '97%',
+  transform: 'translate(-90%, -90%)',
   width: 300,
   bgcolor: 'background.paper',
   border: '2px solid #000',
@@ -30,9 +30,16 @@ function CRCopy({
   setInvite,
 }) {
   const inputRef = useRef();
+  // const [empInfo] = useOutletContext();
+  // socket
+  // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
+  //   transport: ['websocket'],
+  // });
+  const sock = new SockJS('http://15.164.224.26:8080/chatstart');
   const [allChatEmp, setAllChatEmp] = useState([]);
   // socket
   const sock = new SockJS('http://localhost:8080/chatstart');
+//   const sock = new SockJS('http://15.164.224.26:8080/chatstart');
   const client = Stomp.over(sock);
 
   client.connect({}, () => {
@@ -51,12 +58,12 @@ function CRCopy({
     }
   };
 
+
   //1:1채팅일 때 이미있는 채팅방 예외처리   //초대할 사원
   const alreadyInvite = [];
   invite.map((vite) => {
     alreadyInvite.push(vite.empId);
   });
-
   useEffect(() => {
     //headCount가 2인 chatroomEmployee T 정보 가져옴
     onAllChatEmp(setAllChatEmp, empInfo.empId);
@@ -78,6 +85,7 @@ function CRCopy({
     return check;
   };
 
+
   //채팅방모달 닫기
   const handleClose = () => setopenCreatChat(false);
 
@@ -86,6 +94,7 @@ function CRCopy({
   const eventChatHandle = () => {
     const input = document.getElementById('chatroomName');
     if (input.value.trim() !== '') {
+
       if (input.value.length === 0) {
         inputRef.current.focus();
         input.value = '';

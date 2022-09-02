@@ -4,6 +4,8 @@ import styles from '../../css/chat/ChatSide.module.css';
 import PersonIcon from '@mui/icons-material/Person';
 import ChatIcon from '@mui/icons-material/Chat';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { Badge } from '@mui/material';
+
 
 function CSCopy({ children, setChatStatus }) {
   return (
@@ -18,7 +20,18 @@ function CSCopy({ children, setChatStatus }) {
           <li
             className={styles.listyle}
             onClick={() => setChatStatus('chatList')}>
-            <ChatIcon fontSize="large" />
+
+            <Badge
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              color="secondary"
+              badgeContent={501}
+              max={500}>
+              <ChatIcon fontSize="large" />
+            </Badge>
+
           </li>
           <li
             className={styles.listyle}

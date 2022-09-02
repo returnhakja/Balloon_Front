@@ -11,10 +11,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Container } from '@mui/system';
 import ChatCopy from './ChatCopy';
 
+
+  // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
+  //   transport: ['websocket'],
+  // });
+
 function CRMCopy({ empInfo, setChatStatus }) {
   const [chatroom, setChatroom] = useState([]);
   const empId = empInfo.empId;
-  const sock = new SockJS('http://localhost:8080/chatstart');
+  // const sock = new SockJS('http://localhost:8080/chatstart');
+  const sock = new SockJS('http://15.164.224.26:8080/chatstart');
   const client = Stomp.over(sock);
   const [roomId, setRoomId] = useState(0);
 
@@ -27,7 +33,7 @@ function CRMCopy({ empInfo, setChatStatus }) {
 
   useEffect(() => {}, [roomId]);
 
-  // console.log(chatStatus);
+
   return (
     <div className={styles.listroom}>
       {roomId === 0 ? (
@@ -41,6 +47,7 @@ function CRMCopy({ empInfo, setChatStatus }) {
                 <div
                   className={styles.roomcon}
                   key={index}
+
                   onClick={() => {
                     setRoomId(chat.chatroom.chatroomId);
                   }}>
@@ -90,6 +97,7 @@ function CRMCopy({ empInfo, setChatStatus }) {
                         <DeleteIcon />
                       </Button>
                     </div>
+
                     <div className={styles.content}>
                       {chat.chatContent.length <= '15' ? (
                         <div className={styles.content}>
@@ -116,6 +124,7 @@ function CRMCopy({ empInfo, setChatStatus }) {
           </div>
         </>
       ) : (
+
         <ChatCopy
           empInfo={empInfo}
           roomId={roomId}

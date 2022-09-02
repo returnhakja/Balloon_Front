@@ -29,8 +29,10 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
   const empId = empInfo.empId;
   const [allChatEmp, setAllChatEmp] = useState([]);
   // socket
+
   // const sock = new SockJS('http://localhost:8080/chatstart');
   // const client = Stomp.over(sock);
+
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, () => {
