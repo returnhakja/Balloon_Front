@@ -33,30 +33,30 @@ function Home({ empInfo, setEmpInfo, logout, isLogin }) {
         logout={logout}
         isLogin={isLogin}
       />
-      <div className={styles.Icon}>
-        {open ? (
-          <Test style={style} open={open} setOpen={setOpen} empInfo={empInfo} />
-        ) : (
-          <Fab
-            color="secondary"
-            aria-label="add"
-            onClick={() => {
-              setOpen(true);
-            }}
-            className={styles.float}>
-            <AddIcon />
-          </Fab>
-        )}
-        {/* <Fab
-          color="secondary"
-          aria-label="add"
-          onClick={() => {
-            setOpen(true);
-          }}
-          className={styles.float}>
-          <AddIcon />
-        </Fab> */}
-      </div>
+
+      {isLogin && (
+        <div className={styles.Icon}>
+          {open ? (
+            <Test
+              style={style}
+              open={open}
+              setOpen={setOpen}
+              empInfo={empInfo}
+            />
+          ) : (
+            <Fab
+              color="secondary"
+              aria-label="add"
+              onClick={() => {
+                setOpen(true);
+              }}
+              className={styles.float}>
+              <AddIcon />
+            </Fab>
+          )}
+        </div>
+      )}
+
       <Outlet context={[empInfo]} />
       <Footer />
     </>

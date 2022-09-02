@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { findHigherOrganization, insertUnit } from '../../context/UnitAxios';
-import { Container, Button, TextField, Typography, Box } from '@mui/material';
-// import styles from './styles.module.css';
 import styles from './unit.module.css';
+import { Container, Button, TextField, Typography, Box } from '@mui/material';
 
-const Input = ({ label, register, required }) => (
+const Input = ({ label, name, register, required, maxLength }) => (
   <>
-    <label>{label}</label>
-    <input {...register(label, { required })} />
+    <label className={styles.label}>{label}</label>
+    <input
+      className={styles.input}
+      {...register(name, { required, maxLength })}
+    />
   </>
 );
 
 const Select = React.forwardRef(({ onChange, name, label, higher }, ref) => (
   <>
     <label className={styles.label}>{label}</label>
-    <select name={name} ref={ref} onChange={onChange}>
+    <select className={styles.input} name={name} ref={ref} onChange={onChange}>
       {higher.length !== 0 &&
         higher.map((data, index) => (
           <option key={index} value={data.unitCode}>
@@ -67,6 +69,7 @@ function UnitAddpage() {
             className={styles.input}
             {...register('unitCode', { required: true, maxLength: 8 })}
           />
+          <Input />
           {errors.unitCode && errors.unitCode.type === 'required' && (
             <p>This field is required</p>
           )}
