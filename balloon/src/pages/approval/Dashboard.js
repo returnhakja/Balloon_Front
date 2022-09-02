@@ -11,7 +11,7 @@ const contentArr = ['업무기안입니다.', '출장계획서입니다.', '인�
 function Dashboard() {
   return (
     <SideNavigation>
-      <Container maxWidth="xl">
+      <Container maxWidth>
         <p style={{ fontSize: '2.1rem' }}>기본양식함</p>
         <br />
         <hr />

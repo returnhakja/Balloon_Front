@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
-import { deletePA, getPAByPAId } from '../../context/ApprovalAxios';
+import {
+  deletePA,
+  getApvlByDocId,
+  getPAByPAId,
+} from '../../context/ApprovalAxios';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import { FcDocument } from 'react-icons/fc';
@@ -23,22 +27,14 @@ const SaveButton = styled(Button)(({ theme }) => ({
 }));
 
 function DeclaredPersonnelAppointmentInfo() {
-  // 날짜 관련
-  // const [startValue, setStartValue] = useState(null);
-
-  // 모달
-  // const [openModal, setOpenModal] = useState(false);
-  // const [openapprovalModal, setOpenapprovalModal] = useState(false);
-
-  // 사원 정보 context
-  // const [empInfo, setEmpInfo] = useOutletContext();
-
   const [paInfo, setPaInfo] = useState({});
+  const [approver, setApprover] = useState([]);
 
   const params = useParams();
 
   useEffect(() => {
     !!params && getPAByPAId(params.docId, setPaInfo);
+    getApvlByDocId(params.docId, setApprover);
   }, [params]);
 
   return (
@@ -65,7 +61,6 @@ function DeclaredPersonnelAppointmentInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {paInfo.empName}({paInfo.emp && paInfo.emp.empId})
               </th>
             </tr>
@@ -75,16 +70,32 @@ function DeclaredPersonnelAppointmentInfo() {
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
         </div>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
-
         <hr />
         <br />
-        <Card
-          variant="outlined"
-          sx={{ maxWidth: 150 }}
-          style={{ backgroundColor: '#F1F9FF' }}>
-          {!!paInfo && <DfCard drafterName={paInfo.empName} />}
-        </Card>
+        <div className={styles.approvalCard}>
+          <Card
+            variant="outlined"
+            sx={{ maxWidth: 150 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {!!paInfo && <DfCard drafterName={paInfo.empName} />}
+          </Card>
+          {approver.map((empData, index) => {
+            console.log(empData);
+            // if (apvl.length === 0) {
+            //   setApvl(empData);
+            // }
+
+            return (
+              <Card
+                key={index}
+                variant="outlined"
+                sx={{ maxWidth: 150 }}
+                style={{ backgroundColor: '#F1F9FF' }}>
+                <ApCard approverName={empData.approverName} />
+              </Card>
+            );
+          })}
+        </div>
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>
@@ -96,9 +107,8 @@ function DeclaredPersonnelAppointmentInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 {paInfo.documentTitle}
-              </td>{' '}
+              </td>
             </tr>
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>인사명령일</td>
@@ -120,7 +130,6 @@ function DeclaredPersonnelAppointmentInfo() {
           <tbody className={styles.tbodyin}>
             <tr className={styles.trcolor}>
               <td className={styles.tdreaui}>구성원명</td>
-
               <td className={styles.tdreaui}>발령부서</td>
               <td className={styles.tdreaui}>발령직급</td>
             </tr>
@@ -199,6 +208,7 @@ function DeclaredPersonnelAppointmentInfo() {
                   size="large"
                   onClick={async () => {
                     await deletePA(params.docId);
+                    alert('문서가 삭제되었습니다!');
                   }}>
                   삭제하기
                 </Button>

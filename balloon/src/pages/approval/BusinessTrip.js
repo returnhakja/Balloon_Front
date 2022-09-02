@@ -27,7 +27,7 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function Trip() {
+function BusinessTrip() {
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
   const [endValue, setEndValue] = useState(null);
@@ -36,6 +36,7 @@ function Trip() {
   const [docId, setDocId] = useState('');
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
+  const [apvlInfo, setApvlInfo] = useState([]);
 
   // 모달
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
@@ -189,6 +190,19 @@ function Trip() {
             <tr>
               <td className={styles.tdreaui}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  {/* <TextField
+                  id="startValue"
+                  label="시작일"
+                  type="datetime-local"
+                  defaultValue={startValue}
+                  onChange={(newValue) => {
+                    setStartValue(newValue);
+                  }}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                /> */}
                   <DatePicker
                     label="시작일"
                     value={startValue}
@@ -288,7 +302,7 @@ function Trip() {
                 </Button>
               </Link>
               <Link
-                to={'/boxes'}
+                to={'/boxes/dd'}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
                     await insertBizTp(
@@ -305,7 +319,6 @@ function Trip() {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
-
                   approver.map((data, index) => {
                     console.log(data);
                     console.log(index);
@@ -324,4 +337,4 @@ function Trip() {
   );
 }
 
-export default Trip;
+export default BusinessTrip;

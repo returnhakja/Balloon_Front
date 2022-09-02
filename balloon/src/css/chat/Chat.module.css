@@ -1,5 +1,4 @@
 .othercontent {
-  /* background-color: darkseagreen; */
   background-color: rgb(203, 229, 252);
   display: flex;
   margin-right: 5px;
@@ -39,8 +38,8 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  background-color: white;
 }
-
 .mytime {
   text-align: right;
   margin: 0px;
@@ -88,17 +87,14 @@
   transition: 0.15s all ease-in-out;
   box-sizing: border-box;
 }
-
 .inputform::placeholder {
   color: #b1b1b1;
   opacity: 1;
 }
-
 .inputform:focus,
 .inputform:active {
   box-shadow: inset 0 0 0 2px #7690d6;
 }
-
 .inputform:focus {
   outline: none;
 }
@@ -109,19 +105,17 @@
   width: 100px;
   height: 40px;
   cursor: pointer;
+
   box-shadow: 0px 14px 10px -8px rgba(0, 0, 0, 0.2);
   transition: 0.15s all ease-in-out;
   box-sizing: border-box;
 }
-
 .inputbutton:hover {
   background-color: #3c559c;
 }
 
 .logoutBtn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  text-align: right;
 }
 
 .updatename {
@@ -149,7 +143,6 @@
   display: flex;
   border: 1px solid black;
 }
-
 .side2 {
   display: flex;
   /* border: 1px solid black; */
@@ -159,12 +152,10 @@
 .chatList {
   display: flex;
 }
-
 .chatIcon {
   display: flex;
   margin-top: 2%;
 }
-
 .text {
   width: 200px;
   height: 50px;
@@ -173,11 +164,9 @@
   align-items: center;
   font-size: 20px;
 }
-
 .hrwidth {
   width: 80%;
 }
-
 .ChatText {
   width: 200px;
   height: 50px;
@@ -191,14 +180,20 @@
 .liststyle {
   width: 100%;
 }
-
 .fontlist {
   clear: both;
 }
-
 .fontlist:hover {
   color: #7690d6;
   background-color: #d8dfe0;
+}
+.cuCon {
+  /* float: left; */
+  /* display: flex; */
+
+  /* justify-content: center;
+  align-items: center; */
+  /* display: inline-block; */
 }
 
 .list {
@@ -209,7 +204,6 @@
 
 .listroom {
   width: 300px;
-
   /* height: 40vh; */
   background-color: #d0eef7;
 }
@@ -219,20 +213,17 @@
   height: 100%;
   display: flex;
 }
-
 .LastTime {
   float: right;
   margin-top: 5px;
   height: 40px;
   font-size: 12px;
 }
-
 .chatRoomList {
   height: 100%;
   border: 1px solid rgb(90, 89, 89);
   display: flex;
 }
-
 .roomcon:hover {
   background-color: rgba(190, 204, 209, 0.842);
 }
@@ -261,11 +252,9 @@
   text-align: center;
   transform: scaleX(-1);
 }
-
 .creatIcon:hover {
   color: #0596df;
 }
-
 .Listcontainer {
   margin-top: 10vh;
   margin-bottom: 40vh;
@@ -278,19 +267,14 @@
 .DeleteBtn {
   float: right;
 }
-
 .LastTimecon {
   float: right;
 }
-
 .chatfont {
   /* display: flex; */
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid black;
-  margin-bottom: 10px;
 }
-
 .content {
   padding: 10px;
   font-size: 14px;
@@ -303,7 +287,9 @@
 }
 
 .cuName {
+  /* color: rgb(14, 101, 216); */
   color: #0596df;
+
   font-weight: bold;
   font-size: 18px;
   float: left;
@@ -314,6 +300,17 @@
   list-style: none;
 }
 
+
+.scheduleContent {
+  background-color: rgb(249, 255, 205);
+  margin-right: 5px;
+  border-radius: 15px;
+  left: 0;
+  right: 0;
+  bottom: -16px;
+  word-break: break-all;
+}
+
 .EmpAddIcon {
   margin-left: 11.5%;
 }
@@ -322,3 +319,4 @@
   margin-top: 15px;
   margin-bottom: 20px;
 }
+

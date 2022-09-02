@@ -9,7 +9,15 @@ import {
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import { FcDocument } from 'react-icons/fc';
-import { Button, Card, Container, Paper, TextField } from '@mui/material';
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
@@ -42,7 +50,6 @@ function BizReportInfo() {
     }
   }, [params]);
 
-  // const [openModal, setOpenModal] = useState(false);
   console.log(empInfo);
   return (
     <SideNavigation>

@@ -10,7 +10,15 @@ import {
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import { FcDocument } from 'react-icons/fc';
-import { Button, Card, Container, Paper, TextField } from '@mui/material';
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
@@ -43,7 +51,6 @@ function DeclaredBusinessReportInfo() {
     }
   }, [params]);
 
-  // const [openModal, setOpenModal] = useState(false);
   return (
     <SideNavigation>
       <Container>
@@ -114,19 +121,6 @@ function DeclaredBusinessReportInfo() {
               <td colSpan={2} className={styles.tdright}>
                 {' '}
                 {bizRptInfo.documentTitle}
-                {/* <form>
-                  <TextField
-                    type="text"
-                    name="title"
-                    value={bizRptInfo.documentTitle}
-                    className={styles.inputtext}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    focused={false}
-                  />
-                </form> */}
-                {/* <TextField />*/}
               </td>
             </tr>
           </thead>
@@ -161,6 +155,7 @@ function DeclaredBusinessReportInfo() {
                   size="large"
                   onClick={async () => {
                     await deleteBizRpt(params.docId);
+                    alert('문서가 삭제되었습니다!');
                   }}>
                   삭제하기
                 </Button>

@@ -20,19 +20,22 @@ const styleBox = {
   textAlign: 'center',
   padding: 4,
 };
+const sock = new SockJS('http://localhost:8080/chatstart');
+const client = Stomp.over(sock);
 
 function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
   const inputRef = useRef();
   const [empInfo] = useOutletContext();
+  const empId = empInfo.empId;
+  const [allChatEmp, setAllChatEmp] = useState([]);
   // socket
-  // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
-  //   transport: ['websocket'],
-  // });
-  const sock = new SockJS('/chatstart');
-  const client = Stomp.over(sock);
+
+  // const sock = new SockJS('http://localhost:8080/chatstart');
+  // const client = Stomp.over(sock);
+
 
   client.connect({}, () => {
-    client.subscribe(`/topic/message`, (data) => {
+    client.subscribe(`/topic/message`, () => {
       disconnect();
     });
   });
@@ -47,27 +50,21 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     }
   };
 
-  //1:1채팅일 때 이미있는 채팅방 예외처리
+  //초대할 사원
   const alreadyInvite = [];
   invite.map((vite) => {
     alreadyInvite.push(vite.empId);
   });
-  console.log(alreadyInvite);
 
-  const [allChatEmp, setAllChatEmp] = useState([]);
-
+  //headCount가 2인 chatroomEmployee T 정보 가져옴
   useEffect(() => {
-    onAllChatEmp(setAllChatEmp);
+    onAllChatEmp(setAllChatEmp, empId);
   }, []);
 
-  console.log(allChatEmp);
-  let allChatEmpId = [];
-  allChatEmpId = allChatEmp.filter((emp) => emp.empId.empId !== empInfo.empId);
-  console.log(allChatEmpId);
-
-  const checkChatEmp = (allChatEmpId, alreadyInvite) => {
+  //1:1채팅일 때 이미있는 채팅방 예외처리
+  const checkChatEmp = (allChatEmp, alreadyInvite) => {
     let check = true;
-    allChatEmpId.map((id) => {
+    allChatEmp.map((id) => {
       if (id.empId.empId == alreadyInvite) {
         alert('이미 있는 채팅방입니다');
         check = false;
@@ -76,20 +73,18 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     return check;
   };
 
+  //채팅방이름 공백처리
+  //1:1채팅일 때 이미있는 채팅방 예외처리
   const eventChatHandle = () => {
     const input = document.getElementById('chatroomName');
-    console.log(input.value);
     if (input.value.trim() !== '') {
-      console.log(input.value);
       if (input.value.length === 0) {
         inputRef.current.focus();
         input.value = '';
         alert('채팅방 이름을 입력해주세요!!');
       } else {
         if (alreadyInvite.length === 1) {
-          console.log('dddddddddddddddddddddddddd', alreadyInvite);
-          console.log(alreadyInvite.length);
-          const check = checkChatEmp(allChatEmpId, alreadyInvite[0]);
+          const check = checkChatEmp(allChatEmp, alreadyInvite[0]);
           check &&
             onCreateChatroom(
               empInfo,
@@ -98,8 +93,6 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
               client
             );
         } else {
-          console.log('ssssssssssssssssssssssssss', alreadyInvite);
-          console.log(alreadyInvite.length);
           onCreateChatroom(
             empInfo,
             invite,
@@ -115,6 +108,7 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     }
   };
 
+  //채팅방모달
   const handleClose = () => setopenCreatChat(false);
 
   return (
@@ -124,7 +118,7 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
         <div>
           <Input
             id="chatroomName"
-            className={styles.inBox}
+            // className={styles.inBox}
             ref={inputRef}
             onKeyPress={keyEnter}
             placeholder="채팅방 이름을 입력하세요"
@@ -133,8 +127,6 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
             variant="contained"
             onClick={() => {
               eventChatHandle();
-
-              // inputRef.current.value = '';
             }}>
             <div>채팅하기</div>
           </Button>

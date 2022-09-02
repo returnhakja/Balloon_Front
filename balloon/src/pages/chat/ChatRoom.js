@@ -8,28 +8,18 @@ import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import { Box, Modal } from '@mui/material';
 
-const styleBox = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 300,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  textAlign: 'center',
-  padding: 4,
-};
 
-function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
-  const inputRef = useRef();
+//socket
+const sock = new SockJS('http://localhost:8080/chatstart');
+const client = Stomp.over(sock);
+
+function ChatRoom() {
+  const [chatroom, setChatroom] = useState([]);
   const [empInfo] = useOutletContext();
-  // socket
-  // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
-  //   transport: ['websocket'],
-  // });
-  const sock = new SockJS('/chatstart');
-  const client = Stomp.over(sock);
+  const empId = empInfo.empId;
+  //socket
+  // const sock = new SockJS('http://localhost:8080/chatstart');
+  // const client = Stomp.over(sock);
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, (data) => {

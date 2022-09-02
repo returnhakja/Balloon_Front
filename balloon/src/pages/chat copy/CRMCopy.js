@@ -11,12 +11,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Container } from '@mui/system';
 import ChatCopy from './ChatCopy';
 
-function CRMCopy({ empInfo }) {
-  const [chatroom, setChatroom] = useState([]);
-  const empId = empInfo.empId;
+
   // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
   //   transport: ['websocket'],
   // });
+
+function CRMCopy({ empInfo, setChatStatus }) {
+  const [chatroom, setChatroom] = useState([]);
+  const empId = empInfo.empId;
+  // const sock = new SockJS('http://localhost:8080/chatstart');
   const sock = new SockJS('http://15.164.224.26:8080/chatstart');
   const client = Stomp.over(sock);
   const [roomId, setRoomId] = useState(0);
@@ -29,6 +32,7 @@ function CRMCopy({ empInfo }) {
   }, [empId]);
 
   useEffect(() => {}, [roomId]);
+
 
   return (
     <div className={styles.listroom}>
@@ -43,7 +47,8 @@ function CRMCopy({ empInfo }) {
                 <div
                   className={styles.roomcon}
                   key={index}
-                  onClick={(e) => {
+
+                  onClick={() => {
                     setRoomId(chat.chatroom.chatroomId);
                   }}>
                   <Box className={styles.chatRoomBox}>
@@ -69,6 +74,7 @@ function CRMCopy({ empInfo }) {
                         disableElevation
                         onClick={(e) => {
                           const roomDelete = () => {
+                            e.preventDefault();
                             onExitRoom(
                               chat.chatroom.chatroomId,
                               empInfo.empId,
@@ -83,8 +89,7 @@ function CRMCopy({ empInfo }) {
                                 chat.chatroom.headCount
                               )
                             );
-
-                            e.preventDefault();
+                            setChatStatus('chatEmpList');
                           };
 
                           return roomDelete();
@@ -119,7 +124,12 @@ function CRMCopy({ empInfo }) {
           </div>
         </>
       ) : (
-        <ChatCopy empInfo={empInfo} roomId={roomId} />
+
+        <ChatCopy
+          empInfo={empInfo}
+          roomId={roomId}
+          setChatStatus={setChatStatus}
+        />
       )}
     </div>
   );

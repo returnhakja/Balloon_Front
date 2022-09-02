@@ -55,7 +55,7 @@ export const insertUnitList = async (rows) => {
       unitCode: element[0],
       unitName: element[1],
       bell: element[2],
-      unit: { parentUnit: element[3] },
+      parentUnit: { unitCode: element[3] },
     });
   });
 
@@ -89,8 +89,8 @@ export const deleteUnit = async (data) => {
 // 조직 번호로 조직 업데이트 - 미완
 export const updateUnit = async (data) => {
   console.log(data);
-  // const url = '/unit/change';
-  // await axios.put(url, data).catch((error) => console.log(error));
+  const url = '/unit/change';
+  await axios.put(url, data).catch((error) => console.log(error));
   window.location.href = '/management/unit';
 };
 

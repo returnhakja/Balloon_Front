@@ -33,6 +33,7 @@ function Home({ empInfo, setEmpInfo, logout, isLogin }) {
         logout={logout}
         isLogin={isLogin}
       />
+
       {isLogin && (
         <div className={styles.Icon}>
           {open ? (
@@ -55,6 +56,7 @@ function Home({ empInfo, setEmpInfo, logout, isLogin }) {
           )}
         </div>
       )}
+
       <Outlet context={[empInfo]} />
       <Footer />
     </>

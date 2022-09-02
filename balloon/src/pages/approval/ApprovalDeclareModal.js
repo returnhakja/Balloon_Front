@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { updateApproval, updateApvlBizRpt } from '../../context/ApprovalAxios';
+import { updateApproval, updateApvlDoc } from '../../context/ApprovalAxios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -12,6 +12,7 @@ export default function ApprovalDeclareModal({
   openModal,
   setOpenModal,
   approver,
+  paInfo,
 }) {
   const handleClose = () => {
     setOpenModal(false);
@@ -43,24 +44,28 @@ export default function ApprovalDeclareModal({
               뒤로가기
             </Button>
             <Link
-              to={'/'}
+              to={'/boxes/ar'}
               onClick={async () => {
                 approver.map((apvl) => {
-                  updateApvlBizRpt(apvl, 4);
+                  updateApvlDoc(apvl, 4, paInfo);
                   updateApproval(apvl, 4);
                 });
+                alert('문서를 반려 하였습니다!');
               }}>
               <Button variant="contained" size="large" sx={{ my: 0.5 }}>
                 반려하기
               </Button>
             </Link>
             <Link
-              to={'/boxes'}
+              to={'/boxes/ac'}
               onClick={async () => {
-                approver.map((apvl) => {
-                  updateApvlBizRpt(apvl, 2);
-                  updateApproval(apvl, 3);
-                });
+                approver &&
+                  approver.map((apvl) => {
+                    updateApvlDoc(apvl, 2, paInfo);
+                    console.log(apvl);
+                    updateApproval(apvl, 3);
+                  });
+                alert('문서를 결재 하였습니다!');
               }}>
               <Button variant="contained" size="large" sx={{ my: 0.5 }}>
                 결재하기
