@@ -8,11 +8,6 @@ import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import { Box, Modal } from '@mui/material';
 
-function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
-  const [roomId, setRoomId] = useState();
-  const chatroomId = roomId;
-
-  const [empInfo, setEmpInfo] = useOutletContext();
 
 const sock = new SockJS('http://localhost:8080/chatstart');
 const client = Stomp.over(sock);
