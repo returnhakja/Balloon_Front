@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import CalendarInsertModal from './CalendarInsertModal';
 import { insertSchedulList } from '../../context/CalendarAxios';
 import {
   getEmpByEmpId,
@@ -23,17 +22,8 @@ let inTime2 = inTime.replace(/(\s*)/g, '');
 const sock = new SockJS('http://localhost:8080/chatstart');
 const client = Stomp.over(sock);
 
-function CalendarInsert({
-  style,
-  openInsert,
-  setOpenInsert,
-  empInfo,
-  dateStr,
-}) {
-  console.log(dateStr);
-  console.log(new Date());
-  console.log(new Date(dateStr));
-  const [startValue, setStartValue] = useState(dateStr);
+function CalendarInsert({ style, openInsert, setOpenInsert, empInfo, dateStr }) {
+  const [startValue, setStartValue] = useState();
   const [endValue, setEndValue] = useState();
   const [eList, setCEList] = useState([]);
   const [botInfo, setBotInfo] = useState([]);
