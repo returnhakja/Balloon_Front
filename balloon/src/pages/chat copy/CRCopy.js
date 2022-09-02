@@ -2,32 +2,41 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import { onCreateChatroom, onAllChatEmp } from '../../context/ChatAxios';
+import { onCreateChatroom2, onAllChatEmp } from '../../context/ChatAxios';
 import styles from '../../css/chat/Chat.module.css';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import { Box, Modal } from '@mui/material';
 
-function CreateChatroom({ invite, openCreatChat, setopenCreatChat, style }) {
-  const [roomId, setRoomId] = useState();
-  const chatroomId = roomId;
+const styleBox = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 300,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  textAlign: 'center',
+  padding: 4,
+};
 
-  const [empInfo, setEmpInfo] = useOutletContext();
-
-const sock = new SockJS('http://localhost:8080/chatstart');
-const client = Stomp.over(sock);
-
-function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
+function CRCopy({
+  invite,
+  openCreatChat,
+  setopenCreatChat,
+  empInfo,
+  setChatStatus,
+  setInvite,
+}) {
   const inputRef = useRef();
-  const [empInfo] = useOutletContext();
-  const empId = empInfo.empId;
   const [allChatEmp, setAllChatEmp] = useState([]);
   // socket
-  // const sock = new SockJS('http://localhost:8080/chatstart');
-  // const client = Stomp.over(sock);
+  const sock = new SockJS('http://localhost:8080/chatstart');
+  const client = Stomp.over(sock);
 
   client.connect({}, () => {
-    client.subscribe(`/topic/message`, () => {
+    client.subscribe(`/topic/message`, (data) => {
       disconnect();
     });
   });
@@ -42,21 +51,25 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     }
   };
 
-  //초대할 사원
+  //1:1채팅일 때 이미있는 채팅방 예외처리   //초대할 사원
   const alreadyInvite = [];
   invite.map((vite) => {
     alreadyInvite.push(vite.empId);
   });
 
-  //headCount가 2인 chatroomEmployee T 정보 가져옴
   useEffect(() => {
-    onAllChatEmp(setAllChatEmp, empId);
+    //headCount가 2인 chatroomEmployee T 정보 가져옴
+    onAllChatEmp(setAllChatEmp, empInfo.empId);
   }, []);
 
+  //onAllChatEmp에서 로그인한 사원의 정보를 뺌
+  let allChatEmpId = [];
+  allChatEmpId = allChatEmp.filter((emp) => emp.empId.empId);
+
   //1:1채팅일 때 이미있는 채팅방 예외처리
-  const checkChatEmp = (allChatEmp, alreadyInvite) => {
+  const checkChatEmp = (allChatEmpId, alreadyInvite) => {
     let check = true;
-    allChatEmp.map((id) => {
+    allChatEmpId.map((id) => {
       if (id.empId.empId == alreadyInvite) {
         alert('이미 있는 채팅방입니다');
         check = false;
@@ -64,6 +77,9 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     });
     return check;
   };
+
+  //채팅방모달 닫기
+  const handleClose = () => setopenCreatChat(false);
 
   //채팅방이름 공백처리
   //1:1채팅일 때 이미있는 채팅방 예외처리
@@ -76,21 +92,26 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
         alert('채팅방 이름을 입력해주세요!!');
       } else {
         if (alreadyInvite.length === 1) {
-          const check = checkChatEmp(allChatEmp, alreadyInvite[0]);
+          const check = checkChatEmp(allChatEmpId, alreadyInvite[0]);
           check &&
-            onCreateChatroom(
+            onCreateChatroom2(
               empInfo,
               invite,
               document.getElementById('chatroomName'),
-              client
+              client,
+              setChatStatus
             );
+          handleClose();
         } else {
-          onCreateChatroom(
+          onCreateChatroom2(
             empInfo,
             invite,
             document.getElementById('chatroomName'),
-            client
+            client,
+            setChatStatus
           );
+          setInvite([]);
+          handleClose();
         }
       }
     } else {
@@ -100,9 +121,6 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     }
   };
 
-  //채팅방모달
-  const handleClose = () => setopenCreatChat(false);
-
   return (
     <Modal open={openCreatChat} onClose={handleClose}>
       <Box sx={styleBox}>
@@ -110,7 +128,7 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
         <div>
           <Input
             id="chatroomName"
-            // className={styles.inBox}
+            className={styles.inBox}
             ref={inputRef}
             onKeyPress={keyEnter}
             placeholder="채팅방 이름을 입력하세요"
@@ -122,9 +140,9 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
             }}>
             <div>채팅하기</div>
           </Button>
-        </Link>
+        </div>
       </Box>
     </Modal>
   );
 }
-export default CreateChatroom;
+export default CRCopy;

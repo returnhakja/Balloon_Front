@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import CalendarInsertModal from './CalendarInsertModal';
 import { insertSchedulList } from '../../context/CalendarAxios';
 import {
   getEmpByEmpId,
@@ -10,23 +11,38 @@ import { botChatroom } from '../../context/ChatAxios';
 import styles from '../../css/Component.module.css';
 import { BsCalendarWeek } from 'react-icons/bs';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-
 import axios from 'axios';
+import moment from 'moment';
+//채팅방 입장시간
+const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
+let data = 'T';
+let inTime = [nowTime.slice(0, 10), data, nowTime.slice(10)].join('');
+let inTime2 = inTime.replace(/(\s*)/g, '');
+
+const sock = new SockJS('http://localhost:8080/chatstart');
+const client = Stomp.over(sock);
 
 function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const [startValue, setStartValue] = useState();
-  const [endvalue, setEndValue] = useState();
+  const [endValue, setEndValue] = useState();
   const [eList, setCEList] = useState([]);
   const [botInfo, setBotInfo] = useState([]);
   const [inviteSchedule, setInviteSchedule] = useState([]);
+
   const empId = empInfo.empId;
   const scheduleListAdd = [];
 
   const calendarBot = 'Y0000001';
+  console.log(inTime2);
+
+  let scheduletitle = '';
+  let CalendarContent = '';
+  let CalendarLocation = '';
+  let Startvalue = null;
+  let endvalue = null;
 
   const handleClose = () => {
     setOpenInsert(false);
-    // window.location.href = '/calendar';
   };
 
   //사원추가 모달을 위한 open
@@ -49,8 +65,8 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   };
 
   //일정보내기
-  const sock = new SockJS('http://localhost:8080/chatstart');
-  const client = Stomp.over(sock);
+  // const sock = new SockJS('http://localhost:8080/chatstart');
+  // const client = Stomp.over(sock);
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, () => {
@@ -62,20 +78,12 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     client.disconnect();
   };
 
-  const onInviteSchedule = (checked, data) => {
-    if (checked) {
-      setInviteSchedule([...inviteSchedule, data]);
-    } else {
-      setInviteSchedule(inviteSchedule.filter((button) => button !== data));
-    }
-  };
-
   const insertHandle = () => {
-    const scheduletitle = document.getElementById('scheduletitle').value;
-    const CalendarContent = document.getElementById('CalendarContent').value;
-    const CalendarLocation = document.getElementById('CalendarLocation').value;
-    const Startvalue = document.getElementById('startvalue').value;
-    const endvalue = document.getElementById('endvalue').value;
+    scheduletitle = document.getElementById('scheduletitle').value;
+    CalendarContent = document.getElementById('CalendarContent').value;
+    CalendarLocation = document.getElementById('CalendarLocation').value;
+    Startvalue = document.getElementById('startvalue').value;
+    endvalue = document.getElementById('endvalue').value;
 
     inviteSchedule.push(empId);
     console.log(inviteSchedule);
@@ -108,8 +116,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
       });
     });
 
-    // console.log(scheduleListAdd);
-
     insertSchedulList(scheduleListAdd, setOpenInsert);
 
     //일정등록 후 알림보내기
@@ -119,9 +125,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   useEffect(() => {
     getEmpListInSameUnit(empId, setCEList);
     getEmpByEmpId(calendarBot, setBotInfo);
-    // setInvite();
-    // console.log(eList);
-    // console.log(empId);
   }, []);
 
   //이미 존재하는 사람들
@@ -137,6 +140,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   });
   console.log(botroomExist);
   console.log(botroomId);
+  console.log(inviteSchedule);
 
   //새로운 채팅방이 생성되어야할 사람들
   let invitepeople;
@@ -153,6 +157,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         headCount: 2,
       });
     });
+    console.log('sss');
     axios.post('/chatroom/createschchatroom', arr).then((response) => {
       console.log(response.data);
       onSchUserInvite(response.data, invitepeople);
@@ -162,28 +167,30 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
   //chatroomEmployee T에 새로운 값넣고 채팅보내는 부분
   const onSchUserInvite = (add, invitepeople) => {
-    add.map((ad, index) => {
+    add.map((add, index) => {
+      console.log(add.chatroomId);
       axios
         .post(
-          `/cre/insertchatemp/${ad.chatroomId}`,
-
+          `/cre/insertchatemp/${add.chatroomId}`,
           [
             {
               empId: {
                 empId: invitepeople[index],
               },
+              inTime: inTime2,
             },
             {
               empId: {
                 empId: calendarBot,
               },
+              inTime: inTime2,
             },
           ],
           client.send(
             '/app/chat/message',
             {},
             JSON.stringify({
-              chatroomId: ad.chatroomId,
+              chatroomId: add.chatroomId,
               writer: botInfo,
               chatContent: '새로운 일정이 등록되었습니다',
             })
@@ -194,6 +201,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         });
     });
     botroomMsg();
+    scheduleChatContent(add);
   };
 
   // 이미생성된 채팅방에 알림보내기
@@ -206,6 +214,114 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
           chatroomId: id,
           writer: botInfo,
           chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
+        })
+      );
+      client.send(
+        '/app/chat/message',
+        {},
+        JSON.stringify({
+          chatroomId: id,
+          writer: botInfo,
+          chatContent:
+            '{' +
+            '"' +
+            'scheduletitle' +
+            '"' +
+            ':' +
+            '"' +
+            scheduletitle +
+            '"' +
+            ',' +
+            '"' +
+            'CalendarContent' +
+            '"' +
+            ':' +
+            '"' +
+            CalendarContent +
+            '"' +
+            ',' +
+            '"' +
+            'CalendarLocation' +
+            '"' +
+            ':' +
+            '"' +
+            CalendarLocation +
+            '"' +
+            ',' +
+            '"' +
+            'Startvalue' +
+            '"' +
+            ':' +
+            '"' +
+            Startvalue +
+            '"' +
+            ',' +
+            '"' +
+            'endvalue' +
+            '"' +
+            ':' +
+            '"' +
+            endvalue +
+            '"' +
+            '}',
+          status: 2,
+        })
+      );
+    });
+  };
+
+  //일정내용보내기
+  const scheduleChatContent = (add) => {
+    add.map((add) => {
+      client.send(
+        '/app/chat/message',
+        {},
+        JSON.stringify({
+          chatroomId: add.chatroomId,
+          writer: botInfo,
+          chatContent:
+            '{' +
+            '"' +
+            'scheduletitle' +
+            '"' +
+            ':' +
+            '"' +
+            scheduletitle +
+            '"' +
+            ',' +
+            '"' +
+            'CalendarContent' +
+            '"' +
+            ':' +
+            '"' +
+            CalendarContent +
+            '"' +
+            ',' +
+            '"' +
+            'CalendarLocation' +
+            '"' +
+            ':' +
+            '"' +
+            CalendarLocation +
+            '"' +
+            ',' +
+            '"' +
+            'Startvalue' +
+            '"' +
+            ':' +
+            '"' +
+            Startvalue +
+            '"' +
+            ',' +
+            '"' +
+            'endvalue' +
+            '"' +
+            ':' +
+            '"' +
+            endvalue +
+            '"' +
+            '}',
+          status: 2,
         })
       );
     });
@@ -260,13 +376,12 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
             shrink: true,
           }}
         />
-
         <span className={styles.centerfont}> : </span>
         <TextField
           id="endvalue"
           label="끝나는 일"
           type="datetime-local"
-          defaultValue={endvalue}
+          defaultValue={endValue}
           sx={{ width: 250 }}
           onChange={(newValue) => {
             setEndValue(newValue);
@@ -278,37 +393,16 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         <br />
         <br />
         <Button onClick={handleOpen}>사원추가</Button>
-        <Modal
+        <CalendarInsertModal
           open={open}
-          onClose={handleClose}
-          aria-labelledby="parent-modal-title"
-          aria-describedby="parent-modal-description">
-          <Box sx={{ ...style, width: 400 }}>
-            {eList.map((emp, index) => {
-              return (
-                <Typography
-                  id="modal-modal-description"
-                  sx={{ mt: 2 }}
-                  key={index}>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => {
-                      console.log(e);
-                      onInviteSchedule(e.currentTarget.checked, emp.empId);
-                    }}
-                    checked={inviteSchedule.includes(emp.empId) ? true : false}
-                  />
-                  {emp.empName}
-                  {emp.position}
-                </Typography>
-              );
-            })}
-            <br />
-            <Button onClick={handleListClose}>취소하기</Button>
-            <Button onClick={handleempAddClose}>추가하기</Button>
-            {/* <ChildModal /> */}
-          </Box>
-        </Modal>
+          handleClose={handleClose}
+          style={style}
+          eList={eList}
+          inviteSchedule={inviteSchedule}
+          handleListClose={handleListClose}
+          handleempAddClose={handleempAddClose}
+          setInviteSchedule={setInviteSchedule}
+        />
 
         <Typography id="modal-modal-description" variant="h6" sx={{ mt: 2 }}>
           MEMO

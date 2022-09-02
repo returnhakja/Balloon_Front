@@ -1,4 +1,10 @@
 import axios from 'axios';
+import moment from 'moment';
+//채팅방 입장시간
+const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
+let data = 'T';
+let inTime = [nowTime.slice(0, 10), data, nowTime.slice(10)].join('');
+let inTime2 = inTime.replace(/(\s*)/g, '');
 
 //ChatRoom.js
 //마지막으로 보낸 채팅list가져오기
@@ -11,7 +17,7 @@ export const onChatroom = async (setChatroom, empId) => {
     .catch((error) => console.log(error));
 };
 
-//채팅방 삭제
+//headCount가 0일 때 채팅방 삭제
 export const onDeleteRoom = async (chatroomId) => {
   axios
     .delete(`/chatroom/deletechatroom/${chatroomId}`)
@@ -64,20 +70,77 @@ export const onUserInvite = async (chatroomId, invite, client) => {
             empId: {
               empId: data.empId,
             },
+            inTime: inTime2,
           };
         })
       )
       .catch((error) => console.log(error));
 };
 
-// 일정봇과 채팅 보내기
+
+//채팅방 만들기
+export const onCreateChatroom2 = async (
+  empInfo,
+  invite,
+  chatroomName,
+  client,
+  setChatStatus
+) => {
+  invite.push(empInfo);
+  axios
+    .post('/chatroom/createchatroom', {
+      chatroomName: chatroomName.value,
+      headCount: invite.length,
+    })
+    .then((response) => {
+      onUserInvite(response.data, invite, client);
+
+      setChatStatus('chatList');
+    })
+    .catch((error) => console.log(error));
+};
+
+//chatroomEmployee T에 초대할 사람과 초대한 사람 넣어주기
+export const onUserInvite2 = async (chatroomId, invite, client) => {
+  invite &&
+    axios
+      .post(
+        `/cre/insertchatemp/${chatroomId}`,
+        invite.map((data) => {
+          const inviteEnter = () => {
+            client.send(
+              '/app/chat/message',
+              {},
+              JSON.stringify({
+                chatroomId: chatroomId,
+                writer: data,
+                chatContent: data.empName + '님이 입장하셨습니다',
+              })
+            );
+          };
+          inviteEnter();
+          return {
+            empId: {
+              empId: data.empId,
+            },
+          };
+        })
+      )
+      .catch((error) => console.log(error));
+};
 
 // 이미 일정봇과 채팅이 존재하는 사원 찾기
 export const botChatroom = async (inviteSchedule, setBotRoom) => {
   axios.post(`/cre/botchatroom`, inviteSchedule).then((response) => {
-    console.log(response.data);
     setBotRoom(response.data);
   });
+};
+
+// 채팅방인원이 2명인 정보 가져오기
+export const onAllChatEmp = async (setAllChatEmp, empId) => {
+  axios
+    .get(`/cre/allchatemp/${empId}`)
+    .then((response) => setAllChatEmp(response.data));
 };
 
 //////////////////////////////////////////////////////
@@ -93,9 +156,9 @@ export const empIdInfo = async (chatroomId, setChatempinfo) => {
 };
 
 //이전에 채팅했던 기록보이게
-export const chatRecord = async (chatroomId, setChatting) => {
+export const chatRecord = async (chatroomId, setChatting, empId) => {
   axios
-    .get(`/chat/chatrecord/${chatroomId}`)
+    .get(`/chat/chatrecord/${chatroomId}/${empId}`)
     .then((response) => {
       setChatting(response.data);
     })
