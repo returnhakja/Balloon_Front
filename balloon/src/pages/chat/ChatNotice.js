@@ -15,7 +15,10 @@ function ChatNotice() {
   const [chatroom, setChatroom] = useState([]);
   const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
-  const sock = new SockJS('http://localhost:8080/chatstart');
+  // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
+  //   transport: ['websocket'],
+  // });
+  const sock = new SockJS('/chatstart');
   const client = Stomp.over(sock);
 
   //마지막으로 보낸 채팅list가져오기

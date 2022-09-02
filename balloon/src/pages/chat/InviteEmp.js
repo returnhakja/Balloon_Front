@@ -32,8 +32,10 @@ function InviteEmp({ style, modalOpen, setModalOpen }) {
   const empId = empInfo.empId;
 
   // socket
+
   // const sock = new SockJS('http://localhost:8080/chatstart');
   // const client = Stomp.over(sock);
+
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, () => {

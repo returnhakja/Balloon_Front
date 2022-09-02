@@ -4,3 +4,8 @@
   bottom: 1rem;
   z-index: 100;
 }
+
+.float {
+  float: right;
+}
+

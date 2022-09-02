@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const findUnitByUnitId = async (unitCode, setUnit) => {
-  console.log(unitCode);
+  // console.log(unitCode);
   const url = '/unit/';
   const urlStr = url + unitCode;
   await axios
