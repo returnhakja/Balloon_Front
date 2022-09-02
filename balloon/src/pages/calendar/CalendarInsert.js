@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import CalendarInsertModal from './CalendarInsertModal';
 import { insertSchedulList } from '../../context/CalendarAxios';
 import {
   getEmpByEmpId,
@@ -10,7 +11,6 @@ import { botChatroom } from '../../context/ChatAxios';
 import styles from '../../css/Component.module.css';
 import { BsCalendarWeek } from 'react-icons/bs';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-
 import axios from 'axios';
 
 function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
@@ -26,7 +26,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
   const handleClose = () => {
     setOpenInsert(false);
-    // window.location.href = '/calendar';
   };
 
   //사원추가 모달을 위한 open
@@ -60,14 +59,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
   const disconnect = () => {
     client.disconnect();
-  };
-
-  const onInviteSchedule = (checked, data) => {
-    if (checked) {
-      setInviteSchedule([...inviteSchedule, data]);
-    } else {
-      setInviteSchedule(inviteSchedule.filter((button) => button !== data));
-    }
   };
 
   const insertHandle = () => {
@@ -137,6 +128,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   });
   console.log(botroomExist);
   console.log(botroomId);
+  console.log(inviteSchedule);
 
   //새로운 채팅방이 생성되어야할 사람들
   let invitepeople;
@@ -153,6 +145,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         headCount: 2,
       });
     });
+    console.log('sss');
     axios.post('/chatroom/createschchatroom', arr).then((response) => {
       console.log(response.data);
       onSchUserInvite(response.data, invitepeople);
@@ -162,11 +155,11 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
 
   //chatroomEmployee T에 새로운 값넣고 채팅보내는 부분
   const onSchUserInvite = (add, invitepeople) => {
+    console.log(add.chatroomId);
     add.map((ad, index) => {
       axios
         .post(
           `/cre/insertchatemp/${ad.chatroomId}`,
-
           [
             {
               empId: {
@@ -260,7 +253,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
             shrink: true,
           }}
         />
-
         <span className={styles.centerfont}> : </span>
         <TextField
           id="endvalue"
@@ -278,37 +270,16 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         <br />
         <br />
         <Button onClick={handleOpen}>사원추가</Button>
-        <Modal
+        <CalendarInsertModal
           open={open}
-          onClose={handleClose}
-          aria-labelledby="parent-modal-title"
-          aria-describedby="parent-modal-description">
-          <Box sx={{ ...style, width: 400 }}>
-            {eList.map((emp, index) => {
-              return (
-                <Typography
-                  id="modal-modal-description"
-                  sx={{ mt: 2 }}
-                  key={index}>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => {
-                      console.log(e);
-                      onInviteSchedule(e.currentTarget.checked, emp.empId);
-                    }}
-                    checked={inviteSchedule.includes(emp.empId) ? true : false}
-                  />
-                  {emp.empName}
-                  {emp.position}
-                </Typography>
-              );
-            })}
-            <br />
-            <Button onClick={handleListClose}>취소하기</Button>
-            <Button onClick={handleempAddClose}>추가하기</Button>
-            {/* <ChildModal /> */}
-          </Box>
-        </Modal>
+          handleClose={handleClose}
+          style={style}
+          eList={eList}
+          inviteSchedule={inviteSchedule}
+          handleListClose={handleListClose}
+          handleempAddClose={handleempAddClose}
+          setInviteSchedule={setInviteSchedule}
+        />
 
         <Typography id="modal-modal-description" variant="h6" sx={{ mt: 2 }}>
           MEMO

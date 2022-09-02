@@ -1,29 +1,19 @@
-import Box from '@mui/material/Box';
-
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 import React, { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
-import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
-import styles from '../../css/chat/Chat.module.css';
-import Button from '@mui/material/Button';
-import { Checkbox, Container, Grid } from '@mui/material';
-import AddCommentIcon from '@mui/icons-material/AddComment';
-import ClearIcon from '@mui/icons-material/Clear';
 import CECopy from './CECopy';
 import CNCopy from './CNCopy';
 import CSCopy from './CSCopy';
 import CRMCopy from './CRMCopy';
+import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
+import styles from '../../css/chat/Chat.module.css';
+import Box from '@mui/material/Box';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export default function Test({ open, setOpen, empInfo }) {
-  //   const [open, setOpen] = React.useState(false);
-  //   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [chatEmpList, setCEList] = useState([]);
   const [chatUnitList, setCUList] = useState([]);
   const [openCreatChat, setopenCreatChat] = useState(false);
   const [invite, setInvite] = useState([]);
-  //   const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
   const [chatStatus, setChatStatus] = useState('chatEmpList');
   const returnArr = (list, setCUList) => {
@@ -104,7 +94,7 @@ export default function Test({ open, setOpen, empInfo }) {
             {chatStatus === 'chatEmpList' ? (
               <CECopy open={open} setOpen={setOpen} empInfo={empInfo} />
             ) : chatStatus === 'chatList' ? (
-              <CRMCopy empInfo={empInfo} />
+              <CRMCopy empInfo={empInfo} setChatStatus={setChatStatus} />
             ) : chatStatus === 'chatNotice' ? (
               <CNCopy setChatStatus={setChatStatus} empInfo={empInfo} />
             ) : (
@@ -113,7 +103,6 @@ export default function Test({ open, setOpen, empInfo }) {
           </div>
         </div>
       </Box>
-      {/* </Modal> */}
     </div>
   );
 }

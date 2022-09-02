@@ -13,7 +13,14 @@ import styles from '../../css/chat/Chat.module.css';
 import { Checkbox } from '@mui/material';
 import { Box, Button, Modal } from '@mui/material';
 
-function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
+function InviteEmpCopy({
+  style,
+  modalOpen,
+  setModalOpen,
+  setChatempinfo,
+  empInfo,
+  chatroomId,
+}) {
   const [chatEmpList, setCEList] = useState([]);
   const [chatUnitList, setCUList] = useState([]);
   const [newInvite, setNewInvite] = useState([]);
@@ -24,8 +31,6 @@ function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
   const [headCount, setHeadCount] = useState(0);
   // const [chatempinfo, setChatempinfo] = useState([]);
   const [chatAddEmpInfo, setChatAddEmpInfo] = useState([]);
-  const chatroomId = new URL(document.location).searchParams.get('room');
-  const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
 
   // socket
@@ -46,7 +51,7 @@ function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
   //이미 채팅방에 초대 된 사원들 -> existEmp
   const existEmp = [];
   chatAddEmpInfo.map((info) => {
-    existEmp.push(info.empId.empId);
+    return existEmp.push(info.empId.empId);
   });
 
   //Unit이름 띄우기
@@ -88,7 +93,7 @@ function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
         }
       }
     }
-  }, [chatroomId, chatEmpList, chatUnitList, existChatEmp]);
+  }, [chatroomId, chatEmpList, empId, chatUnitList, existChatEmp]);
 
   //채팅방에 없는 사원list
   const ChatEmpHandle = (chatEmpList, setECEList) => {
@@ -146,4 +151,4 @@ function InviteEmp({ style, modalOpen, setModalOpen, setChatempinfo }) {
   );
 }
 
-export default InviteEmp;
+export default InviteEmpCopy;

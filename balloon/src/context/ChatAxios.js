@@ -11,7 +11,7 @@ export const onChatroom = async (setChatroom, empId) => {
     .catch((error) => console.log(error));
 };
 
-//채팅방 삭제
+//headCount가 0일 때 채팅방 삭제
 export const onDeleteRoom = async (chatroomId) => {
   axios
     .delete(`/chatroom/deletechatroom/${chatroomId}`)
@@ -69,6 +69,8 @@ export const onUserInvite = async (chatroomId, invite, client) => {
       )
       .catch((error) => console.log(error));
 };
+
+
 //채팅방 만들기
 export const onCreateChatroom2 = async (
   empInfo,
@@ -87,7 +89,6 @@ export const onCreateChatroom2 = async (
       onUserInvite(response.data, invite, client);
 
       setChatStatus('chatList');
-      // window.location.href = `/chatting?room=${response.data}`;
     })
     .catch((error) => console.log(error));
 };
@@ -121,19 +122,18 @@ export const onUserInvite2 = async (chatroomId, invite, client) => {
       .catch((error) => console.log(error));
 };
 
-// 일정봇과 채팅 보내기
-
 // 이미 일정봇과 채팅이 존재하는 사원 찾기
 export const botChatroom = async (inviteSchedule, setBotRoom) => {
   axios.post(`/cre/botchatroom`, inviteSchedule).then((response) => {
-    console.log(response.data);
     setBotRoom(response.data);
   });
 };
 
 // 채팅방인원이 2명인 정보 가져오기
-export const onAllChatEmp = async (setAllChatEmp) => {
-  axios.get('/cre/allchatemp').then((response) => setAllChatEmp(response.data));
+export const onAllChatEmp = async (setAllChatEmp, empId) => {
+  axios
+    .get(`/cre/allchatemp/${empId}`)
+    .then((response) => setAllChatEmp(response.data));
 };
 
 //////////////////////////////////////////////////////
@@ -149,9 +149,9 @@ export const empIdInfo = async (chatroomId, setChatempinfo) => {
 };
 
 //이전에 채팅했던 기록보이게
-export const chatRecord = async (chatroomId, setChatting) => {
+export const chatRecord = async (chatroomId, setChatting, empId) => {
   axios
-    .get(`/chat/chatrecord/${chatroomId}`)
+    .get(`/chat/chatrecord/${chatroomId}/${empId}`)
     .then((response) => {
       setChatting(response.data);
     })
