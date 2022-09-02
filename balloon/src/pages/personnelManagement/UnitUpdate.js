@@ -34,33 +34,48 @@ const Input = ({ label, register, required }) => (
   </>
 );
 
-const Select = React.forwardRef(({ name, label, unit, higher }, ref) => {
-  const [uCode, setUnitCode] = useState(
-    unit.unitCode !== '00010000' ? unit.parentUnit.unitCode : '없음'
-  );
-  return (
-    <>
-      {/* {setUnitCode(unit.parentUnit)} */}
-      <label className={styles.label}>{label}</label>
-      <select
-        className={styles.input}
-        name={name}
-        ref={ref}
-        value={uCode}
-        onChange={(newValue) => {
-          console.log('newValue', newValue.target.value);
-          setUnitCode(newValue.target.value);
-        }}>
-        {higher.length !== 0 &&
-          higher.map((data, index) => (
-            <option key={data.unitCode} value={data.unitCode}>
-              {data.unitName + ' (' + data.unitCode + ')'}
+const Select = React.forwardRef(
+  ({ name, label, unit, higher, parentCode, setParentCode }, ref) => {
+    useEffect(() => {
+      console.log(parentCode);
+    }, [parentCode]);
+    return (
+      <>
+        <Typography
+          id="modal-modal-title"
+          variant="h6"
+          component="h6"
+          sx={{ mb: 2, mt: 2 }}>
+          {label}
+        </Typography>
+        <select
+          className={styles.input}
+          name={name}
+          ref={ref}
+          value={parentCode}
+          onChange={(newValue) => {
+            parentCode !== '0' && setParentCode(newValue.target.value);
+          }}>
+          {parentCode === '0' ? (
+            <option key={'0'} value={'0'}>
+              {'상위 조직을 설정할 수 없는 최상위 조직입니다.'}
             </option>
-          ))}
-      </select>
-    </>
-  );
-});
+          ) : (
+            higher.length !== 0 &&
+            higher.map(
+              (data) =>
+                data.unitCode !== unit.unitCode && (
+                  <option key={data.unitCode} value={data.unitCode}>
+                    {data.unitName + ' (' + data.unitCode + ')'}
+                  </option>
+                )
+            )
+          )}
+        </select>
+      </>
+    );
+  }
+);
 
 export default function UnitUpdate({ open, setOpen, unitCode }) {
   //   const [open, setOpen] = React.useState(false);
@@ -71,42 +86,42 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
     handleSubmit,
   } = useForm();
 
-  // console.log(unitCode);
   const handleClose = () => setOpen(false);
 
   const [unit, setUnit] = useState({});
   const [higher, setHigher] = useState([]);
   // const handleClose = () => {
   //   setOpenUpdate(false);
-
+  const [parentCode, setParentCode] = useState('0');
   // };
 
   const onSubmit = (unitInfo) => {
     console.log(unitInfo);
 
-    // console.log(data);
-    // insertUnit(unitInfo);
+    const updateData = {
+      unitCode: unitInfo.unitCode,
+      unitName: unitInfo.unitName,
+      bell: unitInfo.bell,
+      parentUnit: { unitCode: parentCode },
+    };
+
+    updateUnit(updateData);
   }; // your form submit function which will invoke after successful validation
 
   const updateHandle = () => {
-    const unitCode = document.getElementById('unitCode').value;
-    const unitName = document.getElementById('unitName').value;
-    const bell = document.getElementById('bell').value;
-    const parentUnit = document.getElementById('parentUnit').value;
-
-    const updatedata = {
-      unitCode: unitCode,
-      unitName: unitName,
-      bell: bell,
-      parentUnit: { unitCode: parentUnit },
-    };
+    // const updatedata = {
+    //   unitCode: unitCode,
+    //   unitName: unitName,
+    //   bell: bell,
+    //   parentUnit: { unitCode: parentUnit },
+    // };
   };
 
   useEffect(() => {
     findUnitByUnitId(unitCode, setUnit);
     findHigherOrganization(setHigher);
-    console.log(unit);
-  }, [Object.keys(unit).length, higher.length]);
+    unit.parentUnit && setParentCode(unit.parentUnit.unitCode);
+  }, [Object.keys(unit).length, higher.length, parentCode.length]);
 
   return (
     <div>
@@ -149,12 +164,21 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
                 sx={{ mb: 2, mt: 2 }}>
                 조직 이름
               </Typography>
-              <input
-                name="unitName"
-                defaultValue={unit.unitName}
-                className={styles.input}
-                {...register('unitName', { required: true, maxLength: 10 })}
-              />
+              {unit.unitCode === '00000000' ? (
+                <input
+                  name="unitName"
+                  value={unit.unitName}
+                  className={styles.input}
+                  readOnly
+                />
+              ) : (
+                <input
+                  name="unitName"
+                  defaultValue={unit.unitName}
+                  className={styles.input}
+                  {...register('unitName', { required: true, maxLength: 10 })}
+                />
+              )}
               {errors.unitName && errors.unitName.type === 'required' && (
                 <p>This field is required</p>
               )}
@@ -187,30 +211,13 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
               {errors.bell && errors.bell.type === 'pattern' && (
                 <p>전화번호 형식이 맞지 않습니다.</p>
               )}
-              <Typography
-                id="modal-modal-description"
-                variant="h6"
-                component="h6"
-                sx={{ mt: 2 }}>
-                상위 조직
-              </Typography>
-              <TextField
-                required
-                id="parentUnit"
-                // label="메모 입력"
-                sx={{ width: '100%' }}
-                inputProps={{ readOnly: true }}
-                value={
-                  Object.keys(unit).length !== 0 && unit.parentUnit
-                    ? unit.parentUnit.unitCode
-                    : '없음'
-                }
-              />
               <Select
                 label="상위조직"
                 {...register('parentUnit')}
                 unit={unit}
                 higher={higher}
+                parentCode={parentCode}
+                setParentCode={setParentCode}
               />
 
               <Button

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 import Banner from './banner.svg';
 import styles from '../css/nav/Navbar.module.css';
 
