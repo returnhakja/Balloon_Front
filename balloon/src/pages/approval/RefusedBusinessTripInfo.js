@@ -284,7 +284,6 @@ function RefusedBusinessTripInfo() {
                   {
                     approver.map((data, index) => {
                       console.log(data);
-                      console.log(index);
                       insertApproval(params.docId, 1, data, inputData, empInfo);
                     });
                   }

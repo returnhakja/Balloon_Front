@@ -54,7 +54,6 @@ function Calendar() {
         state: true,
         scheduleId: scheduleId,
       });
-      console.log(scheduleId);
     }
   };
 
@@ -65,14 +64,6 @@ function Calendar() {
   }, [empInfo]);
 
   useEffect(() => {}, [openInsert, openUpdate, list]);
-
-  // useEffect(() => {
-  //   if (list.length === 0) {
-  //     if (empInfo.length !== 0) {
-  //       getScheduleByEmp(empInfo.empId, setList);
-  //     }
-  //   }
-  // }, [empInfo, openInsert, openUpdate, list]);
 
   // 즐겨찾기 캘린더
   // useEffect(() => {
@@ -90,7 +81,6 @@ function Calendar() {
               type="checkbox"
               onClick={() => {
                 getScheduleByEmp(empInfo.empId);
-                console.log('dkdkddkk');
               }}
             />
             {emp.empName}
@@ -130,8 +120,6 @@ function Calendar() {
           <FullCalendar
             locale="ko"
             initialView="dayGridMonth"
-            // initialEvents={list}
-            // height="100vh"
             handleWindowResize="50vw"
             plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
             headerToolbar={{
@@ -140,11 +128,6 @@ function Calendar() {
               right: 'today prevYear prev next nextYear',
             }}
             googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
-            // events={{
-            //   googleCalendarId:
-            //     'ko.south_korea#holiday@group.v.calendar.google.com',
-            //   color: 'orange',
-            // }}
             moreLinkContent={(e) => (e.text = ` +${e.num} 더보기`)}
             dayMaxEvents={2}
             eventSources={[
@@ -155,8 +138,6 @@ function Calendar() {
                 color: 'red',
               },
             ]}
-            // eventSources={[list]}
-
             eventBackgroundColor={'black'}
             eventSourceSuccess={() => console.log('Success EventSource')}
             eventSourceFailure={() => console.log('Failure EventSource')}
@@ -165,12 +146,9 @@ function Calendar() {
           />
         ) : (
           <>
-            {/* {console.log(list)} */}
             <FullCalendar
               locale="ko"
               initialView="dayGridMonth"
-              // initialEvents={list}
-              // height="70vh"
               handleWindowResize="50vw"
               plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
               headerToolbar={{

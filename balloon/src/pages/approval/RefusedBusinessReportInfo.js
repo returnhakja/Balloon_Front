@@ -33,14 +33,11 @@ function RefusedBusinessReportInfo() {
 
   const params = useParams();
 
-  console.log(empInfo);
-
   useEffect(() => {
     getBizRptByBizRptId(params.docId, setInputData);
     getApvlByDocId(params.docId, setApprover);
   }, [params, inputData.length]);
 
-  console.log(empInfo);
   return (
     <SideNavigation>
       <Container>
@@ -173,7 +170,6 @@ function RefusedBusinessReportInfo() {
 
                   approver.map((data, index) => {
                     console.log(data);
-                    console.log(index);
                     return insertApproval(
                       params.docId,
                       1,

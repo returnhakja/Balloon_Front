@@ -41,8 +41,6 @@ function BizTripInfo() {
   // 사원 정보 context
 
   const params = useParams();
-  console.log(params);
-  console.log(empInfo);
   console.log(bizTpInfo);
   console.log(bizTpEmp);
 

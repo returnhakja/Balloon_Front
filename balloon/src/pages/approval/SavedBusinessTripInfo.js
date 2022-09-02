@@ -328,7 +328,6 @@ function SavedBusinessTripInfo() {
                       }
                       approver.map((data, index) => {
                         console.log(data);
-                        console.log(index);
                         const approvalId = getApvlId(params.docId, data.empId);
 
                         if (approvalId !== null) {
@@ -383,7 +382,6 @@ function SavedBusinessTripInfo() {
                   {
                     approver.map((data, index) => {
                       console.log(data);
-                      console.log(index);
                       const approvalId = getApvlId(params.docId, data.empId);
                       insertApproval(
                         params.docId,

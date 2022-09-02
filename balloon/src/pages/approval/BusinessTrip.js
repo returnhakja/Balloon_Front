@@ -292,7 +292,6 @@ function BusinessTrip() {
 
                     approver.map((data, index) => {
                       console.log(data);
-                      console.log(index);
                       return insertApproval(docId, 0, data, inputData, empInfo);
                     });
 
@@ -321,7 +320,6 @@ function BusinessTrip() {
                   }
                   approver.map((data, index) => {
                     console.log(data);
-                    console.log(index);
                     return insertApproval(docId, 1, data, inputData, empInfo);
                   });
                 }}>

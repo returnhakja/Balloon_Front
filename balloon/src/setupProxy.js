@@ -66,12 +66,4 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
-
-  // app.use(
-  //   '/chatstart',
-  //   createProxyMiddleware({
-  //     target: 'http://15.164.224.26:8080',
-  //     changeOrigin: true,
-  //   })
-  // );
 };

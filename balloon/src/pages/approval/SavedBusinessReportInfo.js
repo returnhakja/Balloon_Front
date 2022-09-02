@@ -71,7 +71,6 @@ function SavedBusinessReportInfo() {
     console.log(rmApprover);
   }, [params, inputData, approver.length]);
   console.log(approver);
-  console.log(empInfo);
   return (
     <SideNavigation>
       <Container>
@@ -233,7 +232,6 @@ function SavedBusinessReportInfo() {
                       }
                       approver.map((data, index) => {
                         console.log(data);
-                        console.log(index);
                         const approvalId = getApvlId(params.docId, data.empId);
 
                         if (approvalId !== null) {
@@ -284,7 +282,6 @@ function SavedBusinessReportInfo() {
 
                   approver.map((data, index) => {
                     console.log(data);
-                    console.log(index);
                     return insertApproval(
                       params.docId,
                       1,

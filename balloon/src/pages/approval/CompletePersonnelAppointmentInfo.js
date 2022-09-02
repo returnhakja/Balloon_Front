@@ -31,7 +31,7 @@ function PersonnelAppointmentInfo() {
   // const [openapprovalModal, setOpenapprovalModal] = useState(false);
 
   // 사원 정보 context
-  // const [empInfo, setEmpInfo] = useOutletContext();
+  // const [empInfo] = useOutletContext();
 
   const [paInfo, setPaInfo] = useState({});
   const [approver, setApprover] = useState([]);

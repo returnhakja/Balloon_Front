@@ -39,8 +39,6 @@ function BizReportInfo() {
   const [apvl, setApvl] = useState({});
 
   const params = useParams();
-  console.log(params);
-  console.log(empInfo);
   console.log(bizRptInfo);
 
   useEffect(() => {
@@ -50,7 +48,6 @@ function BizReportInfo() {
     }
   }, [params]);
 
-  console.log(empInfo);
   return (
     <SideNavigation>
       <Container>

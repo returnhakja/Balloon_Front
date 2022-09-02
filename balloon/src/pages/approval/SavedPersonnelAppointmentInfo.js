@@ -74,9 +74,6 @@ function SavedPersonnelAppointmentInfo() {
       getPAByPAId(params.docId, setInputData);
     } else {
       setPosi(inputData.position);
-
-      // console.log(inputData.movedEmpId.empName);
-      // console.log(inputData);
     }
     if (noApprover.length === 0) {
       setNoApprover(noApprover);
@@ -89,8 +86,6 @@ function SavedPersonnelAppointmentInfo() {
     });
     rmApprover = svApprover.filter((element) => !arr.includes(element.empId));
     console.log(rmApprover);
-    // console.log(mEmpInfo);
-    // console.log(inputData);
   }, [inputData.personnelAppointmentId, approver.length]);
 
   useEffect(() => {

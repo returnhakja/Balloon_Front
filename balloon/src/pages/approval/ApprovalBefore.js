@@ -11,8 +11,6 @@ function ApprovalBefore() {
   const [empInfo] = useOutletContext();
   const [docList, setDocList] = useState([]);
 
-  console.log(empInfo);
-
   useEffect(() => {
     getApvlByApvrIdAnddocStatus(empInfo.empId, 1, setDocList);
   }, []);

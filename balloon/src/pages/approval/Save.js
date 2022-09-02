@@ -19,7 +19,6 @@ function Save() {
 
   function getdocId(params) {
     let documentId = params.row.docId;
-    console.log(params);
     if (documentId.includes('업무기안')) {
       return (
         <Link to={`/draft/sdbr/${params.row.docId}`}>

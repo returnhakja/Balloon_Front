@@ -9,7 +9,6 @@ import Box from '@mui/material/Box';
 import ClearIcon from '@mui/icons-material/Clear';
 
 export default function Test({ open, setOpen, empInfo }) {
-
   const handleClose = () => setOpen(false);
   const [chatEmpList, setCEList] = useState([]);
   const [chatUnitList, setCUList] = useState([]);
@@ -63,9 +62,7 @@ export default function Test({ open, setOpen, empInfo }) {
     }
   };
 
-  useEffect(() => {
-    console.log(chatStatus);
-  }, [chatStatus]);
+  useEffect(() => {}, [chatStatus]);
 
   return (
     <div>
@@ -96,7 +93,6 @@ export default function Test({ open, setOpen, empInfo }) {
               <CECopy open={open} setOpen={setOpen} empInfo={empInfo} />
             ) : chatStatus === 'chatList' ? (
               <CRMCopy empInfo={empInfo} setChatStatus={setChatStatus} />
-
             ) : chatStatus === 'chatNotice' ? (
               <CNCopy setChatStatus={setChatStatus} empInfo={empInfo} />
             ) : (

@@ -24,7 +24,6 @@ const style = {
 function Home({ empInfo, setEmpInfo, logout, isLogin }) {
   const [open, setOpen] = useState(false);
 
-  console.log(empInfo);
   return (
     <>
       <Navbar
