@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
-import { getApvlByApvrNameAnddocStatus } from '../../context/ApprovalAxios';
+import { getApvlByApvrIdAnddocStatus } from '../../context/ApprovalAxios';
 import styles from '../../css/Component.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
@@ -11,39 +11,29 @@ function ApprovalBefore() {
   const [empInfo] = useOutletContext();
   const [docList, setDocList] = useState([]);
 
-  // 날짜 관련
-  const [startValue, setStartValue] = useState(null);
-  const [endvalue, setEndValue] = useState(null);
-
-  //기안양식
-  const [form, setForm] = useState('');
-
-  const handleChange = (event) => {
-    setForm(event.target.value);
-  };
   console.log(empInfo);
 
   useEffect(() => {
-    getApvlByApvrNameAnddocStatus(empInfo.empName, 1, setDocList);
+    getApvlByApvrIdAnddocStatus(empInfo.empId, 1, setDocList);
   }, []);
 
   function getdocId(params) {
     let documentId = params.row.docId;
     if (documentId.includes('업무기안')) {
       return (
-        <Link to={`/apvl/pd/${params.row.docId}`}>
+        <Link to={`/apvl/abbr/${params.row.docId}`}>
           {params.row && params.row.documentTitle}
         </Link>
       );
     } else if (documentId.includes('출장계획')) {
       return (
-        <Link to={`/doc/ddtp/${params.row.docId}`}>
+        <Link to={`/apvl/abtp/${params.row.docId}`}>
           {params.row && params.row.documentTitle}
         </Link>
       );
     } else if (documentId.includes('인사명령')) {
       return (
-        <Link to={`/doc/ddpa/${params.row.docId}`}>
+        <Link to={`/apvl/abpa/${params.row.docId}`}>
           {params.row && params.row.documentTitle}
         </Link>
       );

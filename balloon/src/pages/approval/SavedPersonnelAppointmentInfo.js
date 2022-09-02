@@ -5,7 +5,15 @@ import ModalApproval from './ModalApproval';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import { findUnitList } from '../../context/UnitAxios';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
-import { deletePA, getPAByPAId, insertPA } from '../../context/ApprovalAxios';
+import {
+  deleteApvlByDocIdAndEmpId,
+  deletePA,
+  getApvlByDocId,
+  getApvlId,
+  getPAByPAId,
+  insertApproval,
+  insertPA,
+} from '../../context/ApprovalAxios';
 import { positionArr } from '../../context/EmpFunc';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
@@ -36,7 +44,11 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function SavedPersonnelAppointment() {
+function SavedPersonnelAppointmentInfo() {
+  const [empInfo] = useOutletContext();
+  const [openapprovalModal, setOpenapprovalModal] = useState(false);
+  const [inputData, setInputData] = useState({});
+  const [startValue, setStartValue] = useState(null);
   const [posi, setPosi] = useState('');
   const [units, setUnits] = useState([]);
   const [unit, setUnit] = useState({});
@@ -44,25 +56,17 @@ function SavedPersonnelAppointment() {
   const [mEmpInfo, setMEmpInfo] = useState('');
   const [mEmp, setMEmp] = useState({});
   const [mEmp2, setMEmp2] = useState('');
-
-  // 날짜 관련
-  const [startValue, setStartValue] = useState(null);
-
-  // 모달
-  // const [openModal, setOpenModal] = useState(false);
-  const [openapprovalModal, setOpenapprovalModal] = useState(false);
-
-  // 사원 정보 context
-  const [empInfo] = useOutletContext();
-  const [inputData, setInputData] = useState({});
+  const [approver, setApprover] = useState([]);
+  const [noApprover, setNoApprover] = useState([]);
+  const [svApprover, setSvApprover] = useState([]);
 
   const params = useParams();
-  // const unitNameList = [];
-  // unitNameList =
-  //   units &&
-  //   units.map((unit) => {
-  //     unitNameList.push(unit.unitName);
-  //   });
+  let rmApprover = [];
+
+  useEffect(() => {
+    getApvlByDocId(params.docId, setApprover, setSvApprover);
+  }, []);
+
   useEffect(() => {
     if (!inputData.personnelAppointmentId) {
       findUnitList(setUnits);
@@ -74,9 +78,20 @@ function SavedPersonnelAppointment() {
       // console.log(inputData.movedEmpId.empName);
       // console.log(inputData);
     }
+    if (noApprover.length === 0) {
+      setNoApprover(noApprover);
+    }
+    console.log(svApprover);
+    let arr = [];
+    approver.map((data) => {
+      arr.push(data.empId);
+      console.log(arr);
+    });
+    rmApprover = svApprover.filter((element) => !arr.includes(element.empId));
+    console.log(rmApprover);
     // console.log(mEmpInfo);
     // console.log(inputData);
-  }, [inputData.personnelAppointmentId]);
+  }, [inputData.personnelAppointmentId, approver.length]);
 
   useEffect(() => {
     if (Object.keys(inputData).length !== 0) {
@@ -135,7 +150,6 @@ function SavedPersonnelAppointment() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
@@ -160,16 +174,38 @@ function SavedPersonnelAppointment() {
           <ModalApproval
             openapprovalModal={openapprovalModal}
             setOpenapprovalModal={setOpenapprovalModal}
+            setApprover={setApprover}
+            approver={approver}
+            setNoApprover={setNoApprover}
+            noApprover={noApprover}
           />
         )}
         <hr />
         <br />
-        <Card
-          variant="outlined"
-          sx={{ maxWidth: 150 }}
-          style={{ backgroundColor: '#F1F9FF' }}>
-          {!!empInfo && <DfCard drafterName={empInfo.empName} />}
-        </Card>
+        <div className={styles.approvalCard}>
+          <Card
+            variant="outlined"
+            sx={{ maxWidth: 150 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {!!empInfo && <DfCard drafterName={empInfo.empName} />}
+          </Card>
+          {approver.map((empData, index) => {
+            console.log(empData);
+            // if (apvl.length === 0) {
+            //   setApvl(empData);
+            // }
+
+            return (
+              <Card
+                key={index}
+                variant="outlined"
+                sx={{ maxWidth: 150 }}
+                style={{ backgroundColor: '#F1F9FF' }}>
+                <ApCard approverName={empData.empName} />
+              </Card>
+            );
+          })}
+        </div>
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>
@@ -348,6 +384,7 @@ function SavedPersonnelAppointment() {
                   size="large"
                   onClick={async () => {
                     await deletePA(params.docId);
+                    alert('문서가 삭제되었습니다.');
                   }}>
                   삭제하기
                 </Button>
@@ -368,31 +405,77 @@ function SavedPersonnelAppointment() {
                       posi,
                       setInputData
                     );
-                    window.location.href = '/boxes';
+                    {
+                      if (rmApprover.length !== 0) {
+                        rmApprover.map((data) =>
+                          deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                        );
+                      }
+                      approver.map((data, index) => {
+                        console.log(data);
+                        console.log(index);
+                        const approvalId = getApvlId(params.docId, data.empId);
+
+                        if (approvalId !== null) {
+                          approvalId.then((apvlId) => {
+                            console.log(data);
+                            insertApproval(
+                              params.docId,
+                              0,
+                              data,
+                              inputData,
+                              empInfo,
+                              apvlId
+                            );
+                          });
+                        } else {
+                          insertApproval(
+                            params.docId,
+                            0,
+                            data,
+                            inputData,
+                            empInfo
+                          );
+                        }
+                      });
+                    }
+                    alert('문서가 임시저장되었습니다!');
                   }}>
                   임시저장
                 </Button>
               </Link>
-              <SaveButton
-                variant="contained"
-                color="success"
-                size="large"
-                onClick={async () => {
-                  await insertPA(
-                    params.docId,
-                    1,
-                    inputData,
-                    empInfo,
-                    startValue,
-                    mEmp,
-                    unit,
-                    posi,
-                    setInputData
-                  );
-                  window.location.href = '/boxes';
+              <Link
+                to={'/boxes/ds'}
+                onClick={async (e) => {
+                  if (approver.length !== 0) {
+                    await insertPA(
+                      params.docId,
+                      1,
+                      inputData,
+                      empInfo,
+                      startValue,
+                      mEmp,
+                      unit,
+                      posi,
+                      setInputData
+                    );
+                    alert('문서가 상신되었습니다!');
+                  } else {
+                    alert('결재선을 설정해주세요 !');
+                    e.preventDefault();
+                  }
+                  {
+                    approver.map((data, index) => {
+                      console.log(data);
+                      console.log(index);
+                      insertApproval(params.docId, 1, data, inputData, empInfo);
+                    });
+                  }
                 }}>
-                상신하기
-              </SaveButton>
+                <SaveButton variant="contained" color="success" size="large">
+                  상신하기
+                </SaveButton>
+              </Link>
             </Box>
           </div>
         </div>
@@ -401,4 +484,4 @@ function SavedPersonnelAppointment() {
   );
 }
 
-export default SavedPersonnelAppointment;
+export default SavedPersonnelAppointmentInfo;

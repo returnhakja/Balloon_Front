@@ -50,30 +50,6 @@ function BizReportInfo() {
     }
   }, [params]);
 
-  const ApCard = (empName) => (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          결재자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
-
-  // const [openModal, setOpenModal] = useState(false);
   console.log(empInfo);
   return (
     <SideNavigation>

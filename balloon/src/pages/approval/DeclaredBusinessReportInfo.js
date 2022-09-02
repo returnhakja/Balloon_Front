@@ -51,29 +51,6 @@ function DeclaredBusinessReportInfo() {
     }
   }, [params]);
 
-  const ApCard = (empName) => (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          결재자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
-  // const [openModal, setOpenModal] = useState(false);
   return (
     <SideNavigation>
       <Container>
@@ -144,19 +121,6 @@ function DeclaredBusinessReportInfo() {
               <td colSpan={2} className={styles.tdright}>
                 {' '}
                 {bizRptInfo.documentTitle}
-                {/* <form>
-                  <TextField
-                    type="text"
-                    name="title"
-                    value={bizRptInfo.documentTitle}
-                    className={styles.inputtext}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    focused={false}
-                  />
-                </form> */}
-                {/* <TextField />*/}
               </td>
             </tr>
           </thead>
@@ -191,6 +155,7 @@ function DeclaredBusinessReportInfo() {
                   size="large"
                   onClick={async () => {
                     await deleteBizRpt(params.docId);
+                    alert('문서가 삭제되었습니다!');
                   }}>
                   삭제하기
                 </Button>

@@ -40,7 +40,7 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function Pointment() {
+function PersonnelAppointment() {
   const [posi, setPosi] = useState('');
   const [units, setUnits] = useState('');
   const [unit, setUnit] = useState('');
@@ -339,7 +339,7 @@ function Pointment() {
                 </Button>
               </Link>
               <Link
-                to={'/boxes'}
+                to={'/boxes/dd'}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
                     await insertPA(
@@ -377,4 +377,4 @@ function Pointment() {
   );
 }
 
-export default Pointment;
+export default PersonnelAppointment;

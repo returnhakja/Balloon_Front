@@ -157,7 +157,7 @@ export const insertBizRpt = async (
   const bizRptTitle = document.getElementById('bizRptTitle');
   const bizRptContent = document.getElementById('bizRptContent');
   console.log(docStatus);
-
+  console.log(empInfo);
   const url = '/api/bizrpt';
 
   const headers = {
@@ -252,7 +252,7 @@ export const insertPA = async (
   const pATitle = document.getElementById('PATitle');
   const pAContent = document.getElementById('PAContent');
 
-  console.log(mEmp);
+  console.log(mEmp.empId);
   console.log(posi);
   console.log(unit);
   const url = '/api/pa';
@@ -271,7 +271,7 @@ export const insertPA = async (
     unitName: unit.unitName,
     movedEmpName: mEmp.empName,
     empName: empInfo.empName,
-    movedEmpId: {
+    movedEmp: {
       empId: mEmp && mEmp.empId,
     },
     unit: {
@@ -310,6 +310,23 @@ export const deletePA = async (docId) => {
   await axios.delete(str);
 };
 
+// 결재 pk 가져오기 -------------------------------------------
+export const getApvlId = async (docId, apvrId) => {
+  const url = '/api/apvl/apvlid/';
+  const str = url + docId + '/' + apvrId;
+  let approverId = 0;
+  await axios.get(str).then((res) => {
+    if (res.data !== null) {
+      console.log(res.data.approvalId);
+      approverId = res.data.approvalId;
+    } else {
+      approverId = null;
+    }
+  });
+  console.log(approverId);
+  return approverId;
+};
+
 // 결재 생성 -------------------------------------------------
 
 export const insertApproval = async (
@@ -317,7 +334,8 @@ export const insertApproval = async (
   docStatus,
   apvr,
   inputData,
-  empInfo
+  empInfo,
+  approvalId
 ) => {
   const url = '/api/apvl';
 
@@ -328,16 +346,21 @@ export const insertApproval = async (
   console.log(docStatus);
   console.log(empInfo);
   console.log(apvr);
-  console.log(apvr.approverName);
+  console.log(inputData);
+  console.log(approvalId);
 
   if (docId.includes('업무기안')) {
     inputData = {
+      approvalId: approvalId,
       approvalStatus: docStatus,
-      approverName: apvr.empName ? apvr.empName : apvr.approverName,
+      approverName: apvr.empName,
       position: apvr.position,
       drafterName: empInfo && empInfo.empName,
-      emp: {
+      drafterEmp: {
         empId: empInfo && empInfo.empId,
+      },
+      approverEmp: {
+        empId: apvr.empId,
       },
       businessReport: {
         businessReportId: docId,
@@ -345,12 +368,16 @@ export const insertApproval = async (
     };
   } else if (docId.includes('출장계획')) {
     inputData = {
+      approvalId: approvalId,
       approvalStatus: docStatus,
       approverName: apvr.empName,
       position: apvr.position,
       drafterName: empInfo && empInfo.empName,
-      emp: {
+      drafterEmp: {
         empId: empInfo && empInfo.empId,
+      },
+      approverEmp: {
+        empId: apvr.empId,
       },
       businessTrip: {
         businessTripId: docId,
@@ -358,12 +385,16 @@ export const insertApproval = async (
     };
   } else if (docId.includes('인사명령')) {
     inputData = {
+      approvalId: approvalId,
       approvalStatus: docStatus,
       approverName: apvr.empName,
       position: apvr.position,
       drafterName: empInfo && empInfo.empName,
-      emp: {
+      drafterEmp: {
         empId: empInfo && empInfo.empId,
+      },
+      approverEmp: {
+        empId: apvr.empId,
       },
       personnelAppointment: {
         personnelAppointmentId: docId,
@@ -377,7 +408,7 @@ export const insertApproval = async (
   await axios.post(url, inputData, { headers });
 };
 
-export const getApvlByApvrNameAnddocStatus = async (
+export const getApvlByApvrIdAnddocStatus = async (
   apporver,
   docStatus,
   setDocList
@@ -418,13 +449,19 @@ export const getApvlByApvrNameAnddocStatus = async (
   });
 };
 
-export const getApvlByDocId = async (docId, setApprover) => {
+export const getApvlByDocId = async (docId, setApprover, setSvApprover) => {
   const url = '/api/apvl/';
   const str = url + docId;
 
   await axios.get(str).then((res) => {
     console.log(res.data);
-    setApprover(res.data);
+    let apvrList = [];
+    res.data.map((apvl) => {
+      apvrList.push(apvl.approverEmp);
+    });
+    console.log(apvrList);
+    setApprover(apvrList);
+    setSvApprover(apvrList);
   });
 };
 
@@ -432,10 +469,6 @@ export const getApvlByDocId = async (docId, setApprover) => {
 export const updateApproval = async (apvl, state) => {
   const apvlCom = document.getElementById('apvlContent');
   let inputData = {};
-  console.log(apvl);
-  console.log(state);
-  console.log(apvl.approvalId);
-  console.log(apvl.businessReport);
   const url = '/api/apvl';
   // const str = url + apvl.approvalId;
   const headers = {
@@ -450,8 +483,11 @@ export const updateApproval = async (apvl, state) => {
       approverName: apvl.approverName,
       position: apvl.position,
       drafterName: apvl.drafterName,
-      emp: {
-        empId: apvl && apvl.emp.empId,
+      drafterEmp: {
+        empId: apvl && apvl.drafterEmp.empId,
+      },
+      approverEmp: {
+        epmId: apvl && apvl.approverEmp.empId,
       },
       businessReport: {
         businessReportId: apvl && apvl.businessReport.businessReportId,
@@ -459,14 +495,17 @@ export const updateApproval = async (apvl, state) => {
     };
   } else if (apvl.businessTrip != null) {
     inputData = {
-      approvalId: apvl.approverId,
+      approvalId: apvl.approvalId,
       approvalStatus: state,
       approvalComment: apvlCom.value,
       approverName: apvl.approverName,
       position: apvl.position,
       drafterName: apvl.drafterName,
-      emp: {
-        empId: apvl && apvl.emp.empId,
+      drafterEmp: {
+        empId: apvl && apvl.drafterEmp.empId,
+      },
+      approverEmp: {
+        epmId: apvl && apvl.approverEmp.empId,
       },
       businessTrip: {
         businessTripId: apvl && apvl.businessTrip.businessTripId,
@@ -474,14 +513,17 @@ export const updateApproval = async (apvl, state) => {
     };
   } else if (apvl.personnelAppointment != null) {
     inputData = {
-      approvalId: apvl.approverId,
+      approvalId: apvl.approvalId,
       approvalStatus: state,
       approvalComment: apvlCom.value,
       approverName: apvl.approverName,
       position: apvl.position,
       drafterName: apvl.drafterName,
-      emp: {
-        empId: apvl && apvl.emp.empId,
+      drafterEmp: {
+        empId: apvl && apvl.drafterEmp.empId,
+      },
+      approverEmp: {
+        epmId: apvl && apvl.approverEmp.empId,
       },
       personnelAppointment: {
         personnelAppointmentId:
@@ -495,33 +537,92 @@ export const updateApproval = async (apvl, state) => {
   await axios.post(url, inputData, { headers });
 };
 
-export const updateApvlBizRpt = async (apvl, state) => {
-  const bizRpt = apvl.businessReport;
-  const url = '/api/bizrpt';
-  let inputData = {};
+export const updateApvlDoc = async (apvl, state, paInfo) => {
   console.log(apvl);
-  console.log(bizRpt);
+  console.log(paInfo);
+  let url = '';
+  let inputData = {};
 
   const headers = {
     'Content-Type': 'application/json',
   };
 
-  inputData = {
-    businessReportId: bizRpt.businessReportId,
-    documentTitle: bizRpt.documentTitle,
-    documentContent: bizRpt.documentContent,
-    documentStatus: state,
-    empName: bizRpt.empName,
-    position: bizRpt.position,
-    unitName: bizRpt.unitName,
-    unit: {
-      unitCode: apvl && apvl.emp.unit.unitCode,
-    },
-    emp: {
-      empId: apvl && apvl.emp.empId,
-    },
-  };
+  if (apvl.businessReport != null) {
+    url = '/api/bizrpt';
+    const bizRpt = apvl.businessReport;
+    inputData = {
+      businessReportId: bizRpt.businessReportId,
+      documentTitle: bizRpt.documentTitle,
+      documentContent: bizRpt.documentContent,
+      documentStatus: state,
+      empName: bizRpt.empName,
+      position: bizRpt.position,
+      unitName: bizRpt.unitName,
+      unit: {
+        unitCode: apvl && apvl.emp.unit.unitCode,
+      },
+      emp: {
+        empId: apvl && apvl.emp.empId,
+      },
+    };
+  } else if (apvl.businessTrip != null) {
+    url = '/api/biztp';
+    const bizTp = apvl.businessTrip;
+    inputData = {
+      businessTripId: bizTp.businessTripId,
+      documentTitle: bizTp.documentTitle,
+      documentContent: bizTp.documentContent,
+      documentStatus: state,
+      startDate: bizTp.startDate,
+      endDate: bizTp.endDate,
+      destination: bizTp.destination,
+      visitingPurpose: bizTp.visitingPurpose,
+      empName: bizTp.empName,
+      position: bizTp.position,
+      unitName: bizTp.unitName,
+      unit: {
+        unitCode: apvl && apvl.emp.unit.unitCode,
+      },
+      emp: {
+        empId: apvl && apvl.emp.empId,
+      },
+    };
+  } else if (apvl.personnelAppointment != null) {
+    console.log(apvl);
+    url = '/api/pa';
+    const pa = apvl.personnelAppointment;
+    inputData = {
+      personnelAppointmentId: pa.personnelAppointmentId,
+      documentTitle: pa.documentTitle,
+      documentContent: pa.documentContent,
+      documentStatus: state,
+      personnelDate: pa.personnelDate,
+      position: pa.position,
+      unitName: pa.unitName,
+      movedEmpName: pa.movedEmpName,
+      empName: pa.empName,
+      movedEmpId: {
+        empId: paInfo.movedEmpId && paInfo.movedEmpId.empId,
+      },
+      unit: {
+        unitCode: paInfo.unit && paInfo.unit.unitCode,
+      },
+      emp: {
+        empId: paInfo.emp && paInfo.emp.empId,
+      },
+    };
+  } else {
+    alert('문서가 잘못되었습니다.');
+  }
   console.log(inputData);
 
   await axios.post(url, inputData, { headers });
+};
+
+export const deleteApvlByDocIdAndEmpId = async (docId, empId) => {
+  const url = '/api/apvl/';
+  const str = url + docId + '/' + empId;
+  console.log(docId);
+  console.log(empId);
+  await axios.delete(str);
 };

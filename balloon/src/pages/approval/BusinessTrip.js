@@ -27,7 +27,7 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function Trip() {
+function BusinessTrip() {
   // 날짜 관련
   const [startValue, setStartValue] = useState(null);
   const [endValue, setEndValue] = useState(null);
@@ -36,6 +36,7 @@ function Trip() {
   const [docId, setDocId] = useState('');
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
+  const [apvlInfo, setApvlInfo] = useState([]);
 
   // 모달
   // const [openModal, setOpenModal] = useState(false);
@@ -303,7 +304,7 @@ function Trip() {
                 </Button>
               </Link>
               <Link
-                to={'/boxes'}
+                to={'/boxes/dd'}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
                     await insertBizTp(
@@ -338,4 +339,4 @@ function Trip() {
   );
 }
 
-export default Trip;
+export default BusinessTrip;

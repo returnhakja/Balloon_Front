@@ -9,49 +9,13 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 function Save() {
   const [empInfo] = useOutletContext();
-
   const [docList, setDocList] = useState([]);
-
-  const docStatus = 3;
-
-  // 날짜 관련
-  // const [startValue, setStartValue] = useState(null);
-  // const [endvalue, setEndValue] = useState(null);
-
-  //기안양식
-  const [form, setForm] = useState('');
-
-  const handleChange = (event) => {
-    setForm(event.target.value);
-  };
+  const [docStatus, setDocStatus] = useState(0);
 
   useEffect(() => {
-    if (docList.length === 0) {
-      console.log(empInfo);
-      getDocsByEmp(empInfo.empId, docStatus, setDocList);
-    }
-  }, [empInfo, docList.length]);
-
-  // const [bottomcenter, setBottomCenter] = useState('bottomcenter');
-  // const data = [
-  //   // 기안 제목 , 상신일 , 문서번호
-  //   {
-  //     title: '문서번호',
-  //     dataIndex: 'docId',
-  //     key: 'docId',
-  //   },
-  //   {
-  //     title: '문서제목',
-  //     dataIndex: 'documentTitle',
-  //     key: 'documentTitle',
-  //     render: (id, index) => <Link to={`/`}>{id}</Link>,
-  //   },
-  //   {
-  //     title: '처리일자',
-  //     dataIndex: 'updateTime',
-  //     key: 'upDateTime',
-  //   },
-  // ];
+    getDocsByEmp(empInfo.empId, docStatus, setDocList);
+    docList.length === 0 && setDocStatus(3);
+  }, [empInfo, docStatus, docList.length]);
 
   function getdocId(params) {
     let documentId = params.row.docId;
@@ -98,81 +62,6 @@ function Save() {
           <br />
           <hr />
 
-          {/* <div className={styles.maintitle}>
-            <span className={styles.mainfont}> 상신일 </span>
-
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label="시작일"
-                value={startValue}
-                type=" date"
-                inputFormat={'yyyy-MM-dd'}
-                onChange={(newValue) => {
-                  setStartValue(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-
-            <span className={styles.centerfont}> : </span>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label="끝나는일"
-                value={endvalue}
-                inputFormat={'yyyy-MM-dd'}
-                onChange={(newValue) => {
-                  setEndValue(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-            <br />
-
-            <div className={styles.divform}>
-              <span className={styles.gianfont}> 기안양식 </span>
-              <Box sx={{ minWidth: 250, marginLeft: 2 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
-                    기안양식
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={form}
-                    label="기안양식"
-                    onChange={handleChange}>
-                    <MenuItem value={10}>업무기안</MenuItem>
-                    <MenuItem value={20}>출장기획서</MenuItem>
-                    <MenuItem value={30}>인사명령</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-
-              <span className={styles.search}> 검색 </span>
-
-              <TextField
-                id="outlined-basic"
-                label="기안제목 입력"
-                variant="outlined"
-              />
-            </div>
-          </div>
-          <hr style={{ marginTop: '3vh' }} />
-          <div style={{ textAlign: 'center' }}>
-            <Button
-              variant="contained"
-              size="large"
-              style={{ marginTop: '2vh' }}>
-              조회
-            </Button> */}
-          {/* <Table
-              columns={data}
-              dataSource={docList}
-              pagination={{
-                position: [bottomcenter],
-                pageSize: 5,
-              }}
-            /> */}
           <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
             <DataGrid
               getRowId={(docList) => docList.docId}
@@ -188,7 +77,6 @@ function Save() {
               }}
             />
           </div>
-          {/* </div> */}
         </Container>
       </SideNavigation>
     </>

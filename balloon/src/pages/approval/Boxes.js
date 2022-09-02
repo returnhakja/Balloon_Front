@@ -20,7 +20,7 @@ function Boxes() {
 
   // 현황 카드 변수
   const linkArr = ['/boxes/dd', '/boxes/dc', '/boxes/ds', '/boxes/dr'];
-  const apprvoalStatus = ['상신된', '완료된', '저장된', '반려된'];
+  const apprvoalStatus = ['상신한', '완료된', '저장된', '반려된'];
   const [countArr, setCountArr] = useState([]);
 
   const handleChange = (event, newValue) => {
