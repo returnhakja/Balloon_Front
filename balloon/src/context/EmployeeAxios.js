@@ -4,9 +4,27 @@ import Cookies from 'universal-cookie';
 // 쿠키를 사용할 수 있게 해주기
 export const findCookieAccessToken = () => {
   const cookies = new Cookies();
-  cookies.get('accessToken');
+  const cookie = cookies.get('accessToken');
+  // console.log('accessToken:', cookie);
 
-  return cookies;
+  return cookie;
+};
+
+// accessToken으로 이름, 직위, id 가져오기
+export const getMe = async (setEmpInfo) => {
+  const cookie = await findCookieAccessToken();
+  console.log(cookie);
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + cookie,
+    },
+  };
+  const url = '/employee/me';
+  await axios
+    .get(url, config)
+    .then((response) => response.data)
+    .then((data) => setEmpInfo(data))
+    .catch((error) => console.log(error));
 };
 
 // 전체 사원 출력 (페이징)
@@ -64,23 +82,6 @@ export const selectEmployees = async (setEmpList) => {
     .catch((error) => console.log(error));
 };
 
-// accessToken으로 이름, 직위, id 가져오기
-export const getMe = async (setEmpInfo) => {
-  const cookie = findCookieAccessToken();
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + cookie.cookies.accessToken,
-    },
-  };
-  const url = '/employee/me';
-  await axios
-    .get(url, config)
-    .then((response) => response.data)
-    .then((data) => setEmpInfo(data))
-    .catch((error) => console.log(error));
-};
-
 // 사번으로 Idcheck
 export const selectEmpByEmpId = async (empId, setIdChk) => {
   const urlStr = '/employee/' + empId;
@@ -119,6 +120,7 @@ export const setEmpInfoByEmpId = async (empId, setEmpInfo) => {
 // 결재선 사원들 출력
 export const getEmpListByUnitCode = async () => {
   const cookie = findCookieAccessToken();
+  console.log('getEmpCookie', cookie);
   const config = {
     headers: {
       'Content-Type': 'application/json',

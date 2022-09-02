@@ -58,11 +58,21 @@ function Organization() {
   //   </div>
   // );
 
+  const str1 = 'level-';
+  let num = 1;
+  const str2 = ' rectangle';
   return (
     <>
+      <>
+        <h1 className={str1 + num + str2}></h1>
+        <ol className={str1 + (num + 1) + str2}>
+          <li></li>
+        </ol>
+      </>
+
       {units.length && (
         <Container className="con">
-          <h1 className="level-1 rectangle">{units[0].unitName}</h1>
+          <h1 className={str1 + num + str2}>{units[0].unitName}</h1>
           <ol className="level-2-wrapper">
             <li>
               <h2 className="level-2 rectangle">{units[1].unitName}</h2>
