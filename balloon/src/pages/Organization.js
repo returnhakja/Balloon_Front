@@ -1,11 +1,6 @@
 import { Container, margin } from '@mui/system';
 import React, { useEffect, useState } from 'react';
-import {
-  findUnitList,
-  findUnitByUnitId,
-  // findUnitsByUnitId,
-} from '../context/UnitAxios';
-import { ChildUnits } from '../context/UnitFunc';
+import { findUnitList, findUnitByUnitId } from '../context/UnitAxios';
 import '../css/Organization.css';
 
 function Organization() {
@@ -18,7 +13,7 @@ function Organization() {
     if (units.length === 0) {
       findUnitList(setUnits);
     } else {
-      findUnitByUnitId(units[0].unitCode, setUnit);
+      console.log(units[0].unitName);
     }
   }, [units]);
 
@@ -64,69 +59,48 @@ function Organization() {
   // );
 
   return (
-    <Container className="con">
-      <h1 className="level-1 rectangle">
-        {unit.length !== 0 && units[0].unitName}
-      </h1>
-      <ol className="level-2-wrapper">
-        <li>
-          <h2 className="level-2 rectangle">
-            {unit.length !== 0 && units[1].unitName}
-          </h2>
-          <ol className="level-3-wrapper">
+    <>
+      {units.length && (
+        <Container className="con">
+          <h1 className="level-1 rectangle">{units[0].unitName}</h1>
+          <ol className="level-2-wrapper">
             <li>
-              <h3 className="level-3 rectangle">
-                {' '}
-                {unit.length !== 0 && units[2].unitName}
-              </h3>
+              <h2 className="level-2 rectangle">{units[1].unitName}</h2>
+              <ol className="level-3-wrapper">
+                <li>
+                  <h3 className="level-3 rectangle">{units[2].unitName}</h3>
+                </li>
+              </ol>
+            </li>
+            <li>
+              <h2 className="level-2 rectangle">{units[3].unitName}</h2>
+              <ol className="level-3-wrapper">
+                <li>
+                  <h3 className="level-3 rectangle">{units[4].unitName}</h3>
+                </li>
+              </ol>
+            </li>
+            <li>
+              <h2 className="level-2 rectangle">{units[5].unitName}</h2>
+              <ol className="level-3-1-wrapper">
+                <li>
+                  <h3 className="level-3-1 rectangle">{units[6].unitName}</h3>
+                </li>
+                <li>
+                  <h3 className="level-3-1 rectangle">{units[7].unitName}</h3>
+                </li>
+                <li>
+                  <h3 className="level-3-1 rectangle">{units[8].unitName}</h3>
+                </li>
+                <li>
+                  <h3 className="level-3-1 rectangle">{units[9].unitName}</h3>
+                </li>
+              </ol>
             </li>
           </ol>
-        </li>
-        <li>
-          <h2 className="level-2 rectangle">
-            {' '}
-            {unit.length !== 0 && units[3].unitName}
-          </h2>
-          <ol className="level-3-wrapper">
-            <li>
-              <h3 className="level-3 rectangle">
-                {' '}
-                {unit.length !== 0 && units[4].unitName}
-              </h3>
-            </li>
-          </ol>
-        </li>
-        <li>
-          <h2 className="level-2 rectangle">
-            {' '}
-            {unit.length !== 0 && units[5].unitName}
-          </h2>
-          <ol className="level-3-1-wrapper">
-            <li>
-              <h3 className="level-3-1 rectangle">
-                {' '}
-                {unit.length !== 0 && units[6].unitName}
-              </h3>
-            </li>
-            <li>
-              <h3 className="level-3-1 rectangle">
-                {unit.length !== 0 && units[7].unitName}
-              </h3>
-            </li>
-            <li>
-              <h3 className="level-3-1 rectangle">
-                {unit.length !== 0 && units[8].unitName}
-              </h3>
-            </li>
-            <li>
-              <h3 className="level-3-1 rectangle">
-                {unit.length !== 0 && units[9].unitName}
-              </h3>
-            </li>
-          </ol>
-        </li>
-      </ol>
-    </Container>
+        </Container>
+      )}
+    </>
   );
 }
 

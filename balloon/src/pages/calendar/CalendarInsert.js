@@ -11,9 +11,9 @@ import { botChatroom } from '../../context/ChatAxios';
 import styles from '../../css/Component.module.css';
 import { BsCalendarWeek } from 'react-icons/bs';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-
 import axios from 'axios';
 import moment from 'moment';
+
 //채팅방 입장시간
 const nowTime = moment().format('YYYY-MM-DD HH:mm:ss');
 let data = 'T';
@@ -23,17 +23,8 @@ let inTime2 = inTime.replace(/(\s*)/g, '');
 const sock = new SockJS('http://localhost:8080/chatstart');
 const client = Stomp.over(sock);
 
-function CalendarInsert({
-  style,
-  openInsert,
-  setOpenInsert,
-  empInfo,
-  dateStr,
-}) {
-  console.log(dateStr);
-  console.log(new Date());
-  console.log(new Date(dateStr));
-  const [startValue, setStartValue] = useState(dateStr);
+function CalendarInsert({ style, openInsert, setOpenInsert, empInfo, dateStr }) {
+  const [startValue, setStartValue] = useState();
   const [endValue, setEndValue] = useState();
   const [eList, setCEList] = useState([]);
   const [botInfo, setBotInfo] = useState([]);
