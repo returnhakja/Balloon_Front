@@ -37,11 +37,13 @@ import BusinessReport from './pages/approval/BusinessReport';
 import BusinessTrip from './pages/approval/BusinessTrip';
 import PersonnelAppointment from './pages/approval/PersonnelAppointment';
 
-import SavedBusinessReport from './pages/approval/SavedBusinessReport';
-import SavedBusinessTrip from './pages/approval/SavedBusinessTrip';
-import SavedPersonnelAppointment from './pages/approval/SavedPersonnelAppointment';
+import SavedBusinessReportInfo from './pages/approval/SavedBusinessReportInfo';
+import SavedBusinessTripInfo from './pages/approval/SavedBusinessTripInfo';
+import SavedPersonnelAppointmentInfo from './pages/approval/SavedPersonnelAppointmentInfo';
 
-import ApprovalDeclare from './pages/approval/ApprovalDeclare';
+import BizRptApprovalDeclare from './pages/approval/BizRptApprovalDeclare';
+import BizTpApprovalDeclare from './pages/approval/BizTpApprovalDeclare';
+import PAApprovalDeclare from './pages/approval/PAApprovalDeclare';
 
 import Calendar from './pages/calendar/Calendar';
 
@@ -62,6 +64,9 @@ import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
 
 import NotFound from './pages/NotFound';
+import RefusedBusinessReportInfo from './pages/approval/RefusedBusinessReportInfo';
+import RefusedBusinessTripInfo from './pages/approval/RefusedBusinessTripInfo';
+import RefusedPersonnelAppointmentInfo from './pages/approval/RefusedPersonnelAppointmentInfo';
 
 const cookies = new Cookies();
 
@@ -168,21 +173,52 @@ function App() {
             element={<DeclaredPersonnelAppointmentInfo />}
           />
 
+          {/* 반려된 기안 상세 정보 */}
+          <Route
+            path="/doc/drbr/:docId"
+            element={<RefusedBusinessReportInfo />}
+          />
+          <Route
+            path="/doc/drtp/:docId"
+            element={<RefusedBusinessTripInfo />}
+          />
+          <Route
+            path="/doc/drpa/:docId"
+            element={<RefusedPersonnelAppointmentInfo />}
+          />
+
           {/* 기안작성 */}
           <Route path="/draft/form" element={<Dashboard />} />
           <Route path="/draft/br" element={<BusinessReport />} />
           <Route path="/draft/bt" element={<BusinessTrip />} />
           <Route path="/draft/pa" element={<PersonnelAppointment />} />
+
           {/* 저장된 기안 */}
-          <Route path="/draft/sdbr/:docId" element={<SavedBusinessReport />} />
-          <Route path="/draft/sdbt/:docId" element={<SavedBusinessTrip />} />
+          {['/draft/sdbr/:docId', '/i'].map((path) => (
+            <Route
+              path={path}
+              key={path}
+              element={<SavedBusinessReportInfo />}
+            />
+          ))}
+
+          <Route
+            path="/draft/sdbr/:docId"
+            element={<SavedBusinessReportInfo />}
+          />
+          <Route
+            path="/draft/sdbt/:docId"
+            element={<SavedBusinessTripInfo />}
+          />
           <Route
             path="/draft/sdpa/:docId"
-            element={<SavedPersonnelAppointment />}
+            element={<SavedPersonnelAppointmentInfo />}
           />
 
           {/* 결재 상세 정보 */}
-          <Route path="/apvl/pd/:docId" element={<ApprovalDeclare />} />
+          <Route path="/apvl/abbr/:docId" element={<BizRptApprovalDeclare />} />
+          <Route path="/apvl/abtp/:docId" element={<BizTpApprovalDeclare />} />
+          <Route path="/apvl/abpa/:docId" element={<PAApprovalDeclare />} />
 
           {/* 캘린더 */}
           <Route element={<Calendar />} path="/calendar" exact />

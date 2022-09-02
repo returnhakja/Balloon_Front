@@ -24,7 +24,7 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function Report() {
+function BusinessReport() {
   // 사원 정보 context
   const [empInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
@@ -197,7 +197,7 @@ function Report() {
                 </Button>
               </Link>
               <Link
-                to={'/boxes'}
+                to={'/boxes/dd'}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
                     await insertBizRpt(
@@ -230,4 +230,4 @@ function Report() {
   );
 }
 
-export default Report;
+export default BusinessReport;

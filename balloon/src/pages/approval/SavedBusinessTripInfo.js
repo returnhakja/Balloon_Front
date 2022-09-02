@@ -4,8 +4,11 @@ import SideNavigation from '../../components/SideNavigation';
 import ModalApproval from './ModalApproval';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import {
+  deleteApvlByDocId,
+  deleteApvlByDocIdAndEmpId,
   deleteBizTp,
   getApvlByDocId,
+  getApvlId,
   getBizTpByBizTpId,
   insertApproval,
   insertBizTp,
@@ -13,13 +16,21 @@ import {
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import { FcDocument } from 'react-icons/fc';
-import { Button, Card, Container, Paper, TextField } from '@mui/material';
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Paper,
+  TextField,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
+import { Typography } from 'antd';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -29,28 +40,48 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function SavedBusinessTrip() {
+function SavedBusinessTripInfo() {
   const [empInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
   const [startValue, setStartValue] = useState(null);
   const [endValue, setEndValue] = useState(null);
   const [approver, setApprover] = useState([]);
+  const [noApprover, setNoApprover] = useState([]);
+  const [svApprover, setSvApprover] = useState([]);
 
   const params = useParams();
+  let rmApprover = [];
+
+  useEffect(() => {
+    getApvlByDocId(params.docId, setApprover, setSvApprover);
+  }, []);
+
   useEffect(() => {
     if (!!params) {
       if (Object.keys(inputData).length === 0) {
         getBizTpByBizTpId(params.docId, setInputData);
-        getApvlByDocId(params.docId, setApprover);
+        // getApvlByDocId(params.docId, setApprover);
       } else {
         setStartValue(inputData.startDate);
         setEndValue(inputData.endDate);
         approver.length !== 0 && console.log(approver);
       }
+      if (noApprover.length === 0) {
+        setNoApprover(noApprover);
+      }
     }
+    console.log(svApprover);
+    let arr = [];
+    approver.map((data) => {
+      arr.push(data.empId);
+      console.log(arr);
+    });
+    rmApprover = svApprover.filter((element) => !arr.includes(element.empId));
+    console.log(rmApprover);
   }, [params, inputData, startValue, endValue, approver.length]);
 
+  console.log(params.docId);
   return (
     <SideNavigation>
       <Container>
@@ -75,7 +106,6 @@ function SavedBusinessTrip() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
@@ -101,6 +131,10 @@ function SavedBusinessTrip() {
           <ModalApproval
             openapprovalModal={openapprovalModal}
             setOpenapprovalModal={setOpenapprovalModal}
+            setApprover={setApprover}
+            approver={approver}
+            setNoApprover={setNoApprover}
+            noApprover={noApprover}
           />
         )}
         <hr />
@@ -114,6 +148,7 @@ function SavedBusinessTrip() {
           </Card>
           {approver.map((empData, index) => {
             console.log(empData);
+
             // if (apvl.length === 0) {
             //   setApvl(empData);
             // }
@@ -124,7 +159,7 @@ function SavedBusinessTrip() {
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}>
-                <ApCard approverName={empData.approverName} />
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}
@@ -136,7 +171,6 @@ function SavedBusinessTrip() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 <form>
                   <input
                     id="bizTpTitle"
@@ -166,7 +200,6 @@ function SavedBusinessTrip() {
             <tr align="center">
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
-                {' '}
                 이거 일단 없음
               </td>
               <td className={styles.titlename}></td>
@@ -268,6 +301,7 @@ function SavedBusinessTrip() {
                   size="large"
                   onClick={async () => {
                     await deleteBizTp(params.docId);
+                    alert('문서가 삭제되었습니다!');
                   }}>
                   삭제하기
                 </Button>
@@ -287,16 +321,37 @@ function SavedBusinessTrip() {
                       setInputData
                     );
                     {
-                      approver.map(async (data, index) => {
+                      if (rmApprover.length !== 0) {
+                        rmApprover.map((data) =>
+                          deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                        );
+                      }
+                      approver.map((data, index) => {
                         console.log(data);
                         console.log(index);
-                        await insertApproval(
-                          params.docId,
-                          0,
-                          data,
-                          inputData,
-                          empInfo
-                        );
+                        const approvalId = getApvlId(params.docId, data.empId);
+
+                        if (approvalId !== null) {
+                          approvalId.then((apvlId) => {
+                            console.log(data);
+                            insertApproval(
+                              params.docId,
+                              0,
+                              data,
+                              inputData,
+                              empInfo,
+                              apvlId
+                            );
+                          });
+                        } else {
+                          insertApproval(
+                            params.docId,
+                            0,
+                            data,
+                            inputData,
+                            empInfo
+                          );
+                        }
                       });
                     }
                     alert('문서가 임시저장되었습니다!');
@@ -304,32 +359,7 @@ function SavedBusinessTrip() {
                   임시저장
                 </Button>
               </Link>
-              {/* <Link
-                to="/boxes"
-                onClick={async (e) => {
-                  if (approver != 0) {
-                    await insertBizTp(
-                      params.docId,
-                      1,
-                      inputData,
-                      empInfo,
-                      startValue,
-                      endValue,
-                      setInputData
-                    );
-                    alert('문서가 상신되었습니다!');
-                  } else {
-                    alert('결재선을 설정해주세요 !');
-                    e.preventDefault();
-                  }
-                  {
-                    approver.map((data, index) => {
-                      console.log(data);
-                      console.log(index);
-                      insertApproval(params.docId, 1, data, inputData, empInfo);
-                    });
-                  }
-                }}> */}
+
               <Link
                 to="/boxes"
                 onClick={async (e) => {
@@ -354,7 +384,15 @@ function SavedBusinessTrip() {
                     approver.map((data, index) => {
                       console.log(data);
                       console.log(index);
-                      insertApproval(params.docId, 1, data, inputData, empInfo);
+                      const approvalId = getApvlId(params.docId, data.empId);
+                      insertApproval(
+                        params.docId,
+                        1,
+                        data,
+                        inputData,
+                        empInfo,
+                        approvalId
+                      );
                     });
                   }
                 }}>
@@ -370,4 +408,4 @@ function SavedBusinessTrip() {
   );
 }
 
-export default SavedBusinessTrip;
+export default SavedBusinessTripInfo;
