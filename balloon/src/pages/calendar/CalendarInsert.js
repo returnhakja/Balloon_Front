@@ -11,6 +11,7 @@ import { botChatroom } from '../../context/ChatAxios';
 import styles from '../../css/Component.module.css';
 import { BsCalendarWeek } from 'react-icons/bs';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+
 import axios from 'axios';
 import moment from 'moment';
 //채팅방 입장시간
@@ -42,7 +43,6 @@ function CalendarInsert({
   const scheduleListAdd = [];
 
   const calendarBot = 'Y0000001';
-
   console.log(inTime2);
 
   let scheduletitle = '';
@@ -75,8 +75,7 @@ function CalendarInsert({
   };
 
   //일정보내기
-
-  // const sock = new SockJS('/chatstart');
+  // const sock = new SockJS('http://localhost:8080/chatstart');
   // const client = Stomp.over(sock);
 
   client.connect({}, () => {
@@ -87,6 +86,14 @@ function CalendarInsert({
 
   const disconnect = () => {
     client.disconnect();
+  };
+
+  const onInviteSchedule = (checked, data) => {
+    if (checked) {
+      setInviteSchedule([...inviteSchedule, data]);
+    } else {
+      setInviteSchedule(inviteSchedule.filter((button) => button !== data));
+    }
   };
 
   const insertHandle = () => {
@@ -110,8 +117,6 @@ function CalendarInsert({
       employee: { empId: empInfo.empId },
       employeeIds: inviteSchedule,
     };
-
-    // insertSchedule(inputdata, setOpenInsert);
 
     const ids = inputdata.employeeIds;
     console.log(inputdata.employeeIds);
@@ -386,6 +391,7 @@ function CalendarInsert({
             shrink: true,
           }}
         />
+
         <span className={styles.centerfont}> : </span>
         <TextField
           id="endvalue"
