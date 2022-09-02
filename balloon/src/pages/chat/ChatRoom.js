@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useOutletContext } from 'react-router-dom';
-import SockJS from 'sockjs-client';
+import React, { useEffect, useState } from 'react';
+import { Link, useOutletContext } from 'react-router-dom';
+import ChatSide from './ChatSide';
+import { sendExit } from '../../utils/ChatUtils';
+import { onChatroom, onExitRoom, onHCupdate } from '../../context/ChatAxios';
 import Stomp from 'stompjs';
-import { onCreateChatroom, onAllChatEmp } from '../../context/ChatAxios';
+import SockJS from 'sockjs-client';
 import styles from '../../css/chat/Chat.module.css';
-import Input from '@mui/material/Input';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { Box, Modal } from '@mui/material';
-
+import { Container } from '@mui/system';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 //socket
 const sock = new SockJS('http://localhost:8080/chatstart');
@@ -21,116 +23,103 @@ function ChatRoom() {
   // const sock = new SockJS('http://localhost:8080/chatstart');
   // const client = Stomp.over(sock);
 
-  client.connect({}, () => {
-    client.subscribe(`/topic/message`, (data) => {
-      disconnect();
-    });
-  });
-
-  const disconnect = () => {
-    client.disconnect();
-  };
-
-  const keyEnter = (e) => {
-    if (e.key === 'Enter') {
-      eventChatHandle();
-    }
-  };
-
-  //1:1채팅일 때 이미있는 채팅방 예외처리
-  const alreadyInvite = [];
-  invite.map((vite) => {
-    alreadyInvite.push(vite.empId);
-  });
-  console.log(alreadyInvite);
-
-  const [allChatEmp, setAllChatEmp] = useState([]);
-
+  //마지막으로 보낸 채팅list가져오기
   useEffect(() => {
-    onAllChatEmp(setAllChatEmp);
-  }, []);
-
-  console.log(allChatEmp);
-  let allChatEmpId = [];
-  allChatEmpId = allChatEmp.filter((emp) => emp.empId.empId !== empInfo.empId);
-  console.log(allChatEmpId);
-
-  const checkChatEmp = (allChatEmpId, alreadyInvite) => {
-    let check = true;
-    allChatEmpId.map((id) => {
-      if (id.empId.empId == alreadyInvite) {
-        alert('이미 있는 채팅방입니다');
-        check = false;
-      }
-    });
-    return check;
-  };
-
-  const eventChatHandle = () => {
-    const input = document.getElementById('chatroomName');
-    console.log(input.value);
-    if (input.value.trim() !== '') {
-      console.log(input.value);
-      if (input.value.length === 0) {
-        inputRef.current.focus();
-        input.value = '';
-        alert('채팅방 이름을 입력해주세요!!');
-      } else {
-        if (alreadyInvite.length === 1) {
-          console.log('dddddddddddddddddddddddddd', alreadyInvite);
-          console.log(alreadyInvite.length);
-          const check = checkChatEmp(allChatEmpId, alreadyInvite[0]);
-          check &&
-            onCreateChatroom(
-              empInfo,
-              invite,
-              document.getElementById('chatroomName'),
-              client
-            );
-        } else {
-          console.log('ssssssssssssssssssssssssss', alreadyInvite);
-          console.log(alreadyInvite.length);
-          onCreateChatroom(
-            empInfo,
-            invite,
-            document.getElementById('chatroomName'),
-            client
-          );
-        }
-      }
-    } else {
-      inputRef.current.focus();
-      input.value = '';
-      alert('채팅방 이름을 입력해주세요!!');
+    if (empId) {
+      onChatroom(setChatroom, empId);
     }
-  };
-
-  const handleClose = () => setopenCreatChat(false);
+  }, [empId]);
 
   return (
-    <Modal open={openCreatChat} onClose={handleClose}>
-      <Box sx={styleBox}>
-        <h3 className={styles.inBox}>채팅방 만들기</h3>
-        <div>
-          <Input
-            id="chatroomName"
-            className={styles.inBox}
-            ref={inputRef}
-            onKeyPress={keyEnter}
-            placeholder="채팅방 이름을 입력하세요"
-          />
-          <Button
-            variant="contained"
-            onClick={() => {
-              eventChatHandle();
+    <Container maxWidth="xs" className={styles.Listcontainer}>
+      <div className={styles.side1}>
+        <div className={styles.chatRoomList}>
+          <ChatSide />
+          <div className={styles.listroom}>
+            <div className={styles.chatfont}>
+              <div className={styles.ChatText}>채팅 목록</div>
+            </div>
+            <div className={styles.roomContanar}>
+              {chatroom.map((chat, index) => {
+                return (
+                  <div className={styles.roomcon} key={index}>
+                    <Link to={`/chatting?room=${chat.chatroom.chatroomId}`}>
+                      <Box className={styles.chatRoomBox}>
+                        {chat.chatroom.chatroomName.length <= '15' ? (
+                          <div>
+                            <span className={styles.chatName}>
+                              {chat.chatroom.chatroomName}(
+                              {chat.chatroom.headCount})
+                            </span>
+                          </div>
+                        ) : (
+                          <div>
+                            <span className={styles.chatName}>
+                              {chat.chatroom.chatroomName.substr(0, 12)}...(
+                              {chat.chatroom.headCount})
+                            </span>
+                          </div>
+                        )}
 
-              // inputRef.current.value = '';
-            }}>
-            <div>채팅하기</div>
-          </Button>
+                        <div className={styles.DeleteBtn}>
+                          <Button
+                            variant="text"
+                            disableElevation
+                            onClick={(e) => {
+                              const roomDelete = () => {
+                                e.preventDefault();
+                                onExitRoom(
+                                  chat.chatroom.chatroomId,
+                                  empInfo.empId,
+                                  sendExit(
+                                    client,
+                                    chat.chatroom.chatroomId,
+                                    empInfo
+                                  ),
+                                  onHCupdate(
+                                    chat.chatroom.chatroomId,
+                                    chat.chatroom.chatroomName,
+                                    chat.chatroom.headCount
+                                  )
+                                );
+
+                                window.location.href = '/chatlist';
+                              };
+
+                              return roomDelete();
+                            }}>
+                            <DeleteIcon />
+                          </Button>
+                        </div>
+                        <div className={styles.content}>
+                          {chat.chatContent.length <= '15' ? (
+                            <div className={styles.content}>
+                              {chat.chatContent}
+                              <div className={styles.LastTimecon}>
+                                <div className={styles.LastTime}>
+                                  {chat.chatTime.substr(11, 5)}
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className={styles.content}>
+                              {chat.chatContent.substr(0, 15)}...
+                              <div className={styles.LastTime}>
+                                {chat.chatTime.substr(11, 5)}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </Box>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
-      </Box>
-    </Modal>
+      </div>
+    </Container>
   );
 }
-export default CreateChatroom;
+export default ChatRoom;

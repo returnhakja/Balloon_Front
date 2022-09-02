@@ -22,7 +22,6 @@ let inTime2 = inTime.replace(/(\s*)/g, '');
 const sock = new SockJS('http://localhost:8080/chatstart');
 const client = Stomp.over(sock);
 
-
 function CalendarInsert({
   style,
   openInsert,
@@ -34,7 +33,7 @@ function CalendarInsert({
   console.log(new Date());
   console.log(new Date(dateStr));
   const [startValue, setStartValue] = useState(dateStr);
-  const [endvalue, setEndValue] = useState();
+  const [endValue, setEndValue] = useState();
   const [eList, setCEList] = useState([]);
   const [botInfo, setBotInfo] = useState([]);
   const [inviteSchedule, setInviteSchedule] = useState([]);
@@ -51,7 +50,6 @@ function CalendarInsert({
   let CalendarLocation = '';
   let Startvalue = null;
   let endvalue = null;
-
 
   const handleClose = () => {
     setOpenInsert(false);
@@ -78,15 +76,8 @@ function CalendarInsert({
 
   //일정보내기
 
-  // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
-  //   transport: ['websocket'],
-  // });
-  const sock = new SockJS('/chatstart');
-  const client = Stomp.over(sock);
-
-  // const sock = new SockJS('http://localhost:8080/chatstart');
+  // const sock = new SockJS('/chatstart');
   // const client = Stomp.over(sock);
-
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, () => {
@@ -177,7 +168,6 @@ function CalendarInsert({
         headCount: 2,
       });
     });
-    console.log('sss');
     axios.post('/chatroom/createschchatroom', arr).then((response) => {
       console.log(response.data);
       onSchUserInvite(response.data, invitepeople);

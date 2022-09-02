@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
 import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
 import { sendExit } from '../../utils/ChatUtils';
@@ -8,19 +7,14 @@ import styles from '../../css/chat/Chat.module.css';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Container } from '@mui/system';
 import ChatCopy from './ChatCopy';
-
-
-  // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
-  //   transport: ['websocket'],
-  // });
 
 function CRMCopy({ empInfo, setChatStatus }) {
   const [chatroom, setChatroom] = useState([]);
   const empId = empInfo.empId;
-  // const sock = new SockJS('http://localhost:8080/chatstart');
-  const sock = new SockJS('http://15.164.224.26:8080/chatstart');
+
+  // const sock = new SockJS('http://15.164.224.26:8080/chatstart');
+  const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
   const [roomId, setRoomId] = useState(0);
 
@@ -32,7 +26,6 @@ function CRMCopy({ empInfo, setChatStatus }) {
   }, [empId]);
 
   useEffect(() => {}, [roomId]);
-
 
   return (
     <div className={styles.listroom}>
@@ -47,8 +40,7 @@ function CRMCopy({ empInfo, setChatStatus }) {
                 <div
                   className={styles.roomcon}
                   key={index}
-
-                  onClick={() => {
+                  onClick={(e) => {
                     setRoomId(chat.chatroom.chatroomId);
                   }}>
                   <Box className={styles.chatRoomBox}>
@@ -74,7 +66,6 @@ function CRMCopy({ empInfo, setChatStatus }) {
                         disableElevation
                         onClick={(e) => {
                           const roomDelete = () => {
-                            e.preventDefault();
                             onExitRoom(
                               chat.chatroom.chatroomId,
                               empInfo.empId,
@@ -124,12 +115,7 @@ function CRMCopy({ empInfo, setChatStatus }) {
           </div>
         </>
       ) : (
-
-        <ChatCopy
-          empInfo={empInfo}
-          roomId={roomId}
-          setChatStatus={setChatStatus}
-        />
+        <ChatCopy empInfo={empInfo} roomId={roomId} />
       )}
     </div>
   );

@@ -75,31 +75,6 @@ function ModalApproval({
           );
           console.log(ogApprover);
 
-          // const ogApprover = arr.filter((element) => console.log(approver));
-          // console.log(ogApprover);
-
-          // filter 안에 map ------------------------
-          // const ogApprover = arr.filter(
-          //   (element) =>
-          //     approver.map(
-          //       (data) =>
-          //         // console.log(element);
-          //         // console.log(data);
-          //         data.empId !== element.empId
-          //     )
-          //   // approver.map((data) => console.log(data))
-          // );
-          // console.log(ogApprover);
-          // ----------------------------------------
-
-          // map 안에 filter -------------------------
-          // approver.map((data) => {
-          //   const ogApprover = arr.filter(
-          //     (element) => element.empId !== data.empId
-          //   );
-          //   console.log(ogApprover);
-          // });
-          // ---------------------------------------
           setLeft(ogApprover);
           setRight(approver);
         } else setLeft(arr);

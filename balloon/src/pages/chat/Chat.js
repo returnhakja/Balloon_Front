@@ -37,19 +37,19 @@ import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import ChatSide from './ChatSide';
 import InviteEmp from './InviteEmp';
 
-// const sock = new SockJS('http://localhost:8080/chatstart');
-// const client = Stomp.over(sock);
+const sock = new SockJS('http://localhost:8080/chatstart');
+const client = Stomp.over(sock);
+
 function Chat() {
   const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
   const chatroomId = new URL(document.location).searchParams.get('room');
   const [input, setInput] = useState([]);
   const inputRef = useRef();
-  // const sock = new SockJS('http://15.164.224.26:8080/chatstart', {
-  //   transport: ['websocket'],
-  // });
-  const sock = new SockJS('/chatstart');
-  const client = Stomp.over(sock);
+
+  // const sock = new SockJS('/chatstart');
+  // const client = Stomp.over(sock);
+
   const [modalOpen, setModalOpen] = useState(false);
   //채팅방 채팅기록
   const [chatting, setChatting] = useState([]);
@@ -73,8 +73,6 @@ function Chat() {
     setOpen(!open);
   };
 
-  console.log(input);
-
   const style = {
     position: 'absolute',
     top: '50%',
@@ -90,7 +88,6 @@ function Chat() {
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, (data) => {
-      console.log(data);
       const chat = JSON.parse(data.body);
       setInput([...input, chat]);
       disconnect();
@@ -140,7 +137,6 @@ function Chat() {
 
   const onClickChatRoomTitle = () => {
     setClickChk(clickChk + 1);
-    console.log(clickChk);
     if (clickChk > 1) {
       setClickChk(0);
     }

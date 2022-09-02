@@ -320,7 +320,7 @@ export const login = async (empId, password, authenticate) => {
   if (!!loggi) {
     authenticate();
   } else {
-    cookies.remove('JSESSIONID');
+    // cookies.remove('JSESSIONID');
     alert('아이디 혹은 비밀번호가 틀립니다.');
   }
 };
@@ -329,7 +329,7 @@ export const login = async (empId, password, authenticate) => {
 export const logoutFunc = (logout) => {
   const cookies = new Cookies();
   cookies.remove('accessToken');
-  cookies.remove('JSESSIONID');
+  // cookies.remove('JSESSIONID');
   logout();
   window.location.href = '/';
 };

@@ -1,7 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
-import Cookies from 'universal-cookie';
 
 import Home from './components/Home';
 import MainPage from './components/MainPage';
@@ -69,9 +68,6 @@ import RefusedBusinessReportInfo from './pages/approval/RefusedBusinessReportInf
 import RefusedBusinessTripInfo from './pages/approval/RefusedBusinessTripInfo';
 import RefusedPersonnelAppointmentInfo from './pages/approval/RefusedPersonnelAppointmentInfo';
 
-const cookies = new Cookies();
-
-
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
   const [isLogin, setLogin] = useState(null);
@@ -86,7 +82,6 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem('logged', isLogin);
-    isLogin === false && cookies.remove('JSESSIONID');
   }, [isLogin]);
 
   return (
@@ -99,7 +94,6 @@ function App() {
             setEmpInfo={setEmpInfo}
             logout={() => {
               setLogin(false);
-              cookies.remove('JSESSIONID');
             }}
             isLogin={isLogin}
           />
@@ -227,14 +221,14 @@ function App() {
           <Route element={<Calendar />} path="/calendar" exact />
 
           {/* 메신저 */}
-          {/* <Route
+          <Route
             path="/chatemplist"
             element={<ChatEmpList invite={invite} setInvite={setInvite} />}
           />
           <Route path="/chatlist" element={<ChatRoom />} />
           <Route path="/chatting" element={<Chat />} />
           <Route path="/createroom" element={<CreateRoom invite={invite} />} />
-          <Route path="/chatnotice" element={<ChatNotice />} /> */}
+          <Route path="/chatnotice" element={<ChatNotice />} />
 
           {/* 조직관리 */}
           <Route path="/management/unit" element={<ManagementUnit />} />

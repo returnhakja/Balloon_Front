@@ -34,11 +34,6 @@ function BusinessReport() {
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
 
-  // console.log(empInfo);
-  // console.log(docNum);
-  // console.log(approver);
-  // console.log(noApprover);
-
   useEffect(() => {
     if (docNum === 0) {
       getLatestBizRpt(setDocNum);
@@ -52,7 +47,6 @@ function BusinessReport() {
     }
   }, [docNum, noApprover]);
 
-  // const [openModal, setOpenModal] = useState(false);
   return (
     <SideNavigation>
       <Container>
@@ -187,7 +181,6 @@ function BusinessReport() {
 
                     approver.map(async (data, index) => {
                       console.log(data);
-                      console.log(index);
                       await insertApproval(docId, 0, data, inputData, empInfo);
                     });
 

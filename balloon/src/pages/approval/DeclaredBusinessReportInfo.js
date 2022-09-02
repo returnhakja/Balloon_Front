@@ -40,8 +40,6 @@ function DeclaredBusinessReportInfo() {
   const [apvl, setApvl] = useState({});
 
   const params = useParams();
-  console.log(params);
-  console.log(empInfo);
   console.log(bizRptInfo);
 
   useEffect(() => {

@@ -24,8 +24,6 @@ function ManagementUnit() {
 
   const handleClick = (data) => {
     setRowData(data.row);
-    console.log(data.row);
-    console.log(openUpdate);
   };
 
   const handleUpdate = (setUpdateChk) => {
@@ -63,8 +61,6 @@ function ManagementUnit() {
     }
   }, [unitList, rowData, updateChk, deleteChk]);
 
-  // console.log(rowData);
-
   function GetParentUnit(data) {
     return data.row.parentUnit ? data.row.parentUnit.id : data.row.parentUnit;
   }
@@ -75,19 +71,16 @@ function ManagementUnit() {
       field: 'unitName',
       headerName: '조직명',
       width: 180,
-      //  editable: true
     },
     {
       field: 'bell',
       headerName: '조직 전화번호',
       width: 250,
-      // editable: true,
     },
     {
       field: 'parentUnit',
       headerName: '상위조직',
       width: 300,
-      // editable: true,
       valueGetter: GetParentUnit,
     },
 

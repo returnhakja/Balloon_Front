@@ -20,7 +20,6 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
   const [list, setList] = useState([]);
   const [startValue, setStartValue] = useState(list.scheduleStart);
   const [endvalue, setEndValue] = useState(list.scheduleEnd);
-  console.log(list.scheduleStart);
   const [empInfo] = useOutletContext();
 
   useEffect(() => {
@@ -33,8 +32,6 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
   useEffect(() => {
     setStartValue(list.scheduleStart);
     setEndValue(list.scheduleEnd);
-    console.log(startValue);
-    console.log(endvalue);
   }, [list]);
 
   //업데이트
@@ -60,7 +57,6 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
   };
 
   const deletehandle = async () => {
-    console.log(openUpdate.scheduleId);
     await deleteSchedule(openUpdate.scheduleId, handleClose);
   };
 

@@ -63,14 +63,12 @@ function BizTpApprovalDeclare() {
   const [apvl, setApvl] = useState({});
 
   // 사원 정보 context
-  const [empInfo, setEmpInfo] = useOutletContext();
+  const [empInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [bizTpInfo, setBizTpInfo] = useState({});
   const [openModal, setOpenModal] = useState(false);
 
   const params = useParams();
-  console.log(params);
-  console.log(empInfo);
   console.log(bizTpInfo);
 
   // useEffect(() => {

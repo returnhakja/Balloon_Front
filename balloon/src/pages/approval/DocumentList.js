@@ -19,7 +19,6 @@ function DocList() {
   //기안양식
 
   useEffect(() => {
-    console.log(empInfo);
     getDocsByUnit(empInfo.unit && empInfo.unit.unitCode, setDocList);
     console.log(docList);
   }, [empInfo, docList.length]);

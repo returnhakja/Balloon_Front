@@ -13,7 +13,6 @@ function MainPage() {
           src={Banner}
           alt="BANNER"
           className={styles.img}></img>
-        <span>dd</span>
       </header>
       <div className={styles.logingo}>
         <div className={styles.logcon}>

@@ -38,8 +38,6 @@ function BizReportInfo() {
   const [approver, setApprover] = useState([]);
 
   const params = useParams();
-  console.log(params);
-  console.log(empInfo);
   console.log(bizRptInfo);
 
   useEffect(() => {
@@ -47,8 +45,6 @@ function BizReportInfo() {
     getApvlByDocId(params.docId, setApprover);
   }, [params]);
 
-  // const [openModal, setOpenModal] = useState(false);
-  console.log(empInfo);
   return (
     <SideNavigation>
       <Container>

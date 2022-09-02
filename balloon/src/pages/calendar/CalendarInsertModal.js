@@ -33,7 +33,6 @@ function CalendarInsertModal({
               <input
                 type="checkbox"
                 onChange={(e) => {
-                  console.log(e);
                   onInviteSchedule(e.currentTarget.checked, emp.empId);
                 }}
                 checked={inviteSchedule.includes(emp.empId) ? true : false}
