@@ -108,8 +108,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
       employeeIds: inviteSchedule,
     };
 
-    // insertSchedule(inputdata, setOpenInsert);
-
     const ids = inputdata.employeeIds;
     console.log(inputdata.employeeIds);
     ids.map((id) => {
