@@ -22,7 +22,7 @@ let inTime2 = inTime.replace(/(\s*)/g, '');
 const sock = new SockJS('http://localhost:8080/chatstart');
 const client = Stomp.over(sock);
 
-function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
+function CalendarInsert({ style, openInsert, setOpenInsert, empInfo, dateStr }) {
   const [startValue, setStartValue] = useState();
   const [endValue, setEndValue] = useState();
   const [eList, setCEList] = useState([]);
