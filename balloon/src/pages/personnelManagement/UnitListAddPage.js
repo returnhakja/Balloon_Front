@@ -32,11 +32,8 @@ function UnitListAddPage() {
   useEffect(() => {
     if (unitList.length !== 0) {
       const rows = unitList.filter((row) => row[0] !== 'unitCode');
-      console.log('sssss');
-      console.log(rows);
       insertUnitList(rows);
     } else {
-      console.log('dddddd');
     }
   }, [unitList]);
 

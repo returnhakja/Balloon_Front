@@ -62,9 +62,7 @@ export default function Test({ open, setOpen, empInfo }) {
     }
   };
 
-  useEffect(() => {
-    console.log(chatStatus);
-  }, [chatStatus]);
+  useEffect(() => {}, [chatStatus]);
 
   return (
     <div>

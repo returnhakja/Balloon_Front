@@ -19,8 +19,20 @@ let data = 'T';
 let inTime = [nowTime.slice(0, 10), data, nowTime.slice(10)].join('');
 let inTime2 = inTime.replace(/(\s*)/g, '');
 
-function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
-  const [startValue, setStartValue] = useState();
+// const sock = new SockJS('http://localhost:8080/chatstart');
+// const client = Stomp.over(sock);
+
+function CalendarInsert({
+  style,
+  openInsert,
+  setOpenInsert,
+  empInfo,
+  dateStr,
+}) {
+  console.log(dateStr);
+  console.log(new Date());
+  console.log(new Date(dateStr));
+  const [startValue, setStartValue] = useState(dateStr);
   const [endValue, setEndValue] = useState();
   const [eList, setCEList] = useState([]);
   const [botInfo, setBotInfo] = useState([]);
@@ -30,6 +42,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const scheduleListAdd = [];
 
   const calendarBot = 'Y0000001';
+
   console.log(inTime2);
 
   let scheduletitle = '';
@@ -64,7 +77,8 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   //일정보내기
   //socket
   const [clients, setClients] = useState();
-
+  // const sock = new SockJS('/chatstart');
+  // const client = Stomp.over(sock);
   useEffect(() => {
     const sock = new SockJS('http://localhost:8080/chatstart');
     const client = Stomp.over(sock);
@@ -161,7 +175,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         headCount: 2,
       });
     });
-    console.log('sss');
     axios.post('/chatroom/createschchatroom', arr).then((response) => {
       console.log(response.data);
       onSchUserInvite(response.data, invitepeople);

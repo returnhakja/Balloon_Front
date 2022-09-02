@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useOutletContext } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
@@ -35,6 +34,7 @@ function InviteEmpCopy({
 
   // socket
   const sock = new SockJS('http://localhost:8080/chatstart');
+  //   const sock = new SockJS('http://15.164.224.26:8080/chatstart');
   const client = Stomp.over(sock);
 
   client.connect({}, () => {

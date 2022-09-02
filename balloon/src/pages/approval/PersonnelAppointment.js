@@ -40,7 +40,7 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function Pointment() {
+function PersonnelAppointment() {
   const [posi, setPosi] = useState('');
   const [units, setUnits] = useState('');
   const [unit, setUnit] = useState('');
@@ -74,7 +74,6 @@ function Pointment() {
         getLatestPA(setDocNum);
         setDocId('인사명령-22-0000001');
       } else {
-        console.log(docNum);
         setDocId('인사명령' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
       }
 
@@ -225,7 +224,6 @@ function Pointment() {
                     placeholder="구성원을 선택하세요"
                     onChange={(e) => {
                       setMEmp(e.target.value);
-                      console.log(mEmp);
                     }}
 
                     // className={styles.inputtext}
@@ -249,7 +247,6 @@ function Pointment() {
                     placeholder=" 발령부서를 선택하세요"
                     onChange={(e) => {
                       setUnit(e.target.value);
-                      console.log(unit);
                     }}
 
                     // className={styles.inputtext}
@@ -273,7 +270,6 @@ function Pointment() {
                     placeholder=" 발령직위를 선택하세요"
                     onChange={(e) => {
                       setPosi(e.target.value);
-                      console.log(posi);
                     }}
 
                     // className={styles.inputtext}
@@ -329,7 +325,6 @@ function Pointment() {
 
                     approver.map((data, index) => {
                       console.log(data);
-                      console.log(index);
                       return insertApproval(docId, 0, data, inputData, empInfo);
                     });
 
@@ -339,7 +334,7 @@ function Pointment() {
                 </Button>
               </Link>
               <Link
-                to={'/boxes'}
+                to={'/boxes/dd'}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
                     await insertPA(
@@ -361,7 +356,6 @@ function Pointment() {
 
                   approver.map((data, index) => {
                     console.log(data);
-                    console.log(index);
                     return insertApproval(docId, 1, data, inputData, empInfo);
                   });
                 }}>
@@ -377,4 +371,4 @@ function Pointment() {
   );
 }
 
-export default Pointment;
+export default PersonnelAppointment;

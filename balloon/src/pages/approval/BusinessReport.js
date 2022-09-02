@@ -24,7 +24,7 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function Report() {
+function BusinessReport() {
   // 사원 정보 context
   const [empInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
@@ -33,11 +33,6 @@ function Report() {
   const [docId, setDocId] = useState('');
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
-
-  // console.log(empInfo);
-  // console.log(docNum);
-  // console.log(approver);
-  // console.log(noApprover);
 
   useEffect(() => {
     if (docNum === 0) {
@@ -52,7 +47,6 @@ function Report() {
     }
   }, [docNum, noApprover]);
 
-  // const [openModal, setOpenModal] = useState(false);
   return (
     <SideNavigation>
       <Container>
@@ -187,7 +181,6 @@ function Report() {
 
                     approver.map(async (data, index) => {
                       console.log(data);
-                      console.log(index);
                       await insertApproval(docId, 0, data, inputData, empInfo);
                     });
 
@@ -197,7 +190,7 @@ function Report() {
                 </Button>
               </Link>
               <Link
-                to={'/boxes'}
+                to={'/boxes/dd'}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
                     await insertBizRpt(
@@ -230,4 +223,4 @@ function Report() {
   );
 }
 
-export default Report;
+export default BusinessReport;

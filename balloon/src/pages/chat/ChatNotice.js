@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import Stomp from 'stompjs';
-import SockJS from 'sockjs-client';
 import ChatSide from './ChatSide';
 import { onChatroom, onExitRoom } from '../../context/ChatAxios';
 import { sendExit } from '../../utils/ChatUtils';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 import styles from '../../css/chat/Chat.module.css';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { Container } from '@mui/system';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+//socket
+const sock = new SockJS('http://localhost:8080/chatstart');
+const client = Stomp.over(sock);
 
 function ChatNotice() {
   const [chatroom, setChatroom] = useState([]);
   const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
-  const sock = new SockJS('http://localhost:8080/chatstart');
-  const client = Stomp.over(sock);
 
   //마지막으로 보낸 채팅list가져오기
   useEffect(() => {
@@ -36,9 +38,6 @@ function ChatNotice() {
             </div>
             <div className={styles.roomContanar}>
               {chatroom.map((chat, index) => {
-                console.log(chat.chatTime.substr(11, 5));
-                console.log(chat.chatContent.substr(0, 15));
-                console.log(chat.chatroom.chatroomName.substr(0, 15));
                 return (
                   <div className={styles.roomcon} key={index}>
                     <Link to={`/chatting?room=${chat.chatroom.chatroomId}`}>

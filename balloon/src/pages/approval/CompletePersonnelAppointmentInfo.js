@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
-import { getPAByPAId } from '../../context/ApprovalAxios';
+import { getApvlByDocId, getPAByPAId } from '../../context/ApprovalAxios';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import { FcDocument } from 'react-icons/fc';
@@ -31,14 +31,16 @@ function PersonnelAppointmentInfo() {
   // const [openapprovalModal, setOpenapprovalModal] = useState(false);
 
   // 사원 정보 context
-  // const [empInfo, setEmpInfo] = useOutletContext();
+  // const [empInfo] = useOutletContext();
 
   const [paInfo, setPaInfo] = useState({});
+  const [approver, setApprover] = useState([]);
 
   const params = useParams();
 
   useEffect(() => {
     !!params && getPAByPAId(params.docId, setPaInfo);
+    getApvlByDocId(params.docId, setApprover);
   }, [params]);
 
   return (
@@ -79,12 +81,30 @@ function PersonnelAppointmentInfo() {
 
         <hr />
         <br />
-        <Card
-          variant="outlined"
-          sx={{ maxWidth: 150 }}
-          style={{ backgroundColor: '#F1F9FF' }}>
-          {paInfo.length !== 0 && <DfCard drafterName={paInfo.empName} />}
-        </Card>
+        <div className={styles.approvalCard}>
+          <Card
+            variant="outlined"
+            sx={{ maxWidth: 150 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            <DfCard drafterName={paInfo.empName} />
+          </Card>
+          {approver.map((empData, index) => {
+            console.log(empData);
+            // if (apvl.length === 0) {
+            //   setApvl(empData);
+            // }
+
+            return (
+              <Card
+                variant="outlined"
+                sx={{ maxWidth: 150 }}
+                style={{ backgroundColor: '#F1F9FF' }}
+                key={index}>
+                <ApCard approverName={empData.approverName} />
+              </Card>
+            );
+          })}
+        </div>
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>

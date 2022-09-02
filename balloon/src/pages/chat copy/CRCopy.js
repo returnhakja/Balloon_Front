@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useOutletContext } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { onCreateChatroom2, onAllChatEmp } from '../../context/ChatAxios';
@@ -10,9 +9,9 @@ import { Box, Modal } from '@mui/material';
 
 const styleBox = {
   position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  top: '80%',
+  left: '97%',
+  transform: 'translate(-90%, -90%)',
   width: 300,
   bgcolor: 'background.paper',
   border: '2px solid #000',
@@ -27,11 +26,9 @@ function CRCopy({
   setopenCreatChat,
   empInfo,
   setChatStatus,
-  setInvite,
 }) {
   const inputRef = useRef();
-  const [allChatEmp, setAllChatEmp] = useState([]);
-  // socket
+  // const sock = new SockJS('http://15.164.224.26:8080/chatstart');
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
 
@@ -50,26 +47,24 @@ function CRCopy({
       eventChatHandle();
     }
   };
+  useEffect(() => {
+    onAllChatEmp(setAllChatEmp, empInfo.empId);
+  }, []);
 
-  //1:1채팅일 때 이미있는 채팅방 예외처리   //초대할 사원
+  //초대할 사원
   const alreadyInvite = [];
   invite.map((vite) => {
     alreadyInvite.push(vite.empId);
   });
 
-  useEffect(() => {
-    //headCount가 2인 chatroomEmployee T 정보 가져옴
-    onAllChatEmp(setAllChatEmp, empInfo.empId);
-  }, []);
+  const [allChatEmp, setAllChatEmp] = useState([]);
 
-  //onAllChatEmp에서 로그인한 사원의 정보를 뺌
-  let allChatEmpId = [];
-  allChatEmpId = allChatEmp.filter((emp) => emp.empId.empId);
+  useEffect(() => {}, [openCreatChat]);
 
   //1:1채팅일 때 이미있는 채팅방 예외처리
-  const checkChatEmp = (allChatEmpId, alreadyInvite) => {
+  const checkChatEmp = (allChatEmp, alreadyInvite) => {
     let check = true;
-    allChatEmpId.map((id) => {
+    allChatEmp.map((id) => {
       if (id.empId.empId == alreadyInvite) {
         alert('이미 있는 채팅방입니다');
         check = false;
@@ -78,7 +73,6 @@ function CRCopy({
     return check;
   };
 
-  //채팅방모달 닫기
   const handleClose = () => setopenCreatChat(false);
 
   //채팅방이름 공백처리
@@ -92,7 +86,7 @@ function CRCopy({
         alert('채팅방 이름을 입력해주세요!!');
       } else {
         if (alreadyInvite.length === 1) {
-          const check = checkChatEmp(allChatEmpId, alreadyInvite[0]);
+          const check = checkChatEmp(allChatEmp, alreadyInvite[0]);
           check &&
             onCreateChatroom2(
               empInfo,
@@ -101,6 +95,7 @@ function CRCopy({
               client,
               setChatStatus
             );
+
           handleClose();
         } else {
           onCreateChatroom2(
@@ -110,7 +105,6 @@ function CRCopy({
             client,
             setChatStatus
           );
-          setInvite([]);
           handleClose();
         }
       }

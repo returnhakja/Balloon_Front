@@ -6,7 +6,7 @@ import Stomp from 'stompjs';
 import InviteEmpCopy from './InviteEmpCopy';
 import { sendExit } from '../../utils/ChatUtils';
 import {
-  chatRecord,
+  chatRecord2,
   chatroomInfo,
   empIdInfo,
   onExitRoom,
@@ -17,7 +17,6 @@ import styles from '../../css/chat/Chat.module.css';
 import {
   Button,
   Collapse,
-  Container,
   List,
   ListItemButton,
   ListItemIcon,
@@ -33,13 +32,14 @@ import GroupIcon from '@mui/icons-material/Group';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 function ChatCopy({ empInfo, roomId, setChatStatus }) {
-  // const [empInfo] = useOutletContext();
   const empId = empInfo.empId;
   const chatroomId = roomId;
   const [input, setInput] = useState([]);
   const inputRef = useRef();
   const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
+  // const sock = new SockJS('http://15.164.224.26:8080/chatstart');
+  // const client = Stomp.over(sock);
 
   //채팅방 사람 확인 state
   const [open, setOpen] = useState(false);
@@ -64,9 +64,7 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
   client.connect({}, () => {
     client.subscribe(`/topic/message`, (data) => {
       const chat = JSON.parse(data.body);
-      console.log(chat);
       setInput([...input, chat]);
-      console.log(...input);
       disconnect();
     });
   });
@@ -111,9 +109,9 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
       empIdInfo(chatroomId, setChatempinfo);
     }
     //chatroom에 들어갔을 때 기록남게
-    chatRecord(chatroomId, setChatting);
+    chatRecord2(chatroomId, setChatting, empId);
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
-  }, [chatroomId, input]);
+  }, [chatroomId, input, chatting.length]);
 
   useEffect(() => {
     setChatRoomTitle(chatroomName);
@@ -135,7 +133,6 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
 
   const onClickChatRoomTitle = () => {
     setClickChk(clickChk + 1);
-    console.log(clickChk);
     if (clickChk > 1) {
       setClickChk(0);
     }
@@ -147,12 +144,6 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
       send();
       inputRef.current.value = '';
     }
-  };
-
-  const roomExit = () => {
-    onExitRoom(chatroomId, empId, sendExit(client, chatroomId, empInfo));
-    onHCupdate(chatroomId, chatroomName, headCount);
-    setChatStatus('chatEmpList');
   };
 
   //////////////////////////////////////////////////
@@ -228,7 +219,6 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
             width: '100%',
             background: 'lightgray',
             paddingTop: 2,
-
             maxHeight: 200,
             overflowY: 'scroll',
           }}>
@@ -245,20 +235,25 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
                 </List>
               );
             })}
-          {/* 채팅방 추가 */}
+          {/* 채팅방 나가기 */}
           <div className={styles.logoutBtn}>
             <Button
-              onClick={() => {
+              onClick={(e) => {
                 setModalOpen(true);
               }}>
               <PersonAddAlt1Icon />
             </Button>
 
-            {/* 채팅방 나가기 */}
             <Button
-              onClick={() => {
-                roomExit();
-              }}>
+              onClick={() => (
+                onExitRoom(
+                  chatroomId,
+                  empId,
+                  sendExit(client, chatroomId, empInfo)
+                ),
+                onHCupdate(chatroomId, chatroomName, headCount),
+                setChatStatus('chatEmpList')
+              )}>
               <LogoutIcon />
             </Button>
           </div>
@@ -275,20 +270,21 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
           chatroomId={chatroomId}
         />
       )}
+
       <ScrollToBottom className={styles.scrollbar} id="scroller">
         {/* 채팅기록을 가져옴 */}
         {chatting.map((msg, index) => {
           const chatTime = msg.chatTime.substr(11, 5);
-          return (
-            <div key={index}>
-              {msg.employee.empId === empInfo.empId ? (
-                <div className={styles.message}>
-                  <div className={styles.mytime}>{chatTime}</div>
-                  <div className={styles.mycontent}>{msg.chatContent}</div>
-                </div>
-              ) : (
-                <div>
-                  <div className={styles.othermessage}>
+          if (msg.status === 1) {
+            return (
+              <div key={index}>
+                {msg.employee.empId === empInfo.empId ? (
+                  <div className={styles.message}>
+                    <div className={styles.mytime}>{chatTime}</div>
+                    <div className={styles.mycontent}>{msg.chatContent}</div>
+                  </div>
+                ) : (
+                  <div key={index} className={styles.othermessage}>
                     <div>{msg.employee.empName}</div>
                     <div className={styles.contentContan}>
                       <div className={styles.othercontent}>
@@ -297,10 +293,37 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
                       <div className={styles.time}>{chatTime}</div>
                     </div>
                   </div>
+                )}
+              </div>
+            );
+          } else if (msg.status === 2) {
+            const scheduleContent = JSON.parse(msg.chatContent);
+            let startValue = scheduleContent.Startvalue.replace('T', ' ');
+            let endValue = scheduleContent.endvalue.replace('T', ' ');
+            return (
+              <>
+                <div key={index} className={styles.othermessage}>
+                  <div>{msg.employee.empName}</div>
+                  <div className={styles.contentContan}>
+                    <div className={styles.scheduleContent}>
+                      <div>일정제목 : {scheduleContent.scheduletitle}</div>
+                      <div>일정내용 : {scheduleContent.CalendarContent}</div>
+                      <div>장소 : {scheduleContent.CalendarLocation}</div>
+                      <div>
+                        시작일자 : <br />
+                        {startValue}
+                      </div>
+                      <div>
+                        종료일자 : <br />
+                        {endValue}
+                      </div>
+                    </div>
+                    <div className={styles.time}>{chatTime}</div>
+                  </div>
                 </div>
-              )}
-            </div>
-          );
+              </>
+            );
+          }
         })}
       </ScrollToBottom>
 

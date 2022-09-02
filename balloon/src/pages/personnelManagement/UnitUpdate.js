@@ -36,9 +36,7 @@ const Input = ({ label, register, required }) => (
 
 const Select = React.forwardRef(
   ({ name, label, unit, higher, parentCode, setParentCode }, ref) => {
-    useEffect(() => {
-      console.log(parentCode);
-    }, [parentCode]);
+    useEffect(() => {}, [parentCode]);
     return (
       <>
         <Typography
@@ -78,7 +76,6 @@ const Select = React.forwardRef(
 );
 
 export default function UnitUpdate({ open, setOpen, unitCode }) {
-  //   const [open, setOpen] = React.useState(false);
   const {
     register,
     watch,
@@ -90,14 +87,10 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
 
   const [unit, setUnit] = useState({});
   const [higher, setHigher] = useState([]);
-  // const handleClose = () => {
-  //   setOpenUpdate(false);
   const [parentCode, setParentCode] = useState('0');
   // };
 
   const onSubmit = (unitInfo) => {
-    console.log(unitInfo);
-
     const updateData = {
       unitCode: unitInfo.unitCode,
       unitName: unitInfo.unitName,
@@ -107,15 +100,6 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
 
     updateUnit(updateData);
   }; // your form submit function which will invoke after successful validation
-
-  const updateHandle = () => {
-    // const updatedata = {
-    //   unitCode: unitCode,
-    //   unitName: unitName,
-    //   bell: bell,
-    //   parentUnit: { unitCode: parentUnit },
-    // };
-  };
 
   useEffect(() => {
     findUnitByUnitId(unitCode, setUnit);
@@ -153,10 +137,10 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
                 name="unitCode"
                 value={unit.unitCode}
                 className={styles.input}
-                {...register('unitCode', { required: true, maxLength: 10 })}>
-                {/* {Object.keys(unit).length !== 0 &&
-                  unit.unitName + ' (' + unit.unitCode + ')'} */}
-              </input>
+                {...register('unitCode', {
+                  required: true,
+                  maxLength: 10,
+                })}></input>
               <Typography
                 id="modal-modal-title"
                 variant="h6"

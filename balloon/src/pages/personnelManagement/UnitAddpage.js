@@ -39,7 +39,6 @@ function UnitAddpage() {
   } = useForm();
 
   const onSubmit = (unitInfo) => {
-    // console.log(data);
     insertUnit(unitInfo);
   }; // your form submit function which will invoke after successful validation
 
@@ -47,7 +46,6 @@ function UnitAddpage() {
 
   useEffect(() => {
     findHigherOrganization(setHigher);
-    console.log(higher);
   }, [higher.length]);
 
   return (

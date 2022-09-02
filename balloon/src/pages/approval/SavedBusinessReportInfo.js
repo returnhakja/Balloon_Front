@@ -4,8 +4,10 @@ import ModalApproval from './ModalApproval';
 import SideNavigation from '../../components/SideNavigation';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import {
+  deleteApvlByDocIdAndEmpId,
   deleteBizRpt,
   getApvlByDocId,
+  getApvlId,
   getBizRptByBizRptId,
   insertApproval,
   insertBizRpt,
@@ -13,7 +15,15 @@ import {
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import { FcDocument } from 'react-icons/fc';
-import { Button, Card, Container, Paper, TextField } from '@mui/material';
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
@@ -26,24 +36,41 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function SavedBusinessReport() {
+function SavedBusinessReportInfo() {
   // 사원 정보 context
   const [empInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
   const [approver, setApprover] = useState([]);
+  const [noApprover, setNoApprover] = useState([]);
+  const [svApprover, setSvApprover] = useState([]);
 
   const params = useParams();
-
-  console.log(empInfo);
+  let rmApprover = [];
 
   useEffect(() => {
-    getBizRptByBizRptId(params.docId, setInputData);
-    getApvlByDocId(params.docId, setApprover);
-  }, [params, inputData.length]);
+    getApvlByDocId(params.docId, setApprover, setSvApprover);
+  }, []);
 
-  // const [openModal, setOpenModal] = useState(false);
-  console.log(empInfo);
+  useEffect(() => {
+    if (!!params) {
+      if (Object.keys(inputData).length === 0) {
+        getBizRptByBizRptId(params.docId, setInputData);
+        if (noApprover.length === 0) {
+          setNoApprover(noApprover);
+        }
+      }
+    }
+    console.log(svApprover);
+    let arr = [];
+    approver.map((data) => {
+      arr.push(data.empId);
+      console.log(arr);
+    });
+    rmApprover = svApprover.filter((element) => !arr.includes(element.empId));
+    console.log(rmApprover);
+  }, [params, inputData, approver.length]);
+  console.log(approver);
   return (
     <SideNavigation>
       <Container>
@@ -92,6 +119,10 @@ function SavedBusinessReport() {
             <ModalApproval
               openapprovalModal={openapprovalModal}
               setOpenapprovalModal={setOpenapprovalModal}
+              setApprover={setApprover}
+              approver={approver}
+              setNoApprover={setNoApprover}
+              noApprover={noApprover}
             />
           )}
         </div>
@@ -105,7 +136,7 @@ function SavedBusinessReport() {
             <DfCard drafterName={empInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
+            console.log(approver);
             // if (apvl.length === 0) {
             //   setApvl(empData);
             // }
@@ -116,7 +147,7 @@ function SavedBusinessReport() {
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}
                 key={index}>
-                <ApCard approverName={empData.approverName} />
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}
@@ -164,17 +195,18 @@ function SavedBusinessReport() {
 
           <div className={styles.savebutton}>
             <Box sx={{ button: { m: 1 } }}>
-              <Link to="/boxes/ds">
+              <Link to={'/boxes/ds'}>
                 <Button variant="outlined" size="large">
                   목록으로
                 </Button>
               </Link>
-              <Link to="/boxes/ds">
+              <Link to={'/boxes/ds'}>
                 <Button
                   variant="outlined"
                   size="large"
                   onClick={async () => {
                     await deleteBizRpt(params.docId);
+                    alert('문서가 삭제되었습니다!');
                   }}>
                   삭제하기
                 </Button>
@@ -191,18 +223,40 @@ function SavedBusinessReport() {
                       empInfo,
                       setInputData
                     );
+                    console.log(rmApprover);
+                    {
+                      if (rmApprover.length !== 0) {
+                        rmApprover.map((data) =>
+                          deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                        );
+                      }
+                      approver.map((data, index) => {
+                        console.log(data);
+                        const approvalId = getApvlId(params.docId, data.empId);
 
-                    approver.map(async (data, index) => {
-                      console.log(data);
-                      console.log(index);
-                      await insertApproval(
-                        params.docId,
-                        0,
-                        data,
-                        inputData,
-                        empInfo
-                      );
-                    });
+                        if (approvalId !== null) {
+                          approvalId.then((apvlId) => {
+                            console.log(data);
+                            insertApproval(
+                              params.docId,
+                              0,
+                              data,
+                              inputData,
+                              empInfo,
+                              apvlId
+                            );
+                          });
+                        } else {
+                          insertApproval(
+                            params.docId,
+                            0,
+                            data,
+                            inputData,
+                            empInfo
+                          );
+                        }
+                      });
+                    }
 
                     alert('문서가 임시저장되었습니다!');
                   }}>
@@ -228,7 +282,6 @@ function SavedBusinessReport() {
 
                   approver.map((data, index) => {
                     console.log(data);
-                    console.log(index);
                     return insertApproval(
                       params.docId,
                       1,
@@ -250,4 +303,4 @@ function SavedBusinessReport() {
   );
 }
 
-export default SavedBusinessReport;
+export default SavedBusinessReportInfo;

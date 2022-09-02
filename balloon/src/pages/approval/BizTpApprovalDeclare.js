@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
-import ModalApproval from './ModalApproval';
-import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import SideNavigation from '../../components/SideNavigation';
-import {
-  deleteBizTp,
-  getApvlByDocId,
-  getBizTpByBizTpId,
-  getBizTpEmpByBizTpId,
-} from '../../context/ApprovalAxios';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
-import { FcDocument } from 'react-icons/fc';
-import { Button, Card, Container, Paper, TextField } from '@mui/material';
+import ApprovalDeclareModal from './ApprovalDeclareModal';
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
+
 import { styled } from '@mui/material/styles';
+import { blue } from '@mui/material/colors';
+
+import { FcDocument } from 'react-icons/fc';
+import {
+  getApvlByApvrIdAnddocStatus,
+  getApvlByDocId,
+  getBizRptByBizRptId,
+  getBizTpByBizTpId,
+} from '../../context/ApprovalAxios';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { blue } from '@mui/material/colors';
+import { ApCard, DfCard } from './approvalCards/DrafterApproverCard';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -28,30 +38,62 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function DeclaredBusinessTripInfo() {
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  textAlign: 'center',
+};
+
+function BizTpApprovalDeclare() {
+  // 날짜 관련
+  const [startValue, setStartValue] = useState(null);
+  const [endValue, setEndValue] = useState(null);
+  const [inputData, setInputData] = useState({});
+  const [docNum, setDocNum] = useState(0);
+  const [docId, setDocId] = useState('');
+  const [approver, setApprover] = useState([]);
+  const [noApprover, setNoApprover] = useState([]);
+  const [apvl, setApvl] = useState({});
+
   // 사원 정보 context
   const [empInfo] = useOutletContext();
-  const [bizTpInfo, setBizTpInfo] = useState({});
-  const [bizTpEmp, setBizTpEmp] = useState({});
-  const [approver, setApprover] = useState([]);
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
+  const [bizTpInfo, setBizTpInfo] = useState({});
+  const [openModal, setOpenModal] = useState(false);
 
   const params = useParams();
+  console.log(bizTpInfo);
 
+  // useEffect(() => {
+  //   getBizTpByBizTpId(params.docId, setBizTpInfo);
+  // }, []);
   useEffect(() => {
     if (!!params) {
-      getBizTpByBizTpId(params.docId, setBizTpInfo);
-      getBizTpEmpByBizTpId(params.docId, setBizTpEmp);
-      getApvlByDocId(params.docId, setApprover);
+      if (Object.keys(inputData).length === 0) {
+        getBizTpByBizTpId(params.docId, setBizTpInfo);
+        getApvlByDocId(params.docId, setApprover);
+      } else {
+        setStartValue(inputData.startDate);
+        setEndValue(inputData.endDate);
+        approver.length !== 0 && console.log(approver);
+      }
     }
-  }, [params]);
+  }, [params, inputData, startValue, endValue, approver.length]);
 
+  console.log(empInfo);
   return (
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          <FcDocument />
-          출장계획서
+          {' '}
+          <FcDocument /> 결재전
         </p>
 
         <table className={styles.table}>
@@ -81,12 +123,6 @@ function DeclaredBusinessTripInfo() {
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
         </div>
-        {openapprovalModal && (
-          <ModalApproval
-            openapprovalModal={openapprovalModal}
-            setOpenapprovalModal={setOpenapprovalModal}
-          />
-        )}
         <hr />
         <br />
         <div className={styles.approvalCard}>
@@ -98,9 +134,9 @@ function DeclaredBusinessTripInfo() {
           </Card>
           {approver.map((empData, index) => {
             console.log(empData);
-            // if (apvl.length === 0) {
-            //   setApvl(empData);
-            // }
+            if (apvl.length === 0) {
+              setApvl(empData);
+            }
 
             return (
               <Card
@@ -116,15 +152,18 @@ function DeclaredBusinessTripInfo() {
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>
-        <table className={styles.tableborder}>
+        <table className={styles.table}>
           <thead>
             <tr className={styles.trcon}>
-              <td className={styles.titlename}>기안제목</td>
-              <td className={styles.titlename} colSpan={2}>
+              <td className={styles.tdleftpadding}>기안제목</td>
+              <td colSpan={2} className={styles.tdright}>
+                {' '}
                 {bizTpInfo.documentTitle}
               </td>
             </tr>
           </thead>
+        </table>
+        <table className={styles.tableborder}>
           <thead>
             <tr className={styles.trcon}>
               <td className={styles.titlename}>신청자 정보</td>
@@ -137,14 +176,8 @@ function DeclaredBusinessTripInfo() {
             <tr align="center">
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
-                {bizTpEmp[0] &&
-                  bizTpEmp.map((data) => {
-                    return (
-                      <div>
-                        {data.emp.empName} ({data.emp.empId})
-                      </div>
-                    );
-                  })}
+                {' '}
+                이거 일단 없음
               </td>
               <td className={styles.titlename}></td>
             </tr>
@@ -164,11 +197,13 @@ function DeclaredBusinessTripInfo() {
               <td className={styles.tdreaui}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
-                    disabled
                     label="시작일"
                     value={bizTpInfo.startValue && bizTpInfo.startValue}
                     type=" date"
                     inputFormat={'yyyy-MM-dd'}
+                    onChange={(newValue) => {
+                      setStartValue(newValue);
+                    }}
                     renderInput={(params) => <TextField {...params} />}
                   />
                 </LocalizationProvider>
@@ -176,10 +211,12 @@ function DeclaredBusinessTripInfo() {
                 <span className={styles.centerfont}> : </span>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
-                    disabled
                     label="끝나는일"
                     value={bizTpInfo.endvalue && bizTpInfo.endvalue}
                     inputFormat={'yyyy-MM-dd'}
+                    onChange={(newValue) => {
+                      setEndValue(newValue);
+                    }}
                     renderInput={(params) => <TextField {...params} />}
                   />
                 </LocalizationProvider>
@@ -226,7 +263,6 @@ function DeclaredBusinessTripInfo() {
               justifyContent: 'center',
             }}>
             <TextField
-              focused={false}
               fullWidth
               multiline
               rows={10}
@@ -234,27 +270,38 @@ function DeclaredBusinessTripInfo() {
               InputProps={{
                 readOnly: true,
               }}
+              focused={false}
             />
           </Paper>
 
           <div className={styles.savebutton}>
-            <Box sx={{ '& button': { m: 1 } }}>
-              <Link to="/boxes/dd">
-                <Button
-                  variant="outlined"
-                  size="large"
-                  onClick={async () => {
-                    await deleteBizTp(params.docId);
-                    alert('문서가 삭제되었습니다!');
-                  }}>
-                  삭제하기
-                </Button>
-              </Link>
-              <Link to="/boxes/dd">
+            <Box sx={{ button: { m: 1 } }}>
+              <Link to="/boxes/ab">
                 <SaveButton variant="contained" color="success" size="large">
                   목록으로
                 </SaveButton>
               </Link>
+
+              {/* <Link to="/boxes/ab"> */}
+              <Button
+                variant="contained"
+                color="success"
+                size="large"
+                onClick={() => {
+                  setOpenModal(true);
+                }}>
+                결재하기
+              </Button>
+              {openModal && (
+                <ApprovalDeclareModal
+                  style={style}
+                  openModal={openModal}
+                  setOpenModal={setOpenModal}
+                  apvl={apvl}
+                  approver={approver}
+                />
+              )}
+              {/* </Link> */}
             </Box>
           </div>
         </div>
@@ -263,4 +310,4 @@ function DeclaredBusinessTripInfo() {
   );
 }
 
-export default DeclaredBusinessTripInfo;
+export default BizTpApprovalDeclare;

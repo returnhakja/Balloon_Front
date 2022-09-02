@@ -77,7 +77,6 @@ export const onUserInvite = async (chatroomId, invite, client) => {
       .catch((error) => console.log(error));
 };
 
-
 //채팅방 만들기
 export const onCreateChatroom2 = async (
   empInfo,
@@ -129,6 +128,16 @@ export const onUserInvite2 = async (chatroomId, invite, client) => {
       .catch((error) => console.log(error));
 };
 
+//이전에 채팅했던 기록보이게
+export const chatRecord2 = async (chatroomId, setChatting, empId) => {
+  axios
+    .get(`/chat/chatrecord/${chatroomId}/${empId}`)
+    .then((response) => {
+      setChatting(response.data);
+    })
+    .catch((error) => console.log(error));
+};
+
 // 이미 일정봇과 채팅이 존재하는 사원 찾기
 export const botChatroom = async (inviteSchedule, setBotRoom) => {
   axios.post(`/cre/botchatroom`, inviteSchedule).then((response) => {
@@ -138,9 +147,10 @@ export const botChatroom = async (inviteSchedule, setBotRoom) => {
 
 // 채팅방인원이 2명인 정보 가져오기
 export const onAllChatEmp = async (setAllChatEmp, empId) => {
-  axios
-    .get(`/cre/allchatemp/${empId}`)
-    .then((response) => setAllChatEmp(response.data));
+  axios.get(`/cre/allchatemp/${empId}`).then(
+    (response) => console.log(response)
+    // setAllChatEmp(response.data)
+  );
 };
 
 //////////////////////////////////////////////////////
@@ -182,9 +192,6 @@ export const chatroomInfo = async (
 
 //채팅방이름 수정
 export const onUserUpdate = async (chatroomId, chatroomName, headCount) => {
-  console.log(chatroomId);
-  console.log(headCount);
-  console.log(chatroomName);
   await axios
     .put(`/chatroom/updatechatroom/${chatroomId}`, {
       chatroomName: chatroomName,

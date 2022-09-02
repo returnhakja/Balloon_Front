@@ -17,19 +17,11 @@ function DocList() {
   // const [endvalue, setEndValue] = useState(null);
 
   //기안양식
-  const [form, setForm] = useState('');
-
-  const handleChange = (event) => {
-    setForm(event.target.value);
-  };
 
   useEffect(() => {
-    if (docList.length === 0) {
-      console.log(empInfo);
-      getDocsByUnit(empInfo.unit && empInfo.unit.unitCode, setDocList);
-      docList.length !== 0 && console.log(docList);
-    }
-  }, [empInfo, docList]);
+    getDocsByUnit(empInfo.unit && empInfo.unit.unitCode, setDocList);
+    console.log(docList);
+  }, [empInfo, docList.length]);
 
   // const [bottomcenter, setBottomCenter] = useState('bottomcenter');
   // const data = [

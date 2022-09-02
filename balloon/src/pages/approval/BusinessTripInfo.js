@@ -39,8 +39,6 @@ function BizTripInfo() {
   const [empInfo] = useOutletContext();
 
   const params = useParams();
-  console.log(params);
-  console.log(empInfo);
   console.log(bizTpInfo);
   console.log(bizTpEmp);
 

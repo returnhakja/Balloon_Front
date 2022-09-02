@@ -66,16 +66,25 @@ function ModalApproval({
           arr.push(data);
         });
         if (approver && approver.length !== 0) {
-          setLeft(noApprover);
+          let approverList = [];
+          approver.map((data) => approverList.push(data.empId));
+          console.log(approverList);
+
+          const ogApprover = arr.filter(
+            (element) => !approverList.includes(element.empId)
+          );
+          console.log(ogApprover);
+
+          setLeft(ogApprover);
           setRight(approver);
         } else setLeft(arr);
       }
     }
   }, [empId, chatEmpList, noApprover, approver]);
-  // console.log(noApprover);
-  // console.log(approver);
-  // console.log(right);
-  // console.log(left);
+  console.log(noApprover);
+  console.log(approver);
+  console.log(right);
+  console.log(left);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -117,6 +126,7 @@ function ModalApproval({
       <List dense component="div" role="list">
         {items &&
           items.map((value) => {
+            console.log(value);
             const labelId = `transfer-list-item-${value}-label`;
             return (
               <ListItem

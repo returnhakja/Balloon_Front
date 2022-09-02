@@ -4,6 +4,7 @@ import SideNavigation from '../../components/SideNavigation';
 import ModalApproval from './ModalApproval';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import {
+  getApvlByDocId,
   getBizTpByBizTpId,
   getBizTpEmpByBizTpId,
 } from '../../context/ApprovalAxios';
@@ -33,14 +34,13 @@ function BizTripInfo() {
   // const [endvalue, setEndValue] = useState(null);
   const [bizTpInfo, setBizTpInfo] = useState({});
   const [bizTpEmp, setBizTpEmp] = useState({});
+  const [approver, setApprover] = useState([]);
   // 모달
   // const [openModal, setOpenModal] = useState(false);
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
 
   const params = useParams();
-  console.log(params);
-  console.log(empInfo);
   console.log(bizTpInfo);
   console.log(bizTpEmp);
 
@@ -48,6 +48,7 @@ function BizTripInfo() {
     if (!!params) {
       getBizTpByBizTpId(params.docId, setBizTpInfo);
       getBizTpEmpByBizTpId(params.docId, setBizTpEmp);
+      getApvlByDocId(params.docId, setApprover);
     }
   }, [params]);
 
@@ -95,12 +96,30 @@ function BizTripInfo() {
         )}
         <hr />
         <br />
-        <Card
-          variant="outlined"
-          sx={{ maxWidth: 150 }}
-          style={{ backgroundColor: '#F1F9FF' }}>
-          {bizTpInfo.length !== 0 && <DfCard drafterName={bizTpInfo.empName} />}
-        </Card>
+        <div className={styles.approvalCard}>
+          <Card
+            variant="outlined"
+            sx={{ maxWidth: 150 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            <DfCard drafterName={bizTpInfo.empName} />
+          </Card>
+          {approver.map((empData, index) => {
+            console.log(empData);
+            // if (apvl.length === 0) {
+            //   setApvl(empData);
+            // }
+
+            return (
+              <Card
+                variant="outlined"
+                sx={{ maxWidth: 150 }}
+                style={{ backgroundColor: '#F1F9FF' }}
+                key={index}>
+                <ApCard approverName={empData.approverName} />
+              </Card>
+            );
+          })}
+        </div>
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>

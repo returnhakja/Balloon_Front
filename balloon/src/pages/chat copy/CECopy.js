@@ -1,15 +1,10 @@
 import Box from '@mui/material/Box';
-
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 import React, { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 import styles from '../../css/chat/Chat.module.css';
 import Button from '@mui/material/Button';
-import { Checkbox, Container, Grid } from '@mui/material';
+import { Alert, AlertTitle, Checkbox, Container, Grid } from '@mui/material';
 import AddCommentIcon from '@mui/icons-material/AddComment';
-import ClearIcon from '@mui/icons-material/Clear';
 import CRCopy from './CRCopy';
 
 export default function CECopy({ open, setOpen, empInfo }) {
@@ -62,13 +57,12 @@ export default function CECopy({ open, setOpen, empInfo }) {
     if (invite.length === 0) {
       alert('사원을 선택해주세요!!');
     } else {
+      console.log(invite);
       setopenCreatChat(true);
     }
   };
 
-  useEffect(() => {
-    console.log(chatStatus);
-  }, [chatStatus]);
+  useEffect(() => {}, [chatStatus]);
   return (
     <div>
       {/* <Button onClick={handleOpen}>Open modal</Button> */}

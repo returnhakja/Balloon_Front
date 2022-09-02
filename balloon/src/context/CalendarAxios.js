@@ -13,8 +13,10 @@ export const getScheduleByEmp = async (empId, setList) => {
           title: data.scheduleTitle,
           start: data.scheduleStart,
           end: data.scheduleEnd,
-          allDay: true,
+          // allDay: true,
           empId: data.employee.empId,
+          backgroundColor: 'yellow',
+          textColor: 'black',
         });
       });
       return arr;

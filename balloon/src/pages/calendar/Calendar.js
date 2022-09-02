@@ -31,9 +31,13 @@ function Calendar() {
     scheduleId: null,
   });
   const [eList] = useState([]);
+  // dateClick
+  const [dateStr, setdataStr] = useState([]);
   const [empInfo] = useOutletContext();
-  const handleDateClick = () => {
+  const handleDateClick = (e) => {
+    console.log(e.dateStr);
     setOpenInsert(true);
+    setdataStr(e.dateStr);
   };
 
   const handleEventClick = (e) => {
@@ -50,7 +54,6 @@ function Calendar() {
         state: true,
         scheduleId: scheduleId,
       });
-      console.log(scheduleId);
     }
   };
 
@@ -61,14 +64,6 @@ function Calendar() {
   }, [empInfo, openInsert]);
 
   useEffect(() => {}, [openInsert, openUpdate, list]);
-
-  // useEffect(() => {
-  //   if (list.length === 0) {
-  //     if (empInfo.length !== 0) {
-  //       getScheduleByEmp(empInfo.empId, setList);
-  //     }
-  //   }
-  // }, [empInfo, openInsert, openUpdate, list]);
 
   // 즐겨찾기 캘린더
   // useEffect(() => {
@@ -86,7 +81,6 @@ function Calendar() {
               type="checkbox"
               onClick={() => {
                 getScheduleByEmp(empInfo.empId);
-                console.log('dkdkddkk');
               }}
             />
             {emp.empName}
@@ -94,7 +88,7 @@ function Calendar() {
           </Typography>
         );
       })}
-      <Container maxWidth="md" sx={{ zIndex: 2 }}>
+      <Container maxWidth="lg" sx={{ zIndex: 2 }}>
         <Button
           onClick={() => {
             setOpenInsert(true);
@@ -109,6 +103,7 @@ function Calendar() {
             openInsert={openInsert}
             setOpenInsert={setOpenInsert}
             empInfo={empInfo}
+            dateStr={dateStr}
           />
         )}
         {/* 수정 */}
@@ -125,8 +120,6 @@ function Calendar() {
           <FullCalendar
             locale="ko"
             initialView="dayGridMonth"
-            // initialEvents={list}
-            height="70vh"
             handleWindowResize="50vw"
             plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
             headerToolbar={{
@@ -135,26 +128,27 @@ function Calendar() {
               right: 'today prevYear prev next nextYear',
             }}
             googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
-            events={{
-              googleCalendarId:
-                'ko.south_korea#holiday@group.v.calendar.google.com',
-              color: 'orange',
-            }}
-            eventSources={[list]}
+            moreLinkContent={(e) => (e.text = ` +${e.num} 더보기`)}
+            dayMaxEvents={2}
+            eventSources={[
+              list,
+              {
+                googleCalendarId:
+                  'ko.south_korea#holiday@group.v.calendar.google.com',
+                color: 'red',
+              },
+            ]}
             eventBackgroundColor={'black'}
             eventSourceSuccess={() => console.log('Success EventSource')}
             eventSourceFailure={() => console.log('Failure EventSource')}
-            dateClick={() => handleDateClick()}
+            dateClick={(e) => handleDateClick(e)}
             eventClick={(e) => handleEventClick(e)}
           />
         ) : (
           <>
-            {/* {console.log(list)} */}
             <FullCalendar
               locale="ko"
               initialView="dayGridMonth"
-              // initialEvents={list}
-              height="70vh"
               handleWindowResize="50vw"
               plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
               headerToolbar={{
