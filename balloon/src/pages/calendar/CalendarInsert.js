@@ -399,36 +399,16 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo, dateStr }) 
         <br />
         <br />
         <Button onClick={handleOpen}>사원추가</Button>
-        <Modal
+        <CalendarInsertModal
           open={open}
-          onClose={handleClose}
-          aria-labelledby="parent-modal-title"
-          aria-describedby="parent-modal-description">
-          <Box sx={{ ...style, width: 400 }}>
-            {eList.map((emp, index) => {
-              return (
-                <Typography
-                  id="modal-modal-description"
-                  sx={{ mt: 2 }}
-                  key={index}>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => {
-                      onInviteSchedule(e.currentTarget.checked, emp.empId);
-                    }}
-                    checked={inviteSchedule.includes(emp.empId) ? true : false}
-                  />
-                  {emp.empName}
-                  {emp.position}
-                </Typography>
-              );
-            })}
-            <br />
-            <Button onClick={handleListClose}>취소하기</Button>
-            <Button onClick={handleempAddClose}>추가하기</Button>
-            {/* <ChildModal /> */}
-          </Box>
-        </Modal>
+          handleClose={handleClose}
+          style={style}
+          eList={eList}
+          inviteSchedule={inviteSchedule}
+          handleListClose={handleListClose}
+          handleempAddClose={handleempAddClose}
+          setInviteSchedule={setInviteSchedule}
+        />
 
         <Typography id="modal-modal-description" variant="h6" sx={{ mt: 2 }}>
           MEMO
