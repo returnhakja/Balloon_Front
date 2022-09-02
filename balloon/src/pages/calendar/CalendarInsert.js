@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import CalendarInsertModal from './CalendarInsertModal';
 import { insertSchedulList } from '../../context/CalendarAxios';
 import {
   getEmpByEmpId,
@@ -22,8 +23,17 @@ let inTime2 = inTime.replace(/(\s*)/g, '');
 const sock = new SockJS('http://localhost:8080/chatstart');
 const client = Stomp.over(sock);
 
-function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
-  const [startValue, setStartValue] = useState();
+function CalendarInsert({
+  style,
+  openInsert,
+  setOpenInsert,
+  empInfo,
+  dateStr,
+}) {
+  console.log(dateStr);
+  console.log(new Date());
+  console.log(new Date(dateStr));
+  const [startValue, setStartValue] = useState(dateStr);
   const [endValue, setEndValue] = useState();
   const [eList, setCEList] = useState([]);
   const [botInfo, setBotInfo] = useState([]);
@@ -107,8 +117,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
       employee: { empId: empInfo.empId },
       employeeIds: inviteSchedule,
     };
-
-    // insertSchedule(inputdata, setOpenInsert);
 
     const ids = inputdata.employeeIds;
     console.log(inputdata.employeeIds);
@@ -401,36 +409,16 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
         <br />
         <br />
         <Button onClick={handleOpen}>사원추가</Button>
-        <Modal
+        <CalendarInsertModal
           open={open}
-          onClose={handleClose}
-          aria-labelledby="parent-modal-title"
-          aria-describedby="parent-modal-description">
-          <Box sx={{ ...style, width: 400 }}>
-            {eList.map((emp, index) => {
-              return (
-                <Typography
-                  id="modal-modal-description"
-                  sx={{ mt: 2 }}
-                  key={index}>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => {
-                      onInviteSchedule(e.currentTarget.checked, emp.empId);
-                    }}
-                    checked={inviteSchedule.includes(emp.empId) ? true : false}
-                  />
-                  {emp.empName}
-                  {emp.position}
-                </Typography>
-              );
-            })}
-            <br />
-            <Button onClick={handleListClose}>취소하기</Button>
-            <Button onClick={handleempAddClose}>추가하기</Button>
-            {/* <ChildModal /> */}
-          </Box>
-        </Modal>
+          handleClose={handleClose}
+          style={style}
+          eList={eList}
+          inviteSchedule={inviteSchedule}
+          handleListClose={handleListClose}
+          handleempAddClose={handleempAddClose}
+          setInviteSchedule={setInviteSchedule}
+        />
 
         <Typography id="modal-modal-description" variant="h6" sx={{ mt: 2 }}>
           MEMO

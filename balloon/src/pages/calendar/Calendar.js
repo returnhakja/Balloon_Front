@@ -31,9 +31,12 @@ function Calendar() {
     scheduleId: null,
   });
   const [eList] = useState([]);
+  // dateClick
+  const [dateStr, setdataStr] = useState([]);
   const [empInfo] = useOutletContext();
-  const handleDateClick = () => {
+  const handleDateClick = (e) => {
     setOpenInsert(true);
+    setdataStr(e.dateStr);
   };
 
   const handleEventClick = (e) => {
@@ -58,7 +61,7 @@ function Calendar() {
     if (empInfo.length !== 0) {
       getScheduleByEmp(empInfo.empId, setList);
     }
-  }, [empInfo]);
+  }, [empInfo, openInsert]);
 
   useEffect(() => {}, [openInsert, openUpdate, list]);
 
@@ -94,7 +97,8 @@ function Calendar() {
           </Typography>
         );
       })}
-      <Container maxWidth="md" sx={{ zIndex: 2 }}>
+      {/* <Container maxWidth="md" sx={{ zIndex: 2 }}> */}
+      <Container maxWidth="lg" sx={{ zIndex: 2 }}>
         <Button
           onClick={() => {
             setOpenInsert(true);
@@ -109,6 +113,7 @@ function Calendar() {
             openInsert={openInsert}
             setOpenInsert={setOpenInsert}
             empInfo={empInfo}
+            dateStr={dateStr}
           />
         )}
         {/* 수정 */}
@@ -135,12 +140,22 @@ function Calendar() {
               right: 'today prevYear prev next nextYear',
             }}
             googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
-            events={{
-              googleCalendarId:
-                'ko.south_korea#holiday@group.v.calendar.google.com',
-              color: 'orange',
-            }}
-            eventSources={[list]}
+            // events={{
+            //   googleCalendarId:
+            //     'ko.south_korea#holiday@group.v.calendar.google.com',
+            //   color: 'orange',
+            // }}
+            // eventSources={[list]}
+            moreLinkContent={(e) => (e.text = ` +${e.num} 더보기`)}
+            dayMaxEvents={2}
+            eventSources={[
+              list,
+              {
+                googleCalendarId:
+                  'ko.south_korea#holiday@group.v.calendar.google.com',
+                color: 'red',
+              },
+            ]}
             eventBackgroundColor={'black'}
             eventSourceSuccess={() => console.log('Success EventSource')}
             eventSourceFailure={() => console.log('Failure EventSource')}
@@ -172,7 +187,7 @@ function Calendar() {
               eventBackgroundColor={'black'}
               eventSourceSuccess={() => console.log('Success EventSource')}
               eventSourceFailure={() => console.log('Failure EventSource')}
-              dateClick={() => handleDateClick()}
+              dateClick={(e) => handleDateClick(e)}
               eventClick={(e) => handleEventClick(e)}
             />
           </>
