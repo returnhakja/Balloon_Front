@@ -4,64 +4,64 @@ module.exports = function (app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      // target: 'http://15.164.224.26:8080',
-      target: 'http://localhost:8080',
+      target: 'http://15.164.224.26:8080',
+      // target: 'http://localhost:8080',
       changeOrigin: true,
     })
   );
   app.use(
     '/auth',
     createProxyMiddleware({
-      // target: 'http://15.164.224.26:8080',
-      target: 'http://localhost:8080',
+      target: 'http://15.164.224.26:8080',
+      // target: 'http://localhost:8080',
       changeOrigin: true,
     })
   );
   app.use(
     '/employee',
     createProxyMiddleware({
-      // target: 'http://15.164.224.26:8080',
-      target: 'http://localhost:8080',
+      target: 'http://15.164.224.26:8080',
+      // target: 'http://localhost:8080',
       changeOrigin: true,
     })
   );
   app.use(
     '/unit',
     createProxyMiddleware({
-      // target: 'http://15.164.224.26:8080',
-      target: 'http://localhost:8080',
+      target: 'http://15.164.224.26:8080',
+      // target: 'http://localhost:8080',
       changeOrigin: true,
     })
   );
   app.use(
     '/cal',
     createProxyMiddleware({
-      // target: 'http://15.164.224.26:8080',
-      target: 'http://localhost:8080',
+      target: 'http://15.164.224.26:8080',
+      // target: 'http://localhost:8080',
       changeOrigin: true,
     })
   );
   app.use(
     '/chat',
     createProxyMiddleware({
-      // target: 'http://15.164.224.26:8080',
-      target: 'http://localhost:8080',
+      target: 'http://15.164.224.26:8080',
+      // target: 'http://localhost:8080',
       changeOrigin: true,
     })
   );
   app.use(
     '/chatroom',
     createProxyMiddleware({
-      // target: 'http://15.164.224.26:8080',
-      target: 'http://localhost:8080',
+      target: 'http://15.164.224.26:8080',
+      // target: 'http://localhost:8080',
       changeOrigin: true,
     })
   );
   app.use(
     '/cre',
     createProxyMiddleware({
-      // target: 'http://15.164.224.26:8080',
-      target: 'http://localhost:8080',
+      target: 'http://15.164.224.26:8080',
+      // target: 'http://localhost:8080',
       changeOrigin: true,
     })
   );

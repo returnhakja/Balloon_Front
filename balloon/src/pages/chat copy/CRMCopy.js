@@ -13,8 +13,8 @@ function CRMCopy({ empInfo, setChatStatus }) {
   const [chatroom, setChatroom] = useState([]);
   const empId = empInfo.empId;
 
-  // const sock = new SockJS('http://15.164.224.26:8080/chatstart');
-  const sock = new SockJS('http://localhost:8080/chatstart');
+  const sock = new SockJS('http://15.164.224.26:8080/chatstart');
+  // const sock = new SockJS('http://localhost:8080/chatstart');
   const client = Stomp.over(sock);
   const [roomId, setRoomId] = useState(0);
 
