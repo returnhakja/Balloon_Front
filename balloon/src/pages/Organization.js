@@ -63,12 +63,20 @@ function Organization() {
   const str2 = ' rectangle';
   return (
     <>
-      <>
-        <h1 className={str1 + num + str2}></h1>
-        <ol className={str1 + (num + 1) + str2}>
-          <li></li>
-        </ol>
-      </>
+      {units.length && (
+        <>
+          <h1 className={str1 + num + str2}></h1>
+          {units.map((unit) => {
+            return (
+              unit.parentUnit && (
+                <ol className={str1 + (num + 1) + str2}>
+                  <li>dd</li>
+                </ol>
+              )
+            );
+          })}
+        </>
+      )}
 
       {units.length && (
         <Container className="con">

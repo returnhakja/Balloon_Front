@@ -13,7 +13,7 @@ export const findCookieAccessToken = () => {
 // accessToken으로 이름, 직위, id 가져오기
 export const getMe = async (setEmpInfo) => {
   const cookie = await findCookieAccessToken();
-  console.log(cookie);
+  // console.log(cookie);
   const config = {
     headers: {
       Authorization: 'Bearer ' + cookie,
