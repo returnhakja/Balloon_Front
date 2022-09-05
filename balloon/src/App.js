@@ -44,6 +44,10 @@ import BizRptApprovalDeclare from './pages/approval/BizRptApprovalDeclare';
 import BizTpApprovalDeclare from './pages/approval/BizTpApprovalDeclare';
 import PAApprovalDeclare from './pages/approval/PAApprovalDeclare';
 
+import RefusedBusinessReportInfo from './pages/approval/RefusedBusinessReportInfo';
+import RefusedBusinessTripInfo from './pages/approval/RefusedBusinessTripInfo';
+import RefusedPersonnelAppointmentInfo from './pages/approval/RefusedPersonnelAppointmentInfo';
+
 import Calendar from './pages/calendar/Calendar';
 
 import Chat from './pages/chat/Chat';
@@ -62,12 +66,12 @@ import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
 import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
 
-import NotFound from './pages/NotFound';
+import MyPage from './pages/login/MyPage';
 
-import RefusedBusinessReportInfo from './pages/approval/RefusedBusinessReportInfo';
-import RefusedBusinessTripInfo from './pages/approval/RefusedBusinessTripInfo';
-import RefusedPersonnelAppointmentInfo from './pages/approval/RefusedPersonnelAppointmentInfo';
-import MyPage from './pages/personnelManagement/MyPage';
+import NotFound from './pages/NotFound';
+import UpdateMine from './pages/login/UpdateMine';
+import Profile from './pages/login/Profile';
+import Profile2 from './pages/login/Profile2';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
@@ -114,6 +118,9 @@ function App() {
         <Route path="/organization">
           <Route index element={<Organization />} />
         </Route>
+
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile2" element={<Profile2 />} />
 
         {/* Private Routes */}
         <Route
@@ -241,7 +248,9 @@ function App() {
           <Route path="/add/employee" element={<EmpAddPage />} />
           <Route path="/add/employees" element={<EmpListAddPage />} />
 
+          {/* 마이페이지 */}
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/mypage/update" element={<UpdateMine />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

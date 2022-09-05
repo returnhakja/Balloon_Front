@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 
-function MyPage() {
+function UpdateMine() {
   const [empInfo] = useOutletContext();
 
   useEffect(() => {
@@ -10,12 +10,18 @@ function MyPage() {
 
   return (
     <div>
-      <h1>마이페이지</h1>
+      <h1>내 정보 수정</h1>
       <div style={{ display: 'flex' }}>
         <div style={{ margin: '10px' }}>
-          <img src={empInfo.photo} alt="회원 사진" />
+          {!!empInfo.photo && <img src={empInfo.photo} alt="회원 사진" />}
+          <br />
+          <input type="file" id="photo" />
         </div>
         <div style={{ margin: '10px' }}>
+          <div>
+            <span>부서명: </span>
+            <span>{empInfo.unit.unitName}</span>
+          </div>
           <div>
             <span>사원명: </span>
             <span>{empInfo.empName}</span>
@@ -45,21 +51,17 @@ function MyPage() {
             <span>{empInfo.empBell}</span>
           </div>
           {/* <div>
-            <span>주소: </span>
-            <span>{empInfo.address}</span>
-          </div>
-          <div>
-            <span>차량번호판: </span>
-            <span>{empInfo.licensePlate }</span>
-          </div> */}
-          <div>
-            <span>부서명: </span>
-            <span>{empInfo.unit.unitName}</span>
-          </div>
+        <span>주소: </span>
+        <span>{empInfo.address}</span>
+      </div>
+      <div>
+        <span>차량번호판: </span>
+        <span>{empInfo.licensePlate }</span>
+      </div> */}
         </div>
       </div>
     </div>
   );
 }
 
-export default MyPage;
+export default UpdateMine;
