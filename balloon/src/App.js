@@ -67,6 +67,7 @@ import NotFound from './pages/NotFound';
 import RefusedBusinessReportInfo from './pages/approval/RefusedBusinessReportInfo';
 import RefusedBusinessTripInfo from './pages/approval/RefusedBusinessTripInfo';
 import RefusedPersonnelAppointmentInfo from './pages/approval/RefusedPersonnelAppointmentInfo';
+import MyPage from './pages/personnelManagement/MyPage';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
@@ -239,6 +240,8 @@ function App() {
           <Route path="/management/employee" element={<ManagementEmployee />} />
           <Route path="/add/employee" element={<EmpAddPage />} />
           <Route path="/add/employees" element={<EmpListAddPage />} />
+
+          <Route path="/mypage" element={<MyPage />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

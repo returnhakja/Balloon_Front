@@ -20,16 +20,10 @@ let data = 'T';
 let inTime = [nowTime.slice(0, 10), data, nowTime.slice(10)].join('');
 let inTime2 = inTime.replace(/(\s*)/g, '');
 
-const sock = new SockJS('http://localhost:8080/chatstart');
-const client = Stomp.over(sock);
+// const sock = new SockJS('http://localhost:8080/chatstart');
+// const clients = Stomp.over(sock);
 
-function CalendarInsert({
-  style,
-  openInsert,
-  setOpenInsert,
-  empInfo,
-  dateStr,
-}) {
+function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
   const [startValue, setStartValue] = useState();
   const [endValue, setEndValue] = useState();
   const [eList, setCEList] = useState([]);
@@ -40,7 +34,6 @@ function CalendarInsert({
   const scheduleListAdd = [];
 
   const calendarBot = 'Y0000001';
-  console.log(inTime2);
 
   let scheduletitle = '';
   let CalendarContent = '';
@@ -72,26 +65,32 @@ function CalendarInsert({
   };
 
   //일정보내기
-  // const sock = new SockJS('http://localhost:8080/chatstart');
-  // const client = Stomp.over(sock);
+  //socket
+  const [clients, setClients] = useState();
+  useEffect(() => {
+    const sock = new SockJS('http://localhost:8080/chatstart');
+    const client = Stomp.over(sock);
+    setClients(client);
+  }, []);
 
-  client.connect({}, () => {
-    client.subscribe(`/topic/message`, () => {
-      disconnect();
+  clients &&
+    clients.connect({}, () => {
+      clients.subscribe(`/topic/message`, () => {
+        disconnect();
+      });
     });
-  });
 
   const disconnect = () => {
-    client.disconnect();
+    clients.disconnect();
   };
 
-  const onInviteSchedule = (checked, data) => {
-    if (checked) {
-      setInviteSchedule([...inviteSchedule, data]);
-    } else {
-      setInviteSchedule(inviteSchedule.filter((button) => button !== data));
-    }
-  };
+  // const onInviteSchedule = (checked, data) => {
+  //   if (checked) {
+  //     setInviteSchedule([...inviteSchedule, data]);
+  //   } else {
+  //     setInviteSchedule(inviteSchedule.filter((button) => button !== data));
+  //   }
+  // };
 
   const insertHandle = () => {
     scheduletitle = document.getElementById('scheduletitle').value;
@@ -167,7 +166,7 @@ function CalendarInsert({
     invitepeople.map(() => {
       arr.push({
         chatroomName: '일정봇',
-        headCount: 2,
+        headCount: 1,
       });
     });
     axios.post('/chatroom/createschchatroom', arr).then((response) => {
@@ -198,13 +197,13 @@ function CalendarInsert({
               inTime: inTime2,
             },
           ],
-          client.send(
+          clients.send(
             '/app/chat/message',
             {},
             JSON.stringify({
               chatroomId: add.chatroomId,
               writer: botInfo,
-              chatContent: '새로운 일정이 등록되었습니다',
+              chatContent: '일정이 등록되었습니다.',
             })
           )
         )
@@ -212,6 +211,7 @@ function CalendarInsert({
           console.log(response.data);
         });
     });
+    // sleep(3000);
     botroomMsg();
     scheduleChatContent(add);
   };
@@ -219,7 +219,7 @@ function CalendarInsert({
   // 이미생성된 채팅방에 알림보내기
   const botroomMsg = () => {
     botroomId.map((id) => {
-      client.send(
+      clients.send(
         '/app/chat/message',
         {},
         JSON.stringify({
@@ -228,7 +228,7 @@ function CalendarInsert({
           chatContent: '새로운 일정이 등록되었습니다. 확인하세요',
         })
       );
-      client.send(
+      clients.send(
         '/app/chat/message',
         {},
         JSON.stringify({
@@ -285,7 +285,7 @@ function CalendarInsert({
   //일정내용보내기
   const scheduleChatContent = (add) => {
     add.map((add) => {
-      client.send(
+      clients.send(
         '/app/chat/message',
         {},
         JSON.stringify({
@@ -337,6 +337,10 @@ function CalendarInsert({
         })
       );
     });
+  };
+
+  const sleep = (ms) => {
+    return new Promise((r) => setTimeout(r, ms));
   };
 
   return (

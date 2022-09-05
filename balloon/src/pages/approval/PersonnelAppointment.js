@@ -78,8 +78,10 @@ function PersonnelAppointment() {
       }
 
       noApprover.length === 0 && setNoApprover(noApprover);
+
+      mEmp && console.log('mEmp~~~', mEmp);
     }
-  }, [units, empInfo, mEmpInfo, docNum, noApprover]);
+  }, [units, empInfo, mEmpInfo, docNum, noApprover, mEmp]);
 
   return (
     <SideNavigation>
