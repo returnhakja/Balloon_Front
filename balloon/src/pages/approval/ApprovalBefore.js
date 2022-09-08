@@ -65,7 +65,6 @@ function ApprovalBefore() {
           <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
             <DataGrid
               getRowId={(docList) => docList.docId}
-              // rows={docList}
               rows={docList}
               columns={columns}
               pageSize={10}
