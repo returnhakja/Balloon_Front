@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { get, useForm } from 'react-hook-form';
+import { Label } from '../../components/Label';
 import { positionArr, responseArr, gradeArr } from '../../context/EmpFunc';
 import {
   findEmpByEmpIdByAdmin,
@@ -8,8 +9,6 @@ import {
 import { findUnitList } from '../../context/UnitAxios';
 import styles from '../../css/management/Employee.module.css';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-
-const Label = ({ label }) => <p className={styles.label}>{label}</p>;
 
 const SelectUnit = React.forwardRef(
   ({ name, label, unitList, unit, setUnit }, ref) => {
@@ -62,84 +61,6 @@ const SelectArr = React.forwardRef(
     );
   }
 );
-
-// const SelectPosition = React.forwardRef(
-//   ({ name, label, positionArr, posi, setPosi }, ref) => {
-//     useEffect(() => {}, [posi]);
-//     return (
-//       <div style={{ width: '100%', display: 'flex' }}>
-//         <p>{label}</p>
-//         <select
-//           className={styles.inputBox}
-//           name={name}
-//           ref={ref}
-//           value={posi}
-//           onChange={(newValue) => {
-//             setPosi(newValue.target.value);
-//           }}>
-//           {positionArr.length !== 0 &&
-//             positionArr.map((data, index) => (
-//               <option key={index} value={data}>
-//                 {data}
-//               </option>
-//             ))}
-//         </select>
-//       </div>
-//     );
-//   }
-// );
-
-// const SelectResponsibility = React.forwardRef(
-//   ({ name, label, responseArr, reposi, setResposi }, ref) => {
-//     useEffect(() => {}, [reposi]);
-//     return (
-//       <div style={{ width: '100%', display: 'flex' }}>
-//         <p>{label}</p>
-//         <select
-//           className={styles.inputBox}
-//           name={name}
-//           ref={ref}
-//           value={reposi}
-//           onChange={(newValue) => {
-//             setResposi(newValue.target.value);
-//           }}>
-//           {responseArr.length !== 0 &&
-//             responseArr.map((data, index) => (
-//               <option key={index} value={data}>
-//                 {data}
-//               </option>
-//             ))}
-//         </select>
-//       </div>
-//     );
-//   }
-// );
-
-// const SelectUserRoleGrade = React.forwardRef(
-//   ({ name, label, gradeArr, urg, setUrg }, ref) => {
-//     useEffect(() => {}, [urg]);
-//     return (
-//       <div style={{ width: '100%', display: 'flex' }}>
-//         <p>{label}</p>
-//         <select
-//           className={styles.inputBox}
-//           name={name}
-//           ref={ref}
-//           value={urg}
-//           onChange={(newValue) => {
-//             setUrg(newValue.target.value);
-//           }}>
-//           {gradeArr.length !== 0 &&
-//             gradeArr.map((data, index) => (
-//               <option key={index} value={data}>
-//                 {data}
-//               </option>
-//             ))}
-//         </select>
-//       </div>
-//     );
-//   }
-// );
 
 const style = {
   position: 'absolute',
