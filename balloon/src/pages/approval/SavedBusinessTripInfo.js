@@ -49,12 +49,13 @@ function SavedBusinessTripInfo() {
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
   const [svApprover, setSvApprover] = useState([]);
+  const [approvalList, setApprovalList] = useState([]);
 
   const params = useParams();
   let rmApprover = [];
 
   useEffect(() => {
-    getApvlByDocId(params.docId, setApprover, setSvApprover);
+    getApvlByDocId(params.docId, setApprover, setApprovalList, setSvApprover);
   }, []);
 
   useEffect(() => {
@@ -79,7 +80,7 @@ function SavedBusinessTripInfo() {
     });
     rmApprover = svApprover.filter((element) => !arr.includes(element.empId));
     console.log(rmApprover);
-  }, [params, inputData, startValue, endValue, approver.length]);
+  }, [params, inputData, startValue, endValue, approver]);
 
   console.log(params.docId);
   return (
@@ -326,32 +327,40 @@ function SavedBusinessTripInfo() {
                           deleteApvlByDocIdAndEmpId(params.docId, data.empId)
                         );
                       }
-                      approver.map((data, index) => {
-                        console.log(data);
-                        const approvalId = getApvlId(params.docId, data.empId);
+                      insertApproval(
+                        params.docId,
+                        0,
+                        approver,
+                        inputData,
+                        empInfo,
+                        approvalList
+                      );
+                      // approver.map((data, index) => {
+                      //   console.log(data);
+                      //   const approvalId = getApvlId(params.docId, data.empId);
 
-                        if (approvalId !== null) {
-                          approvalId.then((apvlId) => {
-                            console.log(data);
-                            insertApproval(
-                              params.docId,
-                              0,
-                              data,
-                              inputData,
-                              empInfo,
-                              apvlId
-                            );
-                          });
-                        } else {
-                          insertApproval(
-                            params.docId,
-                            0,
-                            data,
-                            inputData,
-                            empInfo
-                          );
-                        }
-                      });
+                      //   if (approvalId !== null) {
+                      //     approvalId.then((apvlId) => {
+                      //       console.log(data);
+                      //       insertApproval(
+                      //         params.docId,
+                      //         0,
+                      //         data,
+                      //         inputData,
+                      //         empInfo,
+                      //         apvlId
+                      //       );
+                      //     });
+                      //   } else {
+                      //     insertApproval(
+                      //       params.docId,
+                      //       0,
+                      //       data,
+                      //       inputData,
+                      //       empInfo
+                      //     );
+                      //   }
+                      // });
                     }
                     alert('문서가 임시저장되었습니다!');
                   }}>
@@ -380,18 +389,26 @@ function SavedBusinessTripInfo() {
                     e.preventDefault();
                   }
                   {
-                    approver.map((data, index) => {
-                      console.log(data);
-                      const approvalId = getApvlId(params.docId, data.empId);
-                      insertApproval(
-                        params.docId,
-                        1,
-                        data,
-                        inputData,
-                        empInfo,
-                        approvalId
-                      );
-                    });
+                    insertApproval(
+                      params.docId,
+                      1,
+                      approver,
+                      inputData,
+                      empInfo,
+                      approvalList
+                    );
+                    // approver.map((data, index) => {
+                    //   console.log(data);
+                    //   const approvalId = getApvlId(params.docId, data.empId);
+                    //   insertApproval(
+                    //     params.docId,
+                    //     1,
+                    //     data,
+                    //     inputData,
+                    //     empInfo,
+                    //     approvalId
+                    //   );
+                    // });
                   }
                 }}>
                 <SaveButton variant="contained" color="success" size="large">

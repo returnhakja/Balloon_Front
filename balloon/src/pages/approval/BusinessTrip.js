@@ -290,10 +290,11 @@ function BusinessTrip() {
                       setInputData
                     );
 
-                    approver.map((data, index) => {
-                      console.log(data);
-                      return insertApproval(docId, 0, data, inputData, empInfo);
-                    });
+                    // approver.map((data, index) => {
+                    //   console.log(data);
+                    //   return insertApproval(docId, 0, data, inputData, empInfo);
+                    // });
+                    insertApproval(docId, 0, approver, inputData, empInfo);
 
                     alert('문서가 임시저장되었습니다!');
                   }}>
@@ -318,10 +319,11 @@ function BusinessTrip() {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
-                  approver.map((data, index) => {
-                    console.log(data);
-                    return insertApproval(docId, 1, data, inputData, empInfo);
-                  });
+                  // approver.map((data, index) => {
+                  //   console.log(data);
+                  //   return insertApproval(docId, 1, data, inputData, empInfo);
+                  // });
+                  insertApproval(docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기

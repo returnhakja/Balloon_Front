@@ -53,7 +53,6 @@ function DeclaredBusinessReportInfo() {
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          {' '}
           <FcDocument /> 업무기안
         </p>
 
@@ -73,7 +72,6 @@ function DeclaredBusinessReportInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {bizRptInfo.empName}({bizRptInfo.emp && bizRptInfo.emp.empId})
               </th>
             </tr>
@@ -94,7 +92,7 @@ function DeclaredBusinessReportInfo() {
             {!!bizRptInfo && <DfCard drafterName={bizRptInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData.approvalId);
+            console.log(empData);
             if (apvl.length === 0) {
               setApvl(empData);
             }
@@ -104,7 +102,7 @@ function DeclaredBusinessReportInfo() {
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}>
-                <ApCard approverName={empData.approverName} />
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}
@@ -117,7 +115,6 @@ function DeclaredBusinessReportInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleftpadding}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 {bizRptInfo.documentTitle}
               </td>
             </tr>

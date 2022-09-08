@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext, useParams } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
-import { getApvlByApvrIdAnddocStatus } from '../../context/ApprovalAxios';
+import {
+  getApvlByApvrIdAnddocStatus,
+  getApvlByDocId,
+} from '../../context/ApprovalAxios';
 import styles from '../../css/Component.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
@@ -50,6 +53,7 @@ function ApprovalBefore() {
     },
     { field: 'updateTime', headerName: '처리일자', width: 160 },
   ];
+
   return (
     <>
       <SideNavigation>
@@ -61,6 +65,7 @@ function ApprovalBefore() {
           <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
             <DataGrid
               getRowId={(docList) => docList.docId}
+              // rows={docList}
               rows={docList}
               columns={columns}
               pageSize={10}

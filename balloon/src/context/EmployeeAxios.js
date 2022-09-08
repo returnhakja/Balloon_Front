@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import { positionArr } from './EmpFunc';
 
 // 쿠키를 사용할 수 있게 해주기
 export const findCookieAccessToken = () => {
@@ -134,24 +135,30 @@ export const getEmpListByUnitCode = async () => {
 export const getEmpListInSameUnit = async (empId, setCEList) => {
   const url = '/employee/unit/list/';
   const urlStr = url + empId;
+  console.log(empId);
   await axios
     .get(urlStr)
     .then((response) => response.data)
     .then((data) => {
+      console.log(data);
       setCEList(data);
     })
     .catch((error) => console.log(error));
 };
 
 // 같은 부서내 결재 사원 출력(자신 제외, 인턴 제외)
-export const getApvrListInSameUnit = async (empId, setCEList) => {
+export const getApvrListInSameUnit = async (empId, position, setCEList) => {
   const url = '/employee/apvr/unit/list/';
   const urlStr = url + empId;
   await axios
     .get(urlStr)
     .then((response) => response.data)
     .then((data) => {
-      setCEList(data);
+      const positionNum = positionArr.indexOf(position);
+      setCEList(
+        data.filter((v) => positionArr.indexOf(v.position) > positionNum)
+      );
+      // setCEList(data);
     })
     .catch((error) => console.log(error));
 };

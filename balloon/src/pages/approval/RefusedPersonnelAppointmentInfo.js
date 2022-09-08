@@ -5,7 +5,12 @@ import ModalApproval from './ModalApproval';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import { findUnitList } from '../../context/UnitAxios';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
-import { deletePA, getPAByPAId, insertPA } from '../../context/ApprovalAxios';
+import {
+  deletePA,
+  getApvlByDocId,
+  getPAByPAId,
+  insertPA,
+} from '../../context/ApprovalAxios';
 import { positionArr } from '../../context/EmpFunc';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
@@ -48,6 +53,7 @@ function RefusedPersonnelAppointmentInfo() {
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [empInfo] = useOutletContext();
   const [inputData, setInputData] = useState({});
+  const [approver, setApprover] = useState([]);
 
   const params = useParams();
 
@@ -64,6 +70,7 @@ function RefusedPersonnelAppointmentInfo() {
   useEffect(() => {
     if (Object.keys(inputData).length !== 0) {
       console.log(inputData);
+      getApvlByDocId(params.docId, setApprover);
       setStartValue(inputData.personnelDate);
       setMEmp(inputData.movedEmpId);
       setUnit(inputData.unit);
@@ -119,12 +126,27 @@ function RefusedPersonnelAppointmentInfo() {
         </div>
         <hr />
         <br />
-        <Card
-          variant="outlined"
-          sx={{ maxWidth: 150 }}
-          style={{ backgroundColor: '#F1F9FF' }}>
-          {!!empInfo && <DfCard drafterName={empInfo.empName} />}
-        </Card>
+        <div className={styles.approvalCard}>
+          <Card
+            variant="outlined"
+            sx={{ maxWidth: 150 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {!!inputData && <DfCard drafterName={inputData.empName} />}
+          </Card>
+          {approver.map((empData, index) => {
+            console.log(empData);
+
+            return (
+              <Card
+                key={index}
+                variant="outlined"
+                sx={{ maxWidth: 150 }}
+                style={{ backgroundColor: '#F1F9FF' }}>
+                <ApCard approverName={empData.empName} />
+              </Card>
+            );
+          })}
+        </div>
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>

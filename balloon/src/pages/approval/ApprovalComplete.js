@@ -1,22 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Component.module.css';
 import { Container } from '@mui/system';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import 'react-datepicker/dist/react-datepicker.css';
+import { getApvlByApvrIdAnddocStatus } from '../../context/ApprovalAxios';
+import { useOutletContext } from 'react-router-dom';
 
 function ApprovalComplete() {
+  const [empInfo] = useOutletContext();
   const [docList, setDocList] = useState([]);
-  // 날짜 관련
   const [startValue, setStartValue] = useState(null);
   const [endvalue, setEndValue] = useState(null);
-
-  //기안양식
   const [form, setForm] = useState('');
 
   const handleChange = (event) => {
     setForm(event.target.value);
   };
+
+  useEffect(() => {
+    getApvlByApvrIdAnddocStatus(empInfo.empId, 3, setDocList);
+  }, []);
 
   const columns = [
     { field: 'docId', headerName: '문서번호', width: 160 },

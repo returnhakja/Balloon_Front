@@ -44,14 +44,14 @@ function SavedBusinessReportInfo() {
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
   const [svApprover, setSvApprover] = useState([]);
+  const [approvalList, setApprovalList] = useState([]);
 
   const params = useParams();
   let rmApprover = [];
 
   useEffect(() => {
-    getApvlByDocId(params.docId, setApprover, setSvApprover);
+    getApvlByDocId(params.docId, setApprover, setApprovalList, setSvApprover);
   }, []);
-
   useEffect(() => {
     if (!!params) {
       if (Object.keys(inputData).length === 0) {
@@ -61,16 +61,12 @@ function SavedBusinessReportInfo() {
         }
       }
     }
-    console.log(svApprover);
     let arr = [];
     approver.map((data) => {
       arr.push(data.empId);
-      console.log(arr);
     });
     rmApprover = svApprover.filter((element) => !arr.includes(element.empId));
-    console.log(rmApprover);
-  }, [params, inputData, approver.length]);
-  console.log(approver);
+  }, [params, inputData, approver]);
   return (
     <SideNavigation>
       <Container>
@@ -136,7 +132,6 @@ function SavedBusinessReportInfo() {
             <DfCard drafterName={empInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            console.log(approver);
             // if (apvl.length === 0) {
             //   setApvl(empData);
             // }
@@ -223,39 +218,20 @@ function SavedBusinessReportInfo() {
                       empInfo,
                       setInputData
                     );
-                    console.log(rmApprover);
                     {
                       if (rmApprover.length !== 0) {
                         rmApprover.map((data) =>
                           deleteApvlByDocIdAndEmpId(params.docId, data.empId)
                         );
                       }
-                      approver.map((data, index) => {
-                        console.log(data);
-                        const approvalId = getApvlId(params.docId, data.empId);
-
-                        if (approvalId !== null) {
-                          approvalId.then((apvlId) => {
-                            console.log(data);
-                            insertApproval(
-                              params.docId,
-                              0,
-                              data,
-                              inputData,
-                              empInfo,
-                              apvlId
-                            );
-                          });
-                        } else {
-                          insertApproval(
-                            params.docId,
-                            0,
-                            data,
-                            inputData,
-                            empInfo
-                          );
-                        }
-                      });
+                      insertApproval(
+                        params.docId,
+                        0,
+                        approver,
+                        inputData,
+                        empInfo,
+                        approvalList
+                      );
                     }
 
                     alert('문서가 임시저장되었습니다!');
@@ -277,19 +253,22 @@ function SavedBusinessReportInfo() {
                     alert('문서가 상신되었습니다!');
                   } else {
                     alert('결재선을 설정해주세요 !');
-                    e.preventDefault();
                   }
-
-                  approver.map((data, index) => {
-                    console.log(data);
-                    return insertApproval(
+                  {
+                    if (rmApprover.length !== 0) {
+                      rmApprover.map((data) =>
+                        deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                      );
+                    }
+                    insertApproval(
                       params.docId,
                       1,
-                      data,
+                      approver,
                       inputData,
-                      empInfo
+                      empInfo,
+                      approvalList
                     );
-                  });
+                  }
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기

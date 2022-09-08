@@ -62,6 +62,8 @@ function PersonnelAppointment() {
   const [empInfo] = useOutletContext();
   const [inputData, setInputData] = useState({});
 
+  console.log(empInfo);
+
   useEffect(() => {
     if (units.length === 0) {
       findUnitList(setUnits);
@@ -78,8 +80,10 @@ function PersonnelAppointment() {
       }
 
       noApprover.length === 0 && setNoApprover(noApprover);
+
+      mEmp && console.log('mEmp~~~', mEmp);
     }
-  }, [units, empInfo, mEmpInfo, docNum, noApprover]);
+  }, [units, empInfo, mEmpInfo, docNum, noApprover, mEmp]);
 
   return (
     <SideNavigation>
@@ -323,10 +327,11 @@ function PersonnelAppointment() {
                       setInputData
                     );
 
-                    approver.map((data, index) => {
-                      console.log(data);
-                      return insertApproval(docId, 0, data, inputData, empInfo);
-                    });
+                    // approver.map((data, index) => {
+                    //   console.log(data);
+                    //   return insertApproval(docId, 0, data, inputData, empInfo);
+                    // });
+                    insertApproval(docId, 0, approver, inputData, empInfo);
 
                     alert('문서가 임시저장되었습니다!');
                   }}>
@@ -354,10 +359,11 @@ function PersonnelAppointment() {
                     e.preventDefault();
                   }
 
-                  approver.map((data, index) => {
-                    console.log(data);
-                    return insertApproval(docId, 1, data, inputData, empInfo);
-                  });
+                  // approver.map((data, index) => {
+                  //   console.log(data);
+                  //   return insertApproval(docId, 1, data, inputData, empInfo);
+                  // });
+                  insertApproval(docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기
