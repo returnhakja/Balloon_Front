@@ -12,11 +12,14 @@ export default function ApprovalDeclareModal({
   openModal,
   setOpenModal,
   approver,
+  apvlList,
+  approvalList,
   paInfo,
 }) {
   const handleClose = () => {
     setOpenModal(false);
   };
+  console.log(approvalList);
   return (
     <div>
       <Modal
@@ -46,6 +49,34 @@ export default function ApprovalDeclareModal({
             <Link
               to={'/boxes/ar'}
               onClick={async () => {
+                updateApvlDoc([apvlList[0]], 4, paInfo);
+                updateApproval(apvlList, 4);
+
+                alert('문서를 반려 하였습니다!');
+              }}>
+              <Button variant="contained" size="large" sx={{ my: 0.5 }}>
+                반려하기
+              </Button>
+            </Link>
+            <Link
+              to={'/boxes/ac'}
+              onClick={async () => {
+                console.log(!apvlList[1]);
+                if (!apvlList[1]) {
+                  updateApvlDoc([apvlList[0]], 2, paInfo);
+                  updateApproval(approvalList, 3);
+                } else {
+                  updateApproval(apvlList, 2);
+                }
+                alert('문서를 결재 하였습니다!');
+              }}>
+              <Button variant="contained" size="large" sx={{ my: 0.5 }}>
+                결재하기
+              </Button>
+            </Link>
+            {/* <Link
+              to={'/boxes/ar'}
+              onClick={async () => {
                 approver.map((apvl) => {
                   updateApvlDoc(apvl, 4, paInfo);
                   updateApproval(apvl, 4);
@@ -70,7 +101,7 @@ export default function ApprovalDeclareModal({
               <Button variant="contained" size="large" sx={{ my: 0.5 }}>
                 결재하기
               </Button>
-            </Link>
+            </Link> */}
           </Box>
         </Box>
       </Modal>

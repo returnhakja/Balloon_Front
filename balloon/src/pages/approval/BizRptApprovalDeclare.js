@@ -21,6 +21,7 @@ import {
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
+import { ApCard, DfCard } from './approvalCards/DrafterApproverCard';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -52,63 +53,24 @@ function ApprovalDeclare() {
   const [apvl, setApvl] = useState({});
   const params = useParams();
   const [openModal, setOpenModal] = useState(false);
+  const [approvalList, setApprovalList] = useState([]);
 
   useEffect(() => {
     getBizRptByBizRptId(params.docId, setBizRptInfo);
-    getApvlByDocId(params.docId, setApprover);
+    getApvlByDocId(params.docId, setApprover, setApprovalList);
   }, []);
 
-  const DfCard = (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          기안자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {bizRptInfo.empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
+  const myIndex = approvalList.findIndex(
+    (apvl) => apvl.approverEmp.empId === empInfo.empId
   );
+  let apvlList = [];
 
-  const ApCard = (empName) => (
-    <React.Fragment>
-      <CardContent>
-        <Typography
-          sx={{ fontSize: 25 }}
-          color="#00AAFF"
-          gutterBottom
-          textAlign="center">
-          결재자
-        </Typography>
-        <hr />
-        <br />
-        <Typography
-          sx={{ fontSize: 20 }}
-          variant="h5"
-          component="div"
-          textAlign="center">
-          {empName}
-        </Typography>
-      </CardContent>
-    </React.Fragment>
-  );
+  apvlList.push(approvalList[myIndex], approvalList[myIndex + 1]);
 
   return (
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          {' '}
           <FcDocument /> 결재전
         </p>
 
@@ -128,7 +90,6 @@ function ApprovalDeclare() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {bizRptInfo.empName}({bizRptInfo.emp && bizRptInfo.emp.empId})
               </th>
             </tr>
@@ -146,10 +107,12 @@ function ApprovalDeclare() {
             variant="outlined"
             sx={{ maxWidth: 150 }}
             style={{ backgroundColor: '#F1F9FF' }}>
-            {DfCard}
+            {bizRptInfo.length !== 0 && (
+              <DfCard drafterName={bizRptInfo.empName} />
+            )}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData.approvalId);
+            console.log(empData);
             if (apvl.length === 0) {
               setApvl(empData);
             }
@@ -159,7 +122,7 @@ function ApprovalDeclare() {
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}
                 key={index}>
-                {ApCard(empData.approverName)}
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}
@@ -173,7 +136,6 @@ function ApprovalDeclare() {
             <tr className={styles.trcon}>
               <td className={styles.tdleftpadding}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 {bizRptInfo.documentTitle}
               </td>
             </tr>
@@ -224,7 +186,8 @@ function ApprovalDeclare() {
                   openModal={openModal}
                   setOpenModal={setOpenModal}
                   approver={approver}
-                  apvl={apvl}
+                  apvlList={apvlList}
+                  approvalList={approvalList}
                 />
               )}
             </Box>

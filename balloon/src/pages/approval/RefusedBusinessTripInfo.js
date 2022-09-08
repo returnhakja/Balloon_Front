@@ -111,7 +111,7 @@ function RefusedBusinessTripInfo() {
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}>
-                <ApCard approverName={empData.approverName} />
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}
@@ -282,10 +282,17 @@ function RefusedBusinessTripInfo() {
                     e.preventDefault();
                   }
                   {
-                    approver.map((data, index) => {
-                      console.log(data);
-                      insertApproval(params.docId, 1, data, inputData, empInfo);
-                    });
+                    // approver.map((data, index) => {
+                    //   console.log(data);
+                    //   insertApproval(params.docId, 1, data, inputData, empInfo);
+                    // });
+                    insertApproval(
+                      params.docId,
+                      1,
+                      approver,
+                      inputData,
+                      empInfo
+                    );
                   }
                 }}>
                 <SaveButton variant="contained" color="success" size="large">

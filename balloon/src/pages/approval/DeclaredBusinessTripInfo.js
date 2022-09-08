@@ -70,7 +70,6 @@ function DeclaredBusinessTripInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {bizTpInfo.empName}({bizTpInfo.emp && bizTpInfo.emp.empId})
               </th>
             </tr>
@@ -108,7 +107,7 @@ function DeclaredBusinessTripInfo() {
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}>
-                <ApCard approverName={empData.approverName} />
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}

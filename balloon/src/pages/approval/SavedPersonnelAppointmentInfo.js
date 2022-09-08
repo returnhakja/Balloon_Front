@@ -59,20 +59,26 @@ function SavedPersonnelAppointmentInfo() {
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
   const [svApprover, setSvApprover] = useState([]);
+  const [approvalList, setApprovalList] = useState([]);
 
   const params = useParams();
   let rmApprover = [];
 
   useEffect(() => {
-    getApvlByDocId(params.docId, setApprover, setSvApprover);
+    getApvlByDocId(params.docId, setApprover, setApprovalList, setSvApprover);
   }, []);
-
+  console.log(empInfo);
   useEffect(() => {
-    if (!inputData.personnelAppointmentId) {
+    if (units.length === 0) {
       findUnitList(setUnits);
-      getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
-      getPAByPAId(params.docId, setInputData);
+      if (mEmpInfo.length === 0) {
+        getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
+        getPAByPAId(params.docId, setInputData);
+      }
     } else {
+      setStartValue(inputData.personnelDate);
+      setMEmp(inputData.movedEmp);
+      setUnit(inputData.unit);
       setPosi(inputData.position);
     }
     if (noApprover.length === 0) {
@@ -86,15 +92,21 @@ function SavedPersonnelAppointmentInfo() {
     });
     rmApprover = svApprover.filter((element) => !arr.includes(element.empId));
     console.log(rmApprover);
-  }, [inputData.personnelAppointmentId, approver.length]);
+  }, [
+    units,
+    mEmpInfo,
+    mEmp,
+    inputData.personnelAppointmentId,
+    approver.length,
+  ]);
 
   useEffect(() => {
     if (Object.keys(inputData).length !== 0) {
       // console.log(inputData.personnelDate);
-      console.log('inputData', inputData);
-      setStartValue(inputData.personnelDate);
-      setMEmp(inputData.movedEmpId);
-      setUnit(inputData.unit);
+      // setStartValue(inputData.personnelDate);
+      // setMEmp(inputData.movedEmp);
+      // setUnit(inputData.unit);
+      // console.log('inputData', inputData);
 
       if (mEmp && mEmp !== {}) {
         if (Object.keys(mEmp).length !== 0) {
@@ -108,7 +120,7 @@ function SavedPersonnelAppointmentInfo() {
           setUnit2(unit.unitName + ' (' + unit.unitCode + ')');
       }
     }
-  }, [inputData, startValue, mEmpInfo.length, mEmp, unit]);
+  }, [inputData]);
 
   // useEffect(() => {
   //   // console.log(mEmpInfo);
@@ -283,7 +295,8 @@ function SavedPersonnelAppointmentInfo() {
                       // className={styles.inputtext}
                     >
                       {/* {console.log(mEmp.empId + ' (' + mEmp.empName + ')123')} */}
-                      {mEmpInfo &&
+                      {console.log(mEmpInfo)}
+                      {mEmpInfo.length !== 0 &&
                         mEmpInfo.map((mEmps, index) => (
                           <MenuItem
                             key={index}
@@ -416,33 +429,41 @@ function SavedPersonnelAppointmentInfo() {
                           deleteApvlByDocIdAndEmpId(params.docId, data.empId)
                         );
                       }
-                      approver.map((data, index) => {
-                        console.log(data);
-                        console.log(index);
-                        const approvalId = getApvlId(params.docId, data.empId);
+                      approvalList(
+                        params.docId,
+                        0,
+                        approver,
+                        inputData,
+                        empInfo,
+                        approvalList
+                      );
+                      // approver.map((data, index) => {
+                      //   console.log(data);
+                      //   console.log(index);
+                      //   const approvalId = getApvlId(params.docId, data.empId);
 
-                        if (approvalId !== null) {
-                          approvalId.then((apvlId) => {
-                            console.log(data);
-                            insertApproval(
-                              params.docId,
-                              0,
-                              data,
-                              inputData,
-                              empInfo,
-                              apvlId
-                            );
-                          });
-                        } else {
-                          insertApproval(
-                            params.docId,
-                            0,
-                            data,
-                            inputData,
-                            empInfo
-                          );
-                        }
-                      });
+                      //   if (approvalId !== null) {
+                      //     approvalId.then((apvlId) => {
+                      //       console.log(data);
+                      //       insertApproval(
+                      //         params.docId,
+                      //         0,
+                      //         data,
+                      //         inputData,
+                      //         empInfo,
+                      //         apvlId
+                      //       );
+                      //     });
+                      //   } else {
+                      //     insertApproval(
+                      //       params.docId,
+                      //       0,
+                      //       data,
+                      //       inputData,
+                      //       empInfo
+                      //     );
+                      //   }
+                      // });
                     }
                     alert('문서가 임시저장되었습니다!');
                   }}>
@@ -470,11 +491,19 @@ function SavedPersonnelAppointmentInfo() {
                     e.preventDefault();
                   }
                   {
-                    approver.map((data, index) => {
-                      console.log(data);
-                      console.log(index);
-                      insertApproval(params.docId, 1, data, inputData, empInfo);
-                    });
+                    insertApproval(
+                      params.docId,
+                      1,
+                      approver,
+                      inputData,
+                      empInfo,
+                      approvalList
+                    );
+                    // approver.map((data, index) => {
+                    //   console.log(data);
+                    //   console.log(index);
+                    //   insertApproval(params.docId, 1, data, inputData, empInfo);
+                    // });
                   }
                 }}>
                 <SaveButton variant="contained" color="success" size="large">

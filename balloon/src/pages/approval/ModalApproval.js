@@ -13,6 +13,7 @@ import {
   Paper,
   Box,
 } from '@mui/material';
+import { positionArr } from '../../context/EmpFunc';
 
 const style = {
   position: 'absolute',
@@ -59,7 +60,7 @@ function ModalApproval({
   useEffect(() => {
     if (!!empId) {
       if (chatEmpList.length === 0) {
-        getApvrListInSameUnit(empId, setCEList);
+        getApvrListInSameUnit(empId, empInfo.position, setCEList);
       } else {
         const arr = [];
         chatEmpList.map((data) => {
@@ -68,12 +69,10 @@ function ModalApproval({
         if (approver && approver.length !== 0) {
           let approverList = [];
           approver.map((data) => approverList.push(data.empId));
-          console.log(approverList);
 
           const ogApprover = arr.filter(
             (element) => !approverList.includes(element.empId)
           );
-          console.log(ogApprover);
 
           setLeft(ogApprover);
           setRight(approver);
@@ -81,10 +80,6 @@ function ModalApproval({
       }
     }
   }, [empId, chatEmpList, noApprover, approver]);
-  console.log(noApprover);
-  console.log(approver);
-  console.log(right);
-  console.log(left);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -126,7 +121,6 @@ function ModalApproval({
       <List dense component="div" role="list">
         {items &&
           items.map((value) => {
-            console.log(value);
             const labelId = `transfer-list-item-${value}-label`;
             return (
               <ListItem
@@ -224,6 +218,23 @@ function ModalApproval({
           <Button
             sx={{ fontSize: 20, border: 1, mt: 3 }}
             onClick={() => {
+              right.sort(function (a, b) {
+                if (
+                  positionArr.indexOf(a.position) >
+                  positionArr.indexOf(b.position)
+                )
+                  return 1;
+                if (
+                  positionArr.indexOf(a.position) ===
+                  positionArr.indexOf(b.position)
+                )
+                  return 0;
+                if (
+                  positionArr.indexOf(a.position) <
+                  positionArr.indexOf(b.position)
+                )
+                  return -1;
+              });
               setApprover(right);
               setNoApprover(left);
               handleClose(false);

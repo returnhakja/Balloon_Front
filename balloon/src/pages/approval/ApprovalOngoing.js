@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SideNavigation from '../../components/SideNavigation';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from '../../css/Component.module.css';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Container } from '@mui/system';
+import { useOutletContext } from 'react-router-dom';
+import { getApvlByApvrIdAnddocStatus } from '../../context/ApprovalAxios';
 
 function ApprovalOngoing() {
+  const [empInfo] = useOutletContext();
   const [docList, setDocList] = useState([]);
 
   // 날짜 관련
@@ -28,6 +31,10 @@ function ApprovalOngoing() {
     },
     { field: 'updateTime', headerName: '처리일자', width: 160 },
   ];
+
+  useEffect(() => {
+    getApvlByApvrIdAnddocStatus(empInfo.empId, 2, setDocList);
+  }, []);
 
   return (
     <>
