@@ -91,29 +91,38 @@ function SavedPersonnelAppointmentInfo() {
   useEffect(() => {
     if (Object.keys(inputData).length !== 0) {
       // console.log(inputData.personnelDate);
-      console.log(inputData);
+      console.log('inputData', inputData);
       setStartValue(inputData.personnelDate);
       setMEmp(inputData.movedEmpId);
       setUnit(inputData.unit);
+
+      if (mEmp && mEmp !== {}) {
+        if (Object.keys(mEmp).length !== 0) {
+          console.log('mEmp', mEmp);
+          setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
+        }
+      }
+
+      if (unit && unit !== {}) {
+        Object.keys(unit).length !== 0 &&
+          setUnit2(unit.unitName + ' (' + unit.unitCode + ')');
+      }
     }
-    if (startValue !== null) {
-      // console.log(startValue);
-    }
-  }, [inputData, startValue]);
+  }, [inputData, startValue, mEmpInfo.length, mEmp, unit]);
 
-  useEffect(() => {
-    // console.log(mEmpInfo);
-  }, [mEmpInfo]);
+  // useEffect(() => {
+  //   // console.log(mEmpInfo);
+  // }, []);
 
-  useEffect(() => {
-    Object.keys(mEmp).length !== 0 &&
-      setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
-  }, [mEmp]);
+  // useEffect(() => {
+  //   Object.keys(mEmp).length !== 0 &&
+  //     setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
+  // }, [Object.keys(mEmp).length]);
 
-  useEffect(() => {
-    Object.keys(unit).length !== 0 &&
-      setUnit2(unit.unitName + ' (' + unit.unitCode + ')');
-  }, [unit]);
+  // useEffect(() => {
+  //   Object.keys(unit).length !== 0 &&
+  //     setUnit2(unit.unitName + ' (' + unit.unitCode + ')');
+  // }, [Object.keys(unit).length]);
 
   // useEffect(() => {
   //   units.length !== 0 && console.log(units);
@@ -257,7 +266,8 @@ function SavedPersonnelAppointmentInfo() {
               <td className={styles.tdreaui}>
                 <FormControl fullWidth>
                   <InputLabel>구성원을 설정해주세요</InputLabel>
-                  {Object.keys(mEmp).length !== 0 && (
+                  {console.log('mEmp', mEmp)}
+                  {mEmp && Object.keys(mEmp).length !== 0 && (
                     <Select
                       id="mEmp"
                       label="구성원을 선택하세요"

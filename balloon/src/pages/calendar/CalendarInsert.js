@@ -202,6 +202,10 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo }) {
     chatScheduleSave(chatScheduleList);
   };
 
+  const sleep = (ms) => {
+    return new Promise((r) => setTimeout(r, ms));
+  };
+
   return (
     <Modal
       open={openInsert}
