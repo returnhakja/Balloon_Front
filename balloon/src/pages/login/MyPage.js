@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import {
   Avatar,
@@ -17,6 +17,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 function MyPage() {
   const [empInfo] = useOutletContext();
+  const [profileOpen, setProfileOpen] = useState(false);
 
   return (
     <Container>
@@ -52,13 +53,19 @@ function MyPage() {
                   src={empInfo.photo}
                   className="mypageavatar"
                 />
-                <Button>
+                <Button
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: '15px 5px 5px 5px',
+                  }}
+                  onClick={() => setProfileOpen(true)}>
                   <p>프로필 이미지 수정</p>
-                  <EditIcon
-                    sx={{ float: 'left', margin: '5px', marginTop: '15px' }}
-                  />
+                  <EditIcon sx={{ float: 'left', marginLeft: '2px' }} />
                 </Button>
               </div>
+              {profileOpen && <></>}
               <div>
                 <Link to={'/mypage/update'}>
                   <Button style={{ float: 'right', marginBottom: '5px' }}>
