@@ -12,7 +12,7 @@ cache:
     - "$HOME/.m2"
 
 script:
-  - cd Balloon
+  - cd balloon
   - node -v
   - npm install
   - CI=false npm run build
