@@ -8,6 +8,13 @@ function UpdateMine() {
     console.log(empInfo);
   }, []);
 
+  const eventHandler = () => {
+    console.log(empInfo);
+    const photo = document.getElementById('photo');
+
+    console.log(photo.files[0].name);
+  };
+
   return (
     <div>
       <h1>내 정보 수정</h1>
@@ -60,6 +67,7 @@ function UpdateMine() {
       </div> */}
         </div>
       </div>
+      <button onClick={() => eventHandler()}>사진 변경</button>
     </div>
   );
 }

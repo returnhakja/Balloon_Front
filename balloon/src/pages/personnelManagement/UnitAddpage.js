@@ -4,16 +4,6 @@ import { findHigherOrganization, insertUnit } from '../../context/UnitAxios';
 import styles from './unit.module.css';
 import { Container, Button, TextField, Typography, Box } from '@mui/material';
 
-const Input = ({ label, name, register, required, maxLength }) => (
-  <>
-    <label className={styles.label}>{label}</label>
-    <input
-      className={styles.input}
-      {...register(name, { required, maxLength })}
-    />
-  </>
-);
-
 const Select = React.forwardRef(({ onChange, name, label, higher }, ref) => (
   <>
     <label className={styles.label}>{label}</label>
@@ -67,25 +57,24 @@ function UnitAddpage() {
             className={styles.input}
             {...register('unitCode', { required: true, maxLength: 8 })}
           />
-          <Input />
-          {errors.unitCode && errors.unitCode.type === 'required' && (
-            <p>This field is required</p>
-          )}
-          {errors.unitCode && errors.unitCode.type === 'maxLength' && (
-            <p>최대 글자 수를 넘었습니다.</p>
-          )}
+          {errors.unitCode &&
+            errors.unitCode.type === 'required' &&
+            alert('조직코드를 입력해주세요.')}
+          {errors.unitCode &&
+            errors.unitCode.type === 'maxLength' &&
+            alert('최대 글자 수를 넘었습니다.')}
           <label className={styles.label}>조직이름</label>
           <input
             className={styles.input}
             {...register('unitName', { required: true, maxLength: 10 })}
           />
-          {errors.unitName && errors.unitName.type === 'required' && (
-            <p>This field is required</p>
-          )}
-          {errors.unitName && errors.unitName.type === 'maxLength' && (
-            <p>최대 글자 수를 넘었습니다.</p>
-          )}
-          <label className={styles.label}>조직전화번호</label>
+          {errors.unitName &&
+            errors.unitName.type === 'required' &&
+            alert('조직명을 입력해주세요.')}
+          {errors.unitName &&
+            errors.unitName.type === 'maxLength' &&
+            alert('최대 글자 수를 넘었습니다.')}
+          <label className={styles.label}>조직 전화번호</label>
           <input
             className={styles.input}
             {...register('bell', {
@@ -94,15 +83,15 @@ function UnitAddpage() {
               pattern: /^\d{3}-\d{3}-\d{4}$/,
             })}
           />
-          {errors.bell && errors.bell.type === 'required' && (
-            <p>This field is required</p>
-          )}
-          {errors.bell && errors.bell.type === 'maxLength' && (
-            <p>최대 글자 수를 넘었습니다.</p>
-          )}
-          {errors.bell && errors.bell.type === 'pattern' && (
-            <p>전화번호 형식이 맞지 않습니다.</p>
-          )}
+          {errors.bell &&
+            errors.bell.type === 'required' &&
+            alert('조직 전화번호를 입력해주세요.')}
+          {errors.bell &&
+            errors.bell.type === 'maxLength' &&
+            alert('최대 글자 수를 넘었습니다.')}
+          {errors.bell &&
+            errors.bell.type === 'pattern' &&
+            alert('전화번호 형식이 맞지 않습니다.(XXX-XXX-XXXX)')}
 
           <Select
             label="상위조직"

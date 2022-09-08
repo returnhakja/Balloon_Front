@@ -105,6 +105,11 @@ export const getEmpByEmpId = async (empId, setBotInfo) => {
   });
 };
 
+export const findEmpByEmpIdByAdmin = async (empId, setEmployee) => {
+  const urlStr = '/employee/' + empId;
+  await axios.get(urlStr).then((response) => setEmployee(response.data));
+};
+
 // 사번으로 사원 검색 후, 정보 넣기
 export const setEmpInfoByEmpId = async (empId, setEmpInfo) => {
   const urlStr = '/employee/' + empId;
@@ -156,6 +161,11 @@ export const getApvrListInSameUnit = async (empId, setCEList) => {
       setCEList(data);
     })
     .catch((error) => console.log(error));
+};
+
+export const updateEmpByAdmin = async (updateData) => {
+  const url = '/employee/update/admin';
+  await axios.put(url, updateData).catch((error) => console.log(error));
 };
 
 // 사원 수정
