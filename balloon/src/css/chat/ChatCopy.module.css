@@ -38,8 +38,8 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  background-color: white;
 }
+
 .mytime {
   text-align: right;
   margin: 0px;
@@ -61,10 +61,13 @@
 }
 
 .inputmain {
-  width: 100%;
-  height: 8%;
+  width: 85%;
+  /* height: 8%; */
+  /* margin-top: 18%; */
+  position: absolute;
+  /* footer의 높이 */
   bottom: 0;
-  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
 }
@@ -84,14 +87,17 @@
   transition: 0.15s all ease-in-out;
   box-sizing: border-box;
 }
+
 .inputform::placeholder {
   color: #b1b1b1;
   opacity: 1;
 }
+
 .inputform:focus,
 .inputform:active {
   box-shadow: inset 0 0 0 2px #7690d6;
 }
+
 .inputform:focus {
   outline: none;
 }
@@ -107,6 +113,7 @@
   transition: 0.15s all ease-in-out;
   box-sizing: border-box;
 }
+
 .inputbutton:hover {
   background-color: #3c559c;
 }
@@ -124,7 +131,7 @@
 
 .chatroomname {
   text-align: center;
-  background-color: #a4c4ee;
+  background-color: rgb(255, 205, 212);
 }
 
 .chatconvimeline {
@@ -132,9 +139,7 @@
 }
 
 .scrollbar {
-  height: 700px;
-  margin-bottom: 5%;
-  max-width: 400px;
+  height: 32vh;
   overflow-x: hidden;
 }
 
@@ -142,20 +147,22 @@
   display: flex;
   border: 1px solid black;
 }
+
 .side2 {
   display: flex;
-  border: 1px solid black;
-  height: 80vh;
-  overflow-y: scroll;
+  /* border: 1px solid black; */
+  height: 50vh;
 }
 
 .chatList {
   display: flex;
 }
+
 .chatIcon {
   display: flex;
   margin-top: 2%;
 }
+
 .text {
   width: 200px;
   height: 50px;
@@ -164,9 +171,11 @@
   align-items: center;
   font-size: 20px;
 }
+
 .hrwidth {
   width: 80%;
 }
+
 .ChatText {
   width: 200px;
   height: 50px;
@@ -180,13 +189,16 @@
 .liststyle {
   width: 100%;
 }
+
 .fontlist {
   clear: both;
 }
+
 .fontlist:hover {
   color: #7690d6;
   background-color: #d8dfe0;
 }
+
 .cuCon {
   /* float: left; */
   /* display: flex; */
@@ -197,30 +209,44 @@
 }
 
 .list {
-  width: 100%;
+  /* width: 100%; */
+  width: 300px;
+  background-color: #d0eef7;
 }
+
 .listroom {
-  width: 100%;
-  height: 80vh;
+  width: 300px;
+  /* height: 40vh; */
+  background-color: #d0eef7;
 }
+
 .listcon {
   width: 100%;
   height: 100%;
   display: flex;
 }
+
 .LastTime {
   float: right;
   margin-top: 5px;
   height: 40px;
   font-size: 12px;
 }
+
 .chatRoomList {
   height: 100%;
   border: 1px solid rgb(90, 89, 89);
   display: flex;
 }
+
 .roomcon:hover {
   background-color: rgba(190, 204, 209, 0.842);
+}
+
+.roomContanar {
+  overflow-y: scroll;
+  /* height: 380px; */
+  height: 80%;
 }
 
 .chatName {
@@ -232,7 +258,8 @@
 
 .olList {
   text-align: center;
-  margin-top: 6%;
+  height: 43vh;
+  overflow-y: scroll;
 }
 
 .creatIcon {
@@ -240,9 +267,11 @@
   text-align: center;
   transform: scaleX(-1);
 }
+
 .creatIcon:hover {
   color: #0596df;
 }
+
 .Listcontainer {
   margin-top: 10vh;
   margin-bottom: 40vh;
@@ -255,14 +284,17 @@
 .DeleteBtn {
   float: right;
 }
+
 .LastTimecon {
   float: right;
 }
+
 .chatfont {
   /* display: flex; */
   justify-content: center;
   align-items: center;
 }
+
 .content {
   padding: 10px;
   font-size: 14px;
@@ -289,18 +321,21 @@
 }
 
 .scheduleContent {
-  border: 1px solid navy;
-  background-color: #e4f3fa;
+  background-color: rgb(249, 255, 205);
   margin-right: 5px;
-  border-radius: 10px;
+  border-radius: 15px;
+  width: 100%;
   left: 0;
   right: 0;
   bottom: -16px;
   word-break: break-all;
-  font-weight: bold;
 }
 
-.th {
-  background-color: #c9e3ff;
-  border-radius: 10px;
+.EmpAddIcon {
+  margin-left: 11.5%;
+}
+
+.inBox {
+  margin-top: 15px;
+  margin-bottom: 20px;
 }

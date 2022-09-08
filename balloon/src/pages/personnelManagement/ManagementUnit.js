@@ -20,21 +20,13 @@ function ManagementUnit() {
     state: false,
     unitCode: null,
   });
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClick = (data) => {
     setRowData(data.row);
   };
 
-  const handleUpdate = (setUpdateChk) => {
-    // updateCheck(setUpdateChk);
-    // setOpenUpdate(true);
-    // if (!!setUpdateChk) {
-    //   setOpenUpdate({
-    //     state: true,
-    //     setUpdateChk: setUpdateChk,
-    //   });
-    // }
+  const handleUpdate = () => {
     setOpen(true);
   };
 
@@ -46,20 +38,12 @@ function ManagementUnit() {
     if (unitList.length === 0) {
       findUnitList(setUnitList);
     } else {
-      if (updateChk === true) {
-        // <UnitUpdate
-        //   unitCode={rowData.unitCode}
-        //   setOpenUpdate={setOpenUpdate}
-        // />;
-        // updateUnit(rowData);
-        // setUpdateChk(false);
-      }
       if (deleteChk === true) {
         deleteUnit(rowData);
         setDeleteChk(false);
       }
     }
-  }, [unitList, rowData, updateChk, deleteChk]);
+  }, [unitList, rowData, deleteChk]);
 
   function GetParentUnit(data) {
     return data.row.parentUnit ? data.row.parentUnit.id : data.row.parentUnit;

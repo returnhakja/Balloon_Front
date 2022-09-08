@@ -14,19 +14,20 @@ import Delete from '@mui/icons-material/Delete';
 import PersonAddIcon from '@mui/icons-material/PersonAddAlt1';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
+import EmployeeUpdate from './EmployeeUpdate';
 
 function ManagementEmployee() {
   const [empList, setEmpList] = useState([]);
   const [rowData, setRowData] = useState({});
   const [deleteChk, setDeleteChk] = useState(false);
-  const [updateChk, setUpdateChk] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClick = (data) => {
     setRowData(data.row);
   };
 
-  const handleUpdate = (setUpdateChk) => {
-    updateCheck(setUpdateChk);
+  const handleUpdate = () => {
+    setOpen(true);
   };
 
   const handleDelete = (setDeleteChk) => {
@@ -37,16 +38,12 @@ function ManagementEmployee() {
     if (empList.length === 0) {
       selectEmployees(setEmpList);
     } else {
-      if (updateChk === true) {
-        Object.keys(rowData).length !== 0 && updateEmployee(rowData);
-        setUpdateChk(false);
-      }
       if (deleteChk === true) {
         Object.keys(rowData).length !== 0 && deleteEmployee(rowData);
         setDeleteChk(false);
       }
     }
-  }, [empList, updateChk, deleteChk, rowData]);
+  }, [empList, deleteChk, rowData]);
 
   const columns = [
     { field: 'empId', headerName: '사원번호', width: 100 },
@@ -116,7 +113,7 @@ function ManagementEmployee() {
           icon={<SettingsIcon />}
           label="update"
           onClick={() => {
-            handleUpdate(setUpdateChk);
+            handleUpdate();
           }}
         />,
         <GridActionsCellItem
@@ -166,6 +163,9 @@ function ManagementEmployee() {
             }}
           />
         </Box>
+        {open && (
+          <EmployeeUpdate open={open} setOpen={setOpen} empId={rowData.empId} />
+        )}
       </Container>
     </div>
   );

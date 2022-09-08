@@ -4,7 +4,7 @@ import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
 import { onChatroom, onExitRoom } from '../../context/ChatAxios';
 import { sendExit } from '../../utils/ChatUtils';
-import styles from '../../css/chat/Chat.module.css';
+import styles from '../../css/chat/ChatCopy.module.css';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';

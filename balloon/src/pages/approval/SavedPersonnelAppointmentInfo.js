@@ -121,7 +121,6 @@ function SavedPersonnelAppointmentInfo() {
       }
     }
   }, [inputData]);
-  console.log(mEmp);
 
   // useEffect(() => {
   //   // console.log(mEmpInfo);
