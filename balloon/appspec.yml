@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/Balloon_Front
+    destination: /home/ubuntu/Balloon_Front/zip
     overwrite: yes
 
 permissions:
