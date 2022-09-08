@@ -35,7 +35,6 @@
   margin-left: 16vw;
 }
 
-
 .input {
   font-size: 16px;
   width: 100%;
@@ -57,4 +56,14 @@
 /* 아이콘 */
 .icon {
   margin-top: 5px;
+}
+.UnitBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 일정등록 */
+.TextField {
+  width: 100%;
 }

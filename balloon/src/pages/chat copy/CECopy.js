@@ -3,7 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 import styles from '../../css/chat/ChatCopy.module.css';
 import Button from '@mui/material/Button';
-import { Alert, AlertTitle, Checkbox, Container, Grid } from '@mui/material';
+import {
+  Alert,
+  AlertTitle,
+  Avatar,
+  Checkbox,
+  Container,
+  Grid,
+} from '@mui/material';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import CRCopy from './CRCopy';
 
@@ -120,6 +127,16 @@ export default function CECopy({ open, setOpen, empInfo }) {
                           if (ce.unit.unitName === cu) {
                             return (
                               <div key={index} className={styles.fontlist}>
+                                <Avatar
+                                  sx={{
+                                    width: 24,
+                                    height: 24,
+                                    marginRight: 1,
+                                  }}
+                                />
+                                {/* <img src={ce.photo} alt="사원 이미지" /> */}
+                                {/* <div className={styles.liststyle}> */}
+                                {/* <div className={styles.li}> */}
                                 {ce.empName} {ce.position}
                                 <Checkbox
                                   type="checkbox"

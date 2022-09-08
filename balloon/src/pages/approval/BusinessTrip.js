@@ -84,7 +84,6 @@ function BusinessTrip() {
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
-            <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
 

@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ChatCopy from './ChatCopy';
+import { Avatar } from '@mui/material';
 import ExitChatroomCopy from './ExitChatroomCopy';
 
 function CRMCopy({ empInfo, setChatStatus }) {
@@ -69,7 +70,6 @@ function CRMCopy({ empInfo, setChatStatus }) {
                             e.preventDefault();
                             eventClickHandle();
                           };
-
                           return eventExit();
                         }}>
                         <DeleteIcon />
