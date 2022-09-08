@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import UnitUpdate from './UnitUpdate';
-import { updateCheck, deleteCheck } from '../../context/MuiRenderFunc';
-import { findUnitList, updateUnit, deleteUnit } from '../../context/UnitAxios';
+import { deleteCheck } from '../../context/MuiRenderFunc';
+import { findUnitList, deleteUnit } from '../../context/UnitAxios';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/system';
@@ -15,11 +15,6 @@ function ManagementUnit() {
   const [unitList, setUnitList] = useState([]);
   const [rowData, setRowData] = useState({});
   const [deleteChk, setDeleteChk] = useState(false);
-  const [updateChk, setUpdateChk] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState({
-    state: false,
-    unitCode: null,
-  });
   const [open, setOpen] = useState(false);
 
   const handleClick = (data) => {

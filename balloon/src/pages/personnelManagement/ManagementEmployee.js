@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  selectEmployees,
-  updateEmployee,
-  deleteEmployee,
-} from '../../context/EmployeeAxios';
-import { updateCheck, deleteCheck } from '../../context/MuiRenderFunc';
+import { selectEmployees, deleteEmployee } from '../../context/EmployeeAxios';
+import { deleteCheck } from '../../context/MuiRenderFunc';
 import { positionArr, responseArr, gradeArr } from '../../context/EmpFunc';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
