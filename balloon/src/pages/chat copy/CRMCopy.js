@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import Stomp from 'stompjs';
-import SockJS from 'sockjs-client';
-import { sendExit } from '../../utils/ChatUtils';
-import { onChatroom, onExitRoom, onHCupdate } from '../../context/ChatAxios';
+import { onChatroom } from '../../context/ChatAxios';
 import styles from '../../css/chat/ChatCopy.module.css';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ChatCopy from './ChatCopy';
 import { Avatar } from '@mui/material';
+import ExitChatroomCopy from './ExitChatroomCopy';
 
 function CRMCopy({ empInfo, setChatStatus }) {
   const [chatroom, setChatroom] = useState([]);
+  //채팅방 나가기 모달
+  const [openExitChat, setOpenExitChat] = useState(false);
   const empId = empInfo.empId;
-
-  // const sock = new SockJS('http://15.164.224.26:8080/chatstart');
-  const sock = new SockJS('http://localhost:8080/chatstart');
-  const client = Stomp.over(sock);
   const [roomId, setRoomId] = useState(0);
 
   //마지막으로 보낸 채팅list가져오기
@@ -27,6 +23,11 @@ function CRMCopy({ empInfo, setChatStatus }) {
   }, [empId]);
 
   useEffect(() => {}, [roomId]);
+
+  //삭제확인알림창
+  const eventClickHandle = () => {
+    setOpenExitChat(true);
+  };
 
   return (
     <div className={styles.listroom}>
@@ -41,7 +42,7 @@ function CRMCopy({ empInfo, setChatStatus }) {
                 <div
                   className={styles.roomcon}
                   key={index}
-                  onClick={(e) => {
+                  onClick={() => {
                     setRoomId(chat.chatroom.chatroomId);
                   }}>
                   <Box className={styles.chatRoomBox}>
@@ -60,62 +61,30 @@ function CRMCopy({ empInfo, setChatStatus }) {
                         </span>
                       </div>
                     )}
-
                     <div className={styles.DeleteBtn}>
-                      {/* <Button
+                      <Button
                         variant="text"
                         disableElevation
                         onClick={(e) => {
-                          const roomDelete = () => {
-                            onExitRoom(
-                              chat.chatroom.chatroomId,
-                              empInfo.empId,
-                              sendExit(
-                                client,
-                                chat.chatroom.chatroomId,
-                                empInfo
-                              ),
-                              onHCupdate(
-                                chat.chatroom.chatroomId,
-                                chat.chatroom.chatroomName,
-                                chat.chatroom.headCount
-                              )
-                            );
-                            setChatStatus('chatEmpList');
+                          const eventExit = () => {
+                            e.preventDefault();
+                            eventClickHandle();
                           };
-
-                          return roomDelete();
-                        }}> */}
-                      <DeleteIcon
-                        sx={{
-                          color: 'blue',
-                          '&:hover': {
-                            cursor: 'pointer',
-                          },
-                        }}
-                        onClick={() => {
-                          const roomDelete = () => {
-                            onExitRoom(
-                              chat.chatroom.chatroomId,
-                              empInfo.empId,
-                              sendExit(
-                                client,
-                                chat.chatroom.chatroomId,
-                                empInfo
-                              ),
-                              onHCupdate(
-                                chat.chatroom.chatroomId,
-                                chat.chatroom.chatroomName,
-                                chat.chatroom.headCount
-                              )
-                            );
-                            setChatStatus('chatEmpList');
-                          };
-
-                          return roomDelete();
-                        }}
-                      />
-                      {/* </Button> */}
+                          return eventExit();
+                        }}>
+                        <DeleteIcon />
+                      </Button>
+                      {openExitChat && (
+                        <ExitChatroomCopy
+                          openExitChat={openExitChat}
+                          setOpenExitChat={setOpenExitChat}
+                          chatroomId={chat.chatroom.chatroomId}
+                          chatroomName={chat.chatroom.chatroomName}
+                          headCount={chat.chatroom.headCount}
+                          empInfo={empInfo}
+                          setChatStatus={setChatStatus}
+                        />
+                      )}
                     </div>
 
                     <div className={styles.content}>

@@ -57,17 +57,23 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
         <NavLink to={'/organization'} style={activeStyle}>
           <li className="management">조직도</li>
         </NavLink>
-        {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+        {isLogin && (
+          <NavLink to={'/mypage'} style={activeStyle}>
+            <li className="unit">마이페이지</li>
+          </NavLink>
+        )}
+        {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' && (
           <NavLink to={'/management/unit'} style={activeStyle}>
             <li className="unit">조직관리</li>
           </NavLink>
-        ) : null}
-        {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' ? (
+        )}
+        {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' && (
           <NavLink to={'/management/employee'} style={activeStyle}>
             <li className="unit">사원관리</li>
           </NavLink>
-        ) : null}
+        )}
       </ul>
+
       <ul>
         {isLogin ? (
           <div className={styles.namediv}>

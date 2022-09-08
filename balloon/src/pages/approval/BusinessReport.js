@@ -25,7 +25,6 @@ const SaveButton = styled(Button)(({ theme }) => ({
 }));
 
 function BusinessReport() {
-  // 사원 정보 context
   const [empInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
@@ -51,7 +50,6 @@ function BusinessReport() {
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          {' '}
           <FcDocument /> 업무기안
         </p>
 
@@ -71,20 +69,17 @@ function BusinessReport() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
           </tbody>
         </table>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
           <button
             type="button"
             className={styles.btnnav}
             onClick={() => {
-              // setOpenModal(true);
               setOpenapprovalModal(true);
             }}
             id="cancelBtn">
@@ -131,7 +126,6 @@ function BusinessReport() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 <form>
                   <input
                     id="bizRptTitle"
@@ -179,10 +173,7 @@ function BusinessReport() {
                       setInputData
                     );
 
-                    approver.map(async (data, index) => {
-                      console.log(data);
-                      await insertApproval(docId, 0, data, inputData, empInfo);
-                    });
+                    insertApproval(docId, 0, approver, inputData, empInfo);
 
                     alert('문서가 임시저장되었습니다!');
                   }}>
@@ -205,11 +196,7 @@ function BusinessReport() {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
-
-                  approver.map((data, index) => {
-                    console.log(data);
-                    return insertApproval(docId, 1, data, inputData, empInfo);
-                  });
+                  insertApproval(docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기

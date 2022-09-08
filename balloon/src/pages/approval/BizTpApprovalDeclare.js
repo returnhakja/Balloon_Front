@@ -67,18 +67,15 @@ function BizTpApprovalDeclare() {
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [bizTpInfo, setBizTpInfo] = useState({});
   const [openModal, setOpenModal] = useState(false);
+  const [approvalList, setApprovalList] = useState([]);
 
   const params = useParams();
-  console.log(bizTpInfo);
 
-  // useEffect(() => {
-  //   getBizTpByBizTpId(params.docId, setBizTpInfo);
-  // }, []);
   useEffect(() => {
     if (!!params) {
       if (Object.keys(inputData).length === 0) {
         getBizTpByBizTpId(params.docId, setBizTpInfo);
-        getApvlByDocId(params.docId, setApprover);
+        getApvlByDocId(params.docId, setApprover, setApprovalList);
       } else {
         setStartValue(inputData.startDate);
         setEndValue(inputData.endDate);
@@ -87,12 +84,17 @@ function BizTpApprovalDeclare() {
     }
   }, [params, inputData, startValue, endValue, approver.length]);
 
-  console.log(empInfo);
+  const myIndex = approvalList.findIndex(
+    (apvl) => apvl.approverEmp.empId === empInfo.empId
+  );
+  let apvlList = [];
+
+  apvlList.push(approvalList[myIndex], approvalList[myIndex + 1]);
+
   return (
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          {' '}
           <FcDocument /> 결재전
         </p>
 
@@ -112,7 +114,6 @@ function BizTpApprovalDeclare() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {bizTpInfo.empName}({bizTpInfo.emp && bizTpInfo.emp.empId})
               </th>
             </tr>
@@ -144,7 +145,7 @@ function BizTpApprovalDeclare() {
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}>
-                <ApCard approverName={empData.approverName} />
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}
@@ -157,7 +158,6 @@ function BizTpApprovalDeclare() {
             <tr className={styles.trcon}>
               <td className={styles.tdleftpadding}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 {bizTpInfo.documentTitle}
               </td>
             </tr>
@@ -176,7 +176,6 @@ function BizTpApprovalDeclare() {
             <tr align="center">
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
-                {' '}
                 이거 일단 없음
               </td>
               <td className={styles.titlename}></td>
@@ -282,7 +281,6 @@ function BizTpApprovalDeclare() {
                 </SaveButton>
               </Link>
 
-              {/* <Link to="/boxes/ab"> */}
               <Button
                 variant="contained"
                 color="success"
@@ -297,11 +295,11 @@ function BizTpApprovalDeclare() {
                   style={style}
                   openModal={openModal}
                   setOpenModal={setOpenModal}
-                  apvl={apvl}
                   approver={approver}
+                  apvlList={apvlList}
+                  approvalList={approvalList}
                 />
               )}
-              {/* </Link> */}
             </Box>
           </div>
         </div>

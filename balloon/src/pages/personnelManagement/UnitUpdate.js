@@ -115,7 +115,7 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description">
-          <Box sx={style}>
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={style}>
             <Typography
               id="modal-modal-title"
               variant="h4"
@@ -125,107 +125,98 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
               <span>조직 정보</span>
               <hr />
             </Typography>
-            <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h6"
-                sx={{ mb: 2, mt: 2 }}>
-                조직 번호
-              </Typography>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h6"
+              sx={{ mb: 2, mt: 2 }}>
+              조직 번호
+            </Typography>
+            <input
+              name="unitCode"
+              value={unit.unitCode}
+              className={styles.input}
+              {...register('unitCode', {
+                required: true,
+                maxLength: 10,
+              })}></input>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h6"
+              sx={{ mb: 2, mt: 2 }}>
+              조직 이름
+            </Typography>
+            {unit.unitCode === '00000000' ? (
               <input
-                name="unitCode"
-                value={unit.unitCode}
+                name="unitName"
+                value={unit.unitName}
                 className={styles.input}
-                {...register('unitCode', {
-                  required: true,
-                  maxLength: 10,
-                })}></input>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h6"
-                sx={{ mb: 2, mt: 2 }}>
-                조직 이름
-              </Typography>
-              {unit.unitCode === '00000000' ? (
-                <input
-                  name="unitName"
-                  value={unit.unitName}
-                  className={styles.input}
-                  readOnly
-                />
-              ) : (
-                <input
-                  name="unitName"
-                  defaultValue={unit.unitName}
-                  className={styles.input}
-                  {...register('unitName', { required: true, maxLength: 10 })}
-                />
-              )}
-              {errors.unitName && errors.unitName.type === 'required' && (
-                <p>This field is required</p>
-              )}
-              {errors.unitName && errors.unitName.type === 'maxLength' && (
-                <p>최대 글자 수를 넘었습니다.</p>
-              )}
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h6"
-                sx={{ mb: 2, mt: 2 }}>
-                전화번호
-              </Typography>
+                readOnly
+              />
+            ) : (
               <input
-                name="bell"
-                defaultValue={unit.bell}
+                name="unitName"
+                defaultValue={unit.unitName}
                 className={styles.input}
-                {...register('bell', {
-                  required: true,
-                  maxLength: 15,
-                  pattern: /^\d{3}-\d{3}-\d{4}$/,
-                })}
+                {...register('unitName', { required: true, maxLength: 10 })}
               />
-              {errors.bell && errors.bell.type === 'required' && (
-                <p>This field is required</p>
-              )}
-              {errors.bell && errors.bell.type === 'maxLength' && (
-                <p>최대 글자 수를 넘었습니다.</p>
-              )}
-              {errors.bell && errors.bell.type === 'pattern' && (
-                <p>전화번호 형식이 맞지 않습니다.</p>
-              )}
-              <Select
-                label="상위조직"
-                {...register('parentUnit')}
-                unit={unit}
-                higher={higher}
-                parentCode={parentCode}
-                setParentCode={setParentCode}
-              />
-              <div className={styles.UnitBtn}>
-                <Button
-                  onClick={handleClose}
-                  sx={{
-                    fontSize: 30,
-                    mr: 3,
-                    border: 1,
-                    mt: 1,
-                    height: '50px',
-                  }}>
-                  취소
-                </Button>
-                {/* 채팅방만드는 부분 */}
-                <Button
-                  // onClick={() => {
-                  //   // updateHandle();
-                  // }}
-                  type="submit"
-                  sx={{ fontSize: 30, border: 1, mt: 1, height: '50px' }}>
-                  수정
-                </Button>
-              </div>
-            </form>
+            )}
+            {errors.unitName && errors.unitName.type === 'required' && (
+              <p>This field is required</p>
+            )}
+            {errors.unitName && errors.unitName.type === 'maxLength' && (
+              <p>최대 글자 수를 넘었습니다.</p>
+            )}
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h6"
+              sx={{ mb: 2, mt: 2 }}>
+              전화번호
+            </Typography>
+            <input
+              name="bell"
+              defaultValue={unit.bell}
+              className={styles.input}
+              {...register('bell', {
+                required: true,
+                maxLength: 15,
+                pattern: /^\d{3}-\d{3}-\d{4}$/,
+              })}
+            />
+            {errors.bell && errors.bell.type === 'required' && (
+              <p>This field is required</p>
+            )}
+            {errors.bell && errors.bell.type === 'maxLength' && (
+              <p>최대 글자 수를 넘었습니다.</p>
+            )}
+            {errors.bell && errors.bell.type === 'pattern' && (
+              <p>전화번호 형식이 맞지 않습니다.</p>
+            )}
+            <Select
+              label="상위조직"
+              {...register('parentUnit')}
+              unit={unit}
+              higher={higher}
+              parentCode={parentCode}
+              setParentCode={setParentCode}
+            />
+
+            <Button
+              onClick={handleClose}
+              sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>
+              취소
+            </Button>
+            {/* 채팅방만드는 부분 */}
+            <Button
+              // onClick={() => {
+              //   // updateHandle();
+              // }}
+              type="submit"
+              sx={{ fontSize: 30, border: 1, mt: 1 }}>
+              수정
+            </Button>
           </Box>
         </Modal>
       )}
