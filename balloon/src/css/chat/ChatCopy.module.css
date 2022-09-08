@@ -192,6 +192,9 @@
 
 .fontlist {
   clear: both;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .fontlist:hover {
@@ -244,7 +247,7 @@
 }
 
 .roomContanar {
-  overflow-y: scroll;
+  overflow-y: auto;
   /* height: 380px; */
   height: 80%;
 }
@@ -259,7 +262,7 @@
 .olList {
   text-align: center;
   height: 43vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .creatIcon {
@@ -320,16 +323,16 @@
   list-style: none;
 }
 
-
 .scheduleContent {
-  background-color: rgb(249, 255, 205);
+  border: 1px solid navy;
+  background-color: #e4f3fa;
   margin-right: 5px;
-  border-radius: 15px;
-  width: 100%;
+  border-radius: 10px;
   left: 0;
   right: 0;
   bottom: -16px;
   word-break: break-all;
+  font-weight: bold;
 }
 
 .EmpAddIcon {

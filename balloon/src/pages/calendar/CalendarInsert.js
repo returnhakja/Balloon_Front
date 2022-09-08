@@ -23,8 +23,14 @@ let inTime2 = inTime.replace(/(\s*)/g, '');
 const sock = new SockJS('http://localhost:8080/chatstart');
 const client = Stomp.over(sock);
 
-function CalendarInsert({ style, openInsert, setOpenInsert, empInfo, dateStr }) {
-  const [startValue, setStartValue] = useState();
+function CalendarInsert({
+  style,
+  openInsert,
+  setOpenInsert,
+  empInfo,
+  dateStr,
+}) {
+  const [startValue, setStartValue] = useState(dateStr);
   const [endValue, setEndValue] = useState();
   const [eList, setCEList] = useState([]);
   const [botInfo, setBotInfo] = useState([]);
@@ -32,7 +38,7 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo, dateStr }) 
 
   const empId = empInfo.empId;
   const scheduleListAdd = [];
-
+  console.log(dateStr);
   const calendarBot = 'Y0000001';
   console.log(inTime2);
 
@@ -122,11 +128,18 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo, dateStr }) 
         employee: { empId: id },
       });
     });
-
-    insertSchedulList(scheduleListAdd, setOpenInsert);
-
-    //일정등록 후 알림보내기
-    onSchCreateChatroom(invitepeople);
+    if (scheduletitle == '') {
+      alert('제목을 입력해주세요.');
+    } else if (endvalue == '') {
+      alert('날짜를 선택해주세요.');
+    } else if (Startvalue >= endvalue) {
+      alert('날짜를 다시 설정해주세요.');
+    } else {
+      insertSchedulList(scheduleListAdd, setOpenInsert);
+      //일정등록 후 알림보내기
+      onSchCreateChatroom(invitepeople);
+      alert('일정이 등록되었습니다.');
+    }
   };
 
   useEffect(() => {
@@ -206,8 +219,8 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo, dateStr }) 
           console.log(response.data);
         });
     });
-    botroomMsg();
     scheduleChatContent(add);
+    botroomMsg();
   };
 
   // 이미생성된 채팅방에 알림보내기
@@ -369,11 +382,13 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo, dateStr }) 
           sx={{ mb: 2, mt: 2 }}>
           날짜 선택
         </Typography>
+
         <TextField
           id="startvalue"
+          required
           label="시작일"
           type="datetime-local"
-          defaultValue={startValue}
+          defaultValue={moment(startValue).format('YYYY-MM-DD[T]HH:mm')}
           onChange={(newValue) => {
             setStartValue(newValue);
           }}
@@ -382,10 +397,10 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo, dateStr }) 
             shrink: true,
           }}
         />
-
         <span className={styles.centerfont}> : </span>
         <TextField
           id="endvalue"
+          required
           label="끝나는 일"
           type="datetime-local"
           defaultValue={endValue}
@@ -397,7 +412,6 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo, dateStr }) 
             shrink: true,
           }}
         />
-        <br />
         <br />
         <Button onClick={handleOpen}>사원추가</Button>
         <CalendarInsertModal
@@ -411,27 +425,38 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo, dateStr }) 
           setInviteSchedule={setInviteSchedule}
         />
 
-        <Typography id="modal-modal-description" variant="h6" sx={{ mt: 2 }}>
+        <Typography id="modal-modal-description" variant="h6">
           MEMO
         </Typography>
         <TextField
-          required
           id="CalendarContent"
           label="메모 입력"
-          sx={{ width: '100%' }}
+          className={styles.TextField}
         />
         <Typography id="modal-modal-description" variant="h6" sx={{ mt: 2 }}>
           장소
         </Typography>
         <TextField
-          required
           id="CalendarLocation"
           label="장소 입력"
-          sx={{ mt: 1, width: '100%' }}
+          className={styles.TextField}
         />
+
         <Button
           onClick={handleClose}
-          sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>
+          sx={{
+            fontSize: 30,
+            mr: 3,
+            border: 1,
+            mt: 1,
+            background: 'gray',
+            color: 'white',
+            height: 50,
+            '&:hover': {
+              backgroundColor: 'gray',
+              border: '2px solid black',
+            },
+          }}>
           취소
         </Button>
         {/* 채팅방만드는 부분 */}
@@ -439,7 +464,19 @@ function CalendarInsert({ style, openInsert, setOpenInsert, empInfo, dateStr }) 
           onClick={() => {
             insertHandle();
           }}
-          sx={{ fontSize: 30, border: 1, mt: 1 }}>
+          sx={{
+            fontSize: 30,
+            mr: 3,
+            border: 1,
+            mt: 1,
+            background: 'orange',
+            color: 'white',
+            height: 50,
+            '&:hover': {
+              backgroundColor: 'orange',
+              border: '2px solid black',
+            },
+          }}>
           등록
         </Button>
       </Box>

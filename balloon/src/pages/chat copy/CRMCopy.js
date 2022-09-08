@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ChatCopy from './ChatCopy';
+import { Avatar } from '@mui/material';
 
 function CRMCopy({ empInfo, setChatStatus }) {
   const [chatroom, setChatroom] = useState([]);
@@ -61,7 +62,7 @@ function CRMCopy({ empInfo, setChatStatus }) {
                     )}
 
                     <div className={styles.DeleteBtn}>
-                      <Button
+                      {/* <Button
                         variant="text"
                         disableElevation
                         onClick={(e) => {
@@ -84,9 +85,37 @@ function CRMCopy({ empInfo, setChatStatus }) {
                           };
 
                           return roomDelete();
-                        }}>
-                        <DeleteIcon />
-                      </Button>
+                        }}> */}
+                      <DeleteIcon
+                        sx={{
+                          color: 'blue',
+                          '&:hover': {
+                            cursor: 'pointer',
+                          },
+                        }}
+                        onClick={() => {
+                          const roomDelete = () => {
+                            onExitRoom(
+                              chat.chatroom.chatroomId,
+                              empInfo.empId,
+                              sendExit(
+                                client,
+                                chat.chatroom.chatroomId,
+                                empInfo
+                              ),
+                              onHCupdate(
+                                chat.chatroom.chatroomId,
+                                chat.chatroom.chatroomName,
+                                chat.chatroom.headCount
+                              )
+                            );
+                            setChatStatus('chatEmpList');
+                          };
+
+                          return roomDelete();
+                        }}
+                      />
+                      {/* </Button> */}
                     </div>
 
                     <div className={styles.content}>

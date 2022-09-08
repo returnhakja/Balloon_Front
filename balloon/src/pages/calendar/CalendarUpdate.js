@@ -94,61 +94,36 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
           sx={{ mb: 2, mt: 2 }}>
           일정
         </Typography>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          {/* <DateTimePicker
-            locale={ko}
-            label="시작일"
-            value={startValue}
-            inputFormat={'yyyy/MM/dd  HH:mm'}
-            renderInput={(params) => <TextField {...params} />}
-            onChange={(newValue) => {
-              setStartValue(newValue);
-            }}
-          /> */}
-          <TextField
-            id="startvalue"
-            label="시작일"
-            type="datetime-local"
-            value={!!startValue && startValue}
-            sx={{ width: 250 }}
-            onChange={(e) => {
-              setStartValue(e.target.value);
-            }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </LocalizationProvider>
+
+        <TextField
+          id="startvalue"
+          label="시작일"
+          type="datetime-local"
+          value={!!startValue && startValue}
+          sx={{ width: 250 }}
+          onChange={(e) => {
+            setStartValue(e.target.value);
+          }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+
         <span className={styles.centerfont}> : </span>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          {/* <DateTimePicker */}
 
-          {/* <DateTimePicker
-
-            locale={ko}
-            label="끝나는일"
-            value={endvalue}
-            inputFormat={'yyyy/MM/dd  HH:mm'}
-            onChange={(newValue) => {
-              setEndValue(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-          /> */}
-
-          <TextField
-            id="endvalue"
-            label="끝나는 일"
-            type="datetime-local"
-            value={!!endvalue && endvalue}
-            sx={{ width: 250 }}
-            onChange={(e) => {
-              setEndValue(e.target.value);
-            }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </LocalizationProvider>
+        <TextField
+          id="endvalue"
+          label="끝나는 일"
+          type="datetime-local"
+          value={!!endvalue && endvalue}
+          sx={{ width: 250 }}
+          onChange={(e) => {
+            setEndValue(e.target.value);
+          }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
 
         <Typography
           id="modal-modal-description"
@@ -159,7 +134,8 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
         <input
           defaultValue={list.scheduleMemo}
           className={styles.input}
-          id="CalendarContent"></input>
+          id="CalendarContent"
+        />
         <Typography
           id="modal-modal-description"
           variant="h6"
@@ -174,17 +150,52 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
         <br />
         <Button
           onClick={() => handleClose()}
-          sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>
+          sx={{
+            fontSize: 30,
+            mr: 3,
+            border: 1,
+            mt: 1,
+            background: 'gray',
+            color: 'white',
+            height: 50,
+            '&:hover': {
+              backgroundColor: 'gray',
+              border: '2px solid black',
+            },
+          }}>
           취소
         </Button>
         <Button
           onClick={() => updateHandle()}
-          sx={{ fontSize: 30, border: 1, mr: 3, mt: 1 }}>
+          sx={{
+            fontSize: 30,
+            border: 1,
+            mr: 3,
+            mt: 1,
+            background: 'orange',
+            color: 'white',
+            height: 50,
+            '&:hover': {
+              backgroundColor: 'orange',
+              border: '2px solid black',
+            },
+          }}>
           수정
         </Button>
         <Button
           onClick={() => deletehandle()}
-          sx={{ fontSize: 30, border: 1, mt: 1 }}>
+          sx={{
+            fontSize: 30,
+            border: 1,
+            mt: 1,
+            background: 'red',
+            color: 'white',
+            height: 50,
+            '&:hover': {
+              backgroundColor: 'red',
+              border: '2px solid black',
+            },
+          }}>
           삭제
         </Button>
       </Box>

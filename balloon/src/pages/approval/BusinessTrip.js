@@ -11,7 +11,18 @@ import {
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import { FcDocument } from 'react-icons/fc';
-import { Button, Card, Container, Paper, TextField } from '@mui/material';
+import {
+  Button,
+  Card,
+  Container,
+  Paper,
+  Table,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -84,7 +95,6 @@ function BusinessTrip() {
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
-            <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
 

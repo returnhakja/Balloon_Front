@@ -45,3 +45,13 @@
 .icon {
   margin-top: 5px;
 }
+.UnitBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 일정등록 */
+.TextField {
+  width: 100%;
+}
