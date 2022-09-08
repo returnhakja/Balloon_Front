@@ -198,7 +198,7 @@ function App() {
           <Route path="/draft/pa" element={<PersonnelAppointment />} />
 
           {/* 저장된 기안 */}
-          {['/draft/sdbr/:docId', '/i/:애챵'].map((path) => (
+          {['/draft/sdbr/:docId', '/i'].map((path) => (
             <Route
               path={path}
               key={path}
