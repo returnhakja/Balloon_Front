@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
+import ProfileUpdateModal from './ProfileUpdateModal';
 import {
   Avatar,
   Box,
@@ -43,7 +44,6 @@ function MyPage() {
               }}>
               <div style={{ margin: '0px 15px 0px 0px' }}>
                 <Avatar
-                  alt="프로필"
                   style={{
                     width: '150px',
                     height: '150px',
@@ -65,7 +65,14 @@ function MyPage() {
                   <EditIcon sx={{ float: 'left', marginLeft: '2px' }} />
                 </Button>
               </div>
-              {profileOpen && <></>}
+              {profileOpen && (
+                <ProfileUpdateModal
+                  open={profileOpen}
+                  setOpen={setProfileOpen}
+                  empId={empInfo.empId}
+                  photo={empInfo.photo ? empInfo.photo : ''}
+                />
+              )}
               <div>
                 <Link to={'/mypage/update'}>
                   <Button style={{ float: 'right', marginBottom: '5px' }}>

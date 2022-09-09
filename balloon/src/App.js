@@ -81,8 +81,8 @@ function App() {
   const [invite, setInvite] = useState([]);
 
   useEffect(() => {
-    const l = localStorage.getItem('logged');
-    l && JSON.parse(l) ? setLogin(true) : setLogin(false);
+    const logged = localStorage.getItem('logged');
+    logged && logged === 'true' ? setLogin(true) : setLogin(false);
   }, []);
 
   useEffect(() => {
