@@ -66,12 +66,12 @@ import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
 import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
 
-import MyPage from './pages/login/MyPage';
+import MyPage from './pages/mypage/MyPage';
+import UpdateMine from './pages/mypage/UpdateMine';
+import Profile from './pages/mypage/Profile';
+import Profile2 from './pages/mypage/Profile2';
 
 import NotFound from './pages/NotFound';
-import UpdateMine from './pages/login/UpdateMine';
-import Profile from './pages/login/Profile';
-import Profile2 from './pages/login/Profile2';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);

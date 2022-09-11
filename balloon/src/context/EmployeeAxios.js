@@ -176,26 +176,16 @@ export const updateEmpByAdmin = async (updateData) => {
 };
 
 // 사원 수정
-export const updateEmployee = async (
-  data
-  // , title, content, contenter
-) => {
-  console.log(data);
-  // const urlStr = process.env.REACT_APP_URL_EMP;
-  // const inputEmp = {
-  //   //   boardNo: boardNo,
-  //   //   boardTitle: title,
-  //   //   boardContent: content,
-  //   //   user: {
-  //   //     userEmail: contenter,
-  //   //   },
-  // };
-  //     await axios
-  //     .put(urlStr, inputBoard, process.env.REACT_APP_HEADER)
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  //   window.location.href = "/";
+export const updateEmployee = async (updateData) => {
+  const url = `/employee/update/mypage`;
+  console.log(updateData);
+
+  await axios
+    .put(url, updateData, process.env.REACT_APP_HEADER)
+    .catch((error) => {
+      console.log(error);
+    });
+  // window.location.href = '/mypage'
 };
 
 // 사번으로 사원 삭제

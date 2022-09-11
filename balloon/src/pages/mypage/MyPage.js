@@ -85,13 +85,11 @@ function MyPage() {
                       borderTop: '1px solid rgba(224,224,224,1)',
                     }}>
                     <TableRow className="tbrow">
-                      <TableCell className="nameCell" align="center">
-                        사원명
-                      </TableCell>
+                      <TableCell className="nameCell">사원명</TableCell>
                       <TableCell>{empInfo.empName}</TableCell>
                       <TableCell
                         className="nameCell"
-                        align="center"
+                        // align="center"
                         sx={{
                           borderLeft: '1px solid rgba(224,224,224,1)',
                         }}>
@@ -100,13 +98,10 @@ function MyPage() {
                       <TableCell>{empInfo.unit.unitName}</TableCell>
                     </TableRow>
                     <TableRow className="tbrow">
-                      <TableCell className="nameCell" align="center">
-                        직위
-                      </TableCell>
+                      <TableCell className="nameCell">직위</TableCell>
                       <TableCell>{empInfo.position}</TableCell>
                       <TableCell
                         className="nameCell"
-                        align="center"
                         sx={{
                           borderLeft: '1px solid rgba(224,224,224,1)',
                         }}>
@@ -115,13 +110,10 @@ function MyPage() {
                       <TableCell>{empInfo.responsibility}</TableCell>
                     </TableRow>
                     <TableRow className="tbrow">
-                      <TableCell className="nameCell" align="center">
-                        월급
-                      </TableCell>
+                      <TableCell className="nameCell">월급</TableCell>
                       <TableCell>{empInfo.salary}</TableCell>
                       <TableCell
                         className="nameCell"
-                        align="center"
                         sx={{
                           borderLeft: '1px solid rgba(224,224,224,1)',
                         }}>
@@ -130,13 +122,22 @@ function MyPage() {
                       <TableCell>{empInfo.commission}</TableCell>
                     </TableRow>
                     <TableRow className="tbrow">
-                      <TableCell className="nameCell" align="center">
-                        사내전화번호
+                      <TableCell className="nameCell">입사 일자</TableCell>
+                      <TableCell>{empInfo.hiredate}</TableCell>
+                      <TableCell
+                        className="nameCell"
+                        sx={{
+                          borderLeft: '1px solid rgba(224,224,224,1)',
+                        }}>
+                        사원 이메일
                       </TableCell>
+                      <TableCell>{empInfo.empMail}</TableCell>
+                    </TableRow>
+                    <TableRow className="tbrow">
+                      <TableCell className="nameCell">사내전화번호</TableCell>
                       <TableCell>{empInfo.empBell}</TableCell>
                       <TableCell
                         className="nameCell"
-                        align="center"
                         sx={{
                           borderLeft: '1px solid rgba(224,224,224,1)',
                         }}>
@@ -145,23 +146,11 @@ function MyPage() {
                       <TableCell>{empInfo.mobile}</TableCell>
                     </TableRow>
                     <TableRow className="tbrow">
-                      <TableCell className="nameCell" align="center">
-                        입사 일자
-                      </TableCell>
-                      <TableCell colSpan={3} align="center">
-                        {empInfo.hiredate}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="tbrow">
-                      <TableCell className="nameCell" align="center">
-                        주소
-                      </TableCell>
+                      <TableCell className="nameCell">주소</TableCell>
                       <TableCell colSpan={3}>{empInfo.address}</TableCell>
                     </TableRow>
                     <TableRow className="tbrow">
-                      <TableCell className="nameCell" align="center">
-                        차량번호판
-                      </TableCell>
+                      <TableCell className="nameCell">차량번호판</TableCell>
                       <TableCell colSpan={3}>{empInfo.licensePlate}</TableCell>
                     </TableRow>
                   </TableBody>
