@@ -13,16 +13,17 @@ function PrivateRoutes({ empInfo, setEmpInfo, isLogin, setLogin }) {
     setCheck(!check);
   }, []);
 
-  return check ? (
-    isLogin ? (
+  return (
+    check &&
+    (isLogin ? (
       <Outlet context={[empInfo, setEmpInfo]} />
     ) : (
       <>
         {cookies.remove('accessToken')}
         <Navigate to="/loginpage" />
       </>
-    )
-  ) : null;
+    ))
+  );
 }
 
 export default PrivateRoutes;
