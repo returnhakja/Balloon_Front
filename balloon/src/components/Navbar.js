@@ -51,9 +51,6 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
         <NavLink to={'/calendar'} style={activeStyle}>
           <li className="celendar">캘린더</li>
         </NavLink>
-        <NavLink to={'/chatemplist'} style={activeStyle}>
-          <li className="chat">메신저</li>
-        </NavLink>
         <NavLink to={'/organization'} style={activeStyle}>
           <li className="management">조직도</li>
         </NavLink>

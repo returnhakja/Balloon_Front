@@ -66,8 +66,8 @@ function SavedPersonnelAppointmentInfo() {
 
   useEffect(() => {
     getApvlByDocId(params.docId, setApprover, setApprovalList, setSvApprover);
-  }, [mEmp, unit, posi]);
-  console.log(empInfo);
+  }, []);
+
   useEffect(() => {
     if (units.length === 0) {
       findUnitList(setUnits);
@@ -84,14 +84,11 @@ function SavedPersonnelAppointmentInfo() {
     if (noApprover.length === 0) {
       setNoApprover(noApprover);
     }
-    console.log(svApprover);
     let arr = [];
     approver.map((data) => {
       arr.push(data.empId);
-      console.log(arr);
     });
     rmApprover = svApprover.filter((element) => !arr.includes(element.empId));
-    console.log(rmApprover);
   }, [
     units,
     mEmpInfo,
@@ -100,17 +97,16 @@ function SavedPersonnelAppointmentInfo() {
     approver.length,
   ]);
 
+  console.log(unit);
+
   useEffect(() => {
     if (Object.keys(inputData).length !== 0) {
-      // console.log(inputData.personnelDate);
       // setStartValue(inputData.personnelDate);
       // setMEmp(inputData.movedEmp);
       // setUnit(inputData.unit);
-      // console.log('inputData', inputData);
 
       if (mEmp && mEmp !== {}) {
         if (Object.keys(mEmp).length !== 0) {
-          console.log('mEmp', mEmp);
           setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
         }
       }
@@ -123,7 +119,6 @@ function SavedPersonnelAppointmentInfo() {
   }, [inputData]);
 
   // useEffect(() => {
-  //   // console.log(mEmpInfo);
   // }, []);
 
   // useEffect(() => {
@@ -137,7 +132,6 @@ function SavedPersonnelAppointmentInfo() {
   // }, [Object.keys(unit).length]);
 
   // useEffect(() => {
-  //   units.length !== 0 && console.log(units);
   // }, [units]);
 
   // mEmpInfo.length !== 0;
@@ -206,7 +200,6 @@ function SavedPersonnelAppointmentInfo() {
             {!!empInfo && <DfCard drafterName={empInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             // if (apvl.length === 0) {
             //   setApvl(empData);
             // }
@@ -252,7 +245,7 @@ function SavedPersonnelAppointmentInfo() {
             <tr className={styles.trcon}>
               <td className={styles.titlename}>인사명령일</td>
               <td className={styles.titlename} colSpan={4}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     label="일자 선택"
                     value={!!startValue && startValue}
@@ -263,7 +256,21 @@ function SavedPersonnelAppointmentInfo() {
                     }}
                     renderInput={(params) => <TextField {...params} />}
                   />
-                </LocalizationProvider>
+                </LocalizationProvider> */}
+                <TextField
+                  id="startvalue"
+                  required
+                  label="시작일"
+                  type="date"
+                  value={startValue}
+                  onChange={(newValue) => {
+                    setStartValue(newValue.target.value);
+                  }}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </td>
             </tr>
           </thead>
@@ -278,7 +285,6 @@ function SavedPersonnelAppointmentInfo() {
               <td className={styles.tdreaui}>
                 <FormControl fullWidth>
                   <InputLabel>구성원을 설정해주세요</InputLabel>
-                  {console.log('mEmp', mEmp)}
                   {mEmp && Object.keys(mEmp).length !== 0 && (
                     <Select
                       id="mEmp"
@@ -287,21 +293,16 @@ function SavedPersonnelAppointmentInfo() {
                       // defaultValue={mEmp2}
                       placeholder="구성원을 선택하세요"
                       onChange={(e) => {
-                        console.log(e);
                         setMEmp2(e.target.value);
-                        // console.log(e.target.value);
                       }}
 
                       // className={styles.inputtext}
                     >
-                      {/* {console.log(mEmp.empId + ' (' + mEmp.empName + ')123')} */}
-                      {console.log(mEmpInfo)}
                       {mEmpInfo.length !== 0 &&
                         mEmpInfo.map((mEmps, index) => (
                           <MenuItem
                             key={index}
                             value={mEmps.empName + ' (' + mEmps.empId + ')'}>
-                            {console.log(mEmps)}
                             {mEmps.empName} ({mEmps.empId})
                           </MenuItem>
                         ))}
@@ -318,9 +319,8 @@ function SavedPersonnelAppointmentInfo() {
                       label="발령부서를 선택하세요"
                       value={unit2}
                       placeholder=" 발령부서를 선택하세요"
-                      defaultValue={unit2}
+                      defaultValue={unit}
                       onChange={(e) => {
-                        console.log(e);
                         setUnit2(e.target.value);
                       }}
 
@@ -333,7 +333,6 @@ function SavedPersonnelAppointmentInfo() {
                             value={
                               unitInfo.unitName + ' (' + unitInfo.unitCode + ')'
                             }>
-                            {console.log(unitInfo)}
                             {unitInfo.unitName} ({unitInfo.unitCode})
                           </MenuItem>
                         ))}
@@ -354,7 +353,6 @@ function SavedPersonnelAppointmentInfo() {
                     defaultValue={inputData.position}
                     onChange={(e) => {
                       setPosi(e.target.value);
-                      // console.log(posi);
                     }}
 
                     // className={styles.inputtext}
@@ -419,7 +417,7 @@ function SavedPersonnelAppointmentInfo() {
                       empInfo,
                       startValue,
                       mEmp,
-                      unit,
+                      unit2,
                       posi,
                       setInputData
                     );
@@ -438,13 +436,10 @@ function SavedPersonnelAppointmentInfo() {
                         approvalList
                       );
                       // approver.map((data, index) => {
-                      //   console.log(data);
-                      //   console.log(index);
                       //   const approvalId = getApvlId(params.docId, data.empId);
 
                       //   if (approvalId !== null) {
                       //     approvalId.then((apvlId) => {
-                      //       console.log(data);
                       //       insertApproval(
                       //         params.docId,
                       //         0,
@@ -481,7 +476,7 @@ function SavedPersonnelAppointmentInfo() {
                       empInfo,
                       startValue,
                       mEmp,
-                      unit,
+                      unit2,
                       posi,
                       setInputData
                     );
@@ -500,8 +495,6 @@ function SavedPersonnelAppointmentInfo() {
                       approvalList
                     );
                     // approver.map((data, index) => {
-                    //   console.log(data);
-                    //   console.log(index);
                     //   insertApproval(params.docId, 1, data, inputData, empInfo);
                     // });
                   }

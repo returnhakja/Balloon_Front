@@ -1,51 +1,48 @@
 import { useEffect, useRef, useState } from 'react';
-import styles from '../../css/chat/Chat.module.css';
-import { useOutletContext } from 'react-router-dom';
 import ScrollToBottom from 'react-scroll-to-bottom';
-import SendIcon from '@mui/icons-material/Send';
-import LogoutIcon from '@mui/icons-material/Logout';
-
-import {
-  Button,
-  Collapse,
-  Container,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
-import { TextField } from '@mui/material';
+import ChatStomp from './ChatStomp';
 import {
   chatRecord,
   chatroomInfo,
   empIdInfo,
   onUserUpdate,
 } from '../../context/ChatAxios';
-import ChatStomp from '../chat/ChatStomp';
+import styles from '../../css/chat/Chat.module.css';
+import {
+  Button,
+  Collapse,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
+import { TextField } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import LogoutIcon from '@mui/icons-material/Logout';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import ChatSide from './ChatSide';
-import InviteEmp from './InviteEmp';
 import ExitChatroom from './ExitChatroom';
+import InviteEmp from './InviteEmp';
 
-function Chat() {
-  const [empInfo] = useOutletContext();
+export default function Chat({ empInfo, roomId, setChatStatus }) {
   const empId = empInfo.empId;
-  const chatroomId = new URL(document.location).searchParams.get('room');
+  const chatroomId = roomId;
   const [input, setInput] = useState([]);
+
   const inputRef = useRef();
-  const [modalOpen, setModalOpen] = useState(false);
   // socket
   const client = ChatStomp();
 
+  console.log(roomId);
+
+  //채팅방 사람 확인 state
+  const [open, setOpen] = useState(false);
+
   //채팅방 채팅기록
   const [chatting, setChatting] = useState([]);
-
-  //채팅중인 사람 확인 state
-  const [open, setOpen] = useState(false);
 
   //채팅방 정보 불러오기
   const [chatroomName, setChatroomName] = useState('');
@@ -54,6 +51,8 @@ function Chat() {
   //chatroomEmployee T에 chatroomId로 사원정보 가져오기
   //채팅방에 어떤사람이 남아있는지 알려주기 위해서
   const [chatempinfo, setChatempinfo] = useState([]);
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   // 채팅방 이름 바꾸기
   const [chatRoomTitle, setChatRoomTitle] = useState(chatroomName);
@@ -71,7 +70,7 @@ function Chat() {
     setOpen(!open);
   };
 
-  const style = {
+  const styleBox = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -86,7 +85,6 @@ function Chat() {
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, (data) => {
-      console.log(data);
       const chat = JSON.parse(data.body);
       setInput([...input, chat]);
       disconnect();
@@ -98,7 +96,7 @@ function Chat() {
   };
 
   const send = () => {
-    if (inputRef.current.value.trim() != '')
+    if (inputRef.current.value.trim() !== '') {
       client.send(
         '/app/chat/message',
         {},
@@ -108,11 +106,12 @@ function Chat() {
           chatContent: inputRef.current.value,
         })
       );
+    }
   };
 
   //엔터키
   const onKeyPress = (e) => {
-    if (e.key == 'Enter') {
+    if (e.key === 'Enter') {
       send();
       inputRef.current.value = '';
     }
@@ -120,10 +119,12 @@ function Chat() {
 
   //chatroom에 들어갔을 때 기록남게
   useEffect(() => {
-    empIdInfo(chatroomId, setChatempinfo);
+    if (!!chatroomId) {
+      empIdInfo(chatroomId, setChatempinfo);
+    }
     chatRecord(chatroomId, setChatting, empId);
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
-  }, [input]);
+  }, [input, chatroomId, chatting.length]);
 
   //채팅방 이름수정
   const onChangeTitle = (event) => {
@@ -141,6 +142,9 @@ function Chat() {
     }
   };
 
+  useEffect(() => {
+    setModalOpen();
+  }, []);
   const keyEnter = (e) => {
     if (e.key == 'Enter') {
       setClickChk(0);
@@ -149,213 +153,278 @@ function Chat() {
   };
 
   return (
-    <Container maxWidth="xs" className={styles.Listcontainer}>
-      <div className={styles.side}>
-        <ChatSide />
-        <div className={styles.chatconvimeline}>
-          <div className={styles.chatroomname}>
-            {chatroomName ? (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+    <div className={styles.chatconvimeline}>
+      <div className={styles.chatroomname}>
+        {chatroomName ? (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              height: '33px',
+              justifyContent: 'center',
+            }}>
+            <TextField
+              id="outlined-multiline-flexible"
+              multiline
+              sx={{
+                '& .MuiInputBase-root': {
+                  height: 20,
+                },
+              }}
+              value={chatRoomTitle}
+              onChange={onChangeTitle}
+              onKeyPress={keyEnter}
+              onClick={onClickChatRoomTitle}
+            />
+            {clickChk == 2 ? (
+              <Button
+                variant="contained"
+                sx={{ height: 30 }}
+                onClick={() => {
+                  onUserUpdate(chatroomId, chatRoomTitle, headCount);
+                  setClickChk(0);
                 }}>
-                <TextField
-                  id="outlined-multiline-flexible"
-                  multiline
-                  label="-"
-                  maxRows={4}
-                  value={chatRoomTitle}
-                  onChange={onChangeTitle}
-                  onKeyPress={keyEnter}
-                  onClick={onClickChatRoomTitle}
-                />
-                {clickChk == 2 ? (
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      onUserUpdate(chatroomId, chatRoomTitle, headCount);
-                      setClickChk(0);
-                    }}>
-                    수정하기
-                  </Button>
-                ) : (
-                  ''
-                )}
-              </div>
+                수정하기
+              </Button>
             ) : (
-              <h5 className=" mb-2 font-weight-bold text-gray-dark">
-                {chatRoomTitle}
-              </h5>
+              ''
             )}
           </div>
+        ) : (
+          <h5 className=" mb-2 font-weight-bold text-gray-dark">
+            {chatRoomTitle}{' '}
+          </h5>
+        )}
+      </div>
 
-          <List sx={{ zIndex: 5 }}>
-            <ListItemButton onClick={handleClick}>
-              <ListItemIcon>
-                <GroupIcon />
-              </ListItemIcon>
-              <ListItemText primary="채팅중인 사람" />
+      <List sx={{ zIndex: 5 }}>
+        <ListItemButton onClick={handleClick}>
+          <ListItemIcon>
+            <GroupIcon />
+          </ListItemIcon>
+          <ListItemText primary="채팅중인 사람" />
 
-              {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-            </ListItemButton>
+          {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+        </ListItemButton>
 
-            <Collapse
-              in={open}
-              timeout="auto"
-              unmountOnExit
-              sx={{
-                position: 'absolute',
-                width: '100%',
-                background: 'lightgray',
-                paddingTop: 2,
-                maxHeight: 200,
-                overflowY: 'scroll',
+        <Collapse
+          in={open}
+          timeout="auto"
+          unmountOnExit
+          sx={{
+            position: 'absolute',
+            width: '100%',
+            background: 'lightgray',
+            paddingTop: 2,
+            maxHeight: 200,
+            overflowY: 'scroll',
+          }}>
+          {chatempinfo &&
+            chatempinfo.map((data, index) => {
+              return (
+                <List component="div" disablePadding key={index}>
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <PersonIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={data.empId.empName} />
+                  </ListItemButton>
+                </List>
+              );
+            })}
+          {/* 사원추가 */}
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              setModalOpen(true);
+            }}>
+            <PersonAddAlt1Icon />
+          </Button>
+          {/* 채팅방 나가기 */}
+          <div className={styles.logoutBtn}>
+            <Button
+              variant="text"
+              disableElevation
+              onClick={(e) => {
+                const eventExit = () => {
+                  e.preventDefault();
+                  eventClickHandle();
+                };
+                return eventExit();
               }}>
-              {chatempinfo &&
-                chatempinfo.map((data, index) => {
-                  return (
-                    <List component="div" disablePadding key={index}>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemIcon>
-                          <PersonIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={data.empId.empName} />
-                      </ListItemButton>
-                    </List>
-                  );
-                })}
-              {/* 채팅방 나가기 */}
-              <div className={styles.logoutBtn}>
-                {/* 사원추가 */}
-                <Button
-                  onClick={() => {
-                    setModalOpen(true);
-                  }}>
-                  <PersonAddAlt1Icon />
-                </Button>
-                <Button
-                  variant="text"
-                  disableElevation
-                  onClick={(e) => {
-                    const eventExit = () => {
-                      e.preventDefault();
-                      eventClickHandle();
-                    };
-                    return eventExit();
-                  }}>
-                  <LogoutIcon />
-                </Button>
-                {openExitChat && (
-                  <ExitChatroom
-                    openExitChat={openExitChat}
-                    setOpenExitChat={setOpenExitChat}
-                    chatroomId={chatroomId}
-                    chatroomName={chatroomName}
-                    headCount={headCount}
-                  />
-                )}
-              </div>
-            </Collapse>
-          </List>
-          {modalOpen && (
-            <InviteEmp
-              style={style}
-              modalOpen={modalOpen}
-              setModalOpen={setModalOpen}
-            />
-          )}
-          <ScrollToBottom className={styles.scrollbar} id="scroller">
-            {/* 채팅기록을 가져옴 */}
-            {chatting.map((msg, index) => {
-              const chatTime = msg.chatTime.substr(11, 5);
-              if (msg.status === 1) {
-                return (
-                  <div key={index}>
-                    {msg.employee.empId === empInfo.empId ? (
-                      <div className={styles.message}>
-                        <div className={styles.mytime}>{chatTime}</div>
-                        <div className={styles.mycontent}>
-                          {msg.chatContent}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className={styles.othermessage}>
-                        <div>{msg.employee.empName}</div>
-                        <div className={styles.contentContan}>
-                          <div className={styles.othercontent}>
-                            {msg.chatContent}
-                          </div>
-                          <div className={styles.time}>{chatTime}</div>
-                        </div>
-                      </div>
-                    )}
+              <LogoutIcon />
+            </Button>
+            {openExitChat && (
+              <ExitChatroom
+                openExitChat={openExitChat}
+                setOpenExitChat={setOpenExitChat}
+                chatroomId={chatroomId}
+                chatroomName={chatroomName}
+                headCount={headCount}
+                empInfo={empInfo}
+                setChatStatus={setChatStatus}
+              />
+            )}
+          </div>
+        </Collapse>
+      </List>
+      {modalOpen && (
+        <InviteEmp
+          style={styleBox}
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+          setChatempinfo={setChatempinfo}
+          empInfo={empInfo}
+          chatroomId={chatroomId}
+        />
+      )}
+
+      <ScrollToBottom className={styles.scrollbar} id="scroller">
+        {/* 채팅기록을 가져옴 */}
+        {chatting.map((msg, index) => {
+          const chatTime = msg.chatTime.substr(11, 5);
+          if (msg.status === 1) {
+            return (
+              <div key={index}>
+                {msg.employee.empId === empInfo.empId ? (
+                  <div className={styles.message}>
+                    <div className={styles.mytime}>{chatTime}</div>
+                    <div className={styles.mycontent}>{msg.chatContent}</div>
                   </div>
-                );
-              } else if (msg.status === 2) {
-                const scheduleContent = JSON.parse(msg.chatContent);
-                let startValue = scheduleContent.Startvalue.replace('T', ' ');
-                let endValue = scheduleContent.endvalue.replace('T', ' ');
-                return (
-                  <>
-                    <div className={styles.othermessage}>
-                      <div>{msg.employee.empName}</div>
-                      <div className={styles.scheduleContent}>
-                        <div>일정제목 : {scheduleContent.scheduletitle}</div>
-                        <div>일정내용 : {scheduleContent.CalendarContent}</div>
-                        <div>장소 : {scheduleContent.CalendarLocation}</div>
-                        <div>시작일자 : {startValue}</div>
-                        <div>종료일자 : {endValue}</div>
-                        <div>
-                          보낸사람 : {scheduleContent.empName}
-                          {scheduleContent.position}
-                        </div>
+                ) : (
+                  <div key={index} className={styles.othermessage}>
+                    <div>{msg.employee.empName}</div>
+                    <div className={styles.contentContan}>
+                      <div className={styles.othercontent}>
+                        {msg.chatContent}
                       </div>
                       <div className={styles.time}>{chatTime}</div>
                     </div>
-                  </>
-                );
-              }
-            })}
-          </ScrollToBottom>
+                  </div>
+                )}
+              </div>
+            );
+          } else if (msg.status === 2) {
+            const scheduleContent = JSON.parse(msg.chatContent);
+            let startValue = scheduleContent.Startvalue.replace('T', ' ');
+            let endValue = scheduleContent.endvalue.replace('T', ' ');
+            return (
+              <>
+                <div key={index} className={styles.othermessage}>
+                  <div>{msg.employee.empName}</div>
+                  <div className={styles.contentContan}>
+                    <div className={styles.scheduleContent}>
+                      <div>일정제목 : {scheduleContent.scheduletitle}</div>
+                      <div>일정내용 : {scheduleContent.CalendarContent}</div>
+                      <div>장소 : {scheduleContent.CalendarLocation}</div>
+                      <div>시작일자 :{startValue}</div>
+                      <div>종료일자 :{endValue}</div>
+                      <div>
+                        보낸사람 : {scheduleContent.empName}
+                        {scheduleContent.position}
+                      </div>
+                    </div>
+                    <div className={styles.time}>{chatTime}</div>
+                  </div>
+                </div>
+              </>
+            );
+          } else if (msg.status === 3) {
+            const approvalContent = JSON.parse(msg.chatContent);
+            return (
+              <>
+                <div key={index} className={styles.othermessage}>
+                  <div>{msg.employee.empName}</div>
+                  <div className={styles.contentContan}>
+                    <div className={styles.scheduleContent}>
+                      <div>기안양식 : {approvalContent.approvalForm}</div>
+                      <div>기안제목 : {approvalContent.approvalTitle}</div>
+                      <div>
+                        기안자 : {approvalContent.empName}
+                        {approvalContent.position}
+                      </div>
+                    </div>
+                    <div className={styles.time}>{chatTime}</div>
+                  </div>
+                </div>
+              </>
+            );
+          } else if (msg.status === 4) {
+            const approvalTripContent = JSON.parse(msg.chatContent);
+            return (
+              <>
+                <div key={index} className={styles.othermessage}>
+                  <div>{msg.employee.empName}</div>
+                  <div className={styles.contentContan}>
+                    <div className={styles.scheduleContent}>
+                      <div>기안양식 : {approvalTripContent.approvalForm}</div>
+                      <div>기안제목 : {approvalTripContent.approvalTitle}</div>
+                      <div>
+                        기안자 : {approvalTripContent.empName}
+                        {approvalTripContent.position}
+                      </div>
+                      <div>방문처 : {approvalTripContent.visitPlace}</div>
+                      <div>방문목적 : {approvalTripContent.visitPurpose}</div>
+                    </div>
+                    <div className={styles.time}>{chatTime}</div>
+                  </div>
+                </div>
+              </>
+            );
+          } else if (msg.status === 5) {
+            const approvalApmtContent = JSON.parse(msg.chatContent);
+            return (
+              <>
+                <div key={index} className={styles.othermessage}>
+                  <div>{msg.employee.empName}</div>
+                  <div className={styles.contentContan}>
+                    <div className={styles.scheduleContent}>
+                      <div>기안양식 : {approvalApmtContent.approvalForm}</div>
+                      <div>기안제목 : {approvalApmtContent.approvalTitle}</div>
+                      <div>
+                        기안자 : {approvalApmtContent.empName}
+                        {approvalApmtContent.position}
+                      </div>
+                      <div>구성원명 : {approvalApmtContent.member}</div>
+                      <div>
+                        발령부서 : {approvalApmtContent.appointDepartment}
+                      </div>
+                      <div>
+                        발령직위 : {approvalApmtContent.appointPosition}
+                      </div>
+                    </div>
+                    <div className={styles.time}>{chatTime}</div>
+                  </div>
+                </div>
+              </>
+            );
+          }
+        })}
+      </ScrollToBottom>
 
-          <div className={styles.scroll}>
-            <div className={styles.contain}></div>
-            <div className={styles.inputmain}>
-              <input
-                className={styles.inputform}
-                ref={inputRef}
-                onKeyPress={onKeyPress}
-                placeholder="메시지를 입력하세요"
-              />
+      <div className={styles.scroll}>
+        <div className={styles.contain}></div>
+        <div className={styles.inputmain}>
+          <input
+            className={styles.inputform}
+            ref={inputRef}
+            onKeyPress={onKeyPress}
+            placeholder="메시지를 입력하세요"
+          />
 
-              <Button
-                variant="contained"
-                endIcon={<SendIcon />}
-                className={styles.inputbutton}
-                onClick={() => {
-                  // chatempinfo.map((data) => {
-                  //   console.log(data);
-                  //   if (
-                  //     data.chatroomId.chatroomName &&
-                  //     data.chatroomId.chatroomName === '일정봇'
-                  //   ) {
-                  //     alert('메세지를 입력할 수 없습니다');
-                  //   } else {
-                  inputRef.current.value && send();
-                  inputRef.current.focus();
-                  inputRef.current.value = '';
-                  //   }
-                  // });
-                }}>
-                전송
-              </Button>
-            </div>
-          </div>
+          <Button
+            variant="contained"
+            endIcon={<SendIcon />}
+            className={styles.inputbutton}
+            onClick={() => {
+              inputRef.current.value && send();
+              inputRef.current.focus();
+              inputRef.current.value = '';
+            }}>
+            전송
+          </Button>
         </div>
       </div>
-    </Container>
+    </div>
   );
 }
-export default Chat;

@@ -176,32 +176,34 @@ export const updateEmpByAdmin = async (updateData) => {
 };
 
 // 사원 수정
-export const updateEmployee = async (
-  data
-  // , title, content, contenter
-) => {
-  console.log(data);
-  // const urlStr = process.env.REACT_APP_URL_EMP;
-  // const inputEmp = {
-  //   //   boardNo: boardNo,
-  //   //   boardTitle: title,
-  //   //   boardContent: content,
-  //   //   user: {
-  //   //     userEmail: contenter,
-  //   //   },
-  // };
-  //     await axios
-  //     .put(urlStr, inputBoard, process.env.REACT_APP_HEADER)
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  //   window.location.href = "/";
+export const updateEmployee = async (updateData) => {
+  const url = `/employee/update/mypage`;
+  console.log(updateData);
+
+  await axios
+    .put(url, updateData, process.env.REACT_APP_HEADER)
+    .catch((error) => {
+      console.log(error);
+    });
+  // window.location.href = '/mypage'
 };
 
 // 사번으로 사원 삭제
 export const deleteEmployee = async (data) => {
-  const url = '/employee/';
-  const urlStr = url + data.empId;
-  await axios.delete(urlStr).catch((error) => console.log(error));
+  const url = `/employee/${data.empId}`;
+  await axios.delete(url).catch((error) => console.log(error));
   window.location.href = '/management/employee';
+};
+
+export const uploadProfile = async (file, empId) => {
+  console.log('empId', empId);
+  console.log('file', file);
+
+  for (let value of file.values()) {
+    console.log('value', value);
+  }
+  // const url = `/file/upload/profile/${empId}`;
+  const url = '/file/upload/profile/' + empId;
+
+  await axios.post(url, file).catch((error) => console.log(error));
 };
