@@ -7,17 +7,29 @@ import {
   getLatestBizTP,
   insertApproval,
   insertBizTp,
+  insertBizTpEmp,
 } from '../../context/ApprovalAxios';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import { FcDocument } from 'react-icons/fc';
-import { Button, Card, Container, Paper, TextField } from '@mui/material';
+import {
+  Button,
+  Card,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
+import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -36,6 +48,8 @@ function BusinessTrip() {
   const [docId, setDocId] = useState('');
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
+  const [mEmpInfo, setMEmpInfo] = useState('');
+  const [mEmp, setMEmp] = useState('');
   const [apvlInfo, setApvlInfo] = useState([]);
 
   // 모달
@@ -43,7 +57,15 @@ function BusinessTrip() {
   // 사원 정보 context
   const [empInfo] = useOutletContext();
 
+  let startDate = startValue && document.getElementById('startValue').value;
+  let endDate = endValue && document.getElementById('endValue').value;
+  console.log(startDate);
+  console.log(endDate);
+
   useEffect(() => {
+    if (mEmpInfo.length === 0) {
+      getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
+    }
     if (docNum === 0) {
       getLatestBizTP(setDocNum);
       setDocId('출장계획-22-0000001');
@@ -55,6 +77,7 @@ function BusinessTrip() {
       setNoApprover(noApprover);
     }
   }, [docNum, noApprover]);
+  console.log(mEmp);
 
   return (
     <SideNavigation>
@@ -170,7 +193,27 @@ function BusinessTrip() {
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
                 {' '}
-                이거 일단 없음
+                <FormControl fullWidth>
+                  <InputLabel>구성원을 설정해주세요</InputLabel>
+                  <Select
+                    id="mEmp"
+                    label="구성원을 선택하세요"
+                    value={mEmp}
+                    placeholder="구성원을 선택하세요"
+                    onChange={(e) => {
+                      setMEmp(e.target.value);
+                    }}
+
+                    // className={styles.inputtext}
+                  >
+                    {mEmpInfo.length !== 0 &&
+                      mEmpInfo.map((mEmps, index) => (
+                        <MenuItem key={index} value={mEmps}>
+                          {mEmps.empName} ({mEmps.empId})
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
               </td>
               <td className={styles.titlename}></td>
             </tr>
@@ -189,20 +232,20 @@ function BusinessTrip() {
             <tr>
               <td className={styles.tdreaui}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  {/* <TextField
-                  id="startValue"
-                  label="시작일"
-                  type="datetime-local"
-                  defaultValue={startValue}
-                  onChange={(newValue) => {
-                    setStartValue(newValue);
-                  }}
-                  sx={{ width: 250 }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                /> */}
-                  <DatePicker
+                  <TextField
+                    id="startValue"
+                    label="시작일"
+                    type="date"
+                    defaultValue={startValue}
+                    onChange={(newValue) => {
+                      setStartValue(newValue);
+                    }}
+                    sx={{ width: 250 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                  {/* <DatePicker
                     label="시작일"
                     value={startValue}
                     type=" date"
@@ -211,13 +254,26 @@ function BusinessTrip() {
                       setStartValue(newValue);
                     }}
                     renderInput={(params) => <TextField {...params} />}
-                  />
+                  /> */}
                 </LocalizationProvider>
 
                 <span className={styles.centerfont}> : </span>
 
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
+                  <TextField
+                    id="endValue"
+                    label="종료일"
+                    type="date"
+                    defaultValue={endValue}
+                    onChange={(newValue) => {
+                      setEndValue(newValue);
+                    }}
+                    sx={{ width: 250 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                  {/* <DatePicker
                     label="끝나는일"
                     value={endValue}
                     inputFormat={'yyyy-MM-dd'}
@@ -225,7 +281,7 @@ function BusinessTrip() {
                       setEndValue(newValue);
                     }}
                     renderInput={(params) => <TextField {...params} />}
-                  />
+                  /> */}
                 </LocalizationProvider>
               </td>
               <td className={styles.tdreaui}>
@@ -284,8 +340,8 @@ function BusinessTrip() {
                       3,
                       inputData,
                       empInfo,
-                      startValue,
-                      endValue,
+                      startDate,
+                      endDate,
                       setInputData
                     );
 
@@ -294,7 +350,7 @@ function BusinessTrip() {
                     //   return insertApproval(docId, 0, data, inputData, empInfo);
                     // });
                     insertApproval(docId, 0, approver, inputData, empInfo);
-
+                    insertBizTpEmp(docId, mEmp);
                     alert('문서가 임시저장되었습니다!');
                   }}>
                   임시저장
@@ -309,8 +365,8 @@ function BusinessTrip() {
                       1,
                       inputData,
                       empInfo,
-                      startValue,
-                      endValue,
+                      startDate,
+                      endDate,
                       setInputData
                     );
                     alert('문서가 상신되었습니다!');

@@ -77,6 +77,25 @@ export const getBizTpEmpByBizTpId = async (bizTpId, setBizTpEmp) => {
   });
 };
 
+// 동반 출장자
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+export const insertBizTpEmp = async (bizTpId, mEmp) => {
+  console.log(bizTpId);
+  console.log(mEmp);
+  const url = '/api/biztpemp';
+  let inputData = {};
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+  inputData = {
+    businessTrip: {
+      businessTripId: bizTpId,
+    },
+    emp: mEmp,
+  };
+  await axios.post(url, inputData, { headers });
+};
+
 // 인사 명령 기안 정보
 export const getPAByPAId = async (PAId, setPAInfo) => {
   const url = '/api/pa/';
