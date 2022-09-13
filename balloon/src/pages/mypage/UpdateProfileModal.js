@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../../css/Component.module.css';
 import { Avatar, Button, Card, Typography } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
 import { Box, CardContent, Modal } from '@mui/material';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { uploadProfile } from '../../context/EmployeeAxios';
@@ -27,17 +26,9 @@ const style = {
 export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
   const [file, setFile] = useState('');
   const handleClose = () => setOpen(false);
-  // console.log(photo);
-
-  // const onSubmit = (e) => {
-  //   console.log('aaa');
-  // }; // your form submit function which will invoke after successful validation
 
   const upload = () => {
-    // console.log('empId', empId);
-
     console.log('file', file);
-    // e.target['file']
     if (file.length !== 0) {
       uploadProfile(file, empId);
     } else {
@@ -46,60 +37,9 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
   };
 
   const handleFileInput = async (e) => {
-    console.log('aaaaaaaaaaa');
-    // console.log("e.target['file']", e.target['file']);
-    console.log('e.target.files[0]', e.target.files[0]);
-    const fl = e.target.files[0];
-    const ss = document.getElementById('getFile');
-    console.log('ss', ss.value);
     const formData = new FormData();
-    const dd = {
-      name: fl.name,
-      lastModifiedDate: fl.lastModifiedDate,
-      lastModified: fl.lastModified,
-      size: fl.size,
-      type: fl.type,
-      webkitRelativePath: fl.webkitRelativePath,
-    };
-
-    // formData.append('file', e.target.files[0]);
     formData.append('file', e.target.files[0]);
-    console.log(dd);
-    // for (let value of formData.values()) {
-    //   console.log('value', value);
-    // }
     setFile(formData);
-
-    // const fileObj = e.target['files'].files[0];
-    // console.log('file', fileObj);
-    // setFile(fileObj);
-    // const formData = new FormData();
-    // formData.append('file', fileObj);
-    // const file_key = file.name.replace('.png', '');
-    // // await Api.put(`user/${ownerData._id}`, {
-    // //   image: ownerData._id,
-    // // });
-    // console.log('fileName', file_key);
-    // const upload = new AWS.S3.ManagedUpload({
-    //   params: {
-    //     Bucket: bucket, // 버킷 이름
-    //     Key: file_key + 2 + '.png', // 유저 아이디
-    //     Body: file, // 파일 객체
-    //   },
-    // });
-    // const promise = upload.promise();
-    // promise.then(
-    //   function () {
-    //     // 이미지 업로드 성공
-    //     window.setTimeout(function () {
-    //       window.location.reload();
-    //     }, 2000);
-    //   },
-    //   function (err) {
-    //     // 이미지 업로드 실패
-    //     console.log(err);
-    //   }
-    // );
   };
 
   return (
@@ -177,7 +117,6 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
                         // background: '#bdbdbd',
                         // color: '#fff',
                       }}
-                      // size={100}
                       src={
                         <img
                           src={`${process.env.PUBLIC_URL}/asset/none_profile.png`}

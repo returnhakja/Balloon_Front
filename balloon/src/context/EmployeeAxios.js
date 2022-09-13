@@ -204,58 +204,6 @@ export const uploadProfile = async (file, empId) => {
   }
   // const url = `/file/upload/profile/${empId}`;
   const url = '/file/upload/profile/' + empId;
-  console.log(url);
-  const header = {
-    // headers: { 'Content-Type': 'multipart/form-data' },
-    // encType: 'multipart/form-data',
-    // name: 'file',
-    // file: file,
-    contentType: 'multipart/form-data',
-    // 출처: https://haenny.tistory.com/280 [Haenny:티스토리]
-  };
-  // const header = { headers: { 'Content-Type': 'application/json' } };
-  const body = { 'form-data': { file: file } };
 
-  // const formData = new FormData();
-  // formData.append('files', file);
-
-  // const props = {
-  //   name: 'file',
-  //   action: '/api/file/upload',
-  //   headers: {
-  //     Authorization: `Bearer ${token}`,
-  //     'Content-Type': 'multipart/form-data',
-  //   },
-  // };
-  // console.log(file);
-  // console.log(formData);
-  const options = {
-    method: 'post',
-    url: url,
-    // data: formData,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  };
-  // await axios({
-  //   method: 'post',
-  //   url: url,
-  //   data: formData,
-  //   headers: {
-  //     'Content-Type': 'multipart/form-data',
-  //   },
-  // });
-
-  await axios
-    .post(
-      url,
-      {
-        headers: {
-          Accept: 'multipart/form-data',
-          'Content-Type': 'multipart/form-data',
-        },
-      },
-      file
-    )
-    .catch((error) => console.log(error));
+  await axios.post(url, file).catch((error) => console.log(error));
 };
