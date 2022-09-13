@@ -14,7 +14,7 @@ import { Button } from '@mui/material';
 import moment from 'moment';
 import 'moment/locale/ko';
 
-function MainPage({ workStatus, setWorkStatus }) {
+function MainPage() {
   const [empInfo] = useOutletContext();
   const [inCnt, setInCnt] = useState(0);
   const [outCnt, setOutCnt] = useState(0);
@@ -29,19 +29,17 @@ function MainPage({ workStatus, setWorkStatus }) {
       if (!!empInfo) {
         findWorkOn(empInfo.empId, setInCnt);
         findWorkOff(empInfo.empId, setOutCnt);
-        findWorkIn(empInfo.empId, setWorkStatus);
       }
     }
-  }, [empInfo.length, inCnt, outCnt, workStatus]);
+  }, [empInfo.length, inCnt, outCnt]);
 
   const WorkStart = () => {
-    console.log(inCnt);
-    console.log(typeof inCnt);
     if (inCnt === 1) {
       alert('이미 출근 등록을 하였습니다!');
     } else {
       if (nowTime <= inTime) {
-        empInfo && startWork(empInfo.empId, setWorkStatus);
+        empInfo && startWork(empInfo.empId);
+        alert('출근 등록을 하였습니다!');
       } else {
         alert('18시 30분이 지났습니다!!!');
       }
@@ -49,21 +47,24 @@ function MainPage({ workStatus, setWorkStatus }) {
   };
 
   const WorkEnd = () => {
-    console.log(outCnt);
-    console.log(typeof outCnt);
-    if (outCnt === 1) {
-      alert('이미 퇴근 등록을 하였습니다!');
+    if (inCnt === 0) {
+      alert('오늘 출근 등록을 하지 않았습니다!');
     } else {
-      // if (nowTime <= outTime) {
-      //   empInfo && endWork(empInfo.empId, setWorkStatus);
-      // } else {
-      //   alert('근태기록이 끝났습니다!!');
-      // }
+      if (outCnt === 1) {
+        alert('이미 퇴근 등록을 하였습니다!');
+      } else {
+        if (nowTime <= outTime) {
+          empInfo && endWork(empInfo.empId);
+          alert('퇴근 등록을 하였습니다!');
+        } else {
+          alert('야근 등록을 해야 합니다!!');
+        }
+      }
     }
   };
 
   // const WorkEndless = () => {
-  //   empInfo && endlessWork(empInfo.empId, setWorkStatus);
+  //   empInfo && endlessWork(empInfo.empId);
   // };
 
   return (
@@ -89,7 +90,12 @@ function MainPage({ workStatus, setWorkStatus }) {
                 <br />
               </div>
               <div style={{ marginTop: '50px' }}>
-                {workStatus ? (
+                {inCnt === 0 ? (
+                  <div>
+                    <p>아직 출근 등록을 하지 않았습니다.</p>
+                    <p>출근 등록을 해주세요.</p>
+                  </div>
+                ) : outCnt === 0 ? (
                   <div>
                     <p>출근 상태입니다.</p>
                     <p>일을 하세요.</p>
@@ -100,7 +106,6 @@ function MainPage({ workStatus, setWorkStatus }) {
                     <p>고생하셨습니다.</p>
                   </div>
                 )}
-
                 <Button sx={{ fontSize: '100px' }} onClick={() => WorkStart()}>
                   출근
                 </Button>

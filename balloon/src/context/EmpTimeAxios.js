@@ -18,12 +18,12 @@ export const findWorkOff = async (empId, setOutCnt) => {
     .catch((error) => console.log(error));
 };
 
-export const findWorkIn = async (empId, setWorkStatus) => {
+export const findWorkIn = async (empId) => {
   const url = `/time/in/${empId}`;
   await axios
     .post(url)
     .then((response) => response.data)
-    .then((data) => setWorkStatus(data))
+    .then((data) => console.log(data))
     .catch((error) => console.log(error));
 };
 
