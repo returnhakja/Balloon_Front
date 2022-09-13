@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import ChatEmpList from '../pages/chat/ChatEmpList';
 import styles from '../css/Home.module.css';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-
-import Test from '../pages/chat copy/Test';
+import ChatMenu from '../pages/chat/ChatMenu';
 
 const style = {
   position: 'absolute',
@@ -36,7 +34,7 @@ function Home({ empInfo, setEmpInfo, logout, isLogin }) {
       {isLogin && (
         <div className={styles.Icon}>
           {open ? (
-            <Test
+            <ChatMenu
               style={style}
               open={open}
               setOpen={setOpen}

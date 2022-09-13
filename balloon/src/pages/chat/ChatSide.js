@@ -1,41 +1,43 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from '../../css/chat/ChatSide.module.css';
+import styles from '../../css/chat/CS.module.css';
 import PersonIcon from '@mui/icons-material/Person';
 import ChatIcon from '@mui/icons-material/Chat';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { Badge } from '@mui/material';
 
-function ChatSide({ children }) {
+export default function ChatSide({ children, setChatStatus }) {
   return (
     <div className={styles.constainer}>
       <div className={styles.iconcon}>
         <ul className={styles.constainer}>
-          <Link to={'/chatemplist'}>
-            <li className={styles.listyle}>
-              <PersonIcon fontSize="large" />
-            </li>
-          </Link>
-          <Link to={'/chatlist'}>
-            <li className={styles.listyle}>
-              <ChatIcon fontSize="large" />
-            </li>
-          </Link>
-          <Link to={'/chatnotice'}>
-            <li className={styles.listyle}>
-              <SettingsIcon fontSize="large" />
-            </li>
-          </Link>
+          <li
+            className={styles.listyle}
+            onClick={() => setChatStatus('chatEmpList')}>
+            <PersonIcon fontSize="large" />
+          </li>
+          <li
+            className={styles.listyle}
+            onClick={() => setChatStatus('chatList')}>
+            {/* <Badge
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              color="secondary"
+              badgeContent={501}
+              max={500}> */}
+            <ChatIcon fontSize="large" />
+            {/* </Badge> */}
+          </li>
+          <li
+            className={styles.listyle}
+            onClick={() => setChatStatus('chatNotice')}>
+            <SettingsIcon fontSize="large" />
+          </li>
         </ul>
-        {/* <div>
-          <PersonIcon />
-        </div>
-        <div>
-          <ChatIcon />
-        </div> */}
       </div>
       <main>{children}</main>
     </div>
   );
 }
-
-export default ChatSide;
