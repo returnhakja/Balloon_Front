@@ -80,7 +80,7 @@ function App() {
   const role = empInfo.userRoleGrade;
   // 채팅방 초대하기
   const [invite, setInvite] = useState([]);
-
+  const [workStatus, setWorkStatus] = useState(false);
   useEffect(() => {
     const logged = localStorage.getItem('logged');
     logged && logged === 'true' ? setLogin(true) : setLogin(false);
@@ -104,7 +104,12 @@ function App() {
             isLogin={isLogin}
           />
         }>
-        <Route index element={<MainPage />} />
+        <Route
+          index
+          element={
+            <MainPage workStatus={workStatus} setWorkStatus={setWorkStatus} />
+          }
+        />
         {/* 로그인 */}
         {!isLogin ? (
           <Route
