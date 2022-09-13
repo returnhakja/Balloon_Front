@@ -50,6 +50,7 @@ function SavedBusinessTripInfo() {
   const [empInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
+  // const [startValue, setStartValue] = useState(inputData.startDate);
   const [startValue, setStartValue] = useState(inputData.startDate);
   const [endValue, setEndValue] = useState(inputData.endDate);
   const [approver, setApprover] = useState([]);
@@ -63,8 +64,8 @@ function SavedBusinessTripInfo() {
   const params = useParams();
   let rmApprover = [];
 
-  let startDate = startValue && document.getElementById('startValue').value;
-  let endDate = endValue && document.getElementById('endValue').value;
+  // const startDate = startValue && document.getElementById('startValue').value;
+  // const endDate = endValue && document.getElementById('endValue').value;
 
   console.log(inputData.startDate);
   console.log(bizTpEmp);
@@ -73,8 +74,12 @@ function SavedBusinessTripInfo() {
   useEffect(() => {
     getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
     getApvlByDocId(params.docId, setApprover, setApprovalList, setSvApprover);
+
     getBizTpEmpByBizTpId(params.docId, setBizTpEmp);
-  }, []);
+
+    setStartValue(inputData.startDate);
+    setEndValue(inputData.endDate);
+  }, [inputData]);
 
   useEffect(() => {
     if (!!params) {
@@ -82,8 +87,8 @@ function SavedBusinessTripInfo() {
         getBizTpByBizTpId(params.docId, setInputData);
         // getApvlByDocId(params.docId, setApprover);
       } else {
-        setStartValue(startValue);
-        setEndValue(endValue);
+        // setStartValue(inputData.startDate);
+        // setEndValue(endValue);
         approver.length !== 0 && console.log(approver);
       }
       if (noApprover.length === 0) {
@@ -257,8 +262,8 @@ function SavedBusinessTripInfo() {
 
             <tr>
               <td className={styles.tdreaui}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  {/* <DatePicker
+                {/* <LocalizationProvider dateAdapter={AdapterDateFns}> */}
+                {/* <DatePicker
                     label="시작일"
                     value={startValue}
                     type=" date"
@@ -268,24 +273,38 @@ function SavedBusinessTripInfo() {
                     }}
                     renderInput={(params) => <TextField {...params} />}
                   /> */}
-                  <TextField
-                    id="startValue"
-                    label="시작일"
-                    type="date"
-                    value={!!startValue && startValue}
-                    onChange={(e) => {
-                      setStartValue(e.target.value);
-                    }}
-                    sx={{ width: 250 }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </LocalizationProvider>
+                {/* <TextField
+                  id="startValue"
+                  label="시작일"
+                  type="date"
+                  value={startValue}
+                  onChange={(e) => {
+                    setStartValue(e.target.value);
+                  }}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                /> */}
+                <TextField
+                  id="startValue"
+                  label="시작일"
+                  type="date"
+                  value={!!startValue && startValue}
+                  sx={{ width: 250 }}
+                  onChange={(e) => {
+                    setStartValue(e.target.value);
+                    console.log(e.target.value);
+                  }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                {/* </LocalizationProvider> */}
 
                 <span className={styles.centerfont}> : </span>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  {/* <DatePicker
+                {/* <LocalizationProvider dateAdapter={AdapterDateFns}> */}
+                {/* <DatePicker
                     label="끝나는일"
                     value={endValue}
                     inputFormat={'yyyy-MM-dd'}
@@ -294,20 +313,20 @@ function SavedBusinessTripInfo() {
                     }}
                     renderInput={(params) => <TextField {...params} />}
                   /> */}
-                  <TextField
-                    id="endValue"
-                    label="종료일"
-                    type="date"
-                    value={inputData.endDate}
-                    onChange={(newValue) => {
-                      setEndValue(newValue);
-                    }}
-                    sx={{ width: 250 }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </LocalizationProvider>
+                <TextField
+                  id="endValue"
+                  label="종료일"
+                  type="date"
+                  value={!!endValue && endValue}
+                  onChange={(e) => {
+                    setEndValue(e.target.value);
+                  }}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                {/* </LocalizationProvider> */}
               </td>
               <td className={styles.tdreaui}>
                 <form>
@@ -381,8 +400,8 @@ function SavedBusinessTripInfo() {
                       3,
                       inputData,
                       empInfo,
-                      startDate,
-                      endDate,
+                      startValue,
+                      endValue,
                       setInputData
                     );
                     {
@@ -443,8 +462,8 @@ function SavedBusinessTripInfo() {
                       1,
                       inputData,
                       empInfo,
-                      startDate,
-                      endDate,
+                      startValue,
+                      endValue,
                       setInputData
                     );
                     alert('문서가 상신되었습니다!');

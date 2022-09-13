@@ -20,7 +20,7 @@ function MyPage() {
 
   return (
     <Container>
-      <h1>마이페이지</h1>
+      <h1 style={{ display: 'flex', justifyContent: 'center' }}>마이페이지</h1>
       <Box
         sx={{
           marginTop: '1%',

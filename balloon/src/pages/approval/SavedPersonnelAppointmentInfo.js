@@ -67,6 +67,7 @@ function SavedPersonnelAppointmentInfo() {
   useEffect(() => {
     getApvlByDocId(params.docId, setApprover, setApprovalList, setSvApprover);
   }, []);
+
   useEffect(() => {
     if (units.length === 0) {
       findUnitList(setUnits);
@@ -178,7 +179,7 @@ function SavedPersonnelAppointmentInfo() {
             결재선설정
           </button>
         </div>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
+
         {openapprovalModal && (
           <ModalApproval
             openapprovalModal={openapprovalModal}
