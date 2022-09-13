@@ -31,6 +31,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
+import moment from 'moment';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -62,7 +63,8 @@ function PersonnelAppointment() {
   const [empInfo] = useOutletContext();
   const [inputData, setInputData] = useState({});
 
-  console.log(empInfo);
+  let date = startValue && document.getElementById('startvalue').value;
+  console.log(date);
 
   useEffect(() => {
     if (units.length === 0) {
@@ -195,7 +197,7 @@ function PersonnelAppointment() {
             <tr className={styles.trcon}>
               <td className={styles.titlename}>인사명령일</td>
               <td className={styles.titlename} colSpan={4}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     label="일자 선택"
                     value={startValue}
@@ -206,7 +208,21 @@ function PersonnelAppointment() {
                     }}
                     renderInput={(params) => <TextField {...params} />}
                   />
-                </LocalizationProvider>
+                </LocalizationProvider> */}
+
+                <TextField
+                  id="startvalue"
+                  required
+                  label="시작일"
+                  type="date"
+                  onChange={(newValue) => {
+                    setStartValue(newValue);
+                  }}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </td>
             </tr>
           </thead>
@@ -320,7 +336,7 @@ function PersonnelAppointment() {
                       3,
                       inputData,
                       empInfo,
-                      startValue,
+                      date,
                       mEmp,
                       unit,
                       posi,
@@ -347,7 +363,7 @@ function PersonnelAppointment() {
                       1,
                       inputData,
                       empInfo,
-                      startValue,
+                      date,
                       mEmp,
                       unit,
                       posi,
