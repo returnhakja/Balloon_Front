@@ -202,21 +202,26 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
               parentCode={parentCode}
               setParentCode={setParentCode}
             />
-
-            <Button
-              onClick={handleClose}
-              sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>
-              취소
-            </Button>
-            {/* 채팅방만드는 부분 */}
-            <Button
-              // onClick={() => {
-              //   // updateHandle();
-              // }}
-              type="submit"
-              sx={{ fontSize: 30, border: 1, mt: 1 }}>
-              수정
-            </Button>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}>
+              <Button
+                onClick={handleClose}
+                sx={{ fontSize: 24, mr: 3, border: 1, mt: 1, height: 50 }}>
+                취소
+              </Button>
+              {/* 채팅방만드는 부분 */}
+              <Button
+                // onClick={() => {
+                //   // updateHandle();
+                // }}
+                type="submit"
+                sx={{ fontSize: 24, border: 1, mt: 1, height: 50 }}>
+                수정
+              </Button>
+            </div>
           </Box>
         </Modal>
       )}

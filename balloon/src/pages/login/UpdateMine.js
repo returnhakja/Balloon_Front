@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { Label } from '../../components/Label';
 import { useForm } from 'react-hook-form';
@@ -24,6 +24,8 @@ function UpdateMine() {
     formState: { errors },
     handleSubmit,
   } = useForm();
+  const [email, setEmail] = useState(empInfo.empMail);
+  const [emailOpen, setEmailOpen] = useState(false);
 
   useEffect(() => {
     console.log(empInfo);
@@ -38,7 +40,9 @@ function UpdateMine() {
 
   return (
     <Container>
-      <h1>내 정보 수정</h1>
+      <h1 style={{ display: 'flex', justifyContent: 'center' }}>
+        내 정보 수정
+      </h1>
       <Box
         sx={{
           marginTop: '1%',
@@ -50,12 +54,13 @@ function UpdateMine() {
         }}>
         <Card>
           {empInfo.length !== 0 && (
-            <CardContent sx={{ display: 'flex' }}>
+            // <CardContent sx={{ display: 'flex' }}>
+            <CardContent>
               <div
                 style={{
                   margin: '15px',
-                  alignItems: 'center',
                   display: 'flex',
+                  alignItems: 'center',
                   justifyContent: 'center',
                   flexWrap: 'wrap',
                 }}>
@@ -86,6 +91,29 @@ function UpdateMine() {
                     </TableCell>
                     <TableCell>{empInfo.unit.unitName}</TableCell> */}
                   </TableRow>
+                  <TableRow className="tbrow">
+                    <TableCell className="nameCell" align="center">
+                      사원 이메일
+                    </TableCell>
+                    <TableCell>
+                      <input
+                        name="empMail"
+                        defaultValue={email}
+                        className={styles.input}
+                        // {...register('empMail', {
+                        //   // required: true,
+                        //   pattern:
+                        //     /^[A-Za-z0-9]([-]?[A-Za-z0-9])*@[A-Za-z0-9]([-]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/,
+                        // })}
+                        readOnly
+                      />
+                      <button onClick={() => setEmailOpen(true)}>변경</button>
+                    </TableCell>
+                    {errors.empMail &&
+                      errors.empMail.type === 'pattern' &&
+                      alert('이메일 형식이 맞지 않습니다.\n(XX@XXX.XXX)')}
+                  </TableRow>
+
                   {/* <TableRow className="tbrow">
                     <TableCell className="nameCell" align="center">
                       직위
@@ -144,40 +172,78 @@ function UpdateMine() {
                     <TableCell className="nameCell" align="center">
                       주소
                     </TableCell>
-                    <TableCell colSpan={3}>{empInfo.address}</TableCell>
+                    <TableCell colSpan={3}>
+                      <input
+                        name="address"
+                        defaultValue={empInfo.address}
+                        className={styles.input}
+                        {...register('address', {
+                          // required: true,
+                          maxLength: 50,
+                        })}
+                      />
+                    </TableCell>
+                    {errors.address &&
+                      errors.address.type === 'maxLength' &&
+                      alert('최대 글자 수를 초과했습니다.')}
                   </TableRow>
                   <TableRow className="tbrow">
                     <TableCell className="nameCell" align="center">
                       차량번호판
                     </TableCell>
-                    <TableCell colSpan={3}>{empInfo.licensePlate}</TableCell>
+                    <TableCell colSpan={3}>
+                      <input
+                        name="licensePlate"
+                        defaultValue={empInfo.licensePlate}
+                        className={styles.input}
+                        {...register('licensePlate', {
+                          // required: true,
+                          maxLength: 12,
+                        })}
+                      />
+                    </TableCell>
+                    {errors.licensePlate &&
+                      errors.licensePlate.type === 'maxLength' &&
+                      alert('최대 글자 수를 초과했습니다.')}
                   </TableRow>
                 </TableBody>
-                <TableCell
-                  colSpan={4}
-                  rowSpan={4}
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    border: '0',
-                  }}>
-                  <Link to={'/mypage'}>
-                    <Button style={{ float: 'right', marginBottom: '5px' }}>
-                      마이페이지
-                    </Button>
-                  </Link>
-
-                  <Button
-                    // onClick={() => {
-                    //   // updateHandle();
-                    // }}
-                    type="submit"
-                    sx={{ fontSize: 30, border: 1, mt: 1 }}>
-                    수정
-                  </Button>
-                </TableCell>
               </Table>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {/* <TableCell
+                    colSpan={4}
+                    rowSpan={4}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      border: '0',
+                    }}> */}
+                <Link to={'/mypage'}>
+                  <Button
+                    // style={{
+                    //   float: 'right',
+                    //   marginBottom: '5px',
+                    // }}
+                    sx={{ fontSize: 24, border: 1, mr: 3, height: 50, mt: 1 }}>
+                    마이페이지
+                  </Button>
+                </Link>
+
+                <Button
+                  // onClick={() => {
+                  //   // updateHandle();
+                  // }}
+                  type="submit"
+                  sx={{ fontSize: 24, border: 1, height: 50, mt: 1 }}>
+                  수정
+                </Button>
+                {/* </TableCell> */}
+              </div>
             </CardContent>
           )}
         </Card>
