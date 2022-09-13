@@ -31,6 +31,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
+import moment from 'moment';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -52,7 +53,7 @@ function PersonnelAppointment() {
   const [noApprover, setNoApprover] = useState([]);
 
   // 날짜 관련
-  const [startValue, setStartValue] = useState(null);
+  const [startValue, setStartValue] = useState(new Date());
 
   // 모달
   // const [openModal, setOpenModal] = useState(false);
@@ -61,8 +62,6 @@ function PersonnelAppointment() {
   // 사원 정보 context
   const [empInfo] = useOutletContext();
   const [inputData, setInputData] = useState({});
-
-  console.log(empInfo);
 
   useEffect(() => {
     if (units.length === 0) {
@@ -195,7 +194,7 @@ function PersonnelAppointment() {
             <tr className={styles.trcon}>
               <td className={styles.titlename}>인사명령일</td>
               <td className={styles.titlename} colSpan={4}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     label="일자 선택"
                     value={startValue}
@@ -206,7 +205,22 @@ function PersonnelAppointment() {
                     }}
                     renderInput={(params) => <TextField {...params} />}
                   />
-                </LocalizationProvider>
+                </LocalizationProvider> */}
+
+                <TextField
+                  id="startvalue"
+                  required
+                  label="시작일"
+                  type="date"
+                  value={startValue}
+                  onChange={(newValue) => {
+                    setStartValue(newValue.target.value);
+                  }}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </td>
             </tr>
           </thead>
@@ -258,7 +272,7 @@ function PersonnelAppointment() {
                     {units &&
                       units.map((unitInfo, index) => (
                         <MenuItem key={index} value={unitInfo}>
-                          {unitInfo.unitName}
+                          {unitInfo.unitName} ({unitInfo.unitCode})
                         </MenuItem>
                       ))}
                   </Select>

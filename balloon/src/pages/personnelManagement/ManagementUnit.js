@@ -10,12 +10,14 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Delete from '@mui/icons-material/Delete';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import QueueIcon from '@mui/icons-material/Queue';
+import UnitAddpage from './UnitAddpage';
 
 function ManagementUnit() {
   const [unitList, setUnitList] = useState([]);
   const [rowData, setRowData] = useState({});
   const [deleteChk, setDeleteChk] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openInsert, setOpenInsert] = useState(false);
 
   const handleClick = (data) => {
     setRowData(data.row);
@@ -90,9 +92,17 @@ function ManagementUnit() {
   return (
     <div style={{ marginTop: 70, marginBottom: 50 }}>
       <Container maxWidth="maxwidth">
-        <Link to={'/add/unit'}>
-          <AddBoxIcon fontSize="large" color="action" />
-        </Link>
+        <AddBoxIcon
+          fontSize="large"
+          color="action"
+          onClick={() => {
+            setOpenInsert(true);
+          }}
+        />
+        {openInsert && (
+          <UnitAddpage openInsert={openInsert} setOpenInsert={setOpenInsert} />
+        )}
+
         <Link to={'/add/units'}>
           <QueueIcon fontSize="large" color="action" />
         </Link>

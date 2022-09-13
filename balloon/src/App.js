@@ -151,6 +151,10 @@ function App() {
           <Route path="/boxes/dl" element={<DocumentList />} />
 
           {/* 상세 정보 */}
+          {['/doc/br/:docId', '/apvl/br/:docId'].map((path) => {
+            <Route path={path} key={path} element={<BusinessReportInfo />} />;
+          })}
+
           <Route path="/doc/br/:docId" element={<BusinessReportInfo />} />
           <Route path="/doc/tp/:docId" element={<BusinessTripInfo />} />
           <Route path="/doc/pa/:docId" element={<PersonnelAppointmentInfo />} />
