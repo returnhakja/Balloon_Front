@@ -145,7 +145,7 @@ function CalendarInsert({
     (people) => !botroomExist.includes(people)
   );
 
-  //새로생성될 채팅방에 알림보내기
+  //처음생성될 채팅방에 알림보내기
   const botroomMsg = (add, client) => {
     let newchatScheduleList = [];
     add.map((add) => {
@@ -215,10 +215,6 @@ function CalendarInsert({
     };
 
     chatScheduleSave(chatScheduleList);
-  };
-
-  const sleep = (ms) => {
-    return new Promise((r) => setTimeout(r, ms));
   };
 
   return (

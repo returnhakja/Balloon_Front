@@ -1,10 +1,10 @@
 import styles from '../../css/chat/Chat.module.css';
 import { sendExit } from '../../utils/ChatUtils';
 import { onExitRoom, onHCupdate } from '../../context/ChatAxios';
-import { useOutletContext } from 'react-router-dom';
-import ChatStomp from '../chat/ChatStomp';
+import ChatStomp from './ChatStomp';
 import Button from '@mui/material/Button';
 import { Box, Modal } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 const styleBox = {
   position: 'absolute',
@@ -19,14 +19,15 @@ const styleBox = {
   padding: 4,
 };
 
-function ExitChatroom({
+export default function ExitChatroom({
   openExitChat,
   setOpenExitChat,
   chatroomId,
   chatroomName,
   headCount,
+  empInfo,
+  setChatStatus,
 }) {
-  const [empInfo] = useOutletContext();
   //모달닫기
   const handleClose = () => setOpenExitChat(false);
   //socket연결
@@ -60,8 +61,8 @@ function ExitChatroom({
                     sendExit(client, chatroomId, empInfo),
                     onHCupdate(chatroomId, chatroomName, headCount)
                   );
-
-                  window.location.href = '/chatlist';
+                  setChatStatus('chatEmpList');
+                  handleClose();
                 };
                 return roomDelete();
               }}>
@@ -73,4 +74,3 @@ function ExitChatroom({
     </Modal>
   );
 }
-export default ExitChatroom;
