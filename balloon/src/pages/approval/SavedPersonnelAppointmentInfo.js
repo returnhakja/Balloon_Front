@@ -66,7 +66,7 @@ function SavedPersonnelAppointmentInfo() {
 
   useEffect(() => {
     getApvlByDocId(params.docId, setApprover, setApprovalList, setSvApprover);
-  }, []);
+  }, [mEmp, unit, posi]);
   console.log(empInfo);
   useEffect(() => {
     if (units.length === 0) {
@@ -185,7 +185,7 @@ function SavedPersonnelAppointmentInfo() {
             결재선설정
           </button>
         </div>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
+
         {openapprovalModal && (
           <ModalApproval
             openapprovalModal={openapprovalModal}
@@ -318,10 +318,10 @@ function SavedPersonnelAppointmentInfo() {
                       label="발령부서를 선택하세요"
                       value={unit2}
                       placeholder=" 발령부서를 선택하세요"
+                      defaultValue={unit2}
                       onChange={(e) => {
                         console.log(e);
                         setUnit2(e.target.value);
-                        // console.log(e.target.value);
                       }}
 
                       // className={styles.inputtext}
@@ -429,7 +429,7 @@ function SavedPersonnelAppointmentInfo() {
                           deleteApvlByDocIdAndEmpId(params.docId, data.empId)
                         );
                       }
-                      approvalList(
+                      insertApproval(
                         params.docId,
                         0,
                         approver,
