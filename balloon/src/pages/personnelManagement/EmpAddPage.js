@@ -134,10 +134,11 @@ function EmpAddPage() {
             <Button
               onClick={idCheckHandle}
               sx={{
-                width: '90px',
-                background: '#A6A6A6',
+                width: '100px',
+                // background: '#A6A6A6',
                 height: '50px',
                 mt: 1,
+                border: 1,
               }}>
               중복 확인
             </Button>
@@ -163,9 +164,9 @@ function EmpAddPage() {
             <Button
               onClick={toggleHidePassword}
               sx={{
-                width: '90px',
+                width: '100px',
                 mt: 1,
-                background: '#A6A6A6',
+                border: 1,
                 height: '50px',
               }}>
               {hidePassword ? '보이기' : '숨기기'}

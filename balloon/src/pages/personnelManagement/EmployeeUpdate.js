@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { get, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Label } from '../../components/Label';
 import { positionArr, responseArr, gradeArr } from '../../context/EmpFunc';
 import {
@@ -8,7 +8,7 @@ import {
 } from '../../context/EmployeeAxios';
 import { findUnitList } from '../../context/UnitAxios';
 import styles from '../../css/management/Employee.module.css';
-import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+import { Box, Button, Modal } from '@mui/material';
 
 const SelectUnit = React.forwardRef(
   ({ name, label, unitList, unit, setUnit }, ref) => {
@@ -92,7 +92,7 @@ export default function EmployeeUpdate({ open, setOpen, empId }) {
 
   const {
     register,
-    watch,
+    // watch,
     formState: { errors },
     handleSubmit,
   } = useForm();
