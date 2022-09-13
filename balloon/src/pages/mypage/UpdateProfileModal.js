@@ -4,6 +4,7 @@ import { Avatar, Button, Card, Typography } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { Box, CardContent, Modal } from '@mui/material';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import { uploadProfile } from '../../context/EmployeeAxios';
 
 const style = {
   position: 'absolute',
@@ -23,17 +24,57 @@ const style = {
   p: 4,
 };
 
-export default function ProfileUpdateModal({ open, setOpen, empId, photo }) {
+export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
+  const [file, setFile] = useState('');
   const handleClose = () => setOpen(false);
-  console.log(photo);
-  const onSubmit = (value) => {
-    console.log('empId', empId);
-    // console.log('file', value.target);
-  }; // your form submit function which will invoke after successful validation
+  // console.log(photo);
+
+  // const onSubmit = (e) => {
+  //   console.log('aaa');
+  // }; // your form submit function which will invoke after successful validation
+
+  const upload = () => {
+    // console.log('empId', empId);
+
+    console.log('file', file);
+    // e.target['file']
+    if (file.length !== 0) {
+      uploadProfile(file, empId);
+    } else {
+      alert('사진을 넣어주세요!!');
+    }
+  };
 
   const handleFileInput = async (e) => {
-    // const file = e.target.files[0];
-    // console.log('file', file);
+    console.log('aaaaaaaaaaa');
+    // console.log("e.target['file']", e.target['file']);
+    console.log('e.target.files[0]', e.target.files[0]);
+    const fl = e.target.files[0];
+    const ss = document.getElementById('getFile');
+    console.log('ss', ss.value);
+    const formData = new FormData();
+    const dd = {
+      name: fl.name,
+      lastModifiedDate: fl.lastModifiedDate,
+      lastModified: fl.lastModified,
+      size: fl.size,
+      type: fl.type,
+      webkitRelativePath: fl.webkitRelativePath,
+    };
+
+    // formData.append('file', e.target.files[0]);
+    formData.append('file', e.target.files[0]);
+    console.log(dd);
+    // for (let value of formData.values()) {
+    //   console.log('value', value);
+    // }
+    setFile(formData);
+
+    // const fileObj = e.target['files'].files[0];
+    // console.log('file', fileObj);
+    // setFile(fileObj);
+    // const formData = new FormData();
+    // formData.append('file', fileObj);
     // const file_key = file.name.replace('.png', '');
     // // await Api.put(`user/${ownerData._id}`, {
     // //   image: ownerData._id,
@@ -69,7 +110,7 @@ export default function ProfileUpdateModal({ open, setOpen, empId, photo }) {
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description">
-          <Box component="form" onSubmit={onSubmit()} sx={style}>
+          <Box component="form" encType="multipart/form-data" sx={style}>
             <Card>
               <div
                 style={{
@@ -153,14 +194,22 @@ export default function ProfileUpdateModal({ open, setOpen, empId, photo }) {
                 )}
               </CardContent>
 
-              <input type="file" onChange={handleFileInput} />
               <div>
+                <input
+                  id="getFile"
+                  type="file"
+                  onChange={handleFileInput}
+                  accept="image/*"
+                />
                 <Button
                   onClick={handleClose}
                   sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>
                   취소
                 </Button>
-                <Button type="submit" sx={{ fontSize: 30, border: 1, mt: 1 }}>
+                <Button
+                  // type="submit"
+                  onClick={() => upload()}
+                  sx={{ fontSize: 30, border: 1, mt: 1 }}>
                   수정
                 </Button>
               </div>

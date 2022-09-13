@@ -190,8 +190,72 @@ export const updateEmployee = async (updateData) => {
 
 // 사번으로 사원 삭제
 export const deleteEmployee = async (data) => {
-  const url = '/employee/';
-  const urlStr = url + data.empId;
-  await axios.delete(urlStr).catch((error) => console.log(error));
+  const url = `/employee/${data.empId}`;
+  await axios.delete(url).catch((error) => console.log(error));
   window.location.href = '/management/employee';
+};
+
+export const uploadProfile = async (file, empId) => {
+  console.log('empId', empId);
+  console.log('file', file);
+
+  for (let value of file.values()) {
+    console.log('value', value);
+  }
+  // const url = `/file/upload/profile/${empId}`;
+  const url = '/file/upload/profile/' + empId;
+  console.log(url);
+  const header = {
+    // headers: { 'Content-Type': 'multipart/form-data' },
+    // encType: 'multipart/form-data',
+    // name: 'file',
+    // file: file,
+    contentType: 'multipart/form-data',
+    // 출처: https://haenny.tistory.com/280 [Haenny:티스토리]
+  };
+  // const header = { headers: { 'Content-Type': 'application/json' } };
+  const body = { 'form-data': { file: file } };
+
+  // const formData = new FormData();
+  // formData.append('files', file);
+
+  // const props = {
+  //   name: 'file',
+  //   action: '/api/file/upload',
+  //   headers: {
+  //     Authorization: `Bearer ${token}`,
+  //     'Content-Type': 'multipart/form-data',
+  //   },
+  // };
+  // console.log(file);
+  // console.log(formData);
+  const options = {
+    method: 'post',
+    url: url,
+    // data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  };
+  // await axios({
+  //   method: 'post',
+  //   url: url,
+  //   data: formData,
+  //   headers: {
+  //     'Content-Type': 'multipart/form-data',
+  //   },
+  // });
+
+  await axios
+    .post(
+      url,
+      {
+        headers: {
+          Accept: 'multipart/form-data',
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+      file
+    )
+    .catch((error) => console.log(error));
 };

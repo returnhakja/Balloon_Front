@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import ProfileUpdateModal from './ProfileUpdateModal';
+import UpdateProfileModal from './UpdateProfileModal';
 import {
   Avatar,
   Box,
@@ -66,7 +66,7 @@ function MyPage() {
                 </Button>
               </div>
               {profileOpen && (
-                <ProfileUpdateModal
+                <UpdateProfileModal
                   open={profileOpen}
                   setOpen={setProfileOpen}
                   empId={empInfo.empId}
