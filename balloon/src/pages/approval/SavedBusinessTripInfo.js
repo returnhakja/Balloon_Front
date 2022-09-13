@@ -10,6 +10,7 @@ import {
   getApvlByDocId,
   getApvlId,
   getBizTpByBizTpId,
+  getBizTpEmpByBizTpId,
   insertApproval,
   insertBizTp,
 } from '../../context/ApprovalAxios';
@@ -21,7 +22,11 @@ import {
   Card,
   CardContent,
   Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   TextField,
 } from '@mui/material';
 import { Box } from '@mui/system';
@@ -31,6 +36,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
 import { Typography } from 'antd';
+import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -51,6 +57,9 @@ function SavedBusinessTripInfo() {
   const [noApprover, setNoApprover] = useState([]);
   const [svApprover, setSvApprover] = useState([]);
   const [approvalList, setApprovalList] = useState([]);
+  const [bizTpEmp, setBizTpEmp] = useState({});
+  const [mEmpInfo, setMEmpInfo] = useState('');
+  const [mEmp, setMEmp] = useState('');
 
   const params = useParams();
   let rmApprover = [];
@@ -59,10 +68,15 @@ function SavedBusinessTripInfo() {
   // const endDate = endValue && document.getElementById('endValue').value;
 
   console.log(inputData.startDate);
-  console.log(startValue);
+  console.log(bizTpEmp);
+  console.log(mEmp);
 
   useEffect(() => {
+    getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
     getApvlByDocId(params.docId, setApprover, setApprovalList, setSvApprover);
+
+    getBizTpEmpByBizTpId(params.docId, setBizTpEmp);
+
     setStartValue(inputData.startDate);
     setEndValue(inputData.endDate);
   }, [inputData]);
@@ -210,7 +224,27 @@ function SavedBusinessTripInfo() {
             <tr align="center">
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
-                이거 일단 없음
+                <FormControl fullWidth>
+                  <InputLabel>구성원을 설정해주세요</InputLabel>
+                  <Select
+                    id="mEmp"
+                    label="구성원을 선택하세요"
+                    value={mEmp}
+                    placeholder="구성원을 선택하세요"
+                    onChange={(e) => {
+                      setMEmp(e.target.value);
+                    }}
+
+                    // className={styles.inputtext}
+                  >
+                    {mEmpInfo.length !== 0 &&
+                      mEmpInfo.map((mEmps, index) => (
+                        <MenuItem key={index} value={mEmps}>
+                          {mEmps.empName} ({mEmps.empId})
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
               </td>
               <td className={styles.titlename}></td>
             </tr>

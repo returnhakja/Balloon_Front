@@ -47,6 +47,7 @@ function DeclaredBusinessTripInfo() {
   }, [params]);
 
   console.log(bizTpInfo);
+  console.log(bizTpEmp);
 
   return (
     <SideNavigation>

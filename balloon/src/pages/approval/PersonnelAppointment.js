@@ -53,7 +53,7 @@ function PersonnelAppointment() {
   const [noApprover, setNoApprover] = useState([]);
 
   // 날짜 관련
-  const [startValue, setStartValue] = useState(null);
+  const [startValue, setStartValue] = useState(new Date());
 
   // 모달
   // const [openModal, setOpenModal] = useState(false);
@@ -62,9 +62,6 @@ function PersonnelAppointment() {
   // 사원 정보 context
   const [empInfo] = useOutletContext();
   const [inputData, setInputData] = useState({});
-
-  let date = startValue && document.getElementById('startvalue').value;
-  console.log(date);
 
   useEffect(() => {
     if (units.length === 0) {
@@ -215,8 +212,9 @@ function PersonnelAppointment() {
                   required
                   label="시작일"
                   type="date"
+                  value={startValue}
                   onChange={(newValue) => {
-                    setStartValue(newValue);
+                    setStartValue(newValue.target.value);
                   }}
                   sx={{ width: 250 }}
                   InputLabelProps={{
@@ -274,7 +272,7 @@ function PersonnelAppointment() {
                     {units &&
                       units.map((unitInfo, index) => (
                         <MenuItem key={index} value={unitInfo}>
-                          {unitInfo.unitName}
+                          {unitInfo.unitName} ({unitInfo.unitCode})
                         </MenuItem>
                       ))}
                   </Select>
@@ -336,7 +334,7 @@ function PersonnelAppointment() {
                       3,
                       inputData,
                       empInfo,
-                      date,
+                      startValue,
                       mEmp,
                       unit,
                       posi,
@@ -363,7 +361,7 @@ function PersonnelAppointment() {
                       1,
                       inputData,
                       empInfo,
-                      date,
+                      startValue,
                       mEmp,
                       unit,
                       posi,
