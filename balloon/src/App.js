@@ -66,23 +66,24 @@ import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
 import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
 
-import MyPage from './pages/login/MyPage';
+import MyPage from './pages/mypage/MyPage';
+import UpdateMine from './pages/mypage/UpdateMine';
+import Profile from './pages/mypage/Profile';
+import Profile2 from './pages/mypage/Profile2';
 
 import NotFound from './pages/NotFound';
-import UpdateMine from './pages/login/UpdateMine';
-import Profile from './pages/login/Profile';
-import Profile2 from './pages/login/Profile2';
+import AdminRoutes from './components/AdminRoutes';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
   const [isLogin, setLogin] = useState(null);
-
+  const role = empInfo.userRoleGrade;
   // 채팅방 초대하기
   const [invite, setInvite] = useState([]);
-
+  const [workStatus, setWorkStatus] = useState(false);
   useEffect(() => {
-    const l = localStorage.getItem('logged');
-    l && JSON.parse(l) ? setLogin(true) : setLogin(false);
+    const logged = localStorage.getItem('logged');
+    logged && logged === 'true' ? setLogin(true) : setLogin(false);
   }, []);
 
   useEffect(() => {
@@ -103,7 +104,12 @@ function App() {
             isLogin={isLogin}
           />
         }>
-        <Route index element={<MainPage />} />
+        <Route
+          index
+          element={
+            <MainPage workStatus={workStatus} setWorkStatus={setWorkStatus} />
+          }
+        />
         {/* 로그인 */}
         {!isLogin ? (
           <Route
@@ -242,15 +248,27 @@ function App() {
           <Route path="/createroom" element={<CreateRoom invite={invite} />} />
           <Route path="/chatnotice" element={<ChatNotice />} />
 
-          {/* 조직관리 */}
-          <Route path="/management/unit" element={<ManagementUnit />} />
-          <Route path="/add/units" element={<UnitListAddPage />} />
-          <Route path="/add/unit" element={<UnitAddpage />} />
+          <Route
+            element={
+              <AdminRoutes
+                empInfo={empInfo}
+                setEmpInfo={setEmpInfo}
+                role={role}
+              />
+            }>
+            {/* 조직관리 */}
+            <Route path="/management/unit" element={<ManagementUnit />} />
+            <Route path="/add/units" element={<UnitListAddPage />} />
+            <Route path="/add/unit" element={<UnitAddpage />} />
 
-          {/* 사원관리 */}
-          <Route path="/management/employee" element={<ManagementEmployee />} />
-          <Route path="/add/employee" element={<EmpAddPage />} />
-          <Route path="/add/employees" element={<EmpListAddPage />} />
+            {/* 사원관리 */}
+            <Route
+              path="/management/employee"
+              element={<ManagementEmployee />}
+            />
+            <Route path="/add/employee" element={<EmpAddPage />} />
+            <Route path="/add/employees" element={<EmpListAddPage />} />
+          </Route>
 
           {/* 마이페이지 */}
           <Route path="/mypage" element={<MyPage />} />

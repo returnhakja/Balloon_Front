@@ -15,6 +15,8 @@ import {
   TableCell,
   TableRow,
 } from '@mui/material';
+import { updateEmployee } from '../../context/EmployeeAxios';
+import UpdateEmailModal from './UpdateEmailModal';
 
 function UpdateMine() {
   const [empInfo] = useOutletContext();
@@ -26,23 +28,27 @@ function UpdateMine() {
   } = useForm();
   const [email, setEmail] = useState(empInfo.empMail);
   const [emailOpen, setEmailOpen] = useState(false);
+  // useEffect(() => {
+  //   console.log(empInfo);
+  // }, []);
+  const onSubmit = (value) => {
+    const updateData = {
+      empId: empInfo.empId,
+      mobile: !!value.mobile ? value.mobile : '미입력',
+      address: !!value.address ? value.address : '미입력',
+      licensePlate: !!value.licensePlate ? value.licensePlate : '미입력',
+    };
 
-  useEffect(() => {
-    console.log(empInfo);
-  }, []);
+    console.log(updateData);
 
-  const eventHandler = () => {
-    console.log(empInfo);
-    const photo = document.getElementById('photo');
-
-    console.log(photo.files[0].name);
+    updateEmployee(updateData);
   };
+
+  // your form submit function which will invoke after successful validation
 
   return (
     <Container>
-      <h1 style={{ display: 'flex', justifyContent: 'center' }}>
-        내 정보 수정
-      </h1>
+      <h1>내 정보 수정</h1>
       <Box
         sx={{
           marginTop: '1%',
@@ -51,16 +57,17 @@ function UpdateMine() {
           justifyContent: 'center',
           alignContent: 'center',
           margin: '30px 0px 30px 0px',
-        }}>
+        }}
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}>
         <Card>
           {empInfo.length !== 0 && (
-            // <CardContent sx={{ display: 'flex' }}>
-            <CardContent>
+            <CardContent sx={{ display: 'flex' }}>
               <div
                 style={{
                   margin: '15px',
-                  display: 'flex',
                   alignItems: 'center',
+                  display: 'flex',
                   justifyContent: 'center',
                   flexWrap: 'wrap',
                 }}>
@@ -86,10 +93,6 @@ function UpdateMine() {
                       사원명
                     </TableCell>
                     <TableCell>{empInfo.empName}</TableCell>
-                    {/* <TableCell className="nameCell" align="center">
-                      부서명
-                    </TableCell>
-                    <TableCell>{empInfo.unit.unitName}</TableCell> */}
                   </TableRow>
                   <TableRow className="tbrow">
                     <TableCell className="nameCell" align="center">
@@ -113,32 +116,7 @@ function UpdateMine() {
                       errors.empMail.type === 'pattern' &&
                       alert('이메일 형식이 맞지 않습니다.\n(XX@XXX.XXX)')}
                   </TableRow>
-
-                  {/* <TableRow className="tbrow">
-                    <TableCell className="nameCell" align="center">
-                      직위
-                    </TableCell>
-                    <TableCell>{empInfo.position}</TableCell>
-                    <TableCell className="nameCell" align="center">
-                      직책
-                    </TableCell>
-                    <TableCell>{empInfo.responsibility}</TableCell>
-                  </TableRow> */}
-                  {/* <TableRow className="tbrow">
-                    <TableCell className="nameCell" align="center">
-                      월급
-                    </TableCell>
-                    <TableCell>{empInfo.salary}</TableCell>
-                    <TableCell className="nameCell" align="center">
-                      상여금
-                    </TableCell>
-                    <TableCell>{empInfo.commission}</TableCell>
-                  </TableRow> */}
                   <TableRow className="tbrow">
-                    {/* <TableCell className="nameCell" align="center">
-                      사내전화번호
-                    </TableCell>
-                    <TableCell>{empInfo.empBell}</TableCell> */}
                     <TableCell className="nameCell" align="center">
                       핸드폰번호
                     </TableCell>
@@ -148,26 +126,18 @@ function UpdateMine() {
                         defaultValue={empInfo.mobile}
                         className={styles.input}
                         {...register('mobile', {
-                          required: true,
+                          // required: true,
                           maxLength: 15,
                           pattern: /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/,
                         })}
                       />
-                      {errors.mobile &&
-                        errors.mobile.type === 'pattern' &&
-                        alert(
-                          '전화번호 형식이 맞지 않습니다.\n(XX-XXX-XXXX, XX-XXXX-XXXX)\n(XXX-XXX-XXXX, XXX-XXXX-XXXX)'
-                        )}
                     </TableCell>
+                    {errors.mobile &&
+                      errors.mobile.type === 'pattern' &&
+                      alert(
+                        '전화번호 형식이 맞지 않습니다.\n(XX-XXX-XXXX, XX-XXXX-XXXX)\n(XXX-XXX-XXXX, XXX-XXXX-XXXX)'
+                      )}
                   </TableRow>
-                  {/* <TableRow className="tbrow">
-                    <TableCell className="nameCell" align="center">
-                      입사 일자
-                    </TableCell>
-                    <TableCell colSpan={3} align="center">
-                      {empInfo.hiredate}
-                    </TableCell>
-                  </TableRow> */}
                   <TableRow className="tbrow">
                     <TableCell className="nameCell" align="center">
                       주소
@@ -206,44 +176,39 @@ function UpdateMine() {
                       errors.licensePlate.type === 'maxLength' &&
                       alert('최대 글자 수를 초과했습니다.')}
                   </TableRow>
+                  <TableRow className="tbrow">
+                    <TableCell
+                      colSpan={4}
+                      rowSpan={4}
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        border: '0',
+                      }}>
+                      <Link to={'/mypage'}>
+                        <Button style={{ float: 'right', marginBottom: '5px' }}>
+                          마이페이지
+                        </Button>
+                      </Link>
+
+                      <Button
+                        type="submit"
+                        sx={{ fontSize: 30, border: 1, mt: 1 }}>
+                        수정
+                      </Button>
+                    </TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                {/* <TableCell
-                    colSpan={4}
-                    rowSpan={4}
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      border: '0',
-                    }}> */}
-                <Link to={'/mypage'}>
-                  <Button
-                    // style={{
-                    //   float: 'right',
-                    //   marginBottom: '5px',
-                    // }}
-                    sx={{ fontSize: 24, border: 1, mr: 3, height: 50, mt: 1 }}>
-                    마이페이지
-                  </Button>
-                </Link>
-
-                <Button
-                  // onClick={() => {
-                  //   // updateHandle();
-                  // }}
-                  type="submit"
-                  sx={{ fontSize: 24, border: 1, height: 50, mt: 1 }}>
-                  수정
-                </Button>
-                {/* </TableCell> */}
-              </div>
+              {emailOpen && (
+                <UpdateEmailModal
+                  open={emailOpen}
+                  setOpen={setEmailOpen}
+                  empId={empInfo.empId}
+                  photo={empInfo.email ? empInfo.email : ''}
+                />
+              )}
             </CardContent>
           )}
         </Card>

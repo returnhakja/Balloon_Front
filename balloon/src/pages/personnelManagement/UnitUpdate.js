@@ -6,7 +6,7 @@ import {
   updateUnit,
 } from '../../context/UnitAxios';
 import styles from '../../css/Component.module.css';
-import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+import { Box, Button, Modal, Typography } from '@mui/material';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 
 const style = {
@@ -21,18 +21,18 @@ const style = {
   p: 4,
 };
 
-const Input = ({ label, register, required }) => (
-  <>
-    <Typography
-      id="modal-modal-title"
-      variant="h6"
-      component="h6"
-      sx={{ mb: 2, mt: 2 }}>
-      {label}
-    </Typography>
-    <input className={styles.input} {...register(label, { required })} />
-  </>
-);
+// const Input = ({ label, register, required }) => (
+//   <>
+//     <Typography
+//       id="modal-modal-title"
+//       variant="h6"
+//       component="h6"
+//       sx={{ mb: 2, mt: 2 }}>
+//       {label}
+//     </Typography>
+//     <input className={styles.input} {...register(label, { required })} />
+//   </>
+// );
 
 const Select = React.forwardRef(
   ({ name, label, unit, higher, parentCode, setParentCode }, ref) => {
@@ -78,7 +78,7 @@ const Select = React.forwardRef(
 export default function UnitUpdate({ open, setOpen, unitCode }) {
   const {
     register,
-    watch,
+    // watch,
     formState: { errors },
     handleSubmit,
   } = useForm();
@@ -88,7 +88,6 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
   const [unit, setUnit] = useState({});
   const [higher, setHigher] = useState([]);
   const [parentCode, setParentCode] = useState('0');
-  // };
 
   const onSubmit = (unitInfo) => {
     const updateData = {
