@@ -1,35 +1,70 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import Banner from './banner.svg';
-import styles from '../css/nav/Navbar.module.css';
-import { Button } from '@mui/material';
 import {
   // endlessWork,
   endWork,
   findWorkIn,
+  findWorkOff,
+  findWorkOn,
   startWork,
 } from '../context/EmpTimeAxios';
+import Banner from './banner.svg';
+import styles from '../css/nav/Navbar.module.css';
+import { Button } from '@mui/material';
+import moment from 'moment';
+import 'moment/locale/ko';
 
 function MainPage({ workStatus, setWorkStatus }) {
   const [empInfo] = useOutletContext();
+  const [inCnt, setInCnt] = useState(0);
+  const [outCnt, setOutCnt] = useState(0);
+
+  // 시간 설정
+  const nowTime = moment().format('HHmmss');
+  const inTime = 183000;
+  const outTime = 210500;
+
+  useEffect(() => {
+    if (empInfo.length !== 0) {
+      if (!!empInfo) {
+        findWorkOn(empInfo.empId, setInCnt);
+        findWorkOff(empInfo.empId, setOutCnt);
+        findWorkIn(empInfo.empId, setWorkStatus);
+      }
+    }
+  }, [empInfo.length, inCnt, outCnt, workStatus]);
 
   const WorkStart = () => {
-    empInfo && startWork(empInfo.empId, setWorkStatus);
+    console.log(inCnt);
+    console.log(typeof inCnt);
+    if (inCnt === 1) {
+      alert('이미 출근 등록을 하였습니다!');
+    } else {
+      if (nowTime <= inTime) {
+        empInfo && startWork(empInfo.empId, setWorkStatus);
+      } else {
+        alert('18시 30분이 지났습니다!!!');
+      }
+    }
   };
 
   const WorkEnd = () => {
-    empInfo && endWork(empInfo.empId, setWorkStatus);
+    console.log(outCnt);
+    console.log(typeof outCnt);
+    if (outCnt === 1) {
+      alert('이미 퇴근 등록을 하였습니다!');
+    } else {
+      // if (nowTime <= outTime) {
+      //   empInfo && endWork(empInfo.empId, setWorkStatus);
+      // } else {
+      //   alert('근태기록이 끝났습니다!!');
+      // }
+    }
   };
 
   // const WorkEndless = () => {
   //   empInfo && endlessWork(empInfo.empId, setWorkStatus);
   // };
-
-  useEffect(() => {
-    if (empInfo.length !== 0) {
-      !!empInfo && findWorkIn(empInfo.empId, setWorkStatus);
-    }
-  }, [empInfo.length, workStatus]);
 
   return (
     <div>
