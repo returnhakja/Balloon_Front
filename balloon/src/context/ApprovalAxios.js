@@ -72,7 +72,9 @@ export const getBizTpByBizTpId = async (bizTpId, setBizTpInfo) => {
 export const getBizTpEmpByBizTpId = async (bizTpId, setBizTpEmp) => {
   const url = '/api/biztpemp/';
   const str = url + bizTpId;
+  console.log(bizTpId);
   await axios.get(str).then((res) => {
+    console.log(res);
     setBizTpEmp(res.data);
   });
 };
@@ -244,12 +246,13 @@ export const insertPA = async (
   const pAId = document.getElementById('PAId');
   const pATitle = document.getElementById('PATitle');
   const pAContent = document.getElementById('PAContent');
-
   const url = '/api/pa';
 
   const headers = {
     'Content-Type': 'application/json',
   };
+
+  console.log(unit.slice(-9, -1));
 
   inputData = {
     personnelAppointmentId: docId,
@@ -258,15 +261,17 @@ export const insertPA = async (
     documentStatus: docStatus,
     personnelDate: startDate,
     position: posi,
-    unitName: unit.unitName,
+    unitName: unit.unitName ? unit.unitName : unit.slice(0, -11),
     movedEmpName: mEmp.empName,
     empName: empInfo.empName,
     movedEmp: {
       empId: mEmp && mEmp.empId,
     },
-    unit: {
-      unitCode: empInfo.unit && empInfo.unit.unitCode,
-    },
+    unit: unit.unitCode
+      ? unit
+      : {
+          unitCode: unit.slice(-9, -1),
+        },
     emp: {
       empId: empInfo.empId,
     },
