@@ -13,8 +13,8 @@ function Save() {
   const [docStatus, setDocStatus] = useState(0);
 
   useEffect(() => {
-    getDocsByEmp(empInfo.empId, docStatus, setDocList);
     docList.length === 0 && setDocStatus(3);
+    getDocsByEmp(empInfo.empId, docStatus, setDocList);
   }, [empInfo, docStatus, docList.length]);
 
   function getdocId(params) {
