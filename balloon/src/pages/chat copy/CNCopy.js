@@ -22,9 +22,9 @@ function CNCopy({ setChatStatus, empInfo }) {
 
   //마지막으로 보낸 채팅list가져오기
   useEffect(() => {
-    if (empId) {
-      onChatroom(setChatroom, empId);
-    }
+    // if (empId) {
+    //   onChatroom(setChatroom, empId);
+    // }
   }, [empId]);
 
   return (
@@ -33,7 +33,12 @@ function CNCopy({ setChatStatus, empInfo }) {
         <div className={styles.ChatText}>공지 사항</div>
       </div>
       <div className={styles.roomContanar}>
-        {chatroom.map((chat, index) => {
+        <div>
+          <span className={styles.chatName}>
+            <p>아직 공지사항이 없습니다.</p>
+          </span>
+        </div>
+        {/* {chatroom.map((chat, index) => {
           return (
             <div className={styles.roomcon} key={index}>
               <Box className={styles.chatRoomBox}>
@@ -95,7 +100,7 @@ function CNCopy({ setChatStatus, empInfo }) {
               </Box>
             </div>
           );
-        })}
+        })} */}
       </div>
     </div>
   );
