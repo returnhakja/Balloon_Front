@@ -68,7 +68,7 @@ module.exports = function (app) {
   app.use(
     '/time',
     createProxyMiddleware({
-      target: 'http://54.180.148.125/:8080',
+      target: 'http://54.180.148.125:8080',
       // target: 'http://localhost:8080',
       changeOrigin: true,
     })
@@ -76,7 +76,7 @@ module.exports = function (app) {
   app.use(
     '/file',
     createProxyMiddleware({
-      target: 'http://54.180.148.125/:8080',
+      target: 'http://54.180.148.125:8080',
       // target: 'http://localhost:8080',
       changeOrigin: true,
     })
