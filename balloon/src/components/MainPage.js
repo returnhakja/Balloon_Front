@@ -3,16 +3,15 @@ import { Link, useOutletContext } from 'react-router-dom';
 import {
   // endlessWork,
   endWork,
-  findWorkIn,
   findWorkOff,
   findWorkOn,
   startWork,
 } from '../context/EmpTimeAxios';
+import moment from 'moment';
+import 'moment/locale/ko';
 import Banner from './banner.svg';
 import styles from '../css/nav/Navbar.module.css';
 import { Button } from '@mui/material';
-import moment from 'moment';
-import 'moment/locale/ko';
 
 function MainPage() {
   const [empInfo] = useOutletContext();
@@ -21,8 +20,6 @@ function MainPage() {
 
   // 시간 설정
   const nowTime = moment().format('HHmmss');
-  const inTime = 183000;
-  const outTime = 210500;
 
   useEffect(() => {
     if (empInfo.length !== 0) {
@@ -37,7 +34,7 @@ function MainPage() {
     if (inCnt === 1) {
       alert('이미 출근 등록을 하였습니다!');
     } else {
-      if (nowTime <= inTime) {
+      if (nowTime <= process.env.REACT_APP_wORK_IN) {
         empInfo && startWork(empInfo.empId);
         alert('출근 등록을 하였습니다!');
       } else {
@@ -53,7 +50,7 @@ function MainPage() {
       if (outCnt === 1) {
         alert('이미 퇴근 등록을 하였습니다!');
       } else {
-        if (nowTime <= outTime) {
+        if (nowTime <= process.env.REACT_APP_wORK_IN) {
           empInfo && endWork(empInfo.empId);
           alert('퇴근 등록을 하였습니다!');
         } else {
