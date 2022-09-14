@@ -34,7 +34,7 @@ function MainPage() {
     if (inCnt === 1) {
       alert('이미 출근 등록을 하였습니다!');
     } else {
-      if (nowTime <= process.env.REACT_APP_wORK_IN) {
+      if (nowTime <= process.env.REACT_APP_WORK_IN) {
         empInfo && startWork(empInfo.empId);
         alert('출근 등록을 하였습니다!');
       } else {
@@ -50,7 +50,7 @@ function MainPage() {
       if (outCnt === 1) {
         alert('이미 퇴근 등록을 하였습니다!');
       } else {
-        if (nowTime <= process.env.REACT_APP_wORK_IN) {
+        if (nowTime <= process.env.REACT_APP_WORK_IN) {
           empInfo && endWork(empInfo.empId);
           alert('퇴근 등록을 하였습니다!');
         } else {
