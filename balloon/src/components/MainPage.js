@@ -42,7 +42,7 @@ function MainPage() {
     } else {
       getDCount(empInfo.empId, setDDCount, setDCCount, setDSCount, setDRCount);
     }
-  }, [empInfo.empId, DDCount, DCCount, DSCount, DRCount]);
+  }, [empInfo.empId, DDCount, DCCount, DSCount, DRCount, countDArr]);
 
   console.log(DDCount, DCCount, DSCount, DRCount);
   const data = {
@@ -164,6 +164,11 @@ function MainPage() {
                   width: 70,
                   height: 70,
                 }}
+                src={
+                  !!empInfo.photo
+                    ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
+                    : ''
+                }
               />
 
               <p>{empInfo.empName + ' ' + empInfo.position}</p>
