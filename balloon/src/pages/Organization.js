@@ -14,6 +14,7 @@ function Organization() {
       findUnitList(setUnits);
     } else {
       console.log(units[0].unitName);
+      console.log(units);
     }
   }, [units]);
 

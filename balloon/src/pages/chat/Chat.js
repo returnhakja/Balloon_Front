@@ -9,6 +9,7 @@ import {
 } from '../../context/ChatAxios';
 import styles from '../../css/chat/Chat.module.css';
 import {
+  Avatar,
   Button,
   Collapse,
   List,
@@ -293,12 +294,26 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
                   </div>
                 ) : (
                   <div key={index} className={styles.othermessage}>
-                    <div>{msg.employee.empName}</div>
-                    <div className={styles.contentContan}>
-                      <div className={styles.othercontent}>
-                        {msg.chatContent}
+                    <Avatar
+                      sx={{
+                        width: 30,
+                        height: 30,
+                        marginRight: 1,
+                      }}
+                      src={
+                        !!msg.employee.photo
+                          ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${msg.employee.photo}`
+                          : ''
+                      }
+                    />
+                    <div>
+                      <div>{msg.employee.empName}</div>
+                      <div className={styles.contentContan}>
+                        <div className={styles.othercontent}>
+                          {msg.chatContent}
+                        </div>
+                        <div className={styles.time}>{chatTime}</div>
                       </div>
-                      <div className={styles.time}>{chatTime}</div>
                     </div>
                   </div>
                 )}

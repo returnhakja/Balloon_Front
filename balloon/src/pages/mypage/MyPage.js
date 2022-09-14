@@ -80,7 +80,7 @@ function MyPage() {
                   empId={empInfo.empId}
                   photo={
                     empInfo.photo
-                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}/${empInfo.photo}`
+                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
                       : ''
                   }
                 />
