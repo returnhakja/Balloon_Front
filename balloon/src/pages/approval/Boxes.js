@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { resolvePath, useOutletContext } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import { StatusCard } from './approvalCards/ApprovalStatusCard';
-import { getDCount } from '../../context/ApprovalFunc';
+import { getACount, getDCount } from '../../context/ApprovalFunc';
 import { Container } from '@mui/material';
 import { Box } from '@mui/system';
 
@@ -13,6 +13,10 @@ function Boxes() {
   const [DCCount, setDCCount] = useState('');
   const [DSCount, setDSCount] = useState('');
   const [DRCount, setDRCount] = useState('');
+  const [ABCount, setABCount] = useState('');
+  const [AOCount, setAOCount] = useState('');
+  const [ACCount, setACCount] = useState('');
+  const [ARCount, setARCount] = useState('');
 
   // 현황 카드 변수
   const linkArr = ['/boxes/dd', '/boxes/dc', '/boxes/ds', '/boxes/dr'];
@@ -23,26 +27,47 @@ function Boxes() {
 
   const apprvoalStatus2 = ['결재전', '진행중', '완료된', '반려된'];
 
-  const [countArr, setCountArr] = useState([]);
+  const [countDArr, setCountDArr] = useState([]);
+  const [countAArr, setCountAArr] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  console.log(countAArr);
+  console.log(ABCount, AOCount, ACCount, ARCount);
   useEffect(() => {
     if (
       DDCount.length !== 0 &&
       DCCount.length !== 0 &&
       DSCount.length !== 0 &&
-      DRCount.length !== 0
+      DRCount.length !== 0 &&
+      ABCount.length !== 0 &&
+      AOCount.length !== 0 &&
+      ACCount.length !== 0 &&
+      ARCount.length !== 0
     ) {
-      if (countArr.length === 0) {
-        setCountArr([DDCount, DCCount, DSCount, DRCount]);
+      if (countDArr.length === 0) {
+        setCountDArr([DDCount, DCCount, DSCount, DRCount]);
+        setCountAArr([ABCount, AOCount, ACCount, ARCount]);
       }
     } else {
       getDCount(empInfo.empId, setDDCount, setDCCount, setDSCount, setDRCount);
+      getACount(empInfo.empId, setABCount, setAOCount, setACCount, setARCount);
     }
-  }, [empInfo.empId, DDCount, DCCount, DSCount, DRCount, countArr]);
+  }, [
+    empInfo.empId,
+    DDCount,
+    DCCount,
+    DSCount,
+    DRCount,
+    countDArr,
+    countAArr,
+    ABCount,
+    AOCount,
+    ACCount,
+    ARCount,
+  ]);
 
   return (
     <SideNavigation>
@@ -62,13 +87,13 @@ function Boxes() {
             bgcolor: 'background.paper',
             borderRadius: 1,
           }}>
-          {countArr.length !== 0 &&
+          {countDArr.length !== 0 &&
             apprvoalStatus.map((status, index) => {
               return (
                 <StatusCard
                   key={index}
                   status={status}
-                  count={countArr[index]}
+                  count={countDArr[index]}
                   link={linkArr[index]}
                 />
               );
@@ -87,13 +112,13 @@ function Boxes() {
             bgcolor: 'background.paper',
             borderRadius: 1,
           }}>
-          {countArr.length !== 0 &&
+          {countDArr.length !== 0 &&
             apprvoalStatus2.map((status, index) => {
               return (
                 <StatusCard
                   key={index}
                   status={status}
-                  count={countArr[index]}
+                  count={countAArr[index]}
                   link={linkArr2[index]}
                 />
               );

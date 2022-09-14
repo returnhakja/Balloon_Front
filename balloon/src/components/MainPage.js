@@ -15,36 +15,74 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import moment from 'moment';
 import 'moment/locale/ko';
+import { getDCount } from '../context/ApprovalFunc';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-export const data = {
-  labels: ['상신한', '완료된', '저장된', '반려된'],
-  datasets: [
-    {
-      label: '# of Votes',
-      data: [12, 19, 3, 5],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-      ],
-      // borderWidth: 1,
-    },
-  ],
-};
 
 function MainPage() {
   const [empInfo] = useOutletContext();
   const [inCnt, setInCnt] = useState(0);
   const [outCnt, setOutCnt] = useState(0);
+  const [DDCount, setDDCount] = useState('');
+  const [DCCount, setDCCount] = useState('');
+  const [DSCount, setDSCount] = useState('');
+  const [DRCount, setDRCount] = useState('');
+  const [countDArr, setCountDArr] = useState([]);
+
+  useEffect(() => {
+    if (
+      DDCount.length !== 0 &&
+      DCCount.length !== 0 &&
+      DSCount.length !== 0 &&
+      DRCount.length !== 0
+    ) {
+      if (countDArr.length === 0) {
+        setCountDArr([DDCount, DCCount, DSCount, DRCount]);
+      }
+    } else {
+      getDCount(empInfo.empId, setDDCount, setDCCount, setDSCount, setDRCount);
+    }
+  }, [empInfo.empId, DDCount, DCCount, DSCount, DRCount]);
+
+  console.log(DDCount, DCCount, DSCount, DRCount);
+  const data = {
+    datasets: [
+      {
+        label: '# of Votes',
+        data: [DDCount, DCCount, DSCount, DRCount],
+        backgroundColor: [
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+        ],
+        borderColor: [
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+    labels: [
+      `상신한 ${DDCount}`,
+      `완료된 ${DCCount}`,
+      `저장된 ${DSCount}`,
+      `반려된 ${DRCount}`,
+    ],
+  };
+  const options = {
+    plugins: {
+      legend: {
+        labels: {
+          padding: 20, //default is 10
+        },
+        display: true,
+        position: 'bottom',
+      },
+    },
+  };
 
   // 시간 설정
   const nowTime = moment().format('HHmmss');
@@ -103,49 +141,48 @@ function MainPage() {
           display: 'flex',
           justifyContent: 'space-around',
         }}>
-        <Box
-          sx={{
-            backgroundColor: '#EEEEEE',
-            mt: 20,
-            width: '250px',
-            height: '200px',
-            position: 'relative',
-            boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
-          }}>
-          <p style={{ padding: '10px' }}>내 정보</p>
-
-          <div
-            style={{
-              display: 'grid',
-              justifyContent: 'center',
-              alignItems: 'center',
+        {empInfo.length !== 0 && (
+          <Box
+            sx={{
+              backgroundColor: '#EEEEEE',
+              mt: 20,
+              width: '250px',
+              height: '200px',
+              position: 'relative',
+              boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
             }}>
-            <Avatar
-              sx={{
-                width: 50,
-                height: 50,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            />
+            <p style={{ padding: '10px' }}>내 정보</p>
 
-            <p>{empInfo.empName + ' ' + empInfo.position}</p>
             <div
               style={{
-                position: 'absolute',
-                bottom: 0,
-                transform: 'translate(50%)',
+                display: 'grid',
+                justifyContent: 'center',
+                // alignItems: 'center',
               }}>
-              <Button sx={{ fontSize: '24px' }} onClick={() => WorkStart()}>
-                출근
-              </Button>
-              <Button sx={{ fontSize: '24px' }} onClick={() => WorkEnd()}>
-                퇴근
-              </Button>
+              <Avatar
+                sx={{
+                  width: 70,
+                  height: 70,
+                }}
+              />
+
+              <p>{empInfo.empName + ' ' + empInfo.position}</p>
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  transform: 'translate(50%)',
+                }}>
+                <Button sx={{ fontSize: '24px' }} onClick={() => WorkStart()}>
+                  출근
+                </Button>
+                <Button sx={{ fontSize: '24px' }} onClick={() => WorkEnd()}>
+                  퇴근
+                </Button>
+              </div>
             </div>
-          </div>
-        </Box>
+          </Box>
+        )}
 
         <div className={styles.logingo}>
           <div className={styles.logcon}>
@@ -191,23 +228,21 @@ function MainPage() {
             )}
           </div>
         </div>
-        <div
-          id="myChart"
-          style={{
-            width: '250px',
-            height: '400px',
-            marginTop: '15vh',
-            backgroundColor: '#EEEEEE',
-            boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
-          }}>
-          <p style={{ padding: '10px' }}>결재관리</p>
-          <Pie data={data} />
-          <div style={{ textAlign: 'center' }}>
-            <br />
-            <p>상신한 : 19 완료된 : 5</p>
-            <p>저장된 : 1 반려된 : 3</p>
+        {empInfo.length !== 0 && (
+          <div
+            id="myChart"
+            style={{
+              width: '250px',
+              height: '350px',
+              marginTop: '12vh',
+              backgroundColor: '#EEEEEE',
+              boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
+            }}>
+            <p style={{ padding: '10px' }}>결재관리</p>
+            <p> 날짜들어갈꺼임 </p>
+            <Pie data={data} options={options} />
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
