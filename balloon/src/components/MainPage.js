@@ -1,35 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import Banner from './banner.svg';
-import styles from '../css/nav/Navbar.module.css';
-import { Button } from '@mui/material';
 import {
   // endlessWork,
   endWork,
-  findWorkIn,
+  findWorkOff,
+  findWorkOn,
   startWork,
 } from '../context/EmpTimeAxios';
+import moment from 'moment';
+import 'moment/locale/ko';
+import Banner from './banner.svg';
+import styles from '../css/nav/Navbar.module.css';
+import { Button } from '@mui/material';
 
-function MainPage({ workStatus, setWorkStatus }) {
+function MainPage() {
   const [empInfo] = useOutletContext();
+  const [inCnt, setInCnt] = useState(0);
+  const [outCnt, setOutCnt] = useState(0);
 
-  const WorkStart = () => {
-    empInfo && startWork(empInfo.empId, setWorkStatus);
-  };
-
-  const WorkEnd = () => {
-    empInfo && endWork(empInfo.empId, setWorkStatus);
-  };
-
-  // const WorkEndless = () => {
-  //   empInfo && endlessWork(empInfo.empId, setWorkStatus);
-  // };
+  // 시간 설정
+  const nowTime = moment().format('HHmmss');
 
   useEffect(() => {
     if (empInfo.length !== 0) {
-      !!empInfo && findWorkIn(empInfo.empId, setWorkStatus);
+      if (!!empInfo) {
+        findWorkOn(empInfo.empId, setInCnt);
+        findWorkOff(empInfo.empId, setOutCnt);
+      }
     }
-  }, [empInfo.length, workStatus]);
+  }, [empInfo.length, inCnt, outCnt]);
+
+  const WorkStart = () => {
+    if (inCnt === 1) {
+      alert('이미 출근 등록을 하였습니다!');
+    } else {
+      if (nowTime <= process.env.REACT_APP_WORK_IN) {
+        empInfo && startWork(empInfo.empId);
+        alert('출근 등록을 하였습니다!');
+      } else {
+        alert('18시 30분이 지났습니다!!!');
+      }
+    }
+  };
+
+  const WorkEnd = () => {
+    if (inCnt === 0) {
+      alert('오늘 출근 등록을 하지 않았습니다!');
+    } else {
+      if (outCnt === 1) {
+        alert('이미 퇴근 등록을 하였습니다!');
+      } else {
+        if (nowTime <= process.env.REACT_APP_WORK_IN) {
+          empInfo && endWork(empInfo.empId);
+          alert('퇴근 등록을 하였습니다!');
+        } else {
+          alert('야근 등록을 해야 합니다!!');
+        }
+      }
+    }
+  };
+
+  // const WorkEndless = () => {
+  //   empInfo && endlessWork(empInfo.empId);
+  // };
 
   return (
     <div>
@@ -54,7 +87,12 @@ function MainPage({ workStatus, setWorkStatus }) {
                 <br />
               </div>
               <div style={{ marginTop: '50px' }}>
-                {workStatus ? (
+                {inCnt === 0 ? (
+                  <div>
+                    <p>아직 출근 등록을 하지 않았습니다.</p>
+                    <p>출근 등록을 해주세요.</p>
+                  </div>
+                ) : outCnt === 0 ? (
                   <div>
                     <p>출근 상태입니다.</p>
                     <p>일을 하세요.</p>
@@ -65,7 +103,6 @@ function MainPage({ workStatus, setWorkStatus }) {
                     <p>고생하셨습니다.</p>
                   </div>
                 )}
-
                 <Button sx={{ fontSize: '100px' }} onClick={() => WorkStart()}>
                   출근
                 </Button>

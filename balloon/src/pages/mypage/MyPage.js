@@ -32,6 +32,10 @@ function MyPage() {
           alignContent: 'center',
           margin: '30px 0px 30px 0px',
         }}>
+        {console.log(
+          'adasddasdasd',
+          `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}`
+        )}
         <Card>
           {empInfo.length !== 0 && (
             <CardContent
@@ -50,7 +54,11 @@ function MyPage() {
                     marginTop: '5px',
                     marginBottom: '5px',
                   }}
-                  src={empInfo.photo}
+                  src={
+                    !!empInfo.photo
+                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
+                      : ''
+                  }
                   className="mypageavatar"
                 />
                 <Button
@@ -70,7 +78,11 @@ function MyPage() {
                   open={profileOpen}
                   setOpen={setProfileOpen}
                   empId={empInfo.empId}
-                  photo={empInfo.photo ? empInfo.photo : ''}
+                  photo={
+                    empInfo.photo
+                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}/${empInfo.photo}`
+                      : ''
+                  }
                 />
               )}
               <div>
