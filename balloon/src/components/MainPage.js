@@ -60,6 +60,8 @@ function MainPage() {
     }
   };
 
+  useEffect(() => {}, [inCnt]);
+
   // const WorkEndless = () => {
   //   empInfo && endlessWork(empInfo.empId);
   // };
