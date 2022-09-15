@@ -29,32 +29,6 @@ export const findHigherOrganization = async (setHigher) => {
     .catch((error) => console.log(error));
 };
 
-// export const getMaxUnitCode = async (parentUnit, setMaxUnitCode) => {
-//   const url = `/unit/max/${parentUnit}`;
-//   // const url = `/unit/max`;
-//   // const inputData = {
-//   //   unit: {
-//   //     parentUnit: {
-//   //       unitCdode: parentUnit,
-//   //     },
-//   //   },
-//   // };
-//   console.log('aaaaaaaaa');
-
-//   return await axios
-//     .get(url)
-//     .then((response) => response.data)
-//     .catch((error) => console.log(error));
-
-//   //   const unitNo = await axios
-//   //   .get(url)
-//   //   .then((response) => response.data)
-//   //   .then((data) => data)
-//   //   .catch((error) => console.log(error));
-
-//   // return unitNo;
-// };
-
 export const insertUnit = async (unitInfo) => {
   const header = { 'Content-Type': 'application/json' };
   const url = '/unit/add';
