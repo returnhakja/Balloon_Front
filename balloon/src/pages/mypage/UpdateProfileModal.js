@@ -41,7 +41,7 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
     formData.append('file', e.target.files[0]);
     setFile(formData);
   };
-  console.log(photo);
+
   return (
     <div>
       {empId && (
