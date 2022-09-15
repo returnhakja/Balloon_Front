@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import { StatusCard } from './approvalCards/ApprovalStatusCard';
-import { getDCount } from '../../context/ApprovalFunc';
+import { getACount, getDCount } from '../../context/ApprovalFunc';
 import { Container } from '@mui/material';
 import { Box } from '@mui/system';
 import Tab from '@mui/material/Tab';
@@ -17,6 +17,10 @@ function Boxes() {
   const [DCCount, setDCCount] = useState('');
   const [DSCount, setDSCount] = useState('');
   const [DRCount, setDRCount] = useState('');
+  const [ABCount, setABCount] = useState('');
+  const [AOCount, setAOCount] = useState('');
+  const [ACCount, setACCount] = useState('');
+  const [ARCount, setARCount] = useState('');
 
   // 현황 카드 변수
   const linkArr = ['/boxes/dd', '/boxes/dc', '/boxes/ds', '/boxes/dr'];
@@ -39,6 +43,7 @@ function Boxes() {
       }
     } else {
       getDCount(empInfo.empId, setDDCount, setDCCount, setDSCount, setDRCount);
+      getACount(empInfo.empId, setABCount, setAOCount, setACCount, setARCount);
     }
   }, [empInfo.empId, DDCount, DCCount, DSCount, DRCount, countArr]);
 

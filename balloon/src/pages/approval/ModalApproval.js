@@ -207,7 +207,6 @@ function ModalApproval({
           </Grid>
         </div>
         <div className="footer">
-          {' '}
           <Button
             onClick={() => {
               handleClose(false);

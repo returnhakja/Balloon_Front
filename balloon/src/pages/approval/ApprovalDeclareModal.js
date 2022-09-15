@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { TextField } from '@mui/material';
+import { Col } from 'antd';
 
 export default function ApprovalDeclareModal({
   style,
@@ -19,7 +20,22 @@ export default function ApprovalDeclareModal({
   const handleClose = () => {
     setOpenModal(false);
   };
+  console.log(apvlList);
   console.log(approvalList);
+
+  const myIndex = approvalList.findIndex(
+    (apvl) => apvl.approvalId === apvlList[0].approvalId
+  );
+  console.log(myIndex);
+  let approvedList = [];
+
+  for (let index = myIndex; index > -1; index--) {
+    console.log(approvalList[index]);
+    approvedList.push(approvalList[index]);
+  }
+
+  console.log(approvedList);
+
   return (
     <div>
       <Modal
@@ -50,7 +66,7 @@ export default function ApprovalDeclareModal({
               to={'/boxes/ar'}
               onClick={async () => {
                 updateApvlDoc([apvlList[0]], 4, paInfo);
-                updateApproval(apvlList, 4);
+                updateApproval(approvedList, 4);
 
                 alert('문서를 반려 하였습니다!');
               }}>
@@ -61,11 +77,11 @@ export default function ApprovalDeclareModal({
             <Link
               to={'/boxes/ac'}
               onClick={async () => {
-                console.log(!apvlList[1]);
                 if (!apvlList[1]) {
                   updateApvlDoc([apvlList[0]], 2, paInfo);
                   updateApproval(approvalList, 3);
                 } else {
+                  updateApvlDoc(apvlList, 5, paInfo);
                   updateApproval(apvlList, 2);
                 }
                 alert('문서를 결재 하였습니다!');
@@ -93,7 +109,6 @@ export default function ApprovalDeclareModal({
                 approver &&
                   approver.map((apvl) => {
                     updateApvlDoc(apvl, 2, paInfo);
-                    console.log(apvl);
                     updateApproval(apvl, 3);
                   });
                 alert('문서를 결재 하였습니다!');

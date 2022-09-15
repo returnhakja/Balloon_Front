@@ -39,6 +39,35 @@ export const getDRByEmp = async (empId, setDRCount) => {
     setDRCount(res.data.length);
   });
 };
+
+export const getABByEmp = async (empId, setABCount) => {
+  const url = '/api/apvl/';
+  const str = url + empId + '/' + 1;
+  await axios.get(str).then((res) => {
+    setABCount(res.data.length);
+  });
+};
+export const getAOByEmp = async (empId, setAOCount) => {
+  const url = '/api/apvl/';
+  const str = url + empId + '/' + 2;
+  await axios.get(str).then((res) => {
+    setAOCount(res.data.length);
+  });
+};
+export const getACByEmp = async (empId, setACCount) => {
+  const url = '/api/apvl/';
+  const str = url + empId + '/' + 3;
+  await axios.get(str).then((res) => {
+    setACCount(res.data.length);
+  });
+};
+export const getARByEmp = async (empId, setARCount) => {
+  const url = '/api/apvl/';
+  const str = url + empId + '/' + 4;
+  await axios.get(str).then((res) => {
+    setARCount(res.data.length);
+  });
+};
 // ---------------------------------------
 
 // 완료된 문서(부서확인용)
@@ -72,9 +101,7 @@ export const getBizTpByBizTpId = async (bizTpId, setBizTpInfo) => {
 export const getBizTpEmpByBizTpId = async (bizTpId, setBizTpEmp) => {
   const url = '/api/biztpemp/';
   const str = url + bizTpId;
-  console.log(bizTpId);
   await axios.get(str).then((res) => {
-    console.log(res);
     setBizTpEmp(res.data);
   });
 };
@@ -82,8 +109,6 @@ export const getBizTpEmpByBizTpId = async (bizTpId, setBizTpEmp) => {
 // 동반 출장자
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 export const insertBizTpEmp = async (bizTpId, mEmp) => {
-  console.log(bizTpId);
-  console.log(mEmp);
   const url = '/api/biztpemp';
   let inputData = {};
   const headers = {
@@ -93,7 +118,11 @@ export const insertBizTpEmp = async (bizTpId, mEmp) => {
     businessTrip: {
       businessTripId: bizTpId,
     },
-    emp: mEmp,
+    emp: mEmp.empId
+      ? mEmp
+      : {
+          empId: mEmp.slice(-9, -1),
+        },
   };
   await axios.post(url, inputData, { headers });
 };
@@ -252,8 +281,6 @@ export const insertPA = async (
     'Content-Type': 'application/json',
   };
 
-  console.log(unit.slice(-9, -1));
-
   inputData = {
     personnelAppointmentId: docId,
     documentTitle: pATitle.value,
@@ -262,11 +289,13 @@ export const insertPA = async (
     personnelDate: startDate,
     position: posi,
     unitName: unit.unitName ? unit.unitName : unit.slice(0, -11),
-    movedEmpName: mEmp.empName,
+    movedEmpName: mEmp.empName ? mEmp.empName : mEmp.slice(0, -11),
     empName: empInfo.empName,
-    movedEmp: {
-      empId: mEmp && mEmp.empId,
-    },
+    movedEmp: mEmp.empId
+      ? mEmp
+      : {
+          empId: mEmp.slice(-9, -1),
+        },
     unit: unit.unitCode
       ? unit
       : {
@@ -471,25 +500,24 @@ export const updateApproval = async (approvalList, state) => {
   const headers = {
     'Content-Type': 'application/json',
   };
-  console.log(approvalList);
-  console.log(apvlCom.value);
   approvalList?.map((apvl, index) => {
     console.log(apvl);
-    if (apvl.businessReport != null) {
+    if (apvl && apvl.businessReport != null) {
       inputData = {
         approvalId: apvl.approvalId,
         approvalStatus:
           state === 3
             ? 3
+            : state === 4
+            ? 4
             : state !== 4 && index === 0
             ? 2
-            : state === 4 && index === 0
-            ? 4
             : state !== 4 && index !== 0
             ? 1
             : 0,
         approvalComment:
-          state === 3 && approvalList.length - 1 !== index
+          (state === 3 && approvalList.length - 1 !== index) ||
+          (state === 4 && index !== 0)
             ? apvl.approvalComment
             : index === 0 || (state === 3 && approvalList.length - 1 === index)
             ? apvlCom.value
@@ -503,7 +531,7 @@ export const updateApproval = async (approvalList, state) => {
           businessReportId: apvl && apvl.businessReport.businessReportId,
         },
       };
-    } else if (apvl.businessTrip != null) {
+    } else if (apvl && apvl.businessTrip != null) {
       inputData = {
         approvalId: apvl.approvalId,
         approvalStatus:
@@ -531,7 +559,7 @@ export const updateApproval = async (approvalList, state) => {
           businessTripId: apvl && apvl.businessTrip.businessTripId,
         },
       };
-    } else if (apvl.personnelAppointment != null) {
+    } else if (apvl && apvl.personnelAppointment != null) {
       inputData = {
         approvalId: apvl.approvalId,
         approvalStatus:
@@ -564,7 +592,6 @@ export const updateApproval = async (approvalList, state) => {
       alert('문서가 잘못되었습니다.');
     }
     inputDataList.push(inputData);
-    console.log(inputDataList);
   });
   await axios.post(url, inputDataList, { headers });
 };
@@ -576,12 +603,10 @@ export const updateApvlDoc = async (approvalList, state, paInfo) => {
   const headers = {
     'Content-Type': 'application/json',
   };
-  console.log(approvalList);
   approvalList?.map((apvl) => {
     if (apvl.businessReport != null) {
       url = '/api/bizrpt';
       const bizRpt = apvl.businessReport;
-      console.log(apvl);
       inputData = {
         businessReportId: bizRpt.businessReportId,
         documentTitle: bizRpt.documentTitle,

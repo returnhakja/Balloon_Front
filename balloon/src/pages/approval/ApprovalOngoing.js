@@ -26,19 +26,25 @@ function ApprovalOngoing() {
     let documentId = params.row.docId;
     if (documentId.includes('업무기안')) {
       return (
-        <Link to={`/doc/br/${params.row.docId}`}>
+        <Link
+          to={`/apvl/aobr/${params.row.docId}`}
+          state={{ path: '/boxes/ao' }}>
           {params.row && params.row.documentTitle}
         </Link>
       );
     } else if (documentId.includes('출장계획')) {
       return (
-        <Link to={`/doc/tp/${params.row.docId}`}>
+        <Link
+          to={`/doc/aotp/${params.row.docId}`}
+          state={{ path: '/boxes/ao' }}>
           {params.row && params.row.documentTitle}
         </Link>
       );
     } else if (documentId.includes('인사명령')) {
       return (
-        <Link to={`/doc/pa/${params.row.docId}`}>
+        <Link
+          to={`/doc/aopa/${params.row.docId}`}
+          state={{ path: '/boxes/ao' }}>
           {params.row && params.row.documentTitle}
         </Link>
       );

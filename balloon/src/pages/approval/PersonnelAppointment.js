@@ -74,16 +74,12 @@ function PersonnelAppointment() {
   const [empInfo] = useOutletContext();
   const [inputData, setInputData] = useState({});
 
-  console.log(empInfo);
-  console.log(mEmp);
-
   const [botInfo, setBotInfo] = useState([]);
   //이미 존재하는 사람들
   const [botApvlRoom, setBotApvlRoom] = useState([]);
   //결재선설정empId
   const apvlPeople = [];
   const approverBot = 'Y0000002';
-  console.log(botInfo);
   const empName = empInfo.empName;
   const position = empInfo.position;
   const approvalForm = '인사명령';
@@ -92,7 +88,6 @@ function PersonnelAppointment() {
   const approvalTitle =
     document.getElementById('PATitle') &&
     document.getElementById('PATitle').value;
-  console.log(approvalTitle);
 
   const member = mEmp.empName;
   const appointDepartment = unit.unitName;
@@ -102,8 +97,6 @@ function PersonnelAppointment() {
   {
     approver.map((empId) => apvlPeople.push(empId.empId));
   }
-  console.log(apvlPeople);
-  console.log(botApvlRoom);
 
   //결재봇정보가져오기
   useEffect(() => {
@@ -113,19 +106,14 @@ function PersonnelAppointment() {
 
   const botroomExist = [];
   const botroomId = [];
-  console.log(botApvlRoom);
   botApvlRoom.map((data) => {
-    console.log(data.empId.empId);
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
-  console.log(botroomExist);
-  console.log(botroomId);
 
   //새로운 채팅방이 생성되어야할 사람들
   let newApvlPeople;
   newApvlPeople = apvlPeople.filter((people) => !botroomExist.includes(people));
-  console.log(newApvlPeople);
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(
@@ -166,7 +154,6 @@ function PersonnelAppointment() {
       chatApprovalList.push(approvalChat);
     });
 
-    console.log(chatApprovalList);
     const chatApprovalSave = (chatApprovalList) => {
       axios.post('/chat/messages', chatApprovalList);
     };
@@ -200,7 +187,6 @@ function PersonnelAppointment() {
       AlreadyChatApproval.push(AchatApproval);
       AlreadyChatApproval.push(chatNewApproval);
     });
-    console.log(AlreadyChatApproval);
     const chatScheduleSave = (AlreadyChatApproval) => {
       axios.post('/chat/messages', AlreadyChatApproval);
     };
@@ -224,8 +210,6 @@ function PersonnelAppointment() {
       }
 
       noApprover.length === 0 && setNoApprover(noApprover);
-
-      mEmp && console.log('mEmp~~~', mEmp);
     }
   }, [units, empInfo, mEmpInfo, docNum, noApprover, mEmp]);
 
@@ -253,7 +237,6 @@ function PersonnelAppointment() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
@@ -295,8 +278,6 @@ function PersonnelAppointment() {
           </Card>
 
           {approver.map((empData, index) => {
-            console.log(empData);
-
             return (
               <Card
                 key={index}
@@ -317,7 +298,6 @@ function PersonnelAppointment() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 <form>
                   <input
                     id="PATitle"
@@ -487,7 +467,6 @@ function PersonnelAppointment() {
                     );
 
                     // approver.map((data, index) => {
-                    //   console.log(data);
                     //   return insertApproval(docId, 0, data, inputData, empInfo);
                     // });
                     insertApproval(docId, 0, approver, inputData, empInfo);
@@ -520,7 +499,6 @@ function PersonnelAppointment() {
                   }
 
                   // approver.map((data, index) => {
-                  //   console.log(data);
                   //   return insertApproval(docId, 1, data, inputData, empInfo);
                   // });
                   insertApproval(docId, 1, approver, inputData, empInfo);

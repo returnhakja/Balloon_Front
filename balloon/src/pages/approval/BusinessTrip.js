@@ -73,7 +73,6 @@ function BusinessTrip() {
   //결재선설정empId
   const apvlPeople = [];
   const approverBot = 'Y0000002';
-  console.log(botInfo);
   const empName = empInfo.empName;
   const position = empInfo.position;
   const approvalForm = '출장계획서';
@@ -82,24 +81,19 @@ function BusinessTrip() {
   const approvalTitle =
     document.getElementById('bizTpTitle') &&
     document.getElementById('bizTpTitle').value;
-  console.log(approvalTitle);
   //방문처
   const visitPlace =
     document.getElementById('destination') &&
     document.getElementById('destination').value;
-  console.log(visitPlace);
   //방문목적
   const visitPurpose =
     document.getElementById('visitingPurpose') &&
     document.getElementById('visitingPurpose').value;
-  console.log(visitPurpose);
 
   //결재선설정empIdList
   {
     approver.map((empId) => apvlPeople.push(empId.empId));
   }
-  console.log(apvlPeople);
-  console.log(botApvlRoom);
 
   //결재봇정보가져오기
   useEffect(() => {
@@ -109,19 +103,14 @@ function BusinessTrip() {
 
   const botroomExist = [];
   const botroomId = [];
-  console.log(botApvlRoom);
   botApvlRoom.map((data) => {
-    console.log(data.empId.empId);
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
-  console.log(botroomExist);
-  console.log(botroomId);
 
   //새로운 채팅방이 생성되어야할 사람들
   let newApvlPeople;
   newApvlPeople = apvlPeople.filter((people) => !botroomExist.includes(people));
-  console.log(newApvlPeople);
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(
@@ -161,7 +150,6 @@ function BusinessTrip() {
       chatApprovalList.push(approvalChat);
     });
 
-    console.log(chatApprovalList);
     const chatApprovalSave = (chatApprovalList) => {
       axios.post('/chat/messages', chatApprovalList);
     };
@@ -195,7 +183,6 @@ function BusinessTrip() {
       AlreadyChatApproval.push(AchatApproval);
       AlreadyChatApproval.push(chatNewApproval);
     });
-    console.log(AlreadyChatApproval);
     const chatScheduleSave = (AlreadyChatApproval) => {
       axios.post('/chat/messages', AlreadyChatApproval);
     };
@@ -205,8 +192,6 @@ function BusinessTrip() {
 
   let startDate = startValue && document.getElementById('startValue').value;
   let endDate = endValue && document.getElementById('endValue').value;
-  console.log(startDate);
-  console.log(endDate);
 
   useEffect(() => {
     if (mEmpInfo.length === 0) {
@@ -223,7 +208,6 @@ function BusinessTrip() {
       setNoApprover(noApprover);
     }
   }, [docNum, noApprover]);
-  console.log(mEmp);
 
   return (
     <SideNavigation>
@@ -249,7 +233,6 @@ function BusinessTrip() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
@@ -308,7 +291,6 @@ function BusinessTrip() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 <form>
                   <input
                     id="bizTpTitle"
@@ -338,7 +320,6 @@ function BusinessTrip() {
             <tr align="center">
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
-                {' '}
                 <FormControl fullWidth>
                   <InputLabel>구성원을 설정해주세요</InputLabel>
                   <Select
@@ -492,7 +473,6 @@ function BusinessTrip() {
                     );
 
                     // approver.map((data, index) => {
-                    //   console.log(data);
                     //   return insertApproval(docId, 0, data, inputData, empInfo);
                     // });
                     insertApproval(docId, 0, approver, inputData, empInfo);
@@ -522,7 +502,6 @@ function BusinessTrip() {
                     e.preventDefault();
                   }
                   // approver.map((data, index) => {
-                  //   console.log(data);
                   //   return insertApproval(docId, 1, data, inputData, empInfo);
                   // });
                   insertApproval(docId, 1, approver, inputData, empInfo);

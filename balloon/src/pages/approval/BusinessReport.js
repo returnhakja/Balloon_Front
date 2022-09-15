@@ -48,7 +48,6 @@ function BusinessReport() {
   //결재선설정empId
   const apvlPeople = [];
   const approverBot = 'Y0000002';
-  console.log(botInfo);
   const empName = empInfo.empName;
   const position = empInfo.position;
   const approvalForm = '업무기안';
@@ -57,14 +56,11 @@ function BusinessReport() {
   const approvalTitle =
     document.getElementById('bizRptTitle') &&
     document.getElementById('bizRptTitle').value;
-  console.log(approvalTitle);
 
   //결재선설정empIdList
   {
     approver.map((empId) => apvlPeople.push(empId.empId));
   }
-  console.log(apvlPeople);
-  console.log(botApvlRoom);
 
   //결재봇정보가져오기
   useEffect(() => {
@@ -79,13 +75,10 @@ function BusinessReport() {
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
-  console.log(botroomExist);
-  console.log(botroomId);
 
   // 채팅방이 생성되어야할 사람들
   let newApvlPeople;
   newApvlPeople = apvlPeople.filter((people) => !botroomExist.includes(people));
-  console.log(newApvlPeople);
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(
@@ -124,7 +117,6 @@ function BusinessReport() {
       chatApprovalList.push(approvalChat);
     });
 
-    console.log(chatApprovalList);
     const chatApprovalSave = (chatApprovalList) => {
       axios.post('/chat/messages', chatApprovalList);
     };
@@ -156,7 +148,6 @@ function BusinessReport() {
       AlreadyChatApproval.push(chatApproval);
       AlreadyChatApproval.push(chatNewApproval);
     });
-    console.log(AlreadyChatApproval);
     const chatScheduleSave = (AlreadyChatApproval) => {
       axios.post('/chat/messages', AlreadyChatApproval);
     };

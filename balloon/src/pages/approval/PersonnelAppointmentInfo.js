@@ -67,7 +67,6 @@ function PersonnelAppointmentInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {paInfo.empName}({paInfo.emp && paInfo.emp.empId})
               </th>
             </tr>
@@ -89,7 +88,6 @@ function PersonnelAppointmentInfo() {
             <DfCard drafterName={paInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             // if (apvl.length === 0) {
             //   setApvl(empData);
             // }
@@ -116,9 +114,8 @@ function PersonnelAppointmentInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 {paInfo.documentTitle}
-              </td>{' '}
+              </td>
             </tr>
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>인사명령일</td>
