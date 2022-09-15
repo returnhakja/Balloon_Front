@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   findHigherOrganization,
-  // getMaxUnitCode,
+
   insertUnit,
 } from '../../context/UnitAxios';
 import styles from './unit.module.css';
@@ -21,6 +21,7 @@ const Select = forwardRef(({ onChange, name, label, higher }, ref) => (
     </select>
   </>
 ));
+
 const style = {
   position: 'absolute',
   top: '50%',
