@@ -29,17 +29,37 @@ export const findHigherOrganization = async (setHigher) => {
     .catch((error) => console.log(error));
 };
 
+// export const getMaxUnitCode = async (parentUnit, setMaxUnitCode) => {
+//   const url = `/unit/max/${parentUnit}`;
+//   // const url = `/unit/max`;
+//   // const inputData = {
+//   //   unit: {
+//   //     parentUnit: {
+//   //       unitCdode: parentUnit,
+//   //     },
+//   //   },
+//   // };
+//   console.log('aaaaaaaaa');
+
+//   return await axios
+//     .get(url)
+//     .then((response) => response.data)
+//     .catch((error) => console.log(error));
+
+//   //   const unitNo = await axios
+//   //   .get(url)
+//   //   .then((response) => response.data)
+//   //   .then((data) => data)
+//   //   .catch((error) => console.log(error));
+
+//   // return unitNo;
+// };
+
 export const insertUnit = async (unitInfo) => {
-  const inputUnit = {
-    unitCode: unitInfo.unitCode,
-    unitName: unitInfo.unitName,
-    bell: unitInfo.bell,
-    parentUnit: { unitCode: unitInfo.parentUnit },
-  };
   const header = { 'Content-Type': 'application/json' };
   const url = '/unit/add';
 
-  await axios.post(url, inputUnit, header).catch((error) => console.log(error));
+  await axios.post(url, unitInfo, header).catch((error) => console.log(error));
 };
 
 export const insertUnitList = async (rows) => {
