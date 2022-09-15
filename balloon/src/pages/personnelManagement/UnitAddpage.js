@@ -69,7 +69,6 @@ function UnitAddpage({ openInsert, setOpenInsert }) {
 
   useEffect(() => {
     higher.length === 0 && findHigherOrganization(setHigher);
-    higher.length !== 0 && console.log(higher);
   }, [higher.length]);
 
   return (
