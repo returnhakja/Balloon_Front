@@ -50,13 +50,13 @@
 .logingo {
   /* position: relative; */
   display: inline-block;
-  background-color: white;
-  width: 70%;
-  height: 30vw;
+  background-color: #cecece;
+  width: 50%;
+  height: 25vw;
 
-  margin-left: 50%;
+  /* margin-left: 50%; */
   margin-top: 8%;
-  transform: translateX(-50%);
+  /* transform: translateX(50%); */
   min-width: 500px;
 }
 
