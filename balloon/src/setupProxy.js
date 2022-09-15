@@ -5,8 +5,8 @@ module.exports = function (app) {
     '/api',
     createProxyMiddleware({
       // target: 'http://15.164.224.26:8080',
-      target: 'http://54.180.148.125:8080',
-      // target: 'http://localhost:8080',
+      // target: 'http://54.180.148.125:8080',
+      target: 'http://localhost:8080',
 
       changeOrigin: true,
     })
@@ -15,8 +15,8 @@ module.exports = function (app) {
     '/auth',
     createProxyMiddleware({
       // target: 'http://15.164.224.26:8080',
-      target: 'http://54.180.148.125:8080',
-      // target: 'http://localhost:8080',
+      // target: 'http://54.180.148.125:8080',
+      target: 'http://localhost:8080',
       changeOrigin: true,
     })
   );
@@ -51,8 +51,8 @@ module.exports = function (app) {
     '/chat',
     createProxyMiddleware({
       // target: 'http://15.164.224.26:8080',
-      target: 'http://54.180.148.125:8080',
-      // target: 'http://localhost:8080',
+      // target: 'http://54.180.148.125:8080',
+      target: 'http://localhost:8080',
       changeOrigin: true,
     })
   );
