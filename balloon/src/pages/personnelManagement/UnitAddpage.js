@@ -2,7 +2,6 @@ import React, { forwardRef, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   findHigherOrganization,
-  // getMaxUnitCode,
   insertUnit,
 } from '../../context/UnitAxios';
 import styles from './unit.module.css';
@@ -21,6 +20,7 @@ const Select = forwardRef(({ onChange, name, label, higher }, ref) => (
     </select>
   </>
 ));
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -36,7 +36,6 @@ const style = {
 
 function UnitAddpage({ openInsert, setOpenInsert }) {
   const [higher, setHigher] = useState([]);
-  const [maxUnitCode, setMaxUnitCode] = useState('');
 
   const {
     register,
@@ -69,8 +68,7 @@ function UnitAddpage({ openInsert, setOpenInsert }) {
 
   useEffect(() => {
     higher.length === 0 && findHigherOrganization(setHigher);
-    higher.length !== 0 && console.log(higher);
-  }, [higher.length, maxUnitCode]);
+  }, [higher.length]);
 
   return (
     <Modal
