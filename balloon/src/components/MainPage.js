@@ -31,44 +31,50 @@ function MainPage() {
   const [DRCount, setDRCount] = useState('');
   const [countDArr, setCountDArr] = useState([]);
 
-//  useEffect(() => {
-//    if (empInfo.length !== 0) {
-//      if (!!empInfo) {
-//        findWorkOn(empInfo.empId, setInCnt);
-//        findWorkOff(empInfo.empId, setOutCnt);
-//      }
-//    } else {
-//      // window.location.href = '/';
-//      inCnt !== 0 && console.log('inCnt', inCnt);
-//      outCnt !== 0 && console.log('outCnt', outCnt);
-//    }
-//  }, [empInfo.length]);
+  //  useEffect(() => {
+  //    if (empInfo.length !== 0) {
+  //      if (!!empInfo) {
+  //        findWorkOn(empInfo.empId, setInCnt);
+  //        findWorkOff(empInfo.empId, setOutCnt);
+  //      }
+  //    } else {
+  //      // window.location.href = '/';
+  //      inCnt !== 0 && console.log('inCnt', inCnt);
+  //      outCnt !== 0 && console.log('outCnt', outCnt);
+  //    }
+  //  }, [empInfo.length]);
 
   useEffect(() => {
-  if (empInfo.length !== 0) {
+    if (empInfo.length !== 0) {
       if (!!empInfo) {
         findWorkOn(empInfo.empId, setInCnt);
         findWorkOff(empInfo.empId, setOutCnt);
       }
-       inCnt !== 0 && console.log('inCnt', inCnt);
+      inCnt !== 0 && console.log('inCnt', inCnt);
       outCnt !== 0 && console.log('outCnt', outCnt);
-        if (
-          DDCount.length !== 0 &&
-          DCCount.length !== 0 &&
-          DSCount.length !== 0 &&
-          DRCount.length !== 0
-        ) {
-          if (countDArr.length === 0) {
-            setCountDArr([DDCount, DCCount, DSCount, DRCount]);
-          }
-        } else {
-          getDCount(empInfo.empId, setDDCount, setDCCount, setDSCount, setDRCount);
+      if (
+        DDCount.length !== 0 &&
+        DCCount.length !== 0 &&
+        DSCount.length !== 0 &&
+        DRCount.length !== 0
+      ) {
+        if (countDArr.length === 0) {
+          setCountDArr([DDCount, DCCount, DSCount, DRCount]);
         }
+      } else {
+        getDCount(
+          empInfo.empId,
+          setDDCount,
+          setDCCount,
+          setDSCount,
+          setDRCount
+        );
+      }
     }
   }, [empInfo.empId, rend, DDCount, DCCount, DSCount, DRCount, countDArr]);
 
   console.log(DDCount, DCCount, DSCount, DRCount);
-  
+
   const data = {
     datasets: [
       {
