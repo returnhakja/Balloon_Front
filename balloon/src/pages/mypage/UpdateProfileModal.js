@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { uploadProfile } from '../../context/EmployeeAxios';
 import styles from '../../css/Component.module.css';
-// import { Avatar, Button, Card, Typography } from 'antd';
 import {
   Box,
   CardContent,
@@ -11,7 +11,6 @@ import {
   Typography,
 } from '@mui/material';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import { uploadProfile } from '../../context/EmployeeAxios';
 
 const style = {
   position: 'absolute',
