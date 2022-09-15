@@ -37,7 +37,6 @@ const style = {
 
 function UnitAddpage({ openInsert, setOpenInsert }) {
   const [higher, setHigher] = useState([]);
-  const [maxUnitCode, setMaxUnitCode] = useState('');
 
   const {
     register,
@@ -71,7 +70,7 @@ function UnitAddpage({ openInsert, setOpenInsert }) {
   useEffect(() => {
     higher.length === 0 && findHigherOrganization(setHigher);
     higher.length !== 0 && console.log(higher);
-  }, [higher.length, maxUnitCode]);
+  }, [higher.length]);
 
   return (
     <Modal
