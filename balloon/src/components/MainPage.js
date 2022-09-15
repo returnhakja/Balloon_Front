@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import Banner from './banner.svg';
-import styles from '../css/nav/Navbar.module.css';
-import { Avatar, Box, Button, Container } from '@mui/material';
+import { getDCount } from '../context/ApprovalFunc';
 import {
   // endlessWork,
   endWork,
@@ -10,12 +8,13 @@ import {
   findWorkOn,
   startWork,
 } from '../context/EmpTimeAxios';
-
+import Banner from './banner.svg';
+import styles from '../css/nav/Navbar.module.css';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import moment from 'moment';
 import 'moment/locale/ko';
-import { getDCount } from '../context/ApprovalFunc';
+import { Avatar, Box, Button, Container } from '@mui/material';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -23,28 +22,53 @@ function MainPage() {
   const [empInfo] = useOutletContext();
   const [inCnt, setInCnt] = useState(0);
   const [outCnt, setOutCnt] = useState(0);
+  const [rend, setRend] = useState(false);
+  // 시간 설정
+  const nowTime = moment().format('HHmmss');
   const [DDCount, setDDCount] = useState('');
   const [DCCount, setDCCount] = useState('');
   const [DSCount, setDSCount] = useState('');
   const [DRCount, setDRCount] = useState('');
   const [countDArr, setCountDArr] = useState([]);
 
+//  useEffect(() => {
+//    if (empInfo.length !== 0) {
+//      if (!!empInfo) {
+//        findWorkOn(empInfo.empId, setInCnt);
+//        findWorkOff(empInfo.empId, setOutCnt);
+//      }
+//    } else {
+//      // window.location.href = '/';
+//      inCnt !== 0 && console.log('inCnt', inCnt);
+//      outCnt !== 0 && console.log('outCnt', outCnt);
+//    }
+//  }, [empInfo.length]);
+
   useEffect(() => {
-    if (
-      DDCount.length !== 0 &&
-      DCCount.length !== 0 &&
-      DSCount.length !== 0 &&
-      DRCount.length !== 0
-    ) {
-      if (countDArr.length === 0) {
-        setCountDArr([DDCount, DCCount, DSCount, DRCount]);
+  if (empInfo.length !== 0) {
+      if (!!empInfo) {
+        findWorkOn(empInfo.empId, setInCnt);
+        findWorkOff(empInfo.empId, setOutCnt);
       }
-    } else {
-      getDCount(empInfo.empId, setDDCount, setDCCount, setDSCount, setDRCount);
+       inCnt !== 0 && console.log('inCnt', inCnt);
+      outCnt !== 0 && console.log('outCnt', outCnt);
+        if (
+          DDCount.length !== 0 &&
+          DCCount.length !== 0 &&
+          DSCount.length !== 0 &&
+          DRCount.length !== 0
+        ) {
+          if (countDArr.length === 0) {
+            setCountDArr([DDCount, DCCount, DSCount, DRCount]);
+          }
+        } else {
+          getDCount(empInfo.empId, setDDCount, setDCCount, setDSCount, setDRCount);
+        }
     }
-  }, [empInfo.empId, DDCount, DCCount, DSCount, DRCount, countDArr]);
+  }, [empInfo.empId, rend, DDCount, DCCount, DSCount, DRCount, countDArr]);
 
   console.log(DDCount, DCCount, DSCount, DRCount);
+  
   const data = {
     datasets: [
       {
@@ -84,24 +108,13 @@ function MainPage() {
     },
   };
 
-  // 시간 설정
-  const nowTime = moment().format('HHmmss');
-
-  useEffect(() => {
-    if (empInfo.length !== 0) {
-      if (!!empInfo) {
-        findWorkOn(empInfo.empId, setInCnt);
-        findWorkOff(empInfo.empId, setOutCnt);
-      }
-    }
-  }, [empInfo.length, inCnt, outCnt]);
-
   const WorkStart = () => {
     if (inCnt === 1) {
       alert('이미 출근 등록을 하였습니다!');
     } else {
       if (nowTime <= process.env.REACT_APP_WORK_IN) {
         empInfo && startWork(empInfo.empId);
+        setRend(!rend);
         alert('출근 등록을 하였습니다!');
       } else {
         alert('18시 30분이 지났습니다!!!');
@@ -118,6 +131,7 @@ function MainPage() {
       } else {
         if (nowTime <= process.env.REACT_APP_WORK_IN) {
           empInfo && endWork(empInfo.empId);
+          setRend(!rend);
           alert('퇴근 등록을 하였습니다!');
         } else {
           alert('야근 등록을 해야 합니다!!');

@@ -5,21 +5,19 @@ import '../css/Organization.css';
 
 function Organization() {
   const [units, setUnits] = useState([]);
-  const [unit, setUnit] = useState([]);
-  const [childUnits1, setChildUnits1] = useState([]);
-  const [childUnits2, setChildUnits2] = useState([]);
+  const [prior1, setPrior1] = useState([]);
+  const [prior2, setPrior2] = useState([]);
+  const [prior3, setPrior3] = useState([]);
 
   useEffect(() => {
     if (units.length === 0) {
       findUnitList(setUnits);
     } else {
-      console.log(units);
-      setUnit(units[0]);
-      if (unit.length !== 0) {
-        console.log(unit);
-      }
+      setPrior1(units.filter((unit) => unit.prior === 1));
+      setPrior2(units.filter((unit) => unit.prior === 2));
+      setPrior3(units.filter((unit) => unit.prior === 3));
     }
-  }, [units.length, unit.length]);
+  }, [units.length]);
 
   // useEffect(() => {
   //   console.log(unit);
@@ -67,12 +65,12 @@ function Organization() {
   const str2 = ' rectangle';
   return (
     <>
-      {units.length && (
+      {/* {units.length && (
         <>
           <h1 className={str1 + num + str2}></h1>
           {units.map((unit) => {
             return (
-              unit.parentUnit && (
+              unit?.parentUnit && (
                 <ol className={str1 + (num + 1) + str2}>
                   <li>dd</li>
                 </ol>
@@ -80,6 +78,83 @@ function Organization() {
             );
           })}
         </>
+      )} */}
+      {/* <h1 className={str1 + unit.prior + str2}>조직도</h1>
+      {units.length &&
+        units.map((unit) => {
+          return (
+            <div>
+              <p>{unit.unitName}</p>
+            </div>
+          );
+        })} */}
+      {units.length && (
+        <Container className="con">
+          {prior1.length !== 0 && (
+            <div className={'level-1-wrapper'}>
+              <h1 className={str1 + prior1[0].prior + str2}>
+                {prior1[0].unitName}
+              </h1>
+              <div
+                style={{
+                  display: 'flex',
+                  // justifyContent: 'space-between',
+                  // width: '500px',
+                }}>
+                {prior2.length !== 0 &&
+                  prior2.map((unit2, index2) => {
+                    return (
+                      <ol
+                        key={index2}
+                        className={`level-${unit2.prior}-wrapper`}>
+                        <li style={{ width: '200px' }}>
+                          <h2
+                            className={`level-${unit2.prior}-rectangle`}
+                            style={{
+                              height: '50px',
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}>
+                            {unit2.unitName}
+                          </h2>
+                          {prior3.length !== 0 &&
+                            prior3.map((unit3, index3) => {
+                              if (
+                                unit2.unitCode === unit3.parentUnit.unitCode
+                              ) {
+                                return (
+                                  <ol
+                                    key={index3}
+                                    className={`level-${unit3.prior}-wrapper`}>
+                                    <li
+                                      style={{
+                                        marginTop: '25px',
+                                        width: '200px',
+                                      }}>
+                                      <h3
+                                        className={`level-${unit3.prior}-rectangle`}
+                                        style={{
+                                          height: '50px',
+                                          display: 'flex',
+                                          justifyContent: 'center',
+                                          alignItems: 'center',
+                                        }}>
+                                        {unit3.unitName}
+                                      </h3>
+                                    </li>
+                                  </ol>
+                                );
+                              }
+                            })}
+                        </li>
+                      </ol>
+                    );
+                  })}
+              </div>
+            </div>
+          )}
+        </Container>
       )}
 
       {units.length && (
