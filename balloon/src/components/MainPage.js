@@ -17,6 +17,7 @@ function MainPage() {
   const [empInfo] = useOutletContext();
   const [inCnt, setInCnt] = useState(0);
   const [outCnt, setOutCnt] = useState(0);
+  const [rend, setRend] = useState(false);
 
   // 시간 설정
   const nowTime = moment().format('HHmmss');
@@ -27,8 +28,12 @@ function MainPage() {
         findWorkOn(empInfo.empId, setInCnt);
         findWorkOff(empInfo.empId, setOutCnt);
       }
+    } else {
+      // window.location.href = '/';
+      inCnt !== 0 && console.log('inCnt', inCnt);
+      outCnt !== 0 && console.log('outCnt', outCnt);
     }
-  }, [empInfo.length, inCnt, outCnt]);
+  }, [empInfo.length, rend]);
 
   const WorkStart = () => {
     if (inCnt === 1) {
@@ -36,6 +41,7 @@ function MainPage() {
     } else {
       if (nowTime <= process.env.REACT_APP_WORK_IN) {
         empInfo && startWork(empInfo.empId);
+        setRend(!rend);
         alert('출근 등록을 하였습니다!');
       } else {
         alert('18시 30분이 지났습니다!!!');
@@ -52,6 +58,7 @@ function MainPage() {
       } else {
         if (nowTime <= process.env.REACT_APP_WORK_IN) {
           empInfo && endWork(empInfo.empId);
+          setRend(!rend);
           alert('퇴근 등록을 하였습니다!');
         } else {
           alert('야근 등록을 해야 합니다!!');
@@ -59,8 +66,6 @@ function MainPage() {
       }
     }
   };
-
-  useEffect(() => {}, [inCnt]);
 
   // const WorkEndless = () => {
   //   empInfo && endlessWork(empInfo.empId);
