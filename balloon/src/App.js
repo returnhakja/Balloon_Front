@@ -44,13 +44,11 @@ import BizRptApprovalDeclare from './pages/approval/BizRptApprovalDeclare';
 import BizTpApprovalDeclare from './pages/approval/BizTpApprovalDeclare';
 import PAApprovalDeclare from './pages/approval/PAApprovalDeclare';
 
-import Calendar from './pages/calendar/Calendar';
+import RefusedBusinessReportInfo from './pages/approval/RefusedBusinessReportInfo';
+import RefusedBusinessTripInfo from './pages/approval/RefusedBusinessTripInfo';
+import RefusedPersonnelAppointmentInfo from './pages/approval/RefusedPersonnelAppointmentInfo';
 
-import Chat from './pages/chat/Chat';
-import ChatRoom from './pages/chat/ChatRoom';
-import CreateRoom from './pages/chat/CreateRoom';
-import ChatEmpList from './pages/chat/ChatEmpList';
-import ChatNotice from './pages/chat/ChatNotice';
+import Calendar from './pages/calendar/Calendar';
 
 import Organization from './pages/Organization';
 
@@ -62,22 +60,22 @@ import ManagementEmployee from './pages/personnelManagement/ManagementEmployee';
 import EmpAddPage from './pages/personnelManagement/EmpAddPage';
 import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
 
-import NotFound from './pages/NotFound';
+import MyPage from './pages/mypage/MyPage';
+import UpdateMine from './pages/mypage/UpdateMine';
 
-import RefusedBusinessReportInfo from './pages/approval/RefusedBusinessReportInfo';
-import RefusedBusinessTripInfo from './pages/approval/RefusedBusinessTripInfo';
-import RefusedPersonnelAppointmentInfo from './pages/approval/RefusedPersonnelAppointmentInfo';
+import NotFound from './pages/NotFound';
+import AdminRoutes from './components/AdminRoutes';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
   const [isLogin, setLogin] = useState(null);
-
+  const role = empInfo.userRoleGrade;
   // 채팅방 초대하기
   const [invite, setInvite] = useState([]);
 
   useEffect(() => {
-    const l = localStorage.getItem('logged');
-    l && JSON.parse(l) ? setLogin(true) : setLogin(false);
+    const logged = localStorage.getItem('logged');
+    logged && logged === 'true' ? setLogin(true) : setLogin(false);
   }, []);
 
   useEffect(() => {
@@ -137,6 +135,10 @@ function App() {
           <Route path="/boxes/dl" element={<DocumentList />} />
 
           {/* 상세 정보 */}
+          {['/doc/br/:docId', '/apvl/br/:docId'].map((path) => {
+            <Route path={path} key={path} element={<BusinessReportInfo />} />;
+          })}
+
           <Route path="/doc/br/:docId" element={<BusinessReportInfo />} />
           <Route path="/doc/tp/:docId" element={<BusinessTripInfo />} />
           <Route path="/doc/pa/:docId" element={<PersonnelAppointmentInfo />} />
@@ -220,25 +222,31 @@ function App() {
 
           <Route element={<Calendar />} path="/calendar" exact />
 
-          {/* 메신저 */}
           <Route
-            path="/chatemplist"
-            element={<ChatEmpList invite={invite} setInvite={setInvite} />}
-          />
-          <Route path="/chatlist" element={<ChatRoom />} />
-          <Route path="/chatting" element={<Chat />} />
-          <Route path="/createroom" element={<CreateRoom invite={invite} />} />
-          <Route path="/chatnotice" element={<ChatNotice />} />
+            element={
+              <AdminRoutes
+                empInfo={empInfo}
+                setEmpInfo={setEmpInfo}
+                role={role}
+              />
+            }>
+            {/* 조직관리 */}
+            <Route path="/management/unit" element={<ManagementUnit />} />
+            <Route path="/add/units" element={<UnitListAddPage />} />
+            <Route path="/add/unit" element={<UnitAddpage />} />
 
-          {/* 조직관리 */}
-          <Route path="/management/unit" element={<ManagementUnit />} />
-          <Route path="/add/units" element={<UnitListAddPage />} />
-          <Route path="/add/unit" element={<UnitAddpage />} />
+            {/* 사원관리 */}
+            <Route
+              path="/management/employee"
+              element={<ManagementEmployee />}
+            />
+            <Route path="/add/employee" element={<EmpAddPage />} />
+            <Route path="/add/employees" element={<EmpListAddPage />} />
+          </Route>
 
-          {/* 사원관리 */}
-          <Route path="/management/employee" element={<ManagementEmployee />} />
-          <Route path="/add/employee" element={<EmpAddPage />} />
-          <Route path="/add/employees" element={<EmpListAddPage />} />
+          {/* 마이페이지 */}
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/mypage/update" element={<UpdateMine />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

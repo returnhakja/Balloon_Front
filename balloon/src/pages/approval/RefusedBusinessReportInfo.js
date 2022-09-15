@@ -90,7 +90,7 @@ function RefusedBusinessReportInfo() {
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}
                 key={index}>
-                <ApCard approverName={empData.approverName} />
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}
@@ -168,16 +168,17 @@ function RefusedBusinessReportInfo() {
                     e.preventDefault();
                   }
 
-                  approver.map((data, index) => {
-                    console.log(data);
-                    return insertApproval(
-                      params.docId,
-                      1,
-                      data,
-                      inputData,
-                      empInfo
-                    );
-                  });
+                  // approver.map((data, index) => {
+                  //   console.log(data);
+                  //   return insertApproval(
+                  //     params.docId,
+                  //     1,
+                  //     data,
+                  //     inputData,
+                  //     empInfo
+                  //   );
+                  // });
+                  insertApproval(params.docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   재상신하기

@@ -57,35 +57,27 @@ const SaveButton = styled(Button)(({ theme }) => ({
 }));
 
 function PAApprovalDeclare() {
-  const positionArr = [
-    '인턴',
-    '사원',
-    '주임',
-    '대리',
-    '과장',
-    '차장',
-    '부장',
-    '이사',
-    '상무',
-    '전무',
-    '부사장',
-    '사장',
-    '부회장',
-    '이사회 의장',
-    '회장',
-  ];
+  const [empInfo] = useOutletContext();
   const [paInfo, setPaInfo] = useState({});
   const [approver, setApprover] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [apvl, setApvl] = useState({});
+  const [approvalList, setApprovalList] = useState([]);
 
   const params = useParams();
 
   useEffect(() => {
     !!params && getPAByPAId(params.docId, setPaInfo);
-    getApvlByDocId(params.docId, setApprover);
+    getApvlByDocId(params.docId, setApprover, setApprovalList);
   }, [params]);
-  console.log(paInfo);
+
+  const myIndex = approvalList.findIndex(
+    (apvl) => apvl.approverEmp.empId === empInfo.empId
+  );
+  let apvlList = [];
+
+  apvlList.push(approvalList[myIndex], approvalList[myIndex + 1]);
+
   return (
     <SideNavigation>
       <Container>
@@ -143,7 +135,7 @@ function PAApprovalDeclare() {
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}>
-                <ApCard approverName={empData.approverName} />
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}
@@ -280,8 +272,9 @@ function PAApprovalDeclare() {
                   style={style}
                   openModal={openModal}
                   setOpenModal={setOpenModal}
-                  apvl={apvl}
                   approver={approver}
+                  apvlList={apvlList}
+                  approvalList={approvalList}
                   paInfo={paInfo}
                 />
               )}

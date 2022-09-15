@@ -91,7 +91,7 @@ function DeclaredPersonnelAppointmentInfo() {
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}>
-                <ApCard approverName={empData.approverName} />
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}

@@ -115,7 +115,13 @@ function EmpAddPage() {
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           사원번호
-          <Box style={{ width: '50vw', display: 'flex' }}>
+          <Box
+            style={{
+              width: '50vw',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
             <TextField
               margin="normal"
               // label="사원번호"
@@ -125,10 +131,26 @@ function EmpAddPage() {
               autoComplete="empId"
               autoFocus
             />{' '}
-            <button onClick={idCheckHandle}>중복 확인</button>
+            <Button
+              onClick={idCheckHandle}
+              sx={{
+                width: '100px',
+                // background: '#A6A6A6',
+                height: '50px',
+                mt: 1,
+                border: 1,
+              }}>
+              중복 확인
+            </Button>
           </Box>
           비밀번호
-          <Box style={{ width: '50vw', display: 'flex' }}>
+          <Box
+            style={{
+              width: '50vw',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
             <TextField
               margin="normal"
               // label="비밀번호"
@@ -139,9 +161,16 @@ function EmpAddPage() {
               autoComplete="current-password"
               visible="true"
             />{' '}
-            <button onClick={toggleHidePassword}>
+            <Button
+              onClick={toggleHidePassword}
+              sx={{
+                width: '100px',
+                mt: 1,
+                border: 1,
+                height: '50px',
+              }}>
               {hidePassword ? '보이기' : '숨기기'}
-            </button>
+            </Button>
           </Box>
           이름
           <TextField

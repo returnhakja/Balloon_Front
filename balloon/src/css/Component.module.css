@@ -21,6 +21,11 @@
   margin-top: 3vh;
 }
 
+.empUpadateForm {
+  display: 'flex';
+  align-items: 'center';
+}
+
 .gianfont {
   font-size: 2rem;
 }
@@ -37,6 +42,13 @@
   text-align: center;
 }
 
+.select {
+  font-size: 16px;
+  width: 80%;
+  height: 50px;
+  text-align: center;
+}
+
 .input:focus {
   outline: 1px solid #00aaff;
 }
@@ -44,4 +56,14 @@
 /* 아이콘 */
 .icon {
   margin-top: 5px;
+}
+.UnitBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 일정등록 */
+.TextField {
+  width: 100%;
 }

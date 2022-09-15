@@ -6,7 +6,7 @@ import {
   updateUnit,
 } from '../../context/UnitAxios';
 import styles from '../../css/Component.module.css';
-import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+import { Box, Button, Modal, Typography } from '@mui/material';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 
 const style = {
@@ -21,18 +21,18 @@ const style = {
   p: 4,
 };
 
-const Input = ({ label, register, required }) => (
-  <>
-    <Typography
-      id="modal-modal-title"
-      variant="h6"
-      component="h6"
-      sx={{ mb: 2, mt: 2 }}>
-      {label}
-    </Typography>
-    <input className={styles.input} {...register(label, { required })} />
-  </>
-);
+// const Input = ({ label, register, required }) => (
+//   <>
+//     <Typography
+//       id="modal-modal-title"
+//       variant="h6"
+//       component="h6"
+//       sx={{ mb: 2, mt: 2 }}>
+//       {label}
+//     </Typography>
+//     <input className={styles.input} {...register(label, { required })} />
+//   </>
+// );
 
 const Select = React.forwardRef(
   ({ name, label, unit, higher, parentCode, setParentCode }, ref) => {
@@ -78,7 +78,7 @@ const Select = React.forwardRef(
 export default function UnitUpdate({ open, setOpen, unitCode }) {
   const {
     register,
-    watch,
+    // watch,
     formState: { errors },
     handleSubmit,
   } = useForm();
@@ -88,7 +88,6 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
   const [unit, setUnit] = useState({});
   const [higher, setHigher] = useState([]);
   const [parentCode, setParentCode] = useState('0');
-  // };
 
   const onSubmit = (unitInfo) => {
     const updateData = {
@@ -115,7 +114,7 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description">
-          <Box sx={style}>
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={style}>
             <Typography
               id="modal-modal-title"
               variant="h4"
@@ -125,88 +124,91 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
               <span>조직 정보</span>
               <hr />
             </Typography>
-            <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h6"
-                sx={{ mb: 2, mt: 2 }}>
-                조직 번호
-              </Typography>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h6"
+              sx={{ mb: 2, mt: 2 }}>
+              조직 번호
+            </Typography>
+            <input
+              name="unitCode"
+              value={unit.unitCode}
+              className={styles.input}
+              {...register('unitCode', {
+                required: true,
+                maxLength: 10,
+              })}></input>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h6"
+              sx={{ mb: 2, mt: 2 }}>
+              조직 이름
+            </Typography>
+            {unit.unitCode === '00000000' ? (
               <input
-                name="unitCode"
-                value={unit.unitCode}
+                name="unitName"
+                value={unit.unitName}
                 className={styles.input}
-                {...register('unitCode', {
-                  required: true,
-                  maxLength: 10,
-                })}></input>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h6"
-                sx={{ mb: 2, mt: 2 }}>
-                조직 이름
-              </Typography>
-              {unit.unitCode === '00000000' ? (
-                <input
-                  name="unitName"
-                  value={unit.unitName}
-                  className={styles.input}
-                  readOnly
-                />
-              ) : (
-                <input
-                  name="unitName"
-                  defaultValue={unit.unitName}
-                  className={styles.input}
-                  {...register('unitName', { required: true, maxLength: 10 })}
-                />
-              )}
-              {errors.unitName && errors.unitName.type === 'required' && (
-                <p>This field is required</p>
-              )}
-              {errors.unitName && errors.unitName.type === 'maxLength' && (
-                <p>최대 글자 수를 넘었습니다.</p>
-              )}
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h6"
-                sx={{ mb: 2, mt: 2 }}>
-                전화번호
-              </Typography>
+                readOnly
+              />
+            ) : (
               <input
-                name="bell"
-                defaultValue={unit.bell}
+                name="unitName"
+                defaultValue={unit.unitName}
                 className={styles.input}
-                {...register('bell', {
-                  required: true,
-                  maxLength: 15,
-                  pattern: /^\d{3}-\d{3}-\d{4}$/,
-                })}
+                {...register('unitName', { required: true, maxLength: 10 })}
               />
-              {errors.bell && errors.bell.type === 'required' && (
-                <p>This field is required</p>
-              )}
-              {errors.bell && errors.bell.type === 'maxLength' && (
-                <p>최대 글자 수를 넘었습니다.</p>
-              )}
-              {errors.bell && errors.bell.type === 'pattern' && (
-                <p>전화번호 형식이 맞지 않습니다.</p>
-              )}
-              <Select
-                label="상위조직"
-                {...register('parentUnit')}
-                unit={unit}
-                higher={higher}
-                parentCode={parentCode}
-                setParentCode={setParentCode}
-              />
-
+            )}
+            {errors.unitName && errors.unitName.type === 'required' && (
+              <p>This field is required</p>
+            )}
+            {errors.unitName && errors.unitName.type === 'maxLength' && (
+              <p>최대 글자 수를 넘었습니다.</p>
+            )}
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h6"
+              sx={{ mb: 2, mt: 2 }}>
+              전화번호
+            </Typography>
+            <input
+              name="bell"
+              defaultValue={unit.bell}
+              className={styles.input}
+              {...register('bell', {
+                required: true,
+                maxLength: 15,
+                pattern: /^\d{3}-\d{3}-\d{4}$/,
+              })}
+            />
+            {errors.bell && errors.bell.type === 'required' && (
+              <p>This field is required</p>
+            )}
+            {errors.bell && errors.bell.type === 'maxLength' && (
+              <p>최대 글자 수를 넘었습니다.</p>
+            )}
+            {errors.bell && errors.bell.type === 'pattern' && (
+              <p>전화번호 형식이 맞지 않습니다.</p>
+            )}
+            <Select
+              label="상위조직"
+              {...register('parentUnit')}
+              unit={unit}
+              higher={higher}
+              parentCode={parentCode}
+              setParentCode={setParentCode}
+            />
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}>
               <Button
                 onClick={handleClose}
-                sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>
+                sx={{ fontSize: 24, mr: 3, border: 1, mt: 1, height: 50 }}>
                 취소
               </Button>
               {/* 채팅방만드는 부분 */}
@@ -215,10 +217,10 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
                 //   // updateHandle();
                 // }}
                 type="submit"
-                sx={{ fontSize: 30, border: 1, mt: 1 }}>
+                sx={{ fontSize: 24, border: 1, mt: 1, height: 50 }}>
                 수정
               </Button>
-            </form>
+            </div>
           </Box>
         </Modal>
       )}

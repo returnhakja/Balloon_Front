@@ -1,12 +1,31 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import { positionArr } from './EmpFunc';
 
 // 쿠키를 사용할 수 있게 해주기
 export const findCookieAccessToken = () => {
   const cookies = new Cookies();
-  cookies.get('accessToken');
+  const cookie = cookies.get('accessToken');
+  // console.log('accessToken:', cookie);
 
-  return cookies;
+  return cookie;
+};
+
+// accessToken으로 이름, 직위, id 가져오기
+export const getMe = async (setEmpInfo) => {
+  const cookie = await findCookieAccessToken();
+  // console.log(cookie);
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + cookie,
+    },
+  };
+  const url = '/employee/me';
+  await axios
+    .get(url, config)
+    .then((response) => response.data)
+    .then((data) => setEmpInfo(data))
+    .catch((error) => console.log(error));
 };
 
 // 전체 사원 출력 (페이징)
@@ -64,23 +83,6 @@ export const selectEmployees = async (setEmpList) => {
     .catch((error) => console.log(error));
 };
 
-// accessToken으로 이름, 직위, id 가져오기
-export const getMe = async (setEmpInfo) => {
-  const cookie = findCookieAccessToken();
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + cookie.cookies.accessToken,
-    },
-  };
-  const url = '/employee/me';
-  await axios
-    .get(url, config)
-    .then((response) => response.data)
-    .then((data) => setEmpInfo(data))
-    .catch((error) => console.log(error));
-};
-
 // 사번으로 Idcheck
 export const selectEmpByEmpId = async (empId, setIdChk) => {
   const urlStr = '/employee/' + empId;
@@ -104,6 +106,11 @@ export const getEmpByEmpId = async (empId, setBotInfo) => {
   });
 };
 
+export const findEmpByEmpIdByAdmin = async (empId, setEmployee) => {
+  const urlStr = '/employee/' + empId;
+  await axios.get(urlStr).then((response) => setEmployee(response.data));
+};
+
 // 사번으로 사원 검색 후, 정보 넣기
 export const setEmpInfoByEmpId = async (empId, setEmpInfo) => {
   const urlStr = '/employee/' + empId;
@@ -119,6 +126,7 @@ export const setEmpInfoByEmpId = async (empId, setEmpInfo) => {
 // 결재선 사원들 출력
 export const getEmpListByUnitCode = async () => {
   const cookie = findCookieAccessToken();
+  console.log('getEmpCookie', cookie);
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -134,55 +142,68 @@ export const getEmpListByUnitCode = async () => {
 export const getEmpListInSameUnit = async (empId, setCEList) => {
   const url = '/employee/unit/list/';
   const urlStr = url + empId;
+  console.log(empId);
   await axios
     .get(urlStr)
     .then((response) => response.data)
     .then((data) => {
+      console.log(data);
       setCEList(data);
     })
     .catch((error) => console.log(error));
 };
 
 // 같은 부서내 결재 사원 출력(자신 제외, 인턴 제외)
-export const getApvrListInSameUnit = async (empId, setCEList) => {
+export const getApvrListInSameUnit = async (empId, position, setCEList) => {
   const url = '/employee/apvr/unit/list/';
   const urlStr = url + empId;
   await axios
     .get(urlStr)
     .then((response) => response.data)
     .then((data) => {
-      setCEList(data);
+      const positionNum = positionArr.indexOf(position);
+      setCEList(
+        data.filter((v) => positionArr.indexOf(v.position) > positionNum)
+      );
+      // setCEList(data);
     })
     .catch((error) => console.log(error));
 };
 
+export const updateEmpByAdmin = async (updateData) => {
+  const url = '/employee/update/admin';
+  await axios.put(url, updateData).catch((error) => console.log(error));
+};
+
 // 사원 수정
-export const updateEmployee = async (
-  data
-  // , title, content, contenter
-) => {
-  console.log(data);
-  // const urlStr = process.env.REACT_APP_URL_EMP;
-  // const inputEmp = {
-  //   //   boardNo: boardNo,
-  //   //   boardTitle: title,
-  //   //   boardContent: content,
-  //   //   user: {
-  //   //     userEmail: contenter,
-  //   //   },
-  // };
-  //     await axios
-  //     .put(urlStr, inputBoard, process.env.REACT_APP_HEADER)
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  //   window.location.href = "/";
+export const updateEmployee = async (updateData) => {
+  const url = `/employee/update/mypage`;
+  console.log(updateData);
+
+  await axios
+    .put(url, updateData, process.env.REACT_APP_HEADER)
+    .catch((error) => {
+      console.log(error);
+    });
+  // window.location.href = '/mypage'
 };
 
 // 사번으로 사원 삭제
 export const deleteEmployee = async (data) => {
-  const url = '/employee/';
-  const urlStr = url + data.empId;
-  await axios.delete(urlStr).catch((error) => console.log(error));
+  const url = `/employee/${data.empId}`;
+  await axios.delete(url).catch((error) => console.log(error));
   window.location.href = '/management/employee';
+};
+
+export const uploadProfile = async (file, empId) => {
+  console.log('empId', empId);
+  console.log('file', file);
+
+  for (let value of file.values()) {
+    console.log('value', value);
+  }
+  // const url = `/file/upload/profile/${empId}`;
+  const url = '/file/upload/profile/' + empId;
+
+  await axios.post(url, file).catch((error) => console.log(error));
 };

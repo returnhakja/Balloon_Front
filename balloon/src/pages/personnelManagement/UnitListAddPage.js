@@ -1,17 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {
-  signupValidation,
-  signup,
-  insertSignupList,
-} from '../../context/AuthFunc';
-import { findUnitList } from '../../context/UnitAxios';
 import { insertUnitList } from '../../context/UnitAxios';
-import { selectEmpByEmpId } from '../../context/EmployeeAxios';
 import { Container, Button, TextField, Typography, Box } from '@mui/material';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import readXlsxFile from 'read-excel-file';
 
 function UnitListAddPage() {

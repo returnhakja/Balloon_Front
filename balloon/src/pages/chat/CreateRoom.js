@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useOutletContext } from 'react-router-dom';
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
-import { onCreateChatroom, onAllChatEmp } from '../../context/ChatAxios';
+import ChatStomp from './ChatStomp';
+import { onAllChatEmp, onCreateChatroom } from '../../context/ChatAxios';
 import styles from '../../css/chat/Chat.module.css';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
@@ -10,9 +8,9 @@ import { Box, Modal } from '@mui/material';
 
 const styleBox = {
   position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  top: '80%',
+  left: '97%',
+  transform: 'translate(-90%, -90%)',
   width: 300,
   bgcolor: 'background.paper',
   border: '2px solid #000',
@@ -21,27 +19,19 @@ const styleBox = {
   padding: 4,
 };
 
-const sock = new SockJS('http://localhost:8080/chatstart');
-const client = Stomp.over(sock);
-
-function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
+export default function CreateRoom({
+  invite,
+  openCreatChat,
+  setopenCreatChat,
+  empInfo,
+  setChatStatus,
+}) {
   const inputRef = useRef();
-  const [empInfo] = useOutletContext();
+  //로그인한 사원ID
   const empId = empInfo.empId;
   const [allChatEmp, setAllChatEmp] = useState([]);
   // socket
-  // const sock = new SockJS('http://localhost:8080/chatstart');
-  // const client = Stomp.over(sock);
-
-  client.connect({}, () => {
-    client.subscribe(`/topic/message`, () => {
-      disconnect();
-    });
-  });
-
-  const disconnect = () => {
-    client.disconnect();
-  };
+  const client = ChatStomp();
 
   const keyEnter = (e) => {
     if (e.key === 'Enter') {
@@ -73,7 +63,6 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
   };
 
   //채팅방이름 공백처리
-  //1:1채팅일 때 이미있는 채팅방 예외처리
   const eventChatHandle = () => {
     const input = document.getElementById('chatroomName');
     if (input.value.trim() !== '') {
@@ -89,15 +78,20 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
               empInfo,
               invite,
               document.getElementById('chatroomName'),
-              client
+              client,
+              setChatStatus
             );
+
+          handleClose();
         } else {
           onCreateChatroom(
             empInfo,
             invite,
             document.getElementById('chatroomName'),
-            client
+            client,
+            setChatStatus
           );
+          handleClose();
         }
       }
     } else {
@@ -117,7 +111,7 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
         <div>
           <Input
             id="chatroomName"
-            // className={styles.inBox}
+            className={styles.inBox}
             ref={inputRef}
             onKeyPress={keyEnter}
             placeholder="채팅방 이름을 입력하세요"
@@ -134,4 +128,3 @@ function CreateChatroom({ invite, openCreatChat, setopenCreatChat }) {
     </Modal>
   );
 }
-export default CreateChatroom;

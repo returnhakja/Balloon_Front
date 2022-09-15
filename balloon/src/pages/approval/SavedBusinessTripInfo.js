@@ -10,6 +10,7 @@ import {
   getApvlByDocId,
   getApvlId,
   getBizTpByBizTpId,
+  getBizTpEmpByBizTpId,
   insertApproval,
   insertBizTp,
 } from '../../context/ApprovalAxios';
@@ -21,15 +22,17 @@ import {
   Card,
   CardContent,
   Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   TextField,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
+import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -43,18 +46,36 @@ function SavedBusinessTripInfo() {
   const [empInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
-  const [startValue, setStartValue] = useState(null);
-  const [endValue, setEndValue] = useState(null);
+  // const [startValue, setStartValue] = useState(inputData.startDate);
+  const [startValue, setStartValue] = useState(inputData.startDate);
+  const [endValue, setEndValue] = useState(inputData.endDate);
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
   const [svApprover, setSvApprover] = useState([]);
+  const [approvalList, setApprovalList] = useState([]);
+  const [bizTpEmp, setBizTpEmp] = useState({});
+  const [mEmpInfo, setMEmpInfo] = useState('');
+  const [mEmp, setMEmp] = useState('');
 
   const params = useParams();
   let rmApprover = [];
 
+  // const startDate = startValue && document.getElementById('startValue').value;
+  // const endDate = endValue && document.getElementById('endValue').value;
+
+  console.log(inputData.startDate);
+  console.log(bizTpEmp);
+  console.log(mEmp);
+
   useEffect(() => {
-    getApvlByDocId(params.docId, setApprover, setSvApprover);
-  }, []);
+    getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
+    getApvlByDocId(params.docId, setApprover, setApprovalList, setSvApprover);
+
+    getBizTpEmpByBizTpId(params.docId, setBizTpEmp);
+
+    setStartValue(inputData.startDate);
+    setEndValue(inputData.endDate);
+  }, [inputData]);
 
   useEffect(() => {
     if (!!params) {
@@ -62,8 +83,8 @@ function SavedBusinessTripInfo() {
         getBizTpByBizTpId(params.docId, setInputData);
         // getApvlByDocId(params.docId, setApprover);
       } else {
-        setStartValue(inputData.startDate);
-        setEndValue(inputData.endDate);
+        // setStartValue(inputData.startDate);
+        // setEndValue(endValue);
         approver.length !== 0 && console.log(approver);
       }
       if (noApprover.length === 0) {
@@ -78,7 +99,7 @@ function SavedBusinessTripInfo() {
     });
     rmApprover = svApprover.filter((element) => !arr.includes(element.empId));
     console.log(rmApprover);
-  }, [params, inputData, startValue, endValue, approver.length]);
+  }, [params, inputData, startValue, endValue, approver]);
 
   console.log(params.docId);
   return (
@@ -199,7 +220,27 @@ function SavedBusinessTripInfo() {
             <tr align="center">
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
-                이거 일단 없음
+                <FormControl fullWidth>
+                  <InputLabel>구성원을 설정해주세요</InputLabel>
+                  <Select
+                    id="mEmp"
+                    label="구성원을 선택하세요"
+                    value={mEmp}
+                    placeholder="구성원을 선택하세요"
+                    onChange={(e) => {
+                      setMEmp(e.target.value);
+                    }}
+
+                    // className={styles.inputtext}
+                  >
+                    {mEmpInfo.length !== 0 &&
+                      mEmpInfo.map((mEmps, index) => (
+                        <MenuItem key={index} value={mEmps}>
+                          {mEmps.empName} ({mEmps.empId})
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
               </td>
               <td className={styles.titlename}></td>
             </tr>
@@ -217,8 +258,8 @@ function SavedBusinessTripInfo() {
 
             <tr>
               <td className={styles.tdreaui}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
+                {/* <LocalizationProvider dateAdapter={AdapterDateFns}> */}
+                {/* <DatePicker
                     label="시작일"
                     value={startValue}
                     type=" date"
@@ -227,12 +268,39 @@ function SavedBusinessTripInfo() {
                       setStartValue(newValue);
                     }}
                     renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
+                  /> */}
+                {/* <TextField
+                  id="startValue"
+                  label="시작일"
+                  type="date"
+                  value={startValue}
+                  onChange={(e) => {
+                    setStartValue(e.target.value);
+                  }}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                /> */}
+                <TextField
+                  id="startValue"
+                  label="시작일"
+                  type="date"
+                  value={!!startValue && startValue}
+                  sx={{ width: 250 }}
+                  onChange={(e) => {
+                    setStartValue(e.target.value);
+                    console.log(e.target.value);
+                  }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                {/* </LocalizationProvider> */}
 
                 <span className={styles.centerfont}> : </span>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
+                {/* <LocalizationProvider dateAdapter={AdapterDateFns}> */}
+                {/* <DatePicker
                     label="끝나는일"
                     value={endValue}
                     inputFormat={'yyyy-MM-dd'}
@@ -240,8 +308,21 @@ function SavedBusinessTripInfo() {
                       setEndValue(newValue);
                     }}
                     renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
+                  /> */}
+                <TextField
+                  id="endValue"
+                  label="종료일"
+                  type="date"
+                  value={!!endValue && endValue}
+                  onChange={(e) => {
+                    setEndValue(e.target.value);
+                  }}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                {/* </LocalizationProvider> */}
               </td>
               <td className={styles.tdreaui}>
                 <form>
@@ -325,32 +406,40 @@ function SavedBusinessTripInfo() {
                           deleteApvlByDocIdAndEmpId(params.docId, data.empId)
                         );
                       }
-                      approver.map((data, index) => {
-                        console.log(data);
-                        const approvalId = getApvlId(params.docId, data.empId);
+                      insertApproval(
+                        params.docId,
+                        0,
+                        approver,
+                        inputData,
+                        empInfo,
+                        approvalList
+                      );
+                      // approver.map((data, index) => {
+                      //   console.log(data);
+                      //   const approvalId = getApvlId(params.docId, data.empId);
 
-                        if (approvalId !== null) {
-                          approvalId.then((apvlId) => {
-                            console.log(data);
-                            insertApproval(
-                              params.docId,
-                              0,
-                              data,
-                              inputData,
-                              empInfo,
-                              apvlId
-                            );
-                          });
-                        } else {
-                          insertApproval(
-                            params.docId,
-                            0,
-                            data,
-                            inputData,
-                            empInfo
-                          );
-                        }
-                      });
+                      //   if (approvalId !== null) {
+                      //     approvalId.then((apvlId) => {
+                      //       console.log(data);
+                      //       insertApproval(
+                      //         params.docId,
+                      //         0,
+                      //         data,
+                      //         inputData,
+                      //         empInfo,
+                      //         apvlId
+                      //       );
+                      //     });
+                      //   } else {
+                      //     insertApproval(
+                      //       params.docId,
+                      //       0,
+                      //       data,
+                      //       inputData,
+                      //       empInfo
+                      //     );
+                      //   }
+                      // });
                     }
                     alert('문서가 임시저장되었습니다!');
                   }}>
@@ -379,18 +468,26 @@ function SavedBusinessTripInfo() {
                     e.preventDefault();
                   }
                   {
-                    approver.map((data, index) => {
-                      console.log(data);
-                      const approvalId = getApvlId(params.docId, data.empId);
-                      insertApproval(
-                        params.docId,
-                        1,
-                        data,
-                        inputData,
-                        empInfo,
-                        approvalId
-                      );
-                    });
+                    insertApproval(
+                      params.docId,
+                      1,
+                      approver,
+                      inputData,
+                      empInfo,
+                      approvalList
+                    );
+                    // approver.map((data, index) => {
+                    //   console.log(data);
+                    //   const approvalId = getApvlId(params.docId, data.empId);
+                    //   insertApproval(
+                    //     params.docId,
+                    //     1,
+                    //     data,
+                    //     inputData,
+                    //     empInfo,
+                    //     approvalId
+                    //   );
+                    // });
                   }
                 }}>
                 <SaveButton variant="contained" color="success" size="large">

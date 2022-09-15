@@ -8,6 +8,7 @@ import {
   insertApproval,
   insertBizRpt,
 } from '../../context/ApprovalAxios';
+import ChatStomp from '../chat/ChatStomp';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import { FcDocument } from 'react-icons/fc';
@@ -15,6 +16,15 @@ import { Button, Card, Container, Paper, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
+import axios from 'axios';
+import moment from 'moment';
+import { getEmpByEmpId } from '../../context/EmployeeAxios';
+import { botApvlChatroom, onApvlCreateChatroom } from '../../context/ChatAxios';
+import { idID } from '@mui/material/locale';
+import BusinessReportForm from '../chat/BusinessReportForm';
+
+//socket연결
+const client = ChatStomp();
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -25,7 +35,6 @@ const SaveButton = styled(Button)(({ theme }) => ({
 }));
 
 function BusinessReport() {
-  // 사원 정보 context
   const [empInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
@@ -33,6 +42,127 @@ function BusinessReport() {
   const [docId, setDocId] = useState('');
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
+  const [botInfo, setBotInfo] = useState([]);
+  // 이미 결재봇과 채팅방이 존재하는 사원 찾기
+  const [botApvlRoom, setBotApvlRoom] = useState([]);
+  //결재선설정empId
+  const apvlPeople = [];
+  const approverBot = 'Y0000002';
+  console.log(botInfo);
+  const empName = empInfo.empName;
+  const position = empInfo.position;
+  const approvalForm = '업무기안';
+
+  //기안제목
+  const approvalTitle =
+    document.getElementById('bizRptTitle') &&
+    document.getElementById('bizRptTitle').value;
+  console.log(approvalTitle);
+
+  //결재선설정empIdList
+  {
+    approver.map((empId) => apvlPeople.push(empId.empId));
+  }
+  console.log(apvlPeople);
+  console.log(botApvlRoom);
+
+  //결재봇정보가져오기
+  useEffect(() => {
+    getEmpByEmpId(approverBot, setBotInfo);
+    botApvlChatroom(apvlPeople, setBotApvlRoom);
+  }, [apvlPeople.length]);
+
+  //채팅방이 존재하는지 확인
+  const botroomExist = [];
+  const botroomId = [];
+  botApvlRoom.map((data) => {
+    botroomExist.push(data.empId.empId);
+    botroomId.push(data.chatroomId.chatroomId);
+  });
+  console.log(botroomExist);
+  console.log(botroomId);
+
+  // 채팅방이 생성되어야할 사람들
+  let newApvlPeople;
+  newApvlPeople = apvlPeople.filter((people) => !botroomExist.includes(people));
+  console.log(newApvlPeople);
+
+  const sendChatHandle = () => {
+    onApvlCreateChatroom(
+      newApvlPeople,
+      client,
+      approverBot,
+      AlreadyBotroomMsg,
+      botroomMsg
+    );
+  };
+
+  //처음 생성될 채팅방에 알림보내기
+  const botroomMsg = (add, client) => {
+    let chatApprovalList = [];
+    add.map((add) => {
+      const chatApproval = BusinessReportForm(
+        add.chatroomId,
+        botInfo,
+        approvalTitle,
+        approvalForm,
+        empName,
+        position
+      );
+
+      const approvalChat = {
+        chatroomId: add.chatroomId,
+        writer: botInfo,
+        chatContent: '결재가 등록되었습니다.',
+      };
+
+      //실시간으로 chat이 오기위해
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(chatApproval));
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(approvalChat));
+
+      chatApprovalList.push(chatApproval);
+      chatApprovalList.push(approvalChat);
+    });
+
+    console.log(chatApprovalList);
+    const chatApprovalSave = (chatApprovalList) => {
+      axios.post('/chat/messages', chatApprovalList);
+    };
+    chatApprovalSave(chatApprovalList);
+  };
+
+  // 이미생성된 채팅방에 알림보내기
+  const AlreadyBotroomMsg = (client) => {
+    let AlreadyChatApproval = [];
+    botroomId.map((id) => {
+      const chatApproval = BusinessReportForm(
+        id,
+        botInfo,
+        approvalTitle,
+        approvalForm,
+        empName,
+        position
+      );
+
+      const chatNewApproval = {
+        chatroomId: id,
+        writer: botInfo,
+        chatContent: '새로운 결재가 생성되었습니다. 확인하세요',
+      };
+
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(chatApproval));
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(chatNewApproval));
+
+      AlreadyChatApproval.push(chatApproval);
+      AlreadyChatApproval.push(chatNewApproval);
+    });
+    console.log(AlreadyChatApproval);
+    const chatScheduleSave = (AlreadyChatApproval) => {
+      axios.post('/chat/messages', AlreadyChatApproval);
+    };
+
+    chatScheduleSave(AlreadyChatApproval);
+  };
 
   useEffect(() => {
     if (docNum === 0) {
@@ -51,7 +181,6 @@ function BusinessReport() {
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          {' '}
           <FcDocument /> 업무기안
         </p>
 
@@ -71,20 +200,17 @@ function BusinessReport() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
           </tbody>
         </table>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
           <button
             type="button"
             className={styles.btnnav}
             onClick={() => {
-              // setOpenModal(true);
               setOpenapprovalModal(true);
             }}
             id="cancelBtn">
@@ -131,7 +257,6 @@ function BusinessReport() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 <form>
                   <input
                     id="bizRptTitle"
@@ -179,10 +304,7 @@ function BusinessReport() {
                       setInputData
                     );
 
-                    approver.map(async (data, index) => {
-                      console.log(data);
-                      await insertApproval(docId, 0, data, inputData, empInfo);
-                    });
+                    insertApproval(docId, 0, approver, inputData, empInfo);
 
                     alert('문서가 임시저장되었습니다!');
                   }}>
@@ -200,16 +322,13 @@ function BusinessReport() {
                       empInfo,
                       setInputData
                     );
+                    sendChatHandle();
                     alert('문서가 상신되었습니다!');
                   } else {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
-
-                  approver.map((data, index) => {
-                    console.log(data);
-                    return insertApproval(docId, 1, data, inputData, empInfo);
-                  });
+                  insertApproval(docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기

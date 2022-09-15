@@ -7,6 +7,7 @@ module.exports = function (app) {
       // target: 'http://15.164.224.26:8080',
       target: 'http://54.180.148.125:8080',
       // target: 'http://localhost:8080',
+
       changeOrigin: true,
     })
   );
@@ -66,6 +67,22 @@ module.exports = function (app) {
   );
   app.use(
     '/cre',
+    createProxyMiddleware({
+      // target: 'http://54.180.148.125:8080',
+      target: 'http://localhost:8080',
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    '/time',
+    createProxyMiddleware({
+      // target: 'http://15.164.224.26:8080',
+      target: 'http://localhost:8080',
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    '/file',
     createProxyMiddleware({
       // target: 'http://15.164.224.26:8080',
       target: 'http://54.180.148.125:8080',

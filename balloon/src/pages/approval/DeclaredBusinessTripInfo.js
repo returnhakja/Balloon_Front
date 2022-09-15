@@ -46,6 +46,9 @@ function DeclaredBusinessTripInfo() {
     }
   }, [params]);
 
+  console.log(bizTpInfo);
+  console.log(bizTpEmp);
+
   return (
     <SideNavigation>
       <Container>
@@ -70,7 +73,6 @@ function DeclaredBusinessTripInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {bizTpInfo.empName}({bizTpInfo.emp && bizTpInfo.emp.empId})
               </th>
             </tr>
@@ -108,7 +110,7 @@ function DeclaredBusinessTripInfo() {
                 variant="outlined"
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}>
-                <ApCard approverName={empData.approverName} />
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}
@@ -163,24 +165,46 @@ function DeclaredBusinessTripInfo() {
             <tr>
               <td className={styles.tdreaui}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
+                  <TextField
+                    disabled
+                    id="startValue"
+                    label="시작일"
+                    type="date"
+                    value={bizTpInfo.startDate}
+                    sx={{ width: 250 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                  {/* <DatePicker
                     disabled
                     label="시작일"
-                    value={bizTpInfo.startValue && bizTpInfo.startValue}
+                    value={bizTpInfo.startDate}
                     type=" date"
                     inputFormat={'yyyy-MM-dd'}
                     renderInput={(params) => <TextField {...params} />}
-                  />
+                  /> */}
                 </LocalizationProvider>
 
                 <span className={styles.centerfont}> : </span>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
+                  {/* <DatePicker
                     disabled
                     label="끝나는일"
-                    value={bizTpInfo.endvalue && bizTpInfo.endvalue}
+                    value={bizTpInfo && bizTpInfo.endDate}
                     inputFormat={'yyyy-MM-dd'}
                     renderInput={(params) => <TextField {...params} />}
+                  /> */}
+                  <TextField
+                    disabled
+                    id="endValue"
+                    label="종료일"
+                    type="date"
+                    value={bizTpInfo.endDate}
+                    sx={{ width: 250 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                   />
                 </LocalizationProvider>
               </td>

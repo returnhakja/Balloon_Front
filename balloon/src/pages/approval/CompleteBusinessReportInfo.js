@@ -30,7 +30,7 @@ const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function BizReportInfo() {
+function CompleteBusinessReportInfo() {
   // 사원 정보 context
   const [empInfo] = useOutletContext();
   // const [openapprovalModal, setOpenapprovalModal] = useState(false);
@@ -41,9 +41,9 @@ function BizReportInfo() {
   console.log(bizRptInfo);
 
   useEffect(() => {
-    !!params && getBizRptByBizRptId(params.docId, setBizRptInfo);
+    getBizRptByBizRptId(params.docId, setBizRptInfo);
     getApvlByDocId(params.docId, setApprover);
-  }, [params]);
+  }, []);
 
   return (
     <SideNavigation>
@@ -101,7 +101,7 @@ function BizReportInfo() {
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}
                 key={index}>
-                <ApCard approverName={empData.approverName} />
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}
@@ -170,4 +170,4 @@ function BizReportInfo() {
   );
 }
 
-export default BizReportInfo;
+export default CompleteBusinessReportInfo;

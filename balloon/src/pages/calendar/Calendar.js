@@ -23,7 +23,7 @@ const style = {
   textAlign: 'center',
 };
 
-function Calendar() {
+function Calendar({ clients, setClients }) {
   const [list, setList] = useState([]);
   const [openInsert, setOpenInsert] = useState(false);
   const [openUpdate, setOpenUpdate] = useState({
@@ -114,6 +114,8 @@ function Calendar() {
             setOpenInsert={setOpenInsert}
             empInfo={empInfo}
             dateStr={dateStr}
+            clients={clients}
+            setClients={setClients}
           />
         )}
         {/* 수정 */}
@@ -130,7 +132,6 @@ function Calendar() {
           <FullCalendar
             locale="ko"
             initialView="dayGridMonth"
-            // initialEvents={list}
             height="70vh"
             handleWindowResize="50vw"
             plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
@@ -140,12 +141,6 @@ function Calendar() {
               right: 'today prevYear prev next nextYear',
             }}
             googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
-            // events={{
-            //   googleCalendarId:
-            //     'ko.south_korea#holiday@group.v.calendar.google.com',
-            //   color: 'orange',
-            // }}
-            // eventSources={[list]}
             moreLinkContent={(e) => (e.text = ` +${e.num} 더보기`)}
             dayMaxEvents={2}
             eventSources={[
@@ -156,7 +151,7 @@ function Calendar() {
                 color: 'red',
               },
             ]}
-            eventBackgroundColor={'black'}
+            eventBackgroundColor={'#000000'}
             eventSourceSuccess={() => console.log('Success EventSource')}
             eventSourceFailure={() => console.log('Failure EventSource')}
             dateClick={(e) => handleDateClick(e)}
@@ -164,11 +159,9 @@ function Calendar() {
           />
         ) : (
           <>
-            {/* {console.log(list)} */}
             <FullCalendar
               locale="ko"
               initialView="dayGridMonth"
-              // initialEvents={list}
               height="70vh"
               handleWindowResize="50vw"
               plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
@@ -181,7 +174,7 @@ function Calendar() {
               events={{
                 googleCalendarId:
                   'ko.south_korea#holiday@group.v.calendar.google.com',
-                color: 'orange',
+                color: 'red',
               }}
               eventSources={list}
               eventBackgroundColor={'black'}

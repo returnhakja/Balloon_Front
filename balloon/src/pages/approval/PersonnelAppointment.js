@@ -4,7 +4,10 @@ import ModalApproval from './ModalApproval';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import SideNavigation from '../../components/SideNavigation';
 import { findUnitList } from '../../context/UnitAxios';
-import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
+import {
+  getEmpByEmpId,
+  getEmpListInSameUnit,
+} from '../../context/EmployeeAxios';
 import {
   getLatestPA,
   insertApproval,
@@ -13,6 +16,9 @@ import {
 import { positionArr } from '../../context/EmpFunc';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
+import axios from 'axios';
+import moment from 'moment';
+import ChatStomp from '../chat/ChatStomp';
 import { FcDocument } from 'react-icons/fc';
 import {
   Button,
@@ -31,6 +37,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
+
+import { botApvlChatroom, onApvlCreateChatroom } from '../../context/ChatAxios';
+import PersonnelAppointmentForm from '../chat/PersonnelAppointmentForm';
+
+//socket연결
+const client = ChatStomp();
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -52,7 +64,7 @@ function PersonnelAppointment() {
   const [noApprover, setNoApprover] = useState([]);
 
   // 날짜 관련
-  const [startValue, setStartValue] = useState(null);
+  const [startValue, setStartValue] = useState(new Date());
 
   // 모달
   // const [openModal, setOpenModal] = useState(false);
@@ -61,6 +73,140 @@ function PersonnelAppointment() {
   // 사원 정보 context
   const [empInfo] = useOutletContext();
   const [inputData, setInputData] = useState({});
+
+  console.log(empInfo);
+  console.log(mEmp);
+
+  const [botInfo, setBotInfo] = useState([]);
+  //이미 존재하는 사람들
+  const [botApvlRoom, setBotApvlRoom] = useState([]);
+  //결재선설정empId
+  const apvlPeople = [];
+  const approverBot = 'Y0000002';
+  console.log(botInfo);
+  const empName = empInfo.empName;
+  const position = empInfo.position;
+  const approvalForm = '인사명령';
+
+  //기안제목
+  const approvalTitle =
+    document.getElementById('PATitle') &&
+    document.getElementById('PATitle').value;
+  console.log(approvalTitle);
+
+  const member = mEmp.empName;
+  const appointDepartment = unit.unitName;
+  const appointPosition = posi;
+
+  //결재선설정empIdList
+  {
+    approver.map((empId) => apvlPeople.push(empId.empId));
+  }
+  console.log(apvlPeople);
+  console.log(botApvlRoom);
+
+  //결재봇정보가져오기
+  useEffect(() => {
+    getEmpByEmpId(approverBot, setBotInfo);
+    botApvlChatroom(apvlPeople, setBotApvlRoom);
+  }, [apvlPeople.length]);
+
+  const botroomExist = [];
+  const botroomId = [];
+  console.log(botApvlRoom);
+  botApvlRoom.map((data) => {
+    console.log(data.empId.empId);
+    botroomExist.push(data.empId.empId);
+    botroomId.push(data.chatroomId.chatroomId);
+  });
+  console.log(botroomExist);
+  console.log(botroomId);
+
+  //새로운 채팅방이 생성되어야할 사람들
+  let newApvlPeople;
+  newApvlPeople = apvlPeople.filter((people) => !botroomExist.includes(people));
+  console.log(newApvlPeople);
+
+  const sendChatHandle = () => {
+    onApvlCreateChatroom(
+      newApvlPeople,
+      client,
+      approverBot,
+      AlreadyBotroomMsg,
+      botroomMsg
+    );
+  };
+
+  //생성될 채팅방에 알림보내기
+  const botroomMsg = (add, client) => {
+    let chatApprovalList = [];
+    add.map((add) => {
+      const chatApproval = PersonnelAppointmentForm(
+        add.chatroomId,
+        botInfo,
+        approvalTitle,
+        approvalForm,
+        member,
+        appointDepartment,
+        appointPosition,
+        empName,
+        position
+      );
+      const approvalChat = {
+        chatroomId: add.chatroomId,
+        writer: botInfo,
+        chatContent: '결재가 등록되었습니다.',
+      };
+
+      //실시간으로 chat이 오기위해
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(chatApproval));
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(approvalChat));
+
+      chatApprovalList.push(chatApproval);
+      chatApprovalList.push(approvalChat);
+    });
+
+    console.log(chatApprovalList);
+    const chatApprovalSave = (chatApprovalList) => {
+      axios.post('/chat/messages', chatApprovalList);
+    };
+    chatApprovalSave(chatApprovalList);
+  };
+
+  // 이미생성된 채팅방에 알림보내기
+  const AlreadyBotroomMsg = (client) => {
+    let AlreadyChatApproval = [];
+    botroomId.map((id) => {
+      const AchatApproval = PersonnelAppointmentForm(
+        id,
+        botInfo,
+        approvalTitle,
+        approvalForm,
+        member,
+        appointDepartment,
+        appointPosition,
+        empName,
+        position
+      );
+      const chatNewApproval = {
+        chatroomId: id,
+        writer: botInfo,
+        chatContent: '새로운 결재가 생성되었습니다. 확인하세요',
+      };
+
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(AchatApproval));
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(chatNewApproval));
+
+      AlreadyChatApproval.push(AchatApproval);
+      AlreadyChatApproval.push(chatNewApproval);
+    });
+    console.log(AlreadyChatApproval);
+    const chatScheduleSave = (AlreadyChatApproval) => {
+      axios.post('/chat/messages', AlreadyChatApproval);
+    };
+
+    chatScheduleSave(AlreadyChatApproval);
+  };
 
   useEffect(() => {
     if (units.length === 0) {
@@ -78,8 +224,10 @@ function PersonnelAppointment() {
       }
 
       noApprover.length === 0 && setNoApprover(noApprover);
+
+      mEmp && console.log('mEmp~~~', mEmp);
     }
-  }, [units, empInfo, mEmpInfo, docNum, noApprover]);
+  }, [units, empInfo, mEmpInfo, docNum, noApprover, mEmp]);
 
   return (
     <SideNavigation>
@@ -191,7 +339,7 @@ function PersonnelAppointment() {
             <tr className={styles.trcon}>
               <td className={styles.titlename}>인사명령일</td>
               <td className={styles.titlename} colSpan={4}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     label="일자 선택"
                     value={startValue}
@@ -202,7 +350,22 @@ function PersonnelAppointment() {
                     }}
                     renderInput={(params) => <TextField {...params} />}
                   />
-                </LocalizationProvider>
+                </LocalizationProvider> */}
+
+                <TextField
+                  id="startvalue"
+                  required
+                  label="시작일"
+                  type="date"
+                  value={startValue}
+                  onChange={(newValue) => {
+                    setStartValue(newValue.target.value);
+                  }}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </td>
             </tr>
           </thead>
@@ -254,7 +417,7 @@ function PersonnelAppointment() {
                     {units &&
                       units.map((unitInfo, index) => (
                         <MenuItem key={index} value={unitInfo}>
-                          {unitInfo.unitName}
+                          {unitInfo.unitName} ({unitInfo.unitCode})
                         </MenuItem>
                       ))}
                   </Select>
@@ -323,10 +486,11 @@ function PersonnelAppointment() {
                       setInputData
                     );
 
-                    approver.map((data, index) => {
-                      console.log(data);
-                      return insertApproval(docId, 0, data, inputData, empInfo);
-                    });
+                    // approver.map((data, index) => {
+                    //   console.log(data);
+                    //   return insertApproval(docId, 0, data, inputData, empInfo);
+                    // });
+                    insertApproval(docId, 0, approver, inputData, empInfo);
 
                     alert('문서가 임시저장되었습니다!');
                   }}>
@@ -348,16 +512,18 @@ function PersonnelAppointment() {
                       posi,
                       setInputData
                     );
+                    sendChatHandle();
                     alert('문서가 상신되었습니다!');
                   } else {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
 
-                  approver.map((data, index) => {
-                    console.log(data);
-                    return insertApproval(docId, 1, data, inputData, empInfo);
-                  });
+                  // approver.map((data, index) => {
+                  //   console.log(data);
+                  //   return insertApproval(docId, 1, data, inputData, empInfo);
+                  // });
+                  insertApproval(docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기

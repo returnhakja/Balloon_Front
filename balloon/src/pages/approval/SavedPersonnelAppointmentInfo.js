@@ -59,64 +59,79 @@ function SavedPersonnelAppointmentInfo() {
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
   const [svApprover, setSvApprover] = useState([]);
+  const [approvalList, setApprovalList] = useState([]);
 
   const params = useParams();
   let rmApprover = [];
 
   useEffect(() => {
-    getApvlByDocId(params.docId, setApprover, setSvApprover);
+    getApvlByDocId(params.docId, setApprover, setApprovalList, setSvApprover);
   }, []);
 
   useEffect(() => {
-    if (!inputData.personnelAppointmentId) {
+    if (units.length === 0) {
       findUnitList(setUnits);
-      getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
-      getPAByPAId(params.docId, setInputData);
+      if (mEmpInfo.length === 0) {
+        getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
+        getPAByPAId(params.docId, setInputData);
+      }
     } else {
+      setStartValue(inputData.personnelDate);
+      setMEmp(inputData.movedEmp);
+      setUnit(inputData.unit);
       setPosi(inputData.position);
     }
     if (noApprover.length === 0) {
       setNoApprover(noApprover);
     }
-    console.log(svApprover);
     let arr = [];
     approver.map((data) => {
       arr.push(data.empId);
-      console.log(arr);
     });
     rmApprover = svApprover.filter((element) => !arr.includes(element.empId));
-    console.log(rmApprover);
-  }, [inputData.personnelAppointmentId, approver.length]);
+  }, [
+    units,
+    mEmpInfo,
+    mEmp,
+    inputData.personnelAppointmentId,
+    approver.length,
+  ]);
+
+  console.log(unit);
 
   useEffect(() => {
     if (Object.keys(inputData).length !== 0) {
-      // console.log(inputData.personnelDate);
-      console.log(inputData);
-      setStartValue(inputData.personnelDate);
-      setMEmp(inputData.movedEmpId);
-      setUnit(inputData.unit);
+      // setStartValue(inputData.personnelDate);
+      // setMEmp(inputData.movedEmp);
+      // setUnit(inputData.unit);
+
+      if (mEmp && mEmp !== {}) {
+        if (Object.keys(mEmp).length !== 0) {
+          setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
+        }
+      }
+
+      if (unit && unit !== {}) {
+        Object.keys(unit).length !== 0 &&
+          setUnit2(unit.unitName + ' (' + unit.unitCode + ')');
+      }
     }
-    if (startValue !== null) {
-      // console.log(startValue);
-    }
-  }, [inputData, startValue]);
-
-  useEffect(() => {
-    // console.log(mEmpInfo);
-  }, [mEmpInfo]);
-
-  useEffect(() => {
-    Object.keys(mEmp).length !== 0 &&
-      setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
-  }, [mEmp]);
-
-  useEffect(() => {
-    Object.keys(unit).length !== 0 &&
-      setUnit2(unit.unitName + ' (' + unit.unitCode + ')');
-  }, [unit]);
+  }, [inputData]);
 
   // useEffect(() => {
-  //   units.length !== 0 && console.log(units);
+  // }, []);
+
+  // useEffect(() => {
+  //   Object.keys(mEmp).length !== 0 &&
+  //     setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
+  // }, [Object.keys(mEmp).length]);
+
+  // useEffect(() => {
+  //   Object.keys(unit).length !== 0 &&
+  //     setUnit2(unit.unitName + ' (' + unit.unitCode + ')');
+  // }, [Object.keys(unit).length]);
+
+  // useEffect(() => {
   // }, [units]);
 
   // mEmpInfo.length !== 0;
@@ -164,7 +179,7 @@ function SavedPersonnelAppointmentInfo() {
             결재선설정
           </button>
         </div>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
+
         {openapprovalModal && (
           <ModalApproval
             openapprovalModal={openapprovalModal}
@@ -185,7 +200,6 @@ function SavedPersonnelAppointmentInfo() {
             {!!empInfo && <DfCard drafterName={empInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             // if (apvl.length === 0) {
             //   setApvl(empData);
             // }
@@ -231,7 +245,7 @@ function SavedPersonnelAppointmentInfo() {
             <tr className={styles.trcon}>
               <td className={styles.titlename}>인사명령일</td>
               <td className={styles.titlename} colSpan={4}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     label="일자 선택"
                     value={!!startValue && startValue}
@@ -242,7 +256,21 @@ function SavedPersonnelAppointmentInfo() {
                     }}
                     renderInput={(params) => <TextField {...params} />}
                   />
-                </LocalizationProvider>
+                </LocalizationProvider> */}
+                <TextField
+                  id="startvalue"
+                  required
+                  label="시작일"
+                  type="date"
+                  value={startValue}
+                  onChange={(newValue) => {
+                    setStartValue(newValue.target.value);
+                  }}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </td>
             </tr>
           </thead>
@@ -257,7 +285,7 @@ function SavedPersonnelAppointmentInfo() {
               <td className={styles.tdreaui}>
                 <FormControl fullWidth>
                   <InputLabel>구성원을 설정해주세요</InputLabel>
-                  {Object.keys(mEmp).length !== 0 && (
+                  {mEmp && Object.keys(mEmp).length !== 0 && (
                     <Select
                       id="mEmp"
                       label="구성원을 선택하세요"
@@ -265,20 +293,16 @@ function SavedPersonnelAppointmentInfo() {
                       // defaultValue={mEmp2}
                       placeholder="구성원을 선택하세요"
                       onChange={(e) => {
-                        console.log(e);
                         setMEmp2(e.target.value);
-                        // console.log(e.target.value);
                       }}
 
                       // className={styles.inputtext}
                     >
-                      {/* {console.log(mEmp.empId + ' (' + mEmp.empName + ')123')} */}
-                      {mEmpInfo &&
+                      {mEmpInfo.length !== 0 &&
                         mEmpInfo.map((mEmps, index) => (
                           <MenuItem
                             key={index}
                             value={mEmps.empName + ' (' + mEmps.empId + ')'}>
-                            {console.log(mEmps)}
                             {mEmps.empName} ({mEmps.empId})
                           </MenuItem>
                         ))}
@@ -295,10 +319,9 @@ function SavedPersonnelAppointmentInfo() {
                       label="발령부서를 선택하세요"
                       value={unit2}
                       placeholder=" 발령부서를 선택하세요"
+                      defaultValue={unit}
                       onChange={(e) => {
-                        console.log(e);
                         setUnit2(e.target.value);
-                        // console.log(e.target.value);
                       }}
 
                       // className={styles.inputtext}
@@ -310,7 +333,6 @@ function SavedPersonnelAppointmentInfo() {
                             value={
                               unitInfo.unitName + ' (' + unitInfo.unitCode + ')'
                             }>
-                            {console.log(unitInfo)}
                             {unitInfo.unitName} ({unitInfo.unitCode})
                           </MenuItem>
                         ))}
@@ -331,7 +353,6 @@ function SavedPersonnelAppointmentInfo() {
                     defaultValue={inputData.position}
                     onChange={(e) => {
                       setPosi(e.target.value);
-                      // console.log(posi);
                     }}
 
                     // className={styles.inputtext}
@@ -396,7 +417,7 @@ function SavedPersonnelAppointmentInfo() {
                       empInfo,
                       startValue,
                       mEmp,
-                      unit,
+                      unit2,
                       posi,
                       setInputData
                     );
@@ -406,33 +427,38 @@ function SavedPersonnelAppointmentInfo() {
                           deleteApvlByDocIdAndEmpId(params.docId, data.empId)
                         );
                       }
-                      approver.map((data, index) => {
-                        console.log(data);
-                        console.log(index);
-                        const approvalId = getApvlId(params.docId, data.empId);
+                      insertApproval(
+                        params.docId,
+                        0,
+                        approver,
+                        inputData,
+                        empInfo,
+                        approvalList
+                      );
+                      // approver.map((data, index) => {
+                      //   const approvalId = getApvlId(params.docId, data.empId);
 
-                        if (approvalId !== null) {
-                          approvalId.then((apvlId) => {
-                            console.log(data);
-                            insertApproval(
-                              params.docId,
-                              0,
-                              data,
-                              inputData,
-                              empInfo,
-                              apvlId
-                            );
-                          });
-                        } else {
-                          insertApproval(
-                            params.docId,
-                            0,
-                            data,
-                            inputData,
-                            empInfo
-                          );
-                        }
-                      });
+                      //   if (approvalId !== null) {
+                      //     approvalId.then((apvlId) => {
+                      //       insertApproval(
+                      //         params.docId,
+                      //         0,
+                      //         data,
+                      //         inputData,
+                      //         empInfo,
+                      //         apvlId
+                      //       );
+                      //     });
+                      //   } else {
+                      //     insertApproval(
+                      //       params.docId,
+                      //       0,
+                      //       data,
+                      //       inputData,
+                      //       empInfo
+                      //     );
+                      //   }
+                      // });
                     }
                     alert('문서가 임시저장되었습니다!');
                   }}>
@@ -450,7 +476,7 @@ function SavedPersonnelAppointmentInfo() {
                       empInfo,
                       startValue,
                       mEmp,
-                      unit,
+                      unit2,
                       posi,
                       setInputData
                     );
@@ -460,11 +486,17 @@ function SavedPersonnelAppointmentInfo() {
                     e.preventDefault();
                   }
                   {
-                    approver.map((data, index) => {
-                      console.log(data);
-                      console.log(index);
-                      insertApproval(params.docId, 1, data, inputData, empInfo);
-                    });
+                    insertApproval(
+                      params.docId,
+                      1,
+                      approver,
+                      inputData,
+                      empInfo,
+                      approvalList
+                    );
+                    // approver.map((data, index) => {
+                    //   insertApproval(params.docId, 1, data, inputData, empInfo);
+                    // });
                   }
                 }}>
                 <SaveButton variant="contained" color="success" size="large">

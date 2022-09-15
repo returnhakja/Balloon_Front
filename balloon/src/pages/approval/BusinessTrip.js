@@ -7,17 +7,39 @@ import {
   getLatestBizTP,
   insertApproval,
   insertBizTp,
+  insertBizTpEmp,
 } from '../../context/ApprovalAxios';
+import axios from 'axios';
+import ChatStomp from '../chat/ChatStomp';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import { FcDocument } from 'react-icons/fc';
-import { Button, Card, Container, Paper, TextField } from '@mui/material';
+import {
+  Button,
+  Card,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+} from '@mui/material';
+
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
+
+import { getEmpByEmpId } from '../../context/EmployeeAxios';
+import { botApvlChatroom, onApvlCreateChatroom } from '../../context/ChatAxios';
+import BusinessTripForm from '../chat/BusinessTripForm';
+import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
+
+//socket연결
+const client = ChatStomp();
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -36,14 +58,160 @@ function BusinessTrip() {
   const [docId, setDocId] = useState('');
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
+  const [mEmpInfo, setMEmpInfo] = useState('');
+  const [mEmp, setMEmp] = useState('');
   const [apvlInfo, setApvlInfo] = useState([]);
+  const [botInfo, setBotInfo] = useState([]);
 
   // 모달
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
   const [empInfo] = useOutletContext();
 
+  //이미 존재하는 사람들
+  const [botApvlRoom, setBotApvlRoom] = useState([]);
+  //결재선설정empId
+  const apvlPeople = [];
+  const approverBot = 'Y0000002';
+  console.log(botInfo);
+  const empName = empInfo.empName;
+  const position = empInfo.position;
+  const approvalForm = '출장계획서';
+
+  //기안제목
+  const approvalTitle =
+    document.getElementById('bizTpTitle') &&
+    document.getElementById('bizTpTitle').value;
+  console.log(approvalTitle);
+  //방문처
+  const visitPlace =
+    document.getElementById('destination') &&
+    document.getElementById('destination').value;
+  console.log(visitPlace);
+  //방문목적
+  const visitPurpose =
+    document.getElementById('visitingPurpose') &&
+    document.getElementById('visitingPurpose').value;
+  console.log(visitPurpose);
+
+  //결재선설정empIdList
+  {
+    approver.map((empId) => apvlPeople.push(empId.empId));
+  }
+  console.log(apvlPeople);
+  console.log(botApvlRoom);
+
+  //결재봇정보가져오기
   useEffect(() => {
+    getEmpByEmpId(approverBot, setBotInfo);
+    botApvlChatroom(apvlPeople, setBotApvlRoom);
+  }, [apvlPeople.length]);
+
+  const botroomExist = [];
+  const botroomId = [];
+  console.log(botApvlRoom);
+  botApvlRoom.map((data) => {
+    console.log(data.empId.empId);
+    botroomExist.push(data.empId.empId);
+    botroomId.push(data.chatroomId.chatroomId);
+  });
+  console.log(botroomExist);
+  console.log(botroomId);
+
+  //새로운 채팅방이 생성되어야할 사람들
+  let newApvlPeople;
+  newApvlPeople = apvlPeople.filter((people) => !botroomExist.includes(people));
+  console.log(newApvlPeople);
+
+  const sendChatHandle = () => {
+    onApvlCreateChatroom(
+      newApvlPeople,
+      client,
+      approverBot,
+      AlreadyBotroomMsg,
+      botroomMsg
+    );
+  };
+
+  //생성될 채팅방에 알림보내기
+  const botroomMsg = (add, client) => {
+    let chatApprovalList = [];
+    add.map((add) => {
+      const chatApproval = BusinessTripForm(
+        add.chatroomId,
+        botInfo,
+        approvalTitle,
+        approvalForm,
+        visitPlace,
+        visitPurpose,
+        empName,
+        position
+      );
+      const approvalChat = {
+        chatroomId: add.chatroomId,
+        writer: botInfo,
+        chatContent: '결재가 등록되었습니다.',
+      };
+
+      //실시간으로 chat이 오기위해
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(chatApproval));
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(approvalChat));
+
+      chatApprovalList.push(chatApproval);
+      chatApprovalList.push(approvalChat);
+    });
+
+    console.log(chatApprovalList);
+    const chatApprovalSave = (chatApprovalList) => {
+      axios.post('/chat/messages', chatApprovalList);
+    };
+    chatApprovalSave(chatApprovalList);
+  };
+
+  // 이미생성된 채팅방에 알림보내기
+  const AlreadyBotroomMsg = (client) => {
+    let AlreadyChatApproval = [];
+    botroomId.map((id) => {
+      const AchatApproval = BusinessTripForm(
+        id,
+        botInfo,
+        approvalTitle,
+        approvalForm,
+        visitPlace,
+        visitPurpose,
+        empName,
+        position
+      );
+
+      const chatNewApproval = {
+        chatroomId: id,
+        writer: botInfo,
+        chatContent: '새로운 결재가 등록되었습니다. 확인하세요',
+      };
+
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(AchatApproval));
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(chatNewApproval));
+
+      AlreadyChatApproval.push(AchatApproval);
+      AlreadyChatApproval.push(chatNewApproval);
+    });
+    console.log(AlreadyChatApproval);
+    const chatScheduleSave = (AlreadyChatApproval) => {
+      axios.post('/chat/messages', AlreadyChatApproval);
+    };
+
+    chatScheduleSave(AlreadyChatApproval);
+  };
+
+  let startDate = startValue && document.getElementById('startValue').value;
+  let endDate = endValue && document.getElementById('endValue').value;
+  console.log(startDate);
+  console.log(endDate);
+
+  useEffect(() => {
+    if (mEmpInfo.length === 0) {
+      getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
+    }
     if (docNum === 0) {
       getLatestBizTP(setDocNum);
       setDocId('출장계획-22-0000001');
@@ -55,6 +223,7 @@ function BusinessTrip() {
       setNoApprover(noApprover);
     }
   }, [docNum, noApprover]);
+  console.log(mEmp);
 
   return (
     <SideNavigation>
@@ -84,7 +253,6 @@ function BusinessTrip() {
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
-            <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
 
@@ -171,7 +339,27 @@ function BusinessTrip() {
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
                 {' '}
-                이거 일단 없음
+                <FormControl fullWidth>
+                  <InputLabel>구성원을 설정해주세요</InputLabel>
+                  <Select
+                    id="mEmp"
+                    label="구성원을 선택하세요"
+                    value={mEmp}
+                    placeholder="구성원을 선택하세요"
+                    onChange={(e) => {
+                      setMEmp(e.target.value);
+                    }}
+
+                    // className={styles.inputtext}
+                  >
+                    {mEmpInfo.length !== 0 &&
+                      mEmpInfo.map((mEmps, index) => (
+                        <MenuItem key={index} value={mEmps}>
+                          {mEmps.empName} ({mEmps.empId})
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
               </td>
               <td className={styles.titlename}></td>
             </tr>
@@ -190,20 +378,20 @@ function BusinessTrip() {
             <tr>
               <td className={styles.tdreaui}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  {/* <TextField
-                  id="startValue"
-                  label="시작일"
-                  type="datetime-local"
-                  defaultValue={startValue}
-                  onChange={(newValue) => {
-                    setStartValue(newValue);
-                  }}
-                  sx={{ width: 250 }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                /> */}
-                  <DatePicker
+                  <TextField
+                    id="startValue"
+                    label="시작일"
+                    type="date"
+                    defaultValue={startValue}
+                    onChange={(newValue) => {
+                      setStartValue(newValue);
+                    }}
+                    sx={{ width: 250 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                  {/* <DatePicker
                     label="시작일"
                     value={startValue}
                     type=" date"
@@ -212,13 +400,26 @@ function BusinessTrip() {
                       setStartValue(newValue);
                     }}
                     renderInput={(params) => <TextField {...params} />}
-                  />
+                  /> */}
                 </LocalizationProvider>
 
                 <span className={styles.centerfont}> : </span>
 
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
+                  <TextField
+                    id="endValue"
+                    label="종료일"
+                    type="date"
+                    defaultValue={endValue}
+                    onChange={(newValue) => {
+                      setEndValue(newValue);
+                    }}
+                    sx={{ width: 250 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                  {/* <DatePicker
                     label="끝나는일"
                     value={endValue}
                     inputFormat={'yyyy-MM-dd'}
@@ -226,7 +427,7 @@ function BusinessTrip() {
                       setEndValue(newValue);
                     }}
                     renderInput={(params) => <TextField {...params} />}
-                  />
+                  /> */}
                 </LocalizationProvider>
               </td>
               <td className={styles.tdreaui}>
@@ -285,16 +486,17 @@ function BusinessTrip() {
                       3,
                       inputData,
                       empInfo,
-                      startValue,
-                      endValue,
+                      startDate,
+                      endDate,
                       setInputData
                     );
 
-                    approver.map((data, index) => {
-                      console.log(data);
-                      return insertApproval(docId, 0, data, inputData, empInfo);
-                    });
-
+                    // approver.map((data, index) => {
+                    //   console.log(data);
+                    //   return insertApproval(docId, 0, data, inputData, empInfo);
+                    // });
+                    insertApproval(docId, 0, approver, inputData, empInfo);
+                    insertBizTpEmp(docId, mEmp);
                     alert('문서가 임시저장되었습니다!');
                   }}>
                   임시저장
@@ -309,19 +511,21 @@ function BusinessTrip() {
                       1,
                       inputData,
                       empInfo,
-                      startValue,
-                      endValue,
+                      startDate,
+                      endDate,
                       setInputData
                     );
+                    sendChatHandle();
                     alert('문서가 상신되었습니다!');
                   } else {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
-                  approver.map((data, index) => {
-                    console.log(data);
-                    return insertApproval(docId, 1, data, inputData, empInfo);
-                  });
+                  // approver.map((data, index) => {
+                  //   console.log(data);
+                  //   return insertApproval(docId, 1, data, inputData, empInfo);
+                  // });
+                  insertApproval(docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기
