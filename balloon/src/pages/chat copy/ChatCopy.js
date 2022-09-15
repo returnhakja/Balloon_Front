@@ -37,7 +37,8 @@ function ChatCopy({ empInfo, roomId, setChatStatus }) {
   const [input, setInput] = useState([]);
   const inputRef = useRef();
   // const sock = new SockJS('http://localhost:8080/chatstart');
-  const sock = new SockJS('http://15.164.224.26:8080/chatstart');
+  // const sock = new SockJS('http://15.164.224.26:8080/chatstart');
+  const sock = new SockJS('http://54.180.148.125:8080/chatstart');
   const client = Stomp.over(sock);
   // const client = Stomp.over(sock);
 
