@@ -12,7 +12,7 @@ import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
   const handleClose = () => {
     setOpenUpdate(false);
-    window.location.href = '/calendars';
+    window.location.href = '/schudule';
   };
 
   const [list, setList] = useState([]);
