@@ -20,13 +20,15 @@ script:
   - npm install
   - CI=false npm run build
 before_deploy:
-  - cp ~/.env ~/before-deploy-frontend/
-  - cp appspec.yml ~/before-deploy-frontend/
-  - cp deploy.sh ~/before-deploy-frontend/
-  - cp -r build ~/before-deploy-frontend/
-  - cd ~/before-deploy-frontend && zip -r ~/before-deploy-frontend * # before-deploy로 이동후 전체 압축
-  - cd ../ && mkdir -p ~/deploy-frontend # 상위 디렉토리로 이동후 deploy 디렉토리 생성
-  - mv ~/before-deploy-frontend/before-deploy-frontend.zip ~/deploy-frontend/Balloon-frontend.zip # deploy로 zip파일 이동
+  - cp ~/.env ~/before-deploy-frontend
+  - cp appspec.yml ~/before-deploy-frontend
+  - cp deploy.sh ~/before-deploy-frontend
+  - cp -r build ~/before-deploy-frontend
+  - mkdir -p ~/deploy-frontend
+  - cd ~/deploy-frontend
+  - zip -r ~/before-deploy-frontend/* # before-deploy로 이동후 전체 압축
+  - ls
+#   - mv ~/before-deploy-frontend/before-deploy-frontend.zip ~/deploy-frontend/Balloon-frontend.zip # deploy로 zip파일 이동
   
 deploy:
   - provider: s3
