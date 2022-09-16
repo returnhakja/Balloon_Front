@@ -4,7 +4,6 @@ import { onExitRoom, onHCupdate } from '../../context/ChatAxios';
 import ChatStomp from './ChatStomp';
 import Button from '@mui/material/Button';
 import { Box, Modal } from '@mui/material';
-import { useEffect, useState } from 'react';
 
 const styleBox = {
   position: 'absolute',

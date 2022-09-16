@@ -17,7 +17,6 @@ import { positionArr } from '../../context/EmpFunc';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import axios from 'axios';
-import moment from 'moment';
 import ChatStomp from '../chat/ChatStomp';
 import { FcDocument } from 'react-icons/fc';
 import {
@@ -33,9 +32,6 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
 
 import { botApvlChatroom, onApvlCreateChatroom } from '../../context/ChatAxios';
@@ -63,7 +59,6 @@ function PersonnelAppointment() {
   const [saveType, setSaveType] = useState('');
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
-
   // 날짜 관련
   const [startValue, setStartValue] = useState(new Date());
 
@@ -71,13 +66,10 @@ function PersonnelAppointment() {
   const tempRef = useRef();
 
   // 모달
-  // const [openModal, setOpenModal] = useState(false);
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
-
   // 사원 정보 context
   const [empInfo] = useOutletContext();
   const [inputData, setInputData] = useState({});
-
   const [botInfo, setBotInfo] = useState([]);
   //이미 존재하는 사람들
   const [botApvlRoom, setBotApvlRoom] = useState([]);
@@ -87,12 +79,12 @@ function PersonnelAppointment() {
   const empName = empInfo.empName;
   const position = empInfo.position;
   const approvalForm = '인사명령';
-
+  const botroomExist = [];
+  const botroomId = [];
   //기안제목
   const approvalTitle =
     document.getElementById('PATitle') &&
     document.getElementById('PATitle').value;
-
   const member = mEmp.empName;
   const appointDepartment = unit.unitName;
   const appointPosition = posi;
@@ -102,22 +94,30 @@ function PersonnelAppointment() {
     approver.map((empId) => apvlPeople.push(empId.empId));
   }
 
+  let firstApvlPeople;
+  firstApvlPeople = apvlPeople.filter(
+    (data, index) => data.indexOf(data[0]) === index
+  );
+
   //결재봇정보가져오기
   useEffect(() => {
     getEmpByEmpId(approverBot, setBotInfo);
     botApvlChatroom(apvlPeople, setBotApvlRoom);
   }, [apvlPeople.length]);
 
-  const botroomExist = [];
-  const botroomId = [];
   botApvlRoom.map((data) => {
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
 
+  let createdRoomId = [];
+  createdRoomId = botroomId.slice(0, 1);
+
   //새로운 채팅방이 생성되어야할 사람들
   let newApvlPeople;
-  newApvlPeople = apvlPeople.filter((people) => !botroomExist.includes(people));
+  newApvlPeople = firstApvlPeople.filter(
+    (people) => !botroomExist.includes(people)
+  );
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(
@@ -167,7 +167,7 @@ function PersonnelAppointment() {
   // 이미생성된 채팅방에 알림보내기
   const AlreadyBotroomMsg = (client) => {
     let AlreadyChatApproval = [];
-    botroomId.map((id) => {
+    createdRoomId.map((id) => {
       const AchatApproval = PersonnelAppointmentForm(
         id,
         botInfo,
@@ -194,7 +194,6 @@ function PersonnelAppointment() {
     const chatScheduleSave = (AlreadyChatApproval) => {
       axios.post('/chat/messages', AlreadyChatApproval);
     };
-
     chatScheduleSave(AlreadyChatApproval);
   };
 

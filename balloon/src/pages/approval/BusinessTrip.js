@@ -25,14 +25,11 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
-
 import { getEmpByEmpId } from '../../context/EmployeeAxios';
 import { botApvlChatroom, onApvlCreateChatroom } from '../../context/ChatAxios';
 import BusinessTripForm from '../chat/BusinessTripForm';
@@ -61,14 +58,12 @@ function BusinessTrip() {
   const [noApprover, setNoApprover] = useState([]);
   const [mEmpInfo, setMEmpInfo] = useState('');
   const [mEmp, setMEmp] = useState('');
-  const [apvlInfo, setApvlInfo] = useState([]);
   const [botInfo, setBotInfo] = useState([]);
 
   // 모달
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
   const [empInfo] = useOutletContext();
-
   //이미 존재하는 사람들
   const [botApvlRoom, setBotApvlRoom] = useState([]);
   //결재선설정empId
@@ -99,6 +94,11 @@ function BusinessTrip() {
     approver.map((empId) => apvlPeople.push(empId.empId));
   }
 
+  let firstApvlPeople;
+  firstApvlPeople = apvlPeople.filter(
+    (data, index) => data.indexOf(data[0]) === index
+  );
+
   //결재봇정보가져오기
   useEffect(() => {
     getEmpByEmpId(approverBot, setBotInfo);
@@ -112,9 +112,14 @@ function BusinessTrip() {
     botroomId.push(data.chatroomId.chatroomId);
   });
 
+  let createdRoomId = [];
+  createdRoomId = botroomId.slice(0, 1);
+
   //새로운 채팅방이 생성되어야할 사람들
   let newApvlPeople;
-  newApvlPeople = apvlPeople.filter((people) => !botroomExist.includes(people));
+  newApvlPeople = firstApvlPeople.filter(
+    (people) => !botroomExist.includes(people)
+  );
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(
@@ -163,7 +168,7 @@ function BusinessTrip() {
   // 이미생성된 채팅방에 알림보내기
   const AlreadyBotroomMsg = (client) => {
     let AlreadyChatApproval = [];
-    botroomId.map((id) => {
+    createdRoomId.map((id) => {
       const AchatApproval = BusinessTripForm(
         id,
         botInfo,
@@ -187,10 +192,10 @@ function BusinessTrip() {
       AlreadyChatApproval.push(AchatApproval);
       AlreadyChatApproval.push(chatNewApproval);
     });
+
     const chatScheduleSave = (AlreadyChatApproval) => {
       axios.post('/chat/messages', AlreadyChatApproval);
     };
-
     chatScheduleSave(AlreadyChatApproval);
   };
 
