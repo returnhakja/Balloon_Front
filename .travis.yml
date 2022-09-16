@@ -18,8 +18,7 @@ script:
   - cp ~/.env ~/before-deploy-frontend
   - node -v
   - npm install
-  - CI= '' 
-  - npm run build
+  - CI=false npm run build
 before_deploy:
   - cp ~/.env ~/before-deploy-frontend/
   - cp appspec.yml ~/before-deploy-frontend/
