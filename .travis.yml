@@ -4,7 +4,7 @@ node_js:
 
 branches:
   only:
-    - feature/cal2
+#     - feature/cal2
 
 # Travis CI 서버의 Home
 cache:
