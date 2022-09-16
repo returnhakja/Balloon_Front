@@ -21,6 +21,8 @@ export default function ChatRoom({ empInfo, setChatStatus }) {
     }
   }, [empId]);
 
+  console.log(chatroom);
+
   useEffect(() => {}, [roomId]);
 
   //삭제확인알림창
@@ -40,6 +42,17 @@ export default function ChatRoom({ empInfo, setChatStatus }) {
               return (
                 <>
                   <div className={styles.DeleteBtn}>
+                    {openExitChat && (
+                      <ExitChatroom
+                        openExitChat={openExitChat}
+                        setOpenExitChat={setOpenExitChat}
+                        chatroomId={chat.chatroom.chatroomId}
+                        chatroomName={chat.chatroom.chatroomName}
+                        headCount={chat.chatroom.headCount}
+                        empInfo={empInfo}
+                        setChatStatus={setChatStatus}
+                      />
+                    )}
                     <Button
                       variant="text"
                       disableElevation
@@ -52,17 +65,6 @@ export default function ChatRoom({ empInfo, setChatStatus }) {
                       }}>
                       <DeleteIcon />
                     </Button>
-                    {openExitChat && (
-                      <ExitChatroom
-                        openExitChat={openExitChat}
-                        setOpenExitChat={setOpenExitChat}
-                        chatroomId={chat.chatroom.chatroomId}
-                        chatroomName={chat.chatroom.chatroomName}
-                        headCount={chat.chatroom.headCount}
-                        empInfo={empInfo}
-                        setChatStatus={setChatStatus}
-                      />
-                    )}
                   </div>
                   <div
                     className={styles.roomcon}

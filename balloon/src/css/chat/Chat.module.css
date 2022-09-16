@@ -287,7 +287,8 @@
 }
 
 .DeleteBtn {
-  float: right;
+  position: absolute;
+  left: 80%;
 }
 
 .LastTimecon {
