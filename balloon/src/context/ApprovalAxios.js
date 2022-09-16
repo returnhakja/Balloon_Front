@@ -252,8 +252,6 @@ export const insertPA = async (
     'Content-Type': 'application/json',
   };
 
-  // console.log(unit.slice(-9, -1));
-
   inputData = {
     personnelAppointmentId: docId,
     documentTitle: pATitle.value,

@@ -146,6 +146,7 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
   useEffect(() => {
     setModalOpen();
   }, []);
+
   const keyEnter = (e) => {
     if (e.key == 'Enter') {
       setClickChk(0);

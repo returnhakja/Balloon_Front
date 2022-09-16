@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../../css/chat/Chat.module.css';
 
-export default function ChatNotice({ setChatStatus, empInfo }) {
+export default function ChatNotice() {
   return (
     <div className={styles.listroom}>
       <div className={styles.chatfont}>
