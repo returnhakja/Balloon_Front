@@ -4,11 +4,9 @@ import SideNavigation from '../../components/SideNavigation';
 import ModalApproval from './ModalApproval';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import {
-  deleteApvlByDocId,
   deleteApvlByDocIdAndEmpId,
   deleteBizTp,
   getApvlByDocId,
-  getApvlId,
   getBizTpByBizTpId,
   getBizTpEmpByBizTpId,
   insertApproval,
@@ -20,7 +18,6 @@ import { FcDocument } from 'react-icons/fc';
 import {
   Button,
   Card,
-  CardContent,
   Container,
   FormControl,
   InputLabel,
@@ -31,12 +28,18 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
-import { Typography } from 'antd';
-import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
+import {
+  getEmpByEmpId,
+  getEmpListInSameUnit,
+} from '../../context/EmployeeAxios';
+import { botApvlChatroom, onApvlCreateChatroom } from '../../context/ChatAxios';
+import BusinessTripForm from '../chat/BusinessTripForm';
+import axios from 'axios';
+import ChatStomp from '../chat/ChatStomp';
+
+//socket연결
+const client = ChatStomp();
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -50,7 +53,6 @@ function SavedBusinessTripInfo() {
   const [empInfo] = useOutletContext();
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [inputData, setInputData] = useState({});
-  // const [startValue, setStartValue] = useState(inputData.startDate);
   const [startValue, setStartValue] = useState(inputData.startDate);
   const [endValue, setEndValue] = useState(inputData.endDate);
   const [approver, setApprover] = useState([]);
@@ -60,17 +62,144 @@ function SavedBusinessTripInfo() {
   const [bizTpEmp, setBizTpEmp] = useState({});
   const [mEmpInfo, setMEmpInfo] = useState('');
   const [mEmp, setMEmp] = useState('');
-
+  //이미 존재하는 사람들
+  const [botApvlRoom, setBotApvlRoom] = useState([]);
+  //결재선설정empId
+  const [botInfo, setBotInfo] = useState([]);
+  const apvlPeople = [];
+  const approverBot = 'Y0000002';
+  const empName = empInfo.empName;
+  const position = empInfo.position;
+  const approvalForm = '출장계획서';
   const params = useParams();
   let rmApprover = [];
+  const botroomExist = [];
+  const botroomId = [];
 
-  // const startDate = startValue && document.getElementById('startValue').value;
-  // const endDate = endValue && document.getElementById('endValue').value;
+  //기안제목
+  const approvalTitle =
+    document.getElementById('bizTpTitle') &&
+    document.getElementById('bizTpTitle').value;
 
-  console.log(inputData.startDate);
-  console.log(bizTpEmp);
-  console.log(mEmp);
+  //방문처
+  const visitPlace =
+    document.getElementById('destination') &&
+    document.getElementById('destination').value;
 
+  //방문목적
+  const visitPurpose =
+    document.getElementById('visitingPurpose') &&
+    document.getElementById('visitingPurpose').value;
+
+  //결재선설정empIdList
+  {
+    approver.map((empId) => apvlPeople.push(empId.empId));
+  }
+
+  let firstApvlPeople;
+  firstApvlPeople = apvlPeople.filter(
+    (data, index) => data.indexOf(data[0]) === index
+  );
+
+  //결재봇정보가져오기
+  useEffect(() => {
+    getEmpByEmpId(approverBot, setBotInfo);
+    botApvlChatroom(apvlPeople, setBotApvlRoom);
+  }, [apvlPeople.length]);
+
+  botApvlRoom.map((data) => {
+    botroomExist.push(data.empId.empId);
+    botroomId.push(data.chatroomId.chatroomId);
+  });
+
+  let createdRoomId = [];
+  createdRoomId = botroomId.slice(0, 1);
+
+  //새로운 채팅방이 생성되어야할 사람들
+  let newApvlPeople;
+  newApvlPeople = firstApvlPeople.filter(
+    (people) => !botroomExist.includes(people)
+  );
+
+  const sendChatHandle = () => {
+    onApvlCreateChatroom(
+      newApvlPeople,
+      client,
+      approverBot,
+      AlreadyBotroomMsg,
+      botroomMsg
+    );
+  };
+
+  //생성될 채팅방에 알림보내기
+  const botroomMsg = (add, client) => {
+    let chatApprovalList = [];
+    add.map((add) => {
+      const chatApproval = BusinessTripForm(
+        add.chatroomId,
+        botInfo,
+        approvalTitle,
+        approvalForm,
+        visitPlace,
+        visitPurpose,
+        empName,
+        position
+      );
+      const approvalChat = {
+        chatroomId: add.chatroomId,
+        writer: botInfo,
+        chatContent: '결재가 등록되었습니다.',
+      };
+
+      //실시간으로 chat이 오기위해
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(chatApproval));
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(approvalChat));
+
+      chatApprovalList.push(chatApproval);
+      chatApprovalList.push(approvalChat);
+    });
+
+    const chatApprovalSave = (chatApprovalList) => {
+      axios.post('/chat/messages', chatApprovalList);
+    };
+    chatApprovalSave(chatApprovalList);
+  };
+
+  // 이미생성된 채팅방에 알림보내기
+  const AlreadyBotroomMsg = (client) => {
+    let AlreadyChatApproval = [];
+    createdRoomId.map((id) => {
+      const AchatApproval = BusinessTripForm(
+        id,
+        botInfo,
+        approvalTitle,
+        approvalForm,
+        visitPlace,
+        visitPurpose,
+        empName,
+        position
+      );
+
+      const chatNewApproval = {
+        chatroomId: id,
+        writer: botInfo,
+        chatContent: '새로운 결재가 등록되었습니다. 확인하세요',
+      };
+
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(AchatApproval));
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(chatNewApproval));
+
+      AlreadyChatApproval.push(AchatApproval);
+      AlreadyChatApproval.push(chatNewApproval);
+    });
+
+    const chatScheduleSave = (AlreadyChatApproval) => {
+      axios.post('/chat/messages', AlreadyChatApproval);
+    };
+    chatScheduleSave(AlreadyChatApproval);
+  };
+
+  //////////////////////////////
   useEffect(() => {
     getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
     getApvlByDocId(params.docId, setApprover, setApprovalList, setSvApprover);
@@ -106,6 +235,7 @@ function SavedBusinessTripInfo() {
   }, [params, inputData, startValue, endValue, approver]);
 
   console.log(params.docId);
+
   return (
     <SideNavigation>
       <Container>
@@ -480,6 +610,7 @@ function SavedBusinessTripInfo() {
                       empInfo,
                       approvalList
                     );
+                    sendChatHandle();
                     // approver.map((data, index) => {
                     //   console.log(data);
                     //   const approvalId = getApvlId(params.docId, data.empId);

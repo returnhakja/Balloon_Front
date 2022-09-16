@@ -17,10 +17,8 @@ import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
 import axios from 'axios';
-import moment from 'moment';
 import { getEmpByEmpId } from '../../context/EmployeeAxios';
 import { botApvlChatroom, onApvlCreateChatroom } from '../../context/ChatAxios';
-import { idID } from '@mui/material/locale';
 import BusinessReportForm from '../chat/BusinessReportForm';
 
 //socket연결
@@ -45,47 +43,53 @@ function BusinessReport() {
   const [botInfo, setBotInfo] = useState([]);
   // 이미 결재봇과 채팅방이 존재하는 사원 찾기
   const [botApvlRoom, setBotApvlRoom] = useState([]);
+  //기안제목
+  const [apvlTitle, setApvlTitle] = useState('');
   //결재선설정empId
   const apvlPeople = [];
   const approverBot = 'Y0000002';
-  console.log(botInfo);
   const empName = empInfo.empName;
   const position = empInfo.position;
   const approvalForm = '업무기안';
+  const botroomExist = [];
+  const botroomId = [];
 
   //기안제목
   const approvalTitle =
     document.getElementById('bizRptTitle') &&
     document.getElementById('bizRptTitle').value;
-  console.log(approvalTitle);
 
   //결재선설정empIdList
   {
     approver.map((empId) => apvlPeople.push(empId.empId));
   }
-  console.log(apvlPeople);
-  console.log(botApvlRoom);
+
+  let firstApvlPeople;
+  firstApvlPeople = apvlPeople.filter(
+    (data, index) => data.indexOf(data[0]) === index
+  );
 
   //결재봇정보가져오기
   useEffect(() => {
     getEmpByEmpId(approverBot, setBotInfo);
     botApvlChatroom(apvlPeople, setBotApvlRoom);
-  }, [apvlPeople.length]);
+    setApvlTitle(approvalTitle);
+  }, [apvlPeople.length, apvlTitle]);
 
   //채팅방이 존재하는지 확인
-  const botroomExist = [];
-  const botroomId = [];
   botApvlRoom.map((data) => {
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
-  console.log(botroomExist);
-  console.log(botroomId);
+
+  let createdRoomId = [];
+  createdRoomId = botroomId.slice(0, 1);
 
   // 채팅방이 생성되어야할 사람들
   let newApvlPeople;
-  newApvlPeople = apvlPeople.filter((people) => !botroomExist.includes(people));
-  console.log(newApvlPeople);
+  newApvlPeople = firstApvlPeople.filter(
+    (people) => !botroomExist.includes(people)
+  );
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(
@@ -122,19 +126,18 @@ function BusinessReport() {
 
       chatApprovalList.push(chatApproval);
       chatApprovalList.push(approvalChat);
-    });
 
-    console.log(chatApprovalList);
-    const chatApprovalSave = (chatApprovalList) => {
-      axios.post('/chat/messages', chatApprovalList);
-    };
-    chatApprovalSave(chatApprovalList);
+      const chatApprovalSave = (chatApprovalList) => {
+        axios.post('/chat/messages', chatApprovalList);
+      };
+      chatApprovalSave(chatApprovalList);
+    });
   };
 
   // 이미생성된 채팅방에 알림보내기
   const AlreadyBotroomMsg = (client) => {
     let AlreadyChatApproval = [];
-    botroomId.map((id) => {
+    createdRoomId.map((id) => {
       const chatApproval = BusinessReportForm(
         id,
         botInfo,
@@ -155,13 +158,12 @@ function BusinessReport() {
 
       AlreadyChatApproval.push(chatApproval);
       AlreadyChatApproval.push(chatNewApproval);
-    });
-    console.log(AlreadyChatApproval);
-    const chatScheduleSave = (AlreadyChatApproval) => {
-      axios.post('/chat/messages', AlreadyChatApproval);
-    };
 
-    chatScheduleSave(AlreadyChatApproval);
+      const chatScheduleSave = (AlreadyChatApproval) => {
+        axios.post('/chat/messages', AlreadyChatApproval);
+      };
+      chatScheduleSave(AlreadyChatApproval);
+    });
   };
 
   useEffect(() => {
