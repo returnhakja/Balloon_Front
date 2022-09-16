@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { signupValidation, signup } from '../../context/AuthFunc';
 import { findUnitList } from '../../context/UnitAxios';
 import { selectEmpByEmpId } from '../../context/EmployeeAxios';
 import { positionArr, responseArr, gradeArr } from '../../context/EmpFunc';
+import styles from '../../css/Component.module.css';
 import { Container, Button, TextField, Typography, Box } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -31,6 +31,8 @@ function EmpAddPage() {
   const [hidePassword, setHidePassword] = useState(true);
   const [idChk, setIdChk] = useState(false);
   const [dataChk, setDataChk] = useState(false);
+  const [file, setFile] = useState('');
+  const [fileName, setFileName] = useState('첨부파일');
 
   const toggleHidePassword = (event) => {
     event.preventDefault();
@@ -53,6 +55,18 @@ function EmpAddPage() {
     findUnitList(setUnitArr);
   }, []);
 
+  const handleFileInput = (e) => {
+    const fileStr = e.target?.files[0]?.name;
+    if (!!fileStr) {
+      setFileName(e.target.files[0].name);
+      const formData = new FormData();
+      formData.append('file', e.target.files[0]);
+      setFile(formData);
+    } else {
+      alert('사진이 들어가지 않았습니다!!');
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -72,7 +86,7 @@ function EmpAddPage() {
     let birthday = document.getElementById('birthday').value;
     let address = document.getElementById('address').value;
     let licensePlate = document.getElementById('licensePlate').value;
-    let photo = document.getElementById('photo').value;
+    let photo = file;
 
     const inputEmp = signupValidation(
       setDataChk,
@@ -114,7 +128,7 @@ function EmpAddPage() {
           사원추가
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          사원번호
+          <InputLabel id="label-photo">사원번호</InputLabel>
           <Box
             style={{
               width: '50vw',
@@ -124,7 +138,6 @@ function EmpAddPage() {
             }}>
             <TextField
               margin="normal"
-              // label="사원번호"
               required
               fullWidth
               id="empId"
@@ -143,7 +156,7 @@ function EmpAddPage() {
               중복 확인
             </Button>
           </Box>
-          비밀번호
+          <InputLabel id="label-photo">비밀번호</InputLabel>
           <Box
             style={{
               width: '50vw',
@@ -172,10 +185,9 @@ function EmpAddPage() {
               {hidePassword ? '보이기' : '숨기기'}
             </Button>
           </Box>
-          이름
+          <InputLabel id="label-photo">이름</InputLabel>
           <TextField
             margin="normal"
-            // label="이름"
             required
             fullWidth
             id="empName"
@@ -327,14 +339,36 @@ function EmpAddPage() {
             autoComplete="licensePlate"
           />
           <InputLabel id="label-photo">사진</InputLabel>
-          <TextField
-            margin="normal"
-            type="file"
-            required
-            fullWidth
-            id="photo"
-            autoComplete="photo"
-          />
+          <Box
+            style={{
+              width: '50vw',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <TextField
+              margin="normal"
+              fullWidth
+              value={fileName}
+              id="photo"
+              autoComplete="photo"
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+            <Button
+              variant="outlined"
+              className={styles.filebox}
+              sx={{
+                width: '100px',
+                height: '50px',
+                mt: 1,
+                border: 1,
+              }}>
+              <label htmlFor="file">파일찾기</label>
+              <input type="file" id="file" onChange={handleFileInput} />
+            </Button>
+          </Box>
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="저장하기"

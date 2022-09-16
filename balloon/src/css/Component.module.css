@@ -57,6 +57,7 @@
 .icon {
   margin-top: 5px;
 }
+
 .UnitBtn {
   display: flex;
   justify-content: center;
@@ -66,4 +67,35 @@
 /* 일정등록 */
 .TextField {
   width: 100%;
+}
+
+.filebox .upload_name {
+  display: inline-block;
+  height: 40px;
+  padding: 0 10px;
+  vertical-align: middle;
+  border: 1px solid #dddddd;
+  width: 58%;
+  color: #999999;
+}
+
+/* .filebox label {
+  display: inline-block;
+  padding: 10px 20px;
+  vertical-align: middle;
+  color: #fff;
+  background-color: white;
+  border: 1px solid #dddddd;
+  cursor: pointer;
+  height: 40px;
+  margin-left: 10px;
+}
+*/
+.filebox input[type="file"] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
 }

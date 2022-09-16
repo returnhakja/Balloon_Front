@@ -650,3 +650,33 @@ export const deleteApvlByDocIdAndEmpId = async (docId, empId) => {
   const str = url + docId + '/' + empId;
   await axios.delete(str);
 };
+
+// 결재함 가져오기
+export const getABByEmp = async (empId, setABCount) => {
+  const url = '/api/apvl/';
+  const str = url + empId + '/' + 1;
+  await axios.get(str).then((res) => {
+    setABCount(res.data.length);
+  });
+};
+export const getAOByEmp = async (empId, setAOCount) => {
+  const url = '/api/apvl/';
+  const str = url + empId + '/' + 2;
+  await axios.get(str).then((res) => {
+    setAOCount(res.data.length);
+  });
+};
+export const getACByEmp = async (empId, setACCount) => {
+  const url = '/api/apvl/';
+  const str = url + empId + '/' + 3;
+  await axios.get(str).then((res) => {
+    setACCount(res.data.length);
+  });
+};
+export const getARByEmp = async (empId, setARCount) => {
+  const url = '/api/apvl/';
+  const str = url + empId + '/' + 4;
+  await axios.get(str).then((res) => {
+    setARCount(res.data.length);
+  });
+};

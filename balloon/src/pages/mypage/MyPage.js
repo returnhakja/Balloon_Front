@@ -50,7 +50,11 @@ function MyPage() {
                     marginTop: '5px',
                     marginBottom: '5px',
                   }}
-                  src={empInfo.photo}
+                  src={
+                    !!empInfo.photo
+                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
+                      : `${process.env.REACT_APP_AWS_S3_DEFAULT}`
+                  }
                   className="mypageavatar"
                 />
                 <Button
@@ -70,7 +74,11 @@ function MyPage() {
                   open={profileOpen}
                   setOpen={setProfileOpen}
                   empId={empInfo.empId}
-                  photo={empInfo.photo ? empInfo.photo : ''}
+                  photo={
+                    empInfo.photo
+                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
+                      : `${process.env.REACT_APP_AWS_S3_DEFAULT}`
+                  }
                 />
               )}
               <div>
