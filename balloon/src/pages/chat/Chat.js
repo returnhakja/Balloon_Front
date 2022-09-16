@@ -234,16 +234,17 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
                 </List>
               );
             })}
-          {/* 사원추가 */}
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              setModalOpen(true);
-            }}>
-            <PersonAddAlt1Icon />
-          </Button>
+
           {/* 채팅방 나가기 */}
           <div className={styles.logoutBtn}>
+            {/* 사원추가 */}
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                setModalOpen(true);
+              }}>
+              <PersonAddAlt1Icon />
+            </Button>
             <Button
               variant="text"
               disableElevation
@@ -327,6 +328,18 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
             return (
               <>
                 <div key={index} className={styles.othermessage}>
+                  <Avatar
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      marginRight: 1,
+                    }}
+                    src={
+                      !!msg.employee.photo
+                        ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${msg.employee.photo}`
+                        : ''
+                    }
+                  />
                   <div>{msg.employee.empName}</div>
                   <div className={styles.contentContan}>
                     <div className={styles.scheduleContent}>
@@ -350,6 +363,18 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
             return (
               <>
                 <div key={index} className={styles.othermessage}>
+                  <Avatar
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      marginRight: 1,
+                    }}
+                    src={
+                      !!msg.employee.photo
+                        ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${msg.employee.photo}`
+                        : ''
+                    }
+                  />
                   <div>{msg.employee.empName}</div>
                   <div className={styles.contentContan}>
                     <div className={styles.scheduleContent}>

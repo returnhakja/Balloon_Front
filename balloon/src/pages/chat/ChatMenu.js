@@ -9,8 +9,8 @@ import ChatSide from './ChatSide';
 
 export default function ChatMenu({ open, setOpen, empInfo }) {
   const [chatStatus, setChatStatus] = useState('chatEmpList');
+  const [roomId, setRoomId] = useState(0);
   const handleClose = () => setOpen(false);
-  useEffect(() => {}, [chatStatus]);
 
   return (
     <div>
@@ -36,19 +36,22 @@ export default function ChatMenu({ open, setOpen, empInfo }) {
         <hr />
         <div className={styles.side2}>
           <div className={styles.listcon}>
-            <ChatSide setChatStatus={setChatStatus} />
+            <ChatSide setChatStatus={setChatStatus} setRoomId={setRoomId} />
             {chatStatus === 'chatEmpList' ? (
               <ChatEmpList
                 open={open}
                 empInfo={empInfo}
                 chatStatus={chatStatus}
                 setChatStatus={setChatStatus}
+                setRoomId={setRoomId}
               />
             ) : chatStatus === 'chatList' ? (
               <ChatRoom
                 empInfo={empInfo}
                 chatStatus={chatStatus}
                 setChatStatus={setChatStatus}
+                roomId={roomId}
+                setRoomId={setRoomId}
               />
             ) : chatStatus === 'chatNotice' ? (
               <ChatNotice empInfo={empInfo} setChatStatus={setChatStatus} />
