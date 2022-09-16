@@ -4,12 +4,14 @@ import SideNavigation from '../../components/SideNavigation';
 import ModalApproval from './ModalApproval';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import { findUnitList } from '../../context/UnitAxios';
-import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
+import {
+  getEmpByEmpId,
+  getEmpListInSameUnit,
+} from '../../context/EmployeeAxios';
 import {
   deleteApvlByDocIdAndEmpId,
   deletePA,
   getApvlByDocId,
-  getApvlId,
   getPAByPAId,
   insertApproval,
   insertPA,
@@ -31,10 +33,14 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
+import ChatStomp from '../chat/ChatStomp';
+import PersonnelAppointmentForm from '../chat/PersonnelAppointmentForm';
+import axios from 'axios';
+import { botApvlChatroom, onApvlCreateChatroom } from '../../context/ChatAxios';
+
+//socket연결
+const client = ChatStomp();
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -60,10 +66,142 @@ function SavedPersonnelAppointmentInfo() {
   const [noApprover, setNoApprover] = useState([]);
   const [svApprover, setSvApprover] = useState([]);
   const [approvalList, setApprovalList] = useState([]);
+  const [botInfo, setBotInfo] = useState([]);
+  //이미 존재하는 사람들
+  const [botApvlRoom, setBotApvlRoom] = useState([]);
+  //결재선설정empId
+  const apvlPeople = [];
+  const approverBot = 'Y0000002';
+  const empName = empInfo.empName;
+  const position = empInfo.position;
+  const approvalForm = '인사명령';
+  const botroomExist = [];
+  const botroomId = [];
+
+  //기안제목
+  const approvalTitle =
+    document.getElementById('PATitle') &&
+    document.getElementById('PATitle').value;
+
+  const member = mEmp.empName;
+  const appointDepartment = unit.unitName;
+  const appointPosition = posi;
 
   const params = useParams();
   let rmApprover = [];
 
+  //결재선설정empIdList
+  {
+    approver.map((empId) => apvlPeople.push(empId.empId));
+  }
+
+  let firstApvlPeople;
+  firstApvlPeople = apvlPeople.filter(
+    (data, index) => data.indexOf(data[0]) === index
+  );
+
+  //결재봇정보가져오기
+  useEffect(() => {
+    getEmpByEmpId(approverBot, setBotInfo);
+    botApvlChatroom(apvlPeople, setBotApvlRoom);
+  }, [apvlPeople.length]);
+
+  botApvlRoom.map((data) => {
+    console.log(data.empId.empId);
+    botroomExist.push(data.empId.empId);
+    botroomId.push(data.chatroomId.chatroomId);
+  });
+
+  let createdRoomId = [];
+  createdRoomId = botroomId.slice(0, 1);
+  console.log(createdRoomId);
+
+  //새로운 채팅방이 생성되어야할 사람들
+  let newApvlPeople;
+  newApvlPeople = firstApvlPeople.filter(
+    (people) => !botroomExist.includes(people)
+  );
+
+  const sendChatHandle = () => {
+    onApvlCreateChatroom(
+      newApvlPeople,
+      client,
+      approverBot,
+      AlreadyBotroomMsg,
+      botroomMsg
+    );
+  };
+
+  //생성될 채팅방에 알림보내기
+  const botroomMsg = (add, client) => {
+    let chatApprovalList = [];
+    add.map((add) => {
+      const chatApproval = PersonnelAppointmentForm(
+        add.chatroomId,
+        botInfo,
+        approvalTitle,
+        approvalForm,
+        member,
+        appointDepartment,
+        appointPosition,
+        empName,
+        position
+      );
+      const approvalChat = {
+        chatroomId: add.chatroomId,
+        writer: botInfo,
+        chatContent: '결재가 등록되었습니다.',
+      };
+
+      //실시간으로 chat이 오기위해
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(chatApproval));
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(approvalChat));
+
+      chatApprovalList.push(chatApproval);
+      chatApprovalList.push(approvalChat);
+    });
+
+    const chatApprovalSave = (chatApprovalList) => {
+      axios.post('/chat/messages', chatApprovalList);
+    };
+    chatApprovalSave(chatApprovalList);
+  };
+
+  // 이미생성된 채팅방에 알림보내기
+  const AlreadyBotroomMsg = (client) => {
+    let AlreadyChatApproval = [];
+    createdRoomId.map((id) => {
+      const AchatApproval = PersonnelAppointmentForm(
+        id,
+        botInfo,
+        approvalTitle,
+        approvalForm,
+        member,
+        appointDepartment,
+        appointPosition,
+        empName,
+        position
+      );
+      const chatNewApproval = {
+        chatroomId: id,
+        writer: botInfo,
+        chatContent: '새로운 결재가 생성되었습니다. 확인하세요',
+      };
+
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(AchatApproval));
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(chatNewApproval));
+
+      AlreadyChatApproval.push(AchatApproval);
+      AlreadyChatApproval.push(chatNewApproval);
+    });
+
+    const chatScheduleSave = (AlreadyChatApproval) => {
+      axios.post('/chat/messages', AlreadyChatApproval);
+    };
+    chatScheduleSave(AlreadyChatApproval);
+  };
+
+  /////////////////////////
   useEffect(() => {
     getApvlByDocId(params.docId, setApprover, setApprovalList, setSvApprover);
   }, []);
@@ -494,6 +632,7 @@ function SavedPersonnelAppointmentInfo() {
                       empInfo,
                       approvalList
                     );
+                    sendChatHandle();
                     // approver.map((data, index) => {
                     //   insertApproval(params.docId, 1, data, inputData, empInfo);
                     // });

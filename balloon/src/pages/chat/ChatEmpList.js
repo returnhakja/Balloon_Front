@@ -3,29 +3,18 @@ import React, { useEffect, useState } from 'react';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 import styles from '../../css/chat/Chat.module.css';
 import Button from '@mui/material/Button';
-import {
-  Alert,
-  AlertTitle,
-  Avatar,
-  Checkbox,
-  Container,
-  Grid,
-} from '@mui/material';
+import { Avatar, Checkbox, Grid } from '@mui/material';
 import AddCommentIcon from '@mui/icons-material/AddComment';
-import CreateChatroom from './CreateRoom';
 import CreateRoom from './CreateRoom';
-import { useOutletContext } from 'react-router-dom';
 
 export default function ChatEmpList({
   open,
-  setOpen,
   empInfo,
   chatStatus,
   setChatStatus,
+  setRoomId,
 }) {
-  // const handleClose = () => setOpen(false);
-
-  //채팅할사원
+  //사원이름
   const [chatEmpList, setCEList] = useState([]);
   //조직이름
   const [chatUnitList, setCUList] = useState([]);
@@ -51,15 +40,17 @@ export default function ChatEmpList({
     return setCUList(array);
   };
 
-  // 사원list 출력하기
+  //사원list 출력하기
   useEffect(() => {
     setInvite([]);
+
     if (!!empId) {
       if (chatUnitList.length === 0) {
         if (chatEmpList.length === 0) {
           getEmpListInSameUnit(empId, setCEList);
         } else {
-          setCUList(chatEmpList.unit);
+          // setCUList(chatEmpList.unit);
+          setCUList();
           returnUnit(chatEmpList, setCUList);
         }
       }
@@ -69,6 +60,7 @@ export default function ChatEmpList({
   //초대할 사원을 담아두는 메소드
   const onInvite = (checked, data) => {
     if (checked) {
+      console.log(data);
       setInvite([...invite, data]);
     } else {
       setInvite(invite.filter((button) => button !== data));
@@ -111,6 +103,7 @@ export default function ChatEmpList({
                       empInfo={empInfo}
                       setChatStatus={setChatStatus}
                       setInvite={setInvite}
+                      setRoomId={setRoomId}
                     />
                   )}
                 </Grid>

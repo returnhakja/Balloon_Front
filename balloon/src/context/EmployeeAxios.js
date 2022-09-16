@@ -147,7 +147,6 @@ export const getEmpListInSameUnit = async (empId, setCEList) => {
     .get(urlStr)
     .then((response) => response.data)
     .then((data) => {
-      console.log(data);
       setCEList(data);
     })
     .catch((error) => console.log(error));

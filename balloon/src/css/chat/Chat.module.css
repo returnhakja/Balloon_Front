@@ -287,7 +287,7 @@
 }
 
 .DeleteBtn {
-  position: absolute;
+  float: right;
   left: 80%;
 }
 
