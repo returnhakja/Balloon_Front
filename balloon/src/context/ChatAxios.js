@@ -33,7 +33,8 @@ export const onCreateChatroom = async (
   invite,
   chatroomName,
   client,
-  setChatStatus
+  setChatStatus,
+  setRoomId
 ) => {
   invite.push(empInfo);
   axios
@@ -43,6 +44,7 @@ export const onCreateChatroom = async (
     })
     .then((response) => {
       onUserInvite(response.data, invite, client);
+      setRoomId(response.data);
       setChatStatus('chatList');
     })
     .catch((error) => console.log(error));

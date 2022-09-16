@@ -25,6 +25,7 @@ export default function CreateRoom({
   setopenCreatChat,
   empInfo,
   setChatStatus,
+  setRoomId,
 }) {
   const [allChatEmp, setAllChatEmp] = useState([]);
   const inputRef = useRef();
@@ -81,9 +82,9 @@ export default function CreateRoom({
               invite,
               document.getElementById('chatroomName'),
               client,
-              setChatStatus
+              setChatStatus,
+              setRoomId
             );
-
           handleClose();
         } else {
           onCreateChatroom(
@@ -91,7 +92,8 @@ export default function CreateRoom({
             invite,
             document.getElementById('chatroomName'),
             client,
-            setChatStatus
+            setChatStatus,
+            setRoomId
           );
           handleClose();
         }

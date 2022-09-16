@@ -4,7 +4,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import ChatIcon from '@mui/icons-material/Chat';
 import SettingsIcon from '@mui/icons-material/Settings';
 
-export default function ChatSide({ children, setChatStatus }) {
+export default function ChatSide({ children, setChatStatus, setRoomId }) {
   return (
     <div className={styles.constainer}>
       <div className={styles.iconcon}>
@@ -16,7 +16,10 @@ export default function ChatSide({ children, setChatStatus }) {
           </li>
           <li
             className={styles.listyle}
-            onClick={() => setChatStatus('chatList')}>
+            onClick={() => {
+              setChatStatus('chatList');
+              setRoomId(0);
+            }}>
             <ChatIcon fontSize="large" />
           </li>
           <li
