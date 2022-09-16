@@ -23,7 +23,7 @@ export default function ChatRoom({ empInfo, setChatStatus }) {
 
   useEffect(() => {}, [roomId]);
 
-  //삭제확인알림창
+  //삭제모달창
   const eventClickHandle = () => {
     setOpenExitChat(true);
   };

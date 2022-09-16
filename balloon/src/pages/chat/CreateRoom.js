@@ -26,13 +26,14 @@ export default function CreateRoom({
   empInfo,
   setChatStatus,
 }) {
+  const [allChatEmp, setAllChatEmp] = useState([]);
   const inputRef = useRef();
   //로그인한 사원ID
   const empId = empInfo.empId;
-  const [allChatEmp, setAllChatEmp] = useState([]);
   // socket
   const client = ChatStomp();
 
+  //enter
   const keyEnter = (e) => {
     if (e.key === 'Enter') {
       eventChatHandle();
@@ -40,9 +41,10 @@ export default function CreateRoom({
   };
 
   //초대할 사원
-  const alreadyInvite = [];
+  const InvitePeople = [];
   invite.map((vite) => {
-    alreadyInvite.push(vite.empId);
+    console.log(vite);
+    InvitePeople.push(vite.empId);
   });
 
   //headCount가 2인 chatroomEmployee T 정보 가져옴
@@ -51,10 +53,10 @@ export default function CreateRoom({
   }, []);
 
   //1:1채팅일 때 이미있는 채팅방 예외처리
-  const checkChatEmp = (allChatEmp, alreadyInvite) => {
+  const checkChatEmp = (allChatEmp, InvitePeople) => {
     let check = true;
     allChatEmp.map((id) => {
-      if (id.empId.empId == alreadyInvite) {
+      if (id.empId.empId == InvitePeople) {
         alert('이미 있는 채팅방입니다');
         check = false;
       }
@@ -71,8 +73,8 @@ export default function CreateRoom({
         input.value = '';
         alert('채팅방 이름을 입력해주세요!!');
       } else {
-        if (alreadyInvite.length === 1) {
-          const check = checkChatEmp(allChatEmp, alreadyInvite[0]);
+        if (InvitePeople.length === 1) {
+          const check = checkChatEmp(allChatEmp, InvitePeople[0]);
           check &&
             onCreateChatroom(
               empInfo,

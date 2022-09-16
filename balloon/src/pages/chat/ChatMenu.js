@@ -8,9 +8,8 @@ import ChatNotice from './ChatNotice';
 import ChatSide from './ChatSide';
 
 export default function ChatMenu({ open, setOpen, empInfo }) {
-  const handleClose = () => setOpen(false);
   const [chatStatus, setChatStatus] = useState('chatEmpList');
-
+  const handleClose = () => setOpen(false);
   useEffect(() => {}, [chatStatus]);
 
   return (
@@ -41,7 +40,6 @@ export default function ChatMenu({ open, setOpen, empInfo }) {
             {chatStatus === 'chatEmpList' ? (
               <ChatEmpList
                 open={open}
-                setOpen={setOpen}
                 empInfo={empInfo}
                 chatStatus={chatStatus}
                 setChatStatus={setChatStatus}

@@ -1,10 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styles from '../../css/chat/CS.module.css';
 import PersonIcon from '@mui/icons-material/Person';
 import ChatIcon from '@mui/icons-material/Chat';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Badge } from '@mui/material';
 
 export default function ChatSide({ children, setChatStatus }) {
   return (
@@ -19,16 +17,7 @@ export default function ChatSide({ children, setChatStatus }) {
           <li
             className={styles.listyle}
             onClick={() => setChatStatus('chatList')}>
-            {/* <Badge
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              color="secondary"
-              badgeContent={501}
-              max={500}> */}
             <ChatIcon fontSize="large" />
-            {/* </Badge> */}
           </li>
           <li
             className={styles.listyle}

@@ -92,6 +92,13 @@ export const botApvlChatroom = async (apvlPeople, setBotApvlRoom) => {
   });
 };
 
+// 이미 결재봇과 채팅방이 존재하는 사원 찾기
+export const botApvlChatroom2 = async (apvlId, setBotApvl) => {
+  axios.post(`/cre/apvlbotchatroom`, apvlId).then((response) => {
+    setBotApvl(response.data);
+  });
+};
+
 // 채팅방인원이 2명인 정보 가져오기
 export const onAllChatEmp = async (setAllChatEmp, empId) => {
   axios
