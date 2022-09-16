@@ -75,7 +75,7 @@ export const updateSchedule = async (inputdata, headers, setOpenUpdate) => {
     })
     .catch((error) => console.log(error));
   setOpenUpdate(false);
-  window.location.href = '/calendar';
+  window.location.href = '/calendars';
 };
 
 // 일정 삭제

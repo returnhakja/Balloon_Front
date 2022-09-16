@@ -8,13 +8,11 @@ import {
 import styles from '../../css/Component.module.css';
 import { BsCalendarWeek } from 'react-icons/bs';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
   const handleClose = () => {
     setOpenUpdate(false);
-    window.location.href = '/calendar';
+    window.location.href = '/calendars';
   };
 
   const [list, setList] = useState([]);
