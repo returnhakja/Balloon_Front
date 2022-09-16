@@ -48,7 +48,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
         <NavLink to={'/boxes'} style={activeStyle}>
           <li className="approval">결재관리</li>
         </NavLink>
-        <NavLink to={'/calendars'} style={activeStyle}>
+        <NavLink to={'/schudule'} style={activeStyle}>
           <li className="celendar">캘린더</li>
         </NavLink>
         <NavLink to={'/organization'} style={activeStyle}>
