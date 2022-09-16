@@ -132,6 +132,11 @@ export default function ChatEmpList({
                                     height: 24,
                                     marginRight: 1,
                                   }}
+                                  src={
+                                    !!ce.photo
+                                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${ce.photo}`
+                                      : ''
+                                  }
                                 />
                                 {ce.empName} {ce.position}
                                 <Checkbox

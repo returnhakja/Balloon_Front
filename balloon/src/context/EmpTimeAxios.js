@@ -1,11 +1,29 @@
 import axios from 'axios';
 
-export const findWorkIn = async (empId, setWorkStatus) => {
+export const findWorkOn = async (empId, setInCnt) => {
   const url = `/time/on/${empId}`;
+  await axios
+    .get(url)
+    .then((response) => response.data)
+    .then((data) => setInCnt(data))
+    .catch((error) => console.log(error));
+};
+
+export const findWorkOff = async (empId, setOutCnt) => {
+  const url = `/time/off/${empId}`;
+  await axios
+    .get(url)
+    .then((response) => response.data)
+    .then((data) => setOutCnt(data))
+    .catch((error) => console.log(error));
+};
+
+export const findWorkIn = async (empId) => {
+  const url = `/time/in/${empId}`;
   await axios
     .post(url)
     .then((response) => response.data)
-    .then((data) => setWorkStatus(data))
+    .then((data) => console.log(data))
     .catch((error) => console.log(error));
 };
 

@@ -13,9 +13,13 @@ function Organization() {
     if (units.length === 0) {
       findUnitList(setUnits);
     } else {
-      console.log(units[0].unitName);
+      console.log(units);
+      setUnit(units[0]);
+      if (unit.length !== 0) {
+        console.log(unit);
+      }
     }
-  }, [units]);
+  }, [units.length, unit.length]);
 
   // useEffect(() => {
   //   console.log(unit);

@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Card, Typography } from 'antd';
-import { Box, CardContent, Modal } from '@mui/material';
+// import { Avatar, Button, Card, Typography } from 'antd';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Modal,
+  Typography,
+} from '@mui/material';
 
 const style = {
   position: 'absolute',

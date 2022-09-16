@@ -50,12 +50,6 @@ import RefusedPersonnelAppointmentInfo from './pages/approval/RefusedPersonnelAp
 
 import Calendar from './pages/calendar/Calendar';
 
-import Chat from './pages/chat/Chat';
-import ChatRoom from './pages/chat/ChatRoom';
-import CreateRoom from './pages/chat/CreateRoom';
-import ChatEmpList from './pages/chat/ChatEmpList';
-import ChatNotice from './pages/chat/ChatNotice';
-
 import Organization from './pages/Organization';
 
 import ManagementUnit from './pages/personnelManagement/ManagementUnit';
@@ -68,8 +62,6 @@ import EmpListAddPage from './pages/personnelManagement/EmpListAddPage';
 
 import MyPage from './pages/mypage/MyPage';
 import UpdateMine from './pages/mypage/UpdateMine';
-import Profile from './pages/mypage/Profile';
-import Profile2 from './pages/mypage/Profile2';
 
 import NotFound from './pages/NotFound';
 import AdminRoutes from './components/AdminRoutes';
@@ -81,7 +73,7 @@ function App() {
   const role = empInfo.userRoleGrade;
   // 채팅방 초대하기
   const [invite, setInvite] = useState([]);
-  const [workStatus, setWorkStatus] = useState(false);
+
   useEffect(() => {
     const logged = localStorage.getItem('logged');
     logged && logged === 'true' ? setLogin(true) : setLogin(false);
@@ -105,12 +97,7 @@ function App() {
             isLogin={isLogin}
           />
         }>
-        <Route
-          index
-          element={
-            <MainPage workStatus={workStatus} setWorkStatus={setWorkStatus} />
-          }
-        />
+        <Route index element={<MainPage />} />
         {/* 로그인 */}
         {!isLogin ? (
           <Route
@@ -125,9 +112,6 @@ function App() {
         <Route path="/organization">
           <Route index element={<Organization />} />
         </Route>
-
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/profile2" element={<Profile2 />} />
 
         {/* Private Routes */}
         <Route
@@ -246,16 +230,6 @@ function App() {
           {/* 캘린더 */}
 
           <Route element={<Calendar />} path="/calendar" exact />
-
-          {/* 메신저 */}
-          {/* <Route
-            path="/chatemplist"
-            element={<ChatEmpList invite={invite} setInvite={setInvite} />}
-          />
-          <Route path="/chatlist" element={<ChatRoom />} />
-          <Route path="/chatting" element={<Chat />} />
-          <Route path="/createroom" element={<CreateRoom invite={invite} />} />
-          <Route path="/chatnotice" element={<ChatNotice />} /> */}
 
           <Route
             element={

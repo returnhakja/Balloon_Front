@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import ModalApproval from './ModalApproval';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
@@ -60,11 +60,15 @@ function PersonnelAppointment() {
   const [mEmp, setMEmp] = useState('');
   const [docNum, setDocNum] = useState(0);
   const [docId, setDocId] = useState('');
+  const [saveType, setSaveType] = useState('');
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
 
   // 날짜 관련
   const [startValue, setStartValue] = useState(new Date());
+
+  const approveRef = useRef();
+  const tempRef = useRef();
 
   // 모달
   // const [openModal, setOpenModal] = useState(false);
@@ -202,16 +206,63 @@ function PersonnelAppointment() {
         getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
       }
     } else {
-      if (docNum === 0) {
-        getLatestPA(setDocNum);
-        setDocId('인사명령-22-0000001');
-      } else {
-        setDocId('인사명령' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
-      }
+      // if (docNum === 0) {
+      //   getLatestPA(setDocNum);
+      //   setDocId('인사명령-22-0000001');
+      // } else {
+      //   setDocId('인사명령' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
+      // }
 
       noApprover.length === 0 && setNoApprover(noApprover);
     }
   }, [units, empInfo, mEmpInfo, docNum, noApprover, mEmp]);
+
+  const tempSaveAppr = async () => {
+    await insertPA(
+      docId,
+      3,
+      inputData,
+      empInfo,
+      startValue,
+      mEmp,
+      unit,
+      posi,
+      setInputData
+    );
+
+    insertApproval(docId, 0, approver, inputData, empInfo);
+
+    alert('문서가 임시저장되었습니다!');
+    tempRef.current.click();
+  };
+
+  const approveAppr = async () => {
+    await insertPA(
+      docId,
+      1,
+      inputData,
+      empInfo,
+      startValue,
+      mEmp,
+      unit,
+      posi,
+      setInputData
+    );
+    insertApproval(docId, 1, approver, inputData, empInfo);
+    sendChatHandle();
+    alert('문서가 상신되었습니다!');
+    approveRef.current.click();
+  };
+
+  useEffect(() => {
+    if (docId) {
+      if (saveType === 'approve') {
+        approveAppr();
+      } else if (saveType === 'temp') {
+        tempSaveAppr();
+      }
+    }
+  }, [docId]);
 
   return (
     <SideNavigation>
@@ -227,7 +278,7 @@ function PersonnelAppointment() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>인사명령</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>{docId}</th>
+              <th className={styles.th}>{'-'}</th>
             </tr>
           </thead>
 
@@ -449,59 +500,34 @@ function PersonnelAppointment() {
 
           <div className={styles.savebutton}>
             <Box sx={{ '& button': { m: 1 } }}>
-              <Link to={'/boxes/ds'}>
-                <Button
-                  variant="outlined"
-                  size="large"
-                  onClick={async () => {
-                    await insertPA(
-                      docId,
-                      3,
-                      inputData,
-                      empInfo,
-                      startValue,
-                      mEmp,
-                      unit,
-                      posi,
-                      setInputData
-                    );
-
-                    // approver.map((data, index) => {
-                    //   return insertApproval(docId, 0, data, inputData, empInfo);
-                    // });
-                    insertApproval(docId, 0, approver, inputData, empInfo);
-
-                    alert('문서가 임시저장되었습니다!');
-                  }}>
+              <Link
+                to={'/boxes/ds'}
+                ref={tempRef}
+                onClick={async (e) => {
+                  if (!docId) {
+                    getLatestPA(setDocId);
+                    setSaveType('temp');
+                    e.preventDefault();
+                  }
+                }}>
+                <Button variant="outlined" size="large">
                   임시저장
                 </Button>
               </Link>
               <Link
                 to={'/boxes/dd'}
+                ref={approveRef}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
-                    await insertPA(
-                      docId,
-                      1,
-                      inputData,
-                      empInfo,
-                      startValue,
-                      mEmp,
-                      unit,
-                      posi,
-                      setInputData
-                    );
-                    sendChatHandle();
-                    alert('문서가 상신되었습니다!');
+                    if (!docId) {
+                      getLatestPA(setDocId);
+                      setSaveType('approve');
+                      e.preventDefault();
+                    }
                   } else {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
-
-                  // approver.map((data, index) => {
-                  //   return insertApproval(docId, 1, data, inputData, empInfo);
-                  // });
-                  insertApproval(docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기
