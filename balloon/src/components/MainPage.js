@@ -14,7 +14,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import moment from 'moment';
 import 'moment/locale/ko';
-import { Avatar, Box, Button, Container } from '@mui/material';
+import { Avatar, Box, Button } from '@mui/material';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -30,19 +30,6 @@ function MainPage() {
   const [DSCount, setDSCount] = useState('');
   const [DRCount, setDRCount] = useState('');
   const [countDArr, setCountDArr] = useState([]);
-
-  //  useEffect(() => {
-  //    if (empInfo.length !== 0) {
-  //      if (!!empInfo) {
-  //        findWorkOn(empInfo.empId, setInCnt);
-  //        findWorkOff(empInfo.empId, setOutCnt);
-  //      }
-  //    } else {
-  //      // window.location.href = '/';
-  //      inCnt !== 0 && console.log('inCnt', inCnt);
-  //      outCnt !== 0 && console.log('outCnt', outCnt);
-  //    }
-  //  }, [empInfo.length]);
 
   useEffect(() => {
     if (empInfo.length !== 0) {
@@ -187,7 +174,7 @@ function MainPage() {
                 src={
                   !!empInfo.photo
                     ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
-                    : ''
+                    : `${process.env.REACT_APP_AWS_S3_DEFAULT}`
                 }
               />
 

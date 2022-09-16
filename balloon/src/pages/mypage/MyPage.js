@@ -32,10 +32,6 @@ function MyPage() {
           alignContent: 'center',
           margin: '30px 0px 30px 0px',
         }}>
-        {console.log(
-          'adasddasdasd',
-          `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}`
-        )}
         <Card>
           {empInfo.length !== 0 && (
             <CardContent
@@ -57,7 +53,7 @@ function MyPage() {
                   src={
                     !!empInfo.photo
                       ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
-                      : ''
+                      : `${process.env.REACT_APP_AWS_S3_DEFAULT}`
                   }
                   className="mypageavatar"
                 />
@@ -81,7 +77,7 @@ function MyPage() {
                   photo={
                     empInfo.photo
                       ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
-                      : ''
+                      : `${process.env.REACT_APP_AWS_S3_DEFAULT}`
                   }
                 />
               )}
