@@ -5,7 +5,7 @@ import { logoutFunc, getCookie } from '../context/AuthFunc';
 import { getMe } from '../context/EmployeeAxios';
 import styles from '../css/nav/Navbar.module.css';
 import '../css/nav/Navbar.css';
-import { Button } from '@mui/material';
+import { Avatar, Button } from '@mui/material';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -54,11 +54,6 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
         <NavLink to={'/organization'} style={activeStyle}>
           <li className="management">조직도</li>
         </NavLink>
-        {isLogin && (
-          <NavLink to={'/mypage'} style={activeStyle}>
-            <li className="unit">마이페이지</li>
-          </NavLink>
-        )}
         {empInfo && empInfo.userRoleGrade === 'ROLE_ADMIN' && (
           <NavLink to={'/management/unit'} style={activeStyle}>
             <li className="unit">조직관리</li>
@@ -69,14 +64,31 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
             <li className="unit">사원관리</li>
           </NavLink>
         )}
+        {isLogin && (
+          <NavLink to={'/mypage'} style={activeStyle}>
+            <li className="unit">마이페이지</li>
+          </NavLink>
+        )}
       </ul>
 
       <ul>
         {isLogin ? (
-          <div className={styles.namediv}>
-            <p className="login">
-              {' '}
-              {empInfo.empName} {empInfo.position}{' '}
+          empInfo.length !== 0 ? (
+            <div className={styles.namediv}>
+              <Avatar
+                sx={{
+                  width: 40,
+                  height: 40,
+                }}
+                src={
+                  !!empInfo.photo
+                    ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
+                    : `${process.env.REACT_APP_AWS_S3_DEFAULT}`
+                }
+              />
+              <span className="login">
+                {`${empInfo.empName}${' '}${empInfo.position}`}
+              </span>
               <Button
                 type="button"
                 variant="outlined"
@@ -85,8 +97,20 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
                 onClick={() => logoutFunc(logout)}>
                 Logout
               </Button>
-            </p>
-          </div>
+            </div>
+          ) : (
+            <div className={styles.namediv}>
+              <span className="login">일시적 오류</span>
+              <Button
+                type="button"
+                variant="outlined"
+                size="small"
+                className={styles.btnnav}
+                onClick={() => logoutFunc(logout)}>
+                Logout
+              </Button>
+            </div>
+          )
         ) : (
           <div className={styles.namediv}>
             <Link to={'/loginpage'}>

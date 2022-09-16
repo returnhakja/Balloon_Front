@@ -26,38 +26,17 @@
 
 /* LEVEL-1 STYLES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-.level-1 {
-  list-style: none;
-  width: 50%;
-  margin: 0 auto 40px;
-  background: var(--level-1);
-}
-
 .level-1-wrapper {
   width: 100%
 }
 
-
-.level-1::before {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
-  width: 2px;
-  height: 20px;
-  background: var(--black);
+.level-1-rectangle {
+  margin-bottom: 80px;
+  background: var(--level-1);
 }
 
 /* LEVEL-2 STYLES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-/* .level-2 {
-  width: 70%;
-  margin: 0 auto 40px;
-  background: var(--level-2);
-} */
-
 .level-2-wrapper {
   width: 600px;
   list-style: none;
@@ -71,6 +50,54 @@
   background: var(--level-2);
 }
 
+/* LEVEL-3 STYLES
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.level-3-wrapper {
+  list-style: none;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-column-gap: 20px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.level-3-rectangle {
+  margin-bottom: 20px;
+  background: var(--level-3);
+}
+
+/* LEVEL-1 STYLES
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+/* .level-1 {
+  list-style: none;
+  width: 50%;
+  margin: 0 auto 40px;
+  background: var(--level-1);
+} */
+
+/* .level-1::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  width: 2px;
+  height: 20px;
+  background: var(--black);
+} */
+
+/* LEVEL-2 STYLES
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+/* .level-2 {
+  width: 70%;
+  margin: 0 auto 40px;
+  background: var(--level-2);
+} */
 
 /* 
 .level-2-wrapper::before {
@@ -112,7 +139,6 @@
   background: var(--black);
 } */
 
-
 /* 
 .level-2::before {
   content: '';
@@ -146,21 +172,6 @@
   margin-bottom: 20px;
   background: var(--level-3);
 } */
-
-.level-3-wrapper {
-  list-style: none;
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-column-gap: 20px;
-  width: 90%;
-  margin: 0 auto;
-}
-
-.level-3-rectangle {
-  margin-bottom: 20px;
-  background: var(--level-3);
-}
 
 /* .level-3-1-wrapper {
   list-style: none;
@@ -215,8 +226,6 @@
   height: 20px;
   background: var(--black);
 } */
-
-
 
 /* LEVEL-4 STYLES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
