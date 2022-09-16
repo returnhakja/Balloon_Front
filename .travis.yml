@@ -27,7 +27,7 @@ script:
   - cp -r build ~/before-deploy-frontend
   - mkdir -p ~/deploy-frontend
   - cd ~/before-deploy-frontend
-  - zip -r ~/deploy-frontend/Balloon-frontend.zip * # before-deploy로 이동후 전체 압축
+  - zip -r ~/deploy-frontend/Balloon-frontend.zip * .env # before-deploy로 이동후 전체 압축
   - cd ~
   
 deploy:
