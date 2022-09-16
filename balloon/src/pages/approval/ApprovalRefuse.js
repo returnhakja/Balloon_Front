@@ -94,7 +94,7 @@ function ApprovalRefuse() {
             />
           </div>
         </Container>
-      </SideNavigation>{' '}
+      </SideNavigation>
     </>
   );
 }

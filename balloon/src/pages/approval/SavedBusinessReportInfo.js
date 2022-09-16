@@ -190,11 +190,11 @@ function SavedBusinessReportInfo() {
     });
     rmApprover = svApprover.filter((element) => !arr.includes(element.empId));
   }, [params, inputData, approver]);
+
   return (
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          {' '}
           <FcDocument /> 업무기안
         </p>
 
@@ -214,7 +214,6 @@ function SavedBusinessReportInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
@@ -278,7 +277,6 @@ function SavedBusinessReportInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 <form>
                   <input
                     id="bizRptTitle"
@@ -334,6 +332,9 @@ function SavedBusinessReportInfo() {
                   variant="outlined"
                   size="large"
                   onClick={async () => {
+                    svApprover.map((data) =>
+                      deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                    );
                     await insertBizRpt(
                       params.docId,
                       3,
@@ -342,11 +343,6 @@ function SavedBusinessReportInfo() {
                       setInputData
                     );
                     {
-                      if (rmApprover.length !== 0) {
-                        rmApprover.map((data) =>
-                          deleteApvlByDocIdAndEmpId(params.docId, data.empId)
-                        );
-                      }
                       insertApproval(
                         params.docId,
                         0,
@@ -363,9 +359,12 @@ function SavedBusinessReportInfo() {
                 </Button>
               </Link>
               <Link
-                to={'/boxes'}
+                to={'/boxes/dd'}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
+                    svApprover.map((data) =>
+                      deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                    );
                     await insertBizRpt(
                       params.docId,
                       1,
@@ -378,11 +377,11 @@ function SavedBusinessReportInfo() {
                     alert('결재선을 설정해주세요 !');
                   }
                   {
-                    if (rmApprover.length !== 0) {
-                      rmApprover.map((data) =>
-                        deleteApvlByDocIdAndEmpId(params.docId, data.empId)
-                      );
-                    }
+                    // if (rmApprover.length !== 0) {
+                    //   rmApprover.map((data) =>
+                    //     deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                    //   );
+                    // }
                     insertApproval(
                       params.docId,
                       1,

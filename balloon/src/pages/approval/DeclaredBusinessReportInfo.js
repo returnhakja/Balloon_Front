@@ -40,7 +40,6 @@ function DeclaredBusinessReportInfo() {
   const [apvl, setApvl] = useState({});
 
   const params = useParams();
-  console.log(bizRptInfo);
 
   useEffect(() => {
     if (!!params) {
@@ -92,7 +91,6 @@ function DeclaredBusinessReportInfo() {
             {!!bizRptInfo && <DfCard drafterName={bizRptInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             if (apvl.length === 0) {
               setApvl(empData);
             }

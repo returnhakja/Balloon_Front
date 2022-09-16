@@ -46,9 +46,6 @@ function DeclaredBusinessTripInfo() {
     }
   }, [params]);
 
-  console.log(bizTpInfo);
-  console.log(bizTpEmp);
-
   return (
     <SideNavigation>
       <Container>
@@ -99,7 +96,6 @@ function DeclaredBusinessTripInfo() {
             {!!empInfo && <DfCard drafterName={bizTpInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             // if (apvl.length === 0) {
             //   setApvl(empData);
             // }

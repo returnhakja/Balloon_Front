@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import ModalApproval from './ModalApproval';
@@ -38,11 +38,15 @@ function BusinessReport() {
   const [inputData, setInputData] = useState({});
   const [docNum, setDocNum] = useState(0);
   const [docId, setDocId] = useState('');
+  const [saveType, setSaveType] = useState('');
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
   const [botInfo, setBotInfo] = useState([]);
   // 이미 결재봇과 채팅방이 존재하는 사원 찾기
   const [botApvlRoom, setBotApvlRoom] = useState([]);
+
+  const approveRef = useRef();
+  const tempRef = useRef();
   //결재선설정empId
   const apvlPeople = [];
   const approverBot = 'Y0000002';
@@ -164,18 +168,52 @@ function BusinessReport() {
   };
 
   useEffect(() => {
-    if (docNum === 0) {
-      getLatestBizRpt(setDocNum);
-      setDocId('업무기안-22-0000001');
-    } else {
-      setDocId('업무기안' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
-    }
+    // if (docNum === 0) {
+    //   getLatestBizRpt(setDocNum);
+    //   setDocId('업무기안-22-0000001');
+    // } else {
+    //   setDocId('업무기안' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
+    // }
 
     if (noApprover.length === 0) {
       setNoApprover(noApprover);
     }
   }, [docNum, noApprover]);
 
+  const tempSaveAppr = async () => {
+    await insertBizRpt(docId, 3, inputData, empInfo, setInputData);
+    insertApproval(docId, 0, approver, inputData, empInfo);
+    alert('문서가 임시저장되었습니다!');
+    tempRef.current.click();
+  };
+
+  const approveAppr = async () => {
+    await insertBizRpt(docId, 1, inputData, empInfo, setInputData);
+    insertApproval(docId, 1, approver, inputData, empInfo);
+    sendChatHandle();
+    alert('문서가 상신되었습니다!');
+    approveRef.current.click();
+  };
+
+  useEffect(() => {
+    if (docId) {
+      if (saveType === 'approve') {
+        approveAppr();
+      } else if (saveType === 'temp') {
+        tempSaveAppr();
+      }
+    }
+  }, [docId]);
+
+  const createDocId = () => {
+    getLatestBizRpt(setDocId);
+    // if (docNum === 0) {
+    //   setDocId('업무기안-22-0000001');
+    // } else {
+    //   setDocId('업무기안' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
+    // }
+  };
+  console.log(docId);
   return (
     <SideNavigation>
       <Container>
@@ -189,7 +227,7 @@ function BusinessReport() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>업무기안</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>{docId !== '' && docId}</th>
+              <th className={styles.th}>{'-'}</th>
             </tr>
           </thead>
 
@@ -290,44 +328,44 @@ function BusinessReport() {
 
           <div className={styles.savebutton}>
             <Box sx={{ button: { m: 1 } }}>
-              <Link to={'/boxes/ds'}>
-                <Button
-                  variant="outlined"
-                  size="large"
-                  onClick={async () => {
-                    await insertBizRpt(
-                      docId,
-                      3,
-                      inputData,
-                      empInfo,
-                      setInputData
-                    );
+              <Link
+                to={'/boxes/ds'}
+                ref={tempRef}
+                onClick={(e) => {
+                  if (!docId) {
+                    createDocId();
+                    setSaveType('temp');
 
-                    insertApproval(docId, 0, approver, inputData, empInfo);
+                    // insertBizRpt(docId, 3, inputData, empInfo, setInputData);
 
-                    alert('문서가 임시저장되었습니다!');
-                  }}>
+                    // insertApproval(docId, 0, approver, inputData, empInfo);
+
+                    // alert('문서가 임시저장되었습니다!');
+                    e.preventDefault();
+                  }
+                }}>
+                <Button variant="outlined" size="large">
                   임시저장
                 </Button>
               </Link>
               <Link
                 to={'/boxes/dd'}
-                onClick={async (e) => {
+                ref={approveRef}
+                onClick={(e) => {
                   if (approver.length !== 0) {
-                    await insertBizRpt(
-                      docId,
-                      1,
-                      inputData,
-                      empInfo,
-                      setInputData
-                    );
-                    sendChatHandle();
-                    alert('문서가 상신되었습니다!');
+                    if (!docId) {
+                      createDocId();
+                      setSaveType('approve');
+                      e.preventDefault();
+                    }
+                    // insertBizRpt(docId, 1, inputData, empInfo, setInputData);
+                    // sendChatHandle();
+                    // insertApproval(docId, 1, approver, inputData, empInfo);
+                    // alert('문서가 상신되었습니다!');
                   } else {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
-                  insertApproval(docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기

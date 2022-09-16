@@ -80,7 +80,6 @@ function DeclaredPersonnelAppointmentInfo() {
             {!!paInfo && <DfCard drafterName={paInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             // if (apvl.length === 0) {
             //   setApvl(empData);
             // }
