@@ -43,8 +43,6 @@ function BusinessReport() {
   const [botInfo, setBotInfo] = useState([]);
   // 이미 결재봇과 채팅방이 존재하는 사원 찾기
   const [botApvlRoom, setBotApvlRoom] = useState([]);
-  //기안제목
-  const [apvlTitle, setApvlTitle] = useState('');
   //결재선설정empId
   const apvlPeople = [];
   const approverBot = 'Y0000002';
@@ -73,8 +71,7 @@ function BusinessReport() {
   useEffect(() => {
     getEmpByEmpId(approverBot, setBotInfo);
     botApvlChatroom(apvlPeople, setBotApvlRoom);
-    setApvlTitle(approvalTitle);
-  }, [apvlPeople.length, apvlTitle]);
+  }, [apvlPeople.length]);
 
   //채팅방이 존재하는지 확인
   botApvlRoom.map((data) => {
