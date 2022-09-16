@@ -19,6 +19,11 @@ script:
 before_deploy:
   - openssl aes-256-cbc -K $encrypted_3c84dcdc6bbe_key -iv $encrypted_3c84dcdc6bbe_iv -in .env.enc -out .env -d
   - mkdir -p before-deploy-frontend # zip에 포함시킬 파일들을 담을 디렉토리 생성
+  - ls
+  - pwd
+  - cd ..
+  - ls
+  - pwd
   - cp .env before-deploy-frontend/
   - cp appspec.yml before-deploy-frontend/
   - cp deploy.sh before-deploy-frontend/
