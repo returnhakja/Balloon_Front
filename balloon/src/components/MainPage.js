@@ -159,6 +159,7 @@ function MainPage() {
                 justifyContent: 'center',
                 // alignItems: 'center',
               }}>
+                {console.log(`${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`)}
               <Avatar
                 sx={{
                   width: 70,
