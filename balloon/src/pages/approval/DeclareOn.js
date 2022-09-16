@@ -1,50 +1,40 @@
 import React, { useEffect, useState } from 'react';
+import { useOutletContext, Link } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
+import { getDocsByEmp } from '../../context/ApprovalAxios';
 import styles from '../../css/Component.module.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import { Container } from '@mui/system';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import 'react-datepicker/dist/react-datepicker.css';
-import { getApvlByApvrIdAnddocStatus } from '../../context/ApprovalAxios';
-import { Link, useOutletContext } from 'react-router-dom';
 
-function ApprovalComplete() {
+function DeclareOn() {
   const [empInfo] = useOutletContext();
   const [docList, setDocList] = useState([]);
-  const [startValue, setStartValue] = useState(null);
-  const [endvalue, setEndValue] = useState(null);
-  const [form, setForm] = useState('');
 
-  const handleChange = (event) => {
-    setForm(event.target.value);
-  };
+  const [docStatus, setDocStatus] = useState(0);
 
   useEffect(() => {
-    getApvlByApvrIdAnddocStatus(empInfo.empId, 3, setDocList);
-  }, []);
+    getDocsByEmp(empInfo.empId, docStatus, setDocList);
+    docList.length === 0 && setDocStatus(5);
+  }, [empInfo, docStatus, docList.length]);
 
   function getdocId(params) {
     let documentId = params.row.docId;
     if (documentId.includes('업무기안')) {
       return (
-        <Link
-          to={`/apvl/acbr/${params.row.docId}`}
-          state={{ path: '/boxes/ao' }}>
+        <Link to={`/apvl/br/${params.row.docId}`}>
           {params.row && params.row.documentTitle}
         </Link>
       );
     } else if (documentId.includes('출장계획')) {
       return (
-        <Link
-          to={`/apvl/actp/${params.row.docId}`}
-          state={{ path: '/boxes/ao' }}>
+        <Link to={`/doc/tp/${params.row.docId}`}>
           {params.row && params.row.documentTitle}
         </Link>
       );
     } else if (documentId.includes('인사명령')) {
       return (
-        <Link
-          to={`/apvl/acpa/${params.row.docId}`}
-          state={{ path: '/boxes/ao' }}>
+        <Link to={`/doc/pa/${params.row.docId}`}>
           {params.row && params.row.documentTitle}
         </Link>
       );
@@ -68,10 +58,9 @@ function ApprovalComplete() {
     <>
       <SideNavigation>
         <Container>
-          <p className={styles.sasinfont}>완료된</p>
+          <p className={styles.sasinfont}>진행중</p>
           <br />
           <hr />
-
           <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
             <DataGrid
               getRowId={(docList) => docList.docId}
@@ -87,10 +76,11 @@ function ApprovalComplete() {
               }}
             />
           </div>
+          {/* </div> */}
         </Container>
       </SideNavigation>
     </>
   );
 }
 
-export default ApprovalComplete;
+export default DeclareOn;

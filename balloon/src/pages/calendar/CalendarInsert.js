@@ -44,6 +44,9 @@ function CalendarInsert({
   let Startvalue = null;
   let endvalue = null;
 
+  console.log(botInfo);
+  console.log(botRoom);
+
   const handleClose = () => {
     setOpenInsert(false);
   };

@@ -30,16 +30,10 @@ export const findHigherOrganization = async (setHigher) => {
 };
 
 export const insertUnit = async (unitInfo) => {
-  const inputUnit = {
-    unitCode: unitInfo.unitCode,
-    unitName: unitInfo.unitName,
-    bell: unitInfo.bell,
-    parentUnit: { unitCode: unitInfo.parentUnit },
-  };
   const header = { 'Content-Type': 'application/json' };
   const url = '/unit/add';
 
-  await axios.post(url, inputUnit, header).catch((error) => console.log(error));
+  await axios.post(url, unitInfo, header).catch((error) => console.log(error));
 };
 
 export const insertUnitList = async (rows) => {

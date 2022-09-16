@@ -29,6 +29,8 @@
   text-align: left;
   float: left;
   top: 50%;
+  display: flex;
+  align-items: center;
 }
 
 .time {
@@ -286,6 +288,7 @@
 
 .DeleteBtn {
   float: right;
+  left: 80%;
 }
 
 .LastTimecon {

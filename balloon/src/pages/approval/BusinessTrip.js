@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import ModalApproval from './ModalApproval';
@@ -25,14 +25,11 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
-
 import { getEmpByEmpId } from '../../context/EmployeeAxios';
 import { botApvlChatroom, onApvlCreateChatroom } from '../../context/ChatAxios';
 import BusinessTripForm from '../chat/BusinessTripForm';
@@ -56,50 +53,51 @@ function BusinessTrip() {
   const [inputData, setInputData] = useState({});
   const [docNum, setDocNum] = useState(0);
   const [docId, setDocId] = useState('');
+  const [saveType, setSaveType] = useState('');
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
   const [mEmpInfo, setMEmpInfo] = useState('');
   const [mEmp, setMEmp] = useState('');
-  const [apvlInfo, setApvlInfo] = useState([]);
   const [botInfo, setBotInfo] = useState([]);
 
   // 모달
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
   const [empInfo] = useOutletContext();
-
   //이미 존재하는 사람들
   const [botApvlRoom, setBotApvlRoom] = useState([]);
   //결재선설정empId
   const apvlPeople = [];
   const approverBot = 'Y0000002';
-  console.log(botInfo);
   const empName = empInfo.empName;
   const position = empInfo.position;
   const approvalForm = '출장계획서';
+
+  const approveRef = useRef();
+  const tempRef = useRef();
 
   //기안제목
   const approvalTitle =
     document.getElementById('bizTpTitle') &&
     document.getElementById('bizTpTitle').value;
-  console.log(approvalTitle);
   //방문처
   const visitPlace =
     document.getElementById('destination') &&
     document.getElementById('destination').value;
-  console.log(visitPlace);
   //방문목적
   const visitPurpose =
     document.getElementById('visitingPurpose') &&
     document.getElementById('visitingPurpose').value;
-  console.log(visitPurpose);
 
   //결재선설정empIdList
   {
     approver.map((empId) => apvlPeople.push(empId.empId));
   }
-  console.log(apvlPeople);
-  console.log(botApvlRoom);
+
+  let firstApvlPeople;
+  firstApvlPeople = apvlPeople.filter(
+    (data, index) => data.indexOf(data[0]) === index
+  );
 
   //결재봇정보가져오기
   useEffect(() => {
@@ -109,19 +107,19 @@ function BusinessTrip() {
 
   const botroomExist = [];
   const botroomId = [];
-  console.log(botApvlRoom);
   botApvlRoom.map((data) => {
-    console.log(data.empId.empId);
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
-  console.log(botroomExist);
-  console.log(botroomId);
+
+  let createdRoomId = [];
+  createdRoomId = botroomId.slice(0, 1);
 
   //새로운 채팅방이 생성되어야할 사람들
   let newApvlPeople;
-  newApvlPeople = apvlPeople.filter((people) => !botroomExist.includes(people));
-  console.log(newApvlPeople);
+  newApvlPeople = firstApvlPeople.filter(
+    (people) => !botroomExist.includes(people)
+  );
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(
@@ -161,7 +159,6 @@ function BusinessTrip() {
       chatApprovalList.push(approvalChat);
     });
 
-    console.log(chatApprovalList);
     const chatApprovalSave = (chatApprovalList) => {
       axios.post('/chat/messages', chatApprovalList);
     };
@@ -171,7 +168,7 @@ function BusinessTrip() {
   // 이미생성된 채팅방에 알림보내기
   const AlreadyBotroomMsg = (client) => {
     let AlreadyChatApproval = [];
-    botroomId.map((id) => {
+    createdRoomId.map((id) => {
       const AchatApproval = BusinessTripForm(
         id,
         botInfo,
@@ -195,35 +192,74 @@ function BusinessTrip() {
       AlreadyChatApproval.push(AchatApproval);
       AlreadyChatApproval.push(chatNewApproval);
     });
-    console.log(AlreadyChatApproval);
+
     const chatScheduleSave = (AlreadyChatApproval) => {
       axios.post('/chat/messages', AlreadyChatApproval);
     };
-
     chatScheduleSave(AlreadyChatApproval);
   };
 
   let startDate = startValue && document.getElementById('startValue').value;
   let endDate = endValue && document.getElementById('endValue').value;
-  console.log(startDate);
-  console.log(endDate);
 
   useEffect(() => {
     if (mEmpInfo.length === 0) {
       getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
     }
-    if (docNum === 0) {
-      getLatestBizTP(setDocNum);
-      setDocId('출장계획-22-0000001');
-    } else {
-      setDocId('출장계획' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
-    }
+    // if (docNum === 0) {
+    //   getLatestBizTP(setDocNum);
+    //   setDocId('출장계획-22-0000001');
+    // } else {
+    //   setDocId('출장계획' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
+    // }
 
     if (noApprover.length === 0) {
       setNoApprover(noApprover);
     }
   }, [docNum, noApprover]);
-  console.log(mEmp);
+
+  const tempSaveAppr = async () => {
+    await insertBizTp(
+      docId,
+      3,
+      inputData,
+      empInfo,
+      startDate,
+      endDate,
+      setInputData
+    );
+    insertApproval(docId, 0, approver, inputData, empInfo);
+    insertBizTpEmp(docId, mEmp);
+    alert('문서가 임시저장되었습니다!');
+
+    tempRef.current.click();
+  };
+
+  const approveAppr = async () => {
+    await insertBizTp(
+      docId,
+      1,
+      inputData,
+      empInfo,
+      startDate,
+      endDate,
+      setInputData
+    );
+    insertApproval(docId, 1, approver, inputData, empInfo);
+    insertBizTpEmp(docId, mEmp);
+    sendChatHandle();
+    alert('문서가 상신되었습니다!');
+    approveRef.current.click();
+  };
+  useEffect(() => {
+    if (docId) {
+      if (saveType === 'approve') {
+        approveAppr();
+      } else if (saveType === 'temp') {
+        tempSaveAppr();
+      }
+    }
+  }, [docId]);
 
   return (
     <SideNavigation>
@@ -239,7 +275,7 @@ function BusinessTrip() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>출장계획서</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>{docId}</th>
+              <th className={styles.th}>{'-'}</th>
             </tr>
           </thead>
 
@@ -249,7 +285,6 @@ function BusinessTrip() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
@@ -308,7 +343,6 @@ function BusinessTrip() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 <form>
                   <input
                     id="bizTpTitle"
@@ -338,7 +372,6 @@ function BusinessTrip() {
             <tr align="center">
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
-                {' '}
                 <FormControl fullWidth>
                   <InputLabel>구성원을 설정해주세요</InputLabel>
                   <Select
@@ -476,56 +509,38 @@ function BusinessTrip() {
 
           <div className={styles.savebutton}>
             <Box sx={{ '& button': { m: 1 } }}>
-              <Link to={'/boxes/ds'}>
-                <Button
-                  variant="outlined"
-                  size="large"
-                  onClick={async () => {
-                    await insertBizTp(
-                      docId,
-                      3,
-                      inputData,
-                      empInfo,
-                      startDate,
-                      endDate,
-                      setInputData
-                    );
-
-                    // approver.map((data, index) => {
-                    //   console.log(data);
-                    //   return insertApproval(docId, 0, data, inputData, empInfo);
-                    // });
-                    insertApproval(docId, 0, approver, inputData, empInfo);
-                    insertBizTpEmp(docId, mEmp);
-                    alert('문서가 임시저장되었습니다!');
-                  }}>
+              <Link
+                to={'/boxes/ds'}
+                ref={tempRef}
+                onClick={async (e) => {
+                  if (!docId) {
+                    getLatestBizTP(setDocId);
+                    setSaveType('temp');
+                    e.preventDefault();
+                  }
+                }}>
+                <Button variant="outlined" size="large">
                   임시저장
                 </Button>
               </Link>
               <Link
                 to={'/boxes/dd'}
+                ref={approveRef}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
-                    await insertBizTp(
-                      docId,
-                      1,
-                      inputData,
-                      empInfo,
-                      startDate,
-                      endDate,
-                      setInputData
-                    );
-                    sendChatHandle();
-                    alert('문서가 상신되었습니다!');
+                    if (!docId) {
+                      getLatestBizTP(setDocId);
+                      setSaveType('approve');
+                      e.preventDefault();
+                    }
                   } else {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
                   // approver.map((data, index) => {
-                  //   console.log(data);
                   //   return insertApproval(docId, 1, data, inputData, empInfo);
                   // });
-                  insertApproval(docId, 1, approver, inputData, empInfo);
+                  // insertApproval(docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기

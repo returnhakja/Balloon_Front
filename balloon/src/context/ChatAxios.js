@@ -33,7 +33,8 @@ export const onCreateChatroom = async (
   invite,
   chatroomName,
   client,
-  setChatStatus
+  setChatStatus,
+  setRoomId
 ) => {
   invite.push(empInfo);
   axios
@@ -43,6 +44,7 @@ export const onCreateChatroom = async (
     })
     .then((response) => {
       onUserInvite(response.data, invite, client);
+      setRoomId(response.data);
       setChatStatus('chatList');
     })
     .catch((error) => console.log(error));
@@ -89,6 +91,13 @@ export const botChatroom = async (inviteSchedule, setBotRoom) => {
 export const botApvlChatroom = async (apvlPeople, setBotApvlRoom) => {
   axios.post(`/cre/apvlbotchatroom`, apvlPeople).then((response) => {
     setBotApvlRoom(response.data);
+  });
+};
+
+// 이미 결재봇과 채팅방이 존재하는 사원 찾기
+export const botApvlChatroom2 = async (apvlId, setBotApvl) => {
+  axios.post(`/cre/apvlbotchatroom`, apvlId).then((response) => {
+    setBotApvl(response.data);
   });
 };
 

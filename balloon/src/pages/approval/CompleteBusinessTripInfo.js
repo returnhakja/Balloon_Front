@@ -41,8 +41,6 @@ function BizTripInfo() {
   // 사원 정보 context
 
   const params = useParams();
-  console.log(bizTpInfo);
-  console.log(bizTpEmp);
 
   useEffect(() => {
     if (!!params) {
@@ -76,7 +74,6 @@ function BizTripInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {bizTpInfo.empName}({bizTpInfo.emp && bizTpInfo.emp.empId})
               </th>
             </tr>
@@ -104,7 +101,6 @@ function BizTripInfo() {
             <DfCard drafterName={bizTpInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             // if (apvl.length === 0) {
             //   setApvl(empData);
             // }
@@ -146,7 +142,6 @@ function BizTripInfo() {
             <tr align="center">
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
-                {' '}
                 {bizTpEmp[0] &&
                   bizTpEmp.map((data) => {
                     return (

@@ -9,6 +9,7 @@ import {
 } from '../../context/ChatAxios';
 import styles from '../../css/chat/Chat.module.css';
 import {
+  Avatar,
   Button,
   Collapse,
   List,
@@ -145,6 +146,7 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
   useEffect(() => {
     setModalOpen();
   }, []);
+
   const keyEnter = (e) => {
     if (e.key == 'Enter') {
       setClickChk(0);
@@ -232,16 +234,17 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
                 </List>
               );
             })}
-          {/* 사원추가 */}
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              setModalOpen(true);
-            }}>
-            <PersonAddAlt1Icon />
-          </Button>
+
           {/* 채팅방 나가기 */}
           <div className={styles.logoutBtn}>
+            {/* 사원추가 */}
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                setModalOpen(true);
+              }}>
+              <PersonAddAlt1Icon />
+            </Button>
             <Button
               variant="text"
               disableElevation
@@ -293,12 +296,26 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
                   </div>
                 ) : (
                   <div key={index} className={styles.othermessage}>
-                    <div>{msg.employee.empName}</div>
-                    <div className={styles.contentContan}>
-                      <div className={styles.othercontent}>
-                        {msg.chatContent}
+                    <Avatar
+                      sx={{
+                        width: 30,
+                        height: 30,
+                        marginRight: 1,
+                      }}
+                      src={
+                        !!msg.employee.photo
+                          ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${msg.employee.photo}`
+                          : ''
+                      }
+                    />
+                    <div>
+                      <div>{msg.employee.empName}</div>
+                      <div className={styles.contentContan}>
+                        <div className={styles.othercontent}>
+                          {msg.chatContent}
+                        </div>
+                        <div className={styles.time}>{chatTime}</div>
                       </div>
-                      <div className={styles.time}>{chatTime}</div>
                     </div>
                   </div>
                 )}
@@ -311,6 +328,18 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
             return (
               <>
                 <div key={index} className={styles.othermessage}>
+                  <Avatar
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      marginRight: 1,
+                    }}
+                    src={
+                      !!msg.employee.photo
+                        ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${msg.employee.photo}`
+                        : ''
+                    }
+                  />
                   <div>{msg.employee.empName}</div>
                   <div className={styles.contentContan}>
                     <div className={styles.scheduleContent}>
@@ -334,6 +363,18 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
             return (
               <>
                 <div key={index} className={styles.othermessage}>
+                  <Avatar
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      marginRight: 1,
+                    }}
+                    src={
+                      !!msg.employee.photo
+                        ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${msg.employee.photo}`
+                        : ''
+                    }
+                  />
                   <div>{msg.employee.empName}</div>
                   <div className={styles.contentContan}>
                     <div className={styles.scheduleContent}>
