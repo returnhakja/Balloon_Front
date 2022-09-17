@@ -97,8 +97,7 @@ function MainPage() {
     plugins: {
       legend: {
         labels: {
-          // padding: 10,
-          marginTop: 20,
+          padding: 10,
         },
         display: true,
         position: 'bottom',
@@ -264,20 +263,28 @@ function MainPage() {
               <p>아직 결재 정보가 없습니다.</p>
             </div>
           ) : (
-            <div
+            <Box
               id="myChart"
-              style={{
+              sx={{
+                backgroundColor: '#EEEEEE',
+                mt: 20,
                 width: '250px',
                 height: '350px',
-                marginTop: '12vh',
-                backgroundColor: '#EEEEEE',
+                position: 'relative',
                 boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
               }}>
               {console.log('countDArr', countDArr)}
-              <p style={{ padding: '10px' }}>결재관리</p>
-              <p> 날짜들어갈꺼임 </p>
+              <p
+                style={{
+                  padding: '10px',
+                  textAlign: 'center',
+                  fontSize: '24px',
+                }}>
+                결재관리
+              </p>
+
               <Pie typeof="outlabeledpie" data={data} options={options} />
-            </div>
+            </Box>
           ))}
       </div>
     </div>

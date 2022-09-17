@@ -1,6 +1,7 @@
 /* MAIN STYLES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-.textnone {}
+.textnone {
+}
 
 .con {
   margin-top: 10%;
@@ -27,7 +28,7 @@
 /* LEVEL-1 STYLES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .level-1-wrapper {
-  width: 100%
+  width: 100%;
 }
 
 .level-1-rectangle {
@@ -59,7 +60,7 @@
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-column-gap: 20px;
-  width: 90%;
+
   margin: 0 auto;
 }
 
@@ -164,7 +165,6 @@
   height: 2px;
   background: var(--black);
 } */
-
 
 /* LEVEL-3 STYLES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */

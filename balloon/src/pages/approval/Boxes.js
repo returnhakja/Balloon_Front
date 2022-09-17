@@ -110,7 +110,7 @@ function Boxes() {
             m: 1,
             mt: 3,
             bgcolor: 'background.paper',
-            borderRadius: 1,
+            // borderRadius: 1,
           }}>
           {countDArr.length !== 0 &&
             apprvoalStatus2.map((status, index) => {

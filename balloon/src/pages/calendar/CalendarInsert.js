@@ -104,9 +104,9 @@ function CalendarInsert({
         employee: { empId: id },
       });
     });
-    if (scheduletitle == '') {
+    if (scheduletitle === '') {
       alert('제목을 입력해주세요.');
-    } else if (endvalue == '') {
+    } else if (endvalue === '') {
       alert('날짜를 선택해주세요.');
     } else if (Startvalue >= endvalue) {
       alert('날짜를 다시 설정해주세요.');

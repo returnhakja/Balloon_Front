@@ -38,7 +38,7 @@ const Select = React.forwardRef(
   ({ name, label, unit, higher, parentCode, setParentCode }, ref) => {
     useEffect(() => {}, [parentCode]);
     return (
-      <>
+      <div>
         <Typography
           id="modal-modal-title"
           variant="h6"
@@ -70,7 +70,7 @@ const Select = React.forwardRef(
             )
           )}
         </select>
-      </>
+      </div>
     );
   }
 );

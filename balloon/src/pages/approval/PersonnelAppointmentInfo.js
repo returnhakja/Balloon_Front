@@ -120,17 +120,15 @@ function PersonnelAppointmentInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>인사명령일</td>
               <td className={styles.titlename} colSpan={2}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    disabled
-                    label="명령 일자"
-                    value={paInfo.personnelDate}
-                    type=" date"
-                    inputFormat={'yyyy-MM-dd'}
-                    className={styles.datepicker}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
+                <DatePicker
+                  disabled
+                  label="명령 일자"
+                  value={paInfo.personnelDate}
+                  type=" date"
+                  inputFormat={'yyyy-MM-dd'}
+                  className={styles.datepicker}
+                  renderInput={(params) => <TextField {...params} />}
+                />
               </td>
             </tr>
           </thead>
@@ -156,32 +154,32 @@ function PersonnelAppointmentInfo() {
                 />
               </td>
               <td className={styles.tdreaui}>
-                <form>
-                  <TextField
-                    focused={false}
-                    type="text"
-                    name="title"
-                    value={paInfo.unit && paInfo.unit.unitName}
-                    className={styles.inputtext}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </form>
+                {/* <form> */}
+                <TextField
+                  focused={false}
+                  type="text"
+                  name="title"
+                  value={paInfo.unit && paInfo.unit.unitName}
+                  className={styles.inputtext}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+                {/* </form> */}
               </td>
               <td className={styles.tdreaui}>
-                <form>
-                  <TextField
-                    type="text"
-                    name="title"
-                    value={paInfo.position}
-                    className={styles.inputtext}
-                    focused={false}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </form>
+                {/* <form> */}
+                <TextField
+                  type="text"
+                  name="title"
+                  value={paInfo.position}
+                  className={styles.inputtext}
+                  focused={false}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+                {/* </form> */}
               </td>
             </tr>
           </tbody>
