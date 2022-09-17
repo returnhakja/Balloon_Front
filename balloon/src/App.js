@@ -229,7 +229,7 @@ function App() {
 
           {/* 캘린더 */}
 
-          <Route element={<Calendar />} path="/calendar" exact />
+          <Route element={<Calendar />} path="/schudule" exact />
 
           <Route
             element={
