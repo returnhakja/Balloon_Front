@@ -82,7 +82,6 @@ export const updateSchedule = async (inputdata, headers, setOpenUpdate) => {
 export const deleteSchedule = async (scheduleId, handleClose) => {
   await axios
     .delete(`/cal/delete/${scheduleId}`)
-
     .then(() => {
       handleClose(false);
     })

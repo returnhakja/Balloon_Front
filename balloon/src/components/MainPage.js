@@ -11,7 +11,7 @@ import {
 import Banner from './banner.svg';
 import styles from '../css/nav/Navbar.module.css';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
+import { Chart, Pie } from 'react-chartjs-2';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { Avatar, Box, Button } from '@mui/material';
@@ -63,9 +63,14 @@ function MainPage() {
   console.log(DDCount, DCCount, DSCount, DRCount);
 
   const data = {
+    labels: [
+      `상신한 ${DDCount ? DDCount : '0'}`,
+      `완료된 ${DCCount ? DCCount : '0'}`,
+      `저장된 ${DSCount ? DSCount : '0'}`,
+      `반려된 ${DRCount ? DRCount : '0'}`,
+    ],
     datasets: [
       {
-        label: '# of Votes',
         data: [
           DDCount ? DDCount : 1,
           DCCount ? DCCount : 1,
@@ -87,18 +92,13 @@ function MainPage() {
         borderWidth: 1,
       },
     ],
-    labels: [
-      `상신한 ${DDCount ? DDCount : '0'}`,
-      `완료된 ${DCCount ? DCCount : '0'}`,
-      `저장된 ${DSCount ? DSCount : '0'}`,
-      `반려된 ${DRCount ? DRCount : '0'}`,
-    ],
   };
   const options = {
     plugins: {
       legend: {
         labels: {
-          padding: 20, //default is 10
+          // padding: 10,
+          marginTop: 20,
         },
         display: true,
         position: 'bottom',
@@ -171,7 +171,9 @@ function MainPage() {
                 justifyContent: 'center',
                 // alignItems: 'center',
               }}>
-                {console.log(`${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`)}
+              {console.log(
+                `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
+              )}
               <Avatar
                 sx={{
                   width: 70,
@@ -274,7 +276,7 @@ function MainPage() {
               {console.log('countDArr', countDArr)}
               <p style={{ padding: '10px' }}>결재관리</p>
               <p> 날짜들어갈꺼임 </p>
-              <Pie data={data} options={options} />
+              <Pie typeof="outlabeledpie" data={data} options={options} />
             </div>
           ))}
       </div>

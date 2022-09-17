@@ -77,7 +77,6 @@ function CalendarInsert({
     Startvalue = document.getElementById('startvalue').value;
     endvalue = document.getElementById('endvalue').value;
 
-    inviteSchedule.push(empId);
     console.log(inviteSchedule);
     console.log(Startvalue);
 
@@ -128,6 +127,7 @@ function CalendarInsert({
   useEffect(() => {
     getEmpListInSameUnit(empId, setCEList);
     getEmpByEmpId(calendarBot, setBotInfo);
+    inviteSchedule.push(empId);
   }, []);
 
   const botroomExist = [];
