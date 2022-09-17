@@ -32,9 +32,11 @@ function Organization() {
                 <div className={'level-1-wrapper'}>
                   <h1 className={`level-1-rectangle`}>{unit1.unitName}</h1>
                   <div
+                    // className={`level-1-div`}
                     style={{
                       display: 'flex',
-                      // justifyContent: 'space-between',
+                      justifyContent: 'center',
+                      alignContent: 'center',
                       // width: '500px',
                     }}>
                     {prior2.length !== 0 &&
