@@ -66,7 +66,9 @@ function Organization() {
                                         <li
                                           style={{
                                             marginTop: '25px',
-                                            width: '200px',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
                                           }}>
                                           <h3
                                             className={`level-${unit3.prior}-rectangle`}

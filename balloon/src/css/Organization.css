@@ -38,11 +38,11 @@
 /* LEVEL-2 STYLES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .level-2-wrapper {
-  width: 600px;
+  /* margin: "0px 10px 0px 10px"; */
   list-style: none;
   position: relative;
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .level-2-rectangle {
@@ -59,11 +59,11 @@
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-column-gap: 20px;
-  width: 90%;
   margin: 0 auto;
 }
 
 .level-3-rectangle {
+  width: 60%;
   margin-bottom: 20px;
   background: var(--level-3);
 }

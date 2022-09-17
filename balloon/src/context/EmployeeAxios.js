@@ -93,7 +93,7 @@ export const selectEmpByEmpId = async (empId, setIdChk) => {
       alert('이미사원번호가 있습니다.');
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       alert('생성 가능한 사원번호입니다.');
     });
 };

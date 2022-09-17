@@ -86,7 +86,9 @@ function EmpAddPage() {
     let birthday = document.getElementById('birthday').value;
     let address = document.getElementById('address').value;
     let licensePlate = document.getElementById('licensePlate').value;
-    let photo = file;
+    console.log('file', file);
+
+    let photo = !!file ? file : 'default.png';
 
     const inputEmp = signupValidation(
       setDataChk,
@@ -110,7 +112,8 @@ function EmpAddPage() {
       photo
     );
 
-    if (dataChk === true) {
+    if (!!inputEmp) {
+      console.log('dataChk', dataChk);
       inputEmp.then((data) => signup(data));
     }
   };
