@@ -23,6 +23,7 @@ asset/
 
 # env file
 .env
+.env.production
 
 ### macOS ###
 # General
