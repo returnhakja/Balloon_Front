@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { signupValidation, signup } from '../../context/AuthFunc';
 import { findUnitList } from '../../context/UnitAxios';
 import { selectEmpByEmpId } from '../../context/EmployeeAxios';
+import Moment from 'moment';
 import { positionArr, responseArr, gradeArr } from '../../context/EmpFunc';
 import styles from '../../css/Component.module.css';
 import { Container, Button, TextField, Typography, Box } from '@mui/material';
@@ -26,11 +27,13 @@ function EmpAddPage() {
   const [posi, setPosi] = useState('인턴');
   const [responsi, setResponsi] = useState('없음');
   const [unit, setUnit] = useState('');
+  const [hireDate, setHireDate] = useState(
+    Moment(new Date()).format('YYYY-MM-DD')
+  );
   const [urg, setUrg] = useState('ROLE_USER');
   // const [birth, setBirth] = useState(null);
   const [hidePassword, setHidePassword] = useState(true);
   const [idChk, setIdChk] = useState(false);
-  const [dataChk, setDataChk] = useState(false);
   const [file, setFile] = useState('');
   const [fileName, setFileName] = useState('첨부파일');
 
@@ -77,7 +80,7 @@ function EmpAddPage() {
     const responsibility = responsi;
     let salary = document.getElementById('salary').value;
     let commission = document.getElementById('commission').value;
-    const hiredate = document.getElementById('hiredate').value;
+    const hiredate = hireDate;
     const unitcode = unit;
     const empBell = document.getElementById('empBell').value;
     const empMail = document.getElementById('empMail').value;
@@ -86,12 +89,10 @@ function EmpAddPage() {
     let birthday = document.getElementById('birthday').value;
     let address = document.getElementById('address').value;
     let licensePlate = document.getElementById('licensePlate').value;
-    console.log('file', file);
 
     let photo = !!file ? file : 'default.png';
 
     const inputEmp = signupValidation(
-      setDataChk,
       idChk,
       empId,
       password,
@@ -113,8 +114,7 @@ function EmpAddPage() {
     );
 
     if (!!inputEmp) {
-      console.log('dataChk', dataChk);
-      inputEmp.then((data) => signup(data));
+      signup(inputEmp);
     }
   };
 
@@ -256,6 +256,10 @@ function EmpAddPage() {
             fullWidth
             id="hiredate"
             autoComplete="hiredate"
+            value={hireDate}
+            onChange={(e) => {
+              setHireDate(e.target.value);
+            }}
           />
           <InputLabel id="label-unit">조직이름</InputLabel>
           <Select

@@ -1,9 +1,9 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import Moment from 'moment';
 
 // 회원가입 유효성 검사
 export const signupValidation = (
-  setDataChk,
   idChk,
   empId,
   password,
@@ -30,7 +30,11 @@ export const signupValidation = (
       if (idChk === false) {
         alert('아이디 중복확인을 해주세요!!');
       } else {
-        cnt--;
+        if (empId.length > 8) {
+          alert('사원번호가 8글자를 넘었습니다.');
+        } else {
+          cnt--;
+        }
       }
     } else {
       alert('아이디를 입력해주세요!!');
@@ -114,14 +118,22 @@ export const signupValidation = (
       commission = parseFloat(commission);
       cnt--;
     } else {
-      console.log(cnt);
       alert('상여금을 입력해주세요!!');
     }
   }
 
   if (cnt === 10) {
     if (!!hiredate) {
-      cnt--;
+      const hire = new Date(hiredate);
+      const today = new Date(Date.now());
+      if (
+        Moment(hire).format('YYYYMMDD') - Moment(today).format('YYYYMMDD') <
+        0
+      ) {
+        alert('이미 일자가 지났습니다!!');
+      } else {
+        cnt--;
+      }
     } else {
       alert('고용일자를 입력해주세요!!');
     }
@@ -237,7 +249,7 @@ export const signupValidation = (
       photo: photo,
     };
 
-    return setDataChk(cnt === 0 ? true : false), inputData;
+    return inputData;
   }
   return null;
 };
@@ -247,11 +259,10 @@ export const signup = async (inputEmpData) => {
   const header = { 'Content-Type': 'application/json' };
   const url = '/auth/signup';
 
-  console.log('inputEmpData', inputEmpData);
-  // axios.post(url, inputEmpData, header).catch((error) => {
-  //   console.log(error);
-  // });
-  // window.location.href = '/management/employee';
+  axios.post(url, inputEmpData, header).catch((error) => {
+    console.log(error);
+  });
+  window.location.href = '/management/employee';
 };
 
 // 엑셀로 회원가입

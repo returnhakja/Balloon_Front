@@ -94,7 +94,11 @@ export const selectEmpByEmpId = async (empId, setIdChk) => {
     })
     .catch((error) => {
       // console.log(error);
-      alert('생성 가능한 사원번호입니다.');
+      if (empId.length > 8) {
+        alert('사원번호가 8글자를 넘었습니다.');
+      } else {
+        alert('생성 가능한 사원번호입니다.');
+      }
     });
 };
 
@@ -142,7 +146,6 @@ export const getEmpListByUnitCode = async () => {
 export const getEmpListInSameUnit = async (empId, setCEList) => {
   const url = '/employee/unit/list/';
   const urlStr = url + empId;
-  console.log(empId);
   await axios
     .get(urlStr)
     .then((response) => response.data)
@@ -177,7 +180,6 @@ export const updateEmpByAdmin = async (updateData) => {
 // 사원 수정
 export const updateEmployee = async (updateData) => {
   const url = `/employee/update/mypage`;
-  console.log(updateData);
 
   await axios
     .put(url, updateData, process.env.REACT_APP_HEADER)
@@ -195,13 +197,6 @@ export const deleteEmployee = async (data) => {
 };
 
 export const uploadProfile = async (file, empId) => {
-  console.log('empId', empId);
-  console.log('file', file);
-
-  for (let value of file.values()) {
-    console.log('value', value);
-  }
-  // const url = `/file/upload/profile/${empId}`;
   const url = '/file/upload/profile/' + empId;
 
   await axios.post(url, file).catch((error) => console.log(error));

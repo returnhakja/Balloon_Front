@@ -1,6 +1,6 @@
-import { Container, margin } from '@mui/system';
+import { Container } from '@mui/system';
 import React, { useEffect, useState } from 'react';
-import { findUnitList, findUnitByUnitId } from '../context/UnitAxios';
+import { findUnitList } from '../context/UnitAxios';
 import '../css/Organization.css';
 
 function Organization() {
@@ -19,15 +19,12 @@ function Organization() {
     }
   }, [units.length]);
 
-  const str1 = 'level-';
-  let num = 1;
-  const str2 = ' rectangle';
   return (
     <>
       {units.length && (
         <Container className="con">
           {prior1.length !== 0 &&
-            prior1.map((unit1, index1) => {
+            prior1.map((unit1) => {
               return (
                 <div className={'level-1-wrapper'}>
                   <h1 className={`level-1-rectangle`}>{unit1.unitName}</h1>
