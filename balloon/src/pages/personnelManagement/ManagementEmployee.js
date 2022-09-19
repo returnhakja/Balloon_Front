@@ -3,7 +3,12 @@ import { Link } from 'react-router-dom';
 import { selectEmployees, deleteEmployee } from '../../context/EmployeeAxios';
 import { deleteCheck } from '../../context/MuiRenderFunc';
 import { positionArr, responseArr, gradeArr } from '../../context/EmpFunc';
-import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridToolbar,
+  koKR,
+} from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/system';
 import Delete from '@mui/icons-material/Delete';
@@ -11,6 +16,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAddAlt1';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
 import EmployeeUpdate from './EmployeeUpdate';
+import CustomToolbar from './CustomToolbar';
 
 function ManagementEmployee() {
   const [empList, setEmpList] = useState([]);
@@ -140,6 +146,7 @@ function ManagementEmployee() {
 
         <Box sx={{ width: '100%', height: 700 }}>
           <DataGrid
+            localeText={koKR.components.MuiDataGrid.defaultProps.localeText}
             sx={{
               '	.MuiDataGrid-filterForm': {
                 color: 'red',
@@ -152,7 +159,7 @@ function ManagementEmployee() {
             experimentalFeatures={{ newEditingApi: true }}
             pageSize={10}
             rowsPerPageOptions={[10]}
-            components={{ Toolbar: GridToolbar }}
+            components={{ Toolbar: CustomToolbar }}
             checkboxSelection
             onCellClick={(data) => {
               handleClick(data);

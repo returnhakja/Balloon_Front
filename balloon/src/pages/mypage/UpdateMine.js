@@ -34,9 +34,9 @@ function UpdateMine() {
   const onSubmit = (value) => {
     const updateData = {
       empId: empInfo.empId,
-      mobile: !!value.mobile ? value.mobile : '미입력',
-      address: !!value.address ? value.address : '미입력',
-      licensePlate: !!value.licensePlate ? value.licensePlate : '미입력',
+      mobile: value.mobile,
+      address: value.address,
+      licensePlate: value.licensePlate,
     };
 
     console.log(updateData);

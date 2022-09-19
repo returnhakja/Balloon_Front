@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import UnitUpdate from './UnitUpdate';
 import { deleteCheck } from '../../context/MuiRenderFunc';
 import { findUnitList, deleteUnit } from '../../context/UnitAxios';
-import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, koKR } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/system';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -11,6 +11,7 @@ import Delete from '@mui/icons-material/Delete';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import QueueIcon from '@mui/icons-material/Queue';
 import UnitAddpage from './UnitAddpage';
+import CustomToolbar from './CustomToolbar';
 
 function ManagementUnit() {
   const [unitList, setUnitList] = useState([]);
@@ -109,12 +110,16 @@ function ManagementUnit() {
 
         <Box sx={{ width: '100%', height: 700, display: 'flex' }}>
           <DataGrid
+            localeText={koKR.components.MuiDataGrid.defaultProps.localeText}
             sx={{
               '	.MuiDataGrid-filterForm': {
                 color: 'red',
               },
               justifyContent: 'center',
               alignContent: 'center',
+            }}
+            components={{
+              Toolbar: CustomToolbar,
             }}
             rows={unitList}
             columns={columns}
@@ -123,7 +128,6 @@ function ManagementUnit() {
             experimentalFeatures={{ newEditingApi: true }}
             pageSize={10}
             rowsPerPageOptions={[10]}
-            components={{ Toolbar: GridToolbar }}
             checkboxSelection
             onCellClick={(data) => {
               handleClick(data);

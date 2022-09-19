@@ -211,7 +211,7 @@ function DeclaredBusinessTripInfo() {
                     type="text"
                     name="title"
                     value={bizTpInfo.destination}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -225,7 +225,7 @@ function DeclaredBusinessTripInfo() {
                     type="text"
                     name="title"
                     value={bizTpInfo.visitingPurpose}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}

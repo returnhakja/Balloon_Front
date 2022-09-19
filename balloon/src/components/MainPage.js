@@ -156,7 +156,7 @@ function MainPage() {
           <Box
             sx={{
               backgroundColor: '#EEEEEE',
-              mt: 20,
+              // mt: 20,
               width: '250px',
               height: '200px',
               position: 'relative',
@@ -255,7 +255,7 @@ function MainPage() {
               style={{
                 width: '250px',
                 height: '350px',
-                marginTop: '12vh',
+                // marginTop: '12vh',
                 backgroundColor: '#EEEEEE',
                 boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
               }}>
@@ -267,7 +267,7 @@ function MainPage() {
               id="myChart"
               sx={{
                 backgroundColor: '#EEEEEE',
-                mt: 20,
+                // mt: 20,
                 width: '250px',
                 height: '350px',
                 position: 'relative',
@@ -283,7 +283,7 @@ function MainPage() {
                 결재관리
               </p>
 
-              <Pie typeof="outlabeledpie" data={data} options={options} />
+              <Pie data={data} options={options} />
             </Box>
           ))}
       </div>
