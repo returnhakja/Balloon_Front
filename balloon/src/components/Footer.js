@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from '../css/Footer.module.css';
-// 빌드테스ㅡ
 
 const Footer = () => {
   return (

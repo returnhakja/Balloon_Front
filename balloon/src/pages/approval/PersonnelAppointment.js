@@ -39,6 +39,7 @@ import PersonnelAppointmentForm from '../chat/PersonnelAppointmentForm';
 
 //socket연결
 const client = ChatStomp();
+client.debug = null;
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
