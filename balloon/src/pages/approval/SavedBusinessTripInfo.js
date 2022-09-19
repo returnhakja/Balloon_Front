@@ -61,7 +61,9 @@ function SavedBusinessTripInfo() {
   const [approvalList, setApprovalList] = useState([]);
   const [bizTpEmp, setBizTpEmp] = useState({});
   const [mEmpInfo, setMEmpInfo] = useState('');
-  const [mEmp, setMEmp] = useState('');
+  const [mEmp, setMEmp] = useState({});
+  const [mEmp2, setMEmp2] = useState('');
+
   //이미 존재하는 사람들
   const [botApvlRoom, setBotApvlRoom] = useState([]);
   //결재선설정empId
@@ -205,6 +207,15 @@ function SavedBusinessTripInfo() {
 
     setStartValue(inputData.startDate);
     setEndValue(inputData.endDate);
+    if (bizTpEmp && bizTpEmp.emp !== {}) {
+      if (bizTpEmp.length !== 0) {
+        setMEmp2(
+          bizTpEmp.emp &&
+            bizTpEmp[0].emp.empName + ' (' + bizTpEmp.emp &&
+            bizTpEmp[0].emp.empId + ')'
+        );
+      }
+    }
   }, [inputData]);
 
   useEffect(() => {
@@ -215,23 +226,17 @@ function SavedBusinessTripInfo() {
       } else {
         // setStartValue(inputData.startDate);
         // setEndValue(endValue);
-        approver.length !== 0 && console.log(approver);
       }
       if (noApprover.length === 0) {
         setNoApprover(noApprover);
       }
     }
-    console.log(svApprover);
     let arr = [];
     approver.map((data) => {
       arr.push(data.empId);
-      console.log(arr);
     });
     rmApprover = svApprover.filter((element) => !arr.includes(element.empId));
-    console.log(rmApprover);
   }, [params, inputData, startValue, endValue, approver]);
-
-  console.log(params.docId);
 
   return (
     <SideNavigation>
@@ -298,8 +303,6 @@ function SavedBusinessTripInfo() {
             {!!empInfo && <DfCard drafterName={empInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
-
             // if (apvl.length === 0) {
             //   setApvl(empData);
             // }
@@ -356,17 +359,19 @@ function SavedBusinessTripInfo() {
                   <Select
                     id="mEmp"
                     label="구성원을 선택하세요"
-                    value={mEmp}
+                    value={mEmp2}
                     placeholder="구성원을 선택하세요"
                     onChange={(e) => {
-                      setMEmp(e.target.value);
+                      setMEmp2(e.target.value);
                     }}
 
                     // className={styles.inputtext}
                   >
                     {mEmpInfo.length !== 0 &&
                       mEmpInfo.map((mEmps, index) => (
-                        <MenuItem key={index} value={mEmps}>
+                        <MenuItem
+                          key={index}
+                          value={mEmps.empName + ' (' + mEmps.empId + ')'}>
                           {mEmps.empName} ({mEmps.empId})
                         </MenuItem>
                       ))}
@@ -421,7 +426,6 @@ function SavedBusinessTripInfo() {
                   sx={{ width: 250 }}
                   onChange={(e) => {
                     setStartValue(e.target.value);
-                    console.log(e.target.value);
                   }}
                   InputLabelProps={{
                     shrink: true,
@@ -522,6 +526,9 @@ function SavedBusinessTripInfo() {
                   variant="outlined"
                   size="large"
                   onClick={async () => {
+                    svApprover.map((data) =>
+                      deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                    );
                     await insertBizTp(
                       params.docId,
                       3,
@@ -532,11 +539,6 @@ function SavedBusinessTripInfo() {
                       setInputData
                     );
                     {
-                      if (rmApprover.length !== 0) {
-                        rmApprover.map((data) =>
-                          deleteApvlByDocIdAndEmpId(params.docId, data.empId)
-                        );
-                      }
                       insertApproval(
                         params.docId,
                         0,
@@ -546,12 +548,10 @@ function SavedBusinessTripInfo() {
                         approvalList
                       );
                       // approver.map((data, index) => {
-                      //   console.log(data);
                       //   const approvalId = getApvlId(params.docId, data.empId);
 
                       //   if (approvalId !== null) {
                       //     approvalId.then((apvlId) => {
-                      //       console.log(data);
                       //       insertApproval(
                       //         params.docId,
                       //         0,
@@ -579,10 +579,8 @@ function SavedBusinessTripInfo() {
               </Link>
 
               <Link
-                to="/boxes"
+                to="/boxes/dd"
                 onClick={async (e) => {
-                  console.log(startValue);
-                  console.log(endValue);
                   if (approver.length !== 0) {
                     await insertBizTp(
                       params.docId,
@@ -599,6 +597,9 @@ function SavedBusinessTripInfo() {
                     e.preventDefault();
                   }
                   {
+                    svApprover.map((data) =>
+                      deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                    );
                     insertApproval(
                       params.docId,
                       1,
@@ -609,7 +610,6 @@ function SavedBusinessTripInfo() {
                     );
                     sendChatHandle();
                     // approver.map((data, index) => {
-                    //   console.log(data);
                     //   const approvalId = getApvlId(params.docId, data.empId);
                     //   insertApproval(
                     //     params.docId,

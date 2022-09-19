@@ -58,6 +58,10 @@ const SideNavigation = ({ children }) => {
                 <Link to={'/boxes/dd'}>상신한</Link>
               </Menuitem>
 
+              <Menuitem>
+                <Link to={'/boxes/do'}>진행중</Link>
+              </Menuitem>
+
               <MenuItem>
                 <Link to={'/boxes/dc'}>완료된</Link>
               </MenuItem>

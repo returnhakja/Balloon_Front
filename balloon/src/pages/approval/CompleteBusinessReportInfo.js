@@ -38,7 +38,6 @@ function CompleteBusinessReportInfo() {
   const [approver, setApprover] = useState([]);
 
   const params = useParams();
-  console.log(bizRptInfo);
 
   useEffect(() => {
     getBizRptByBizRptId(params.docId, setBizRptInfo);
@@ -49,7 +48,6 @@ function CompleteBusinessReportInfo() {
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          {' '}
           <FcDocument /> 업무기안
         </p>
 
@@ -69,7 +67,6 @@ function CompleteBusinessReportInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {bizRptInfo.empName}({bizRptInfo.emp && bizRptInfo.emp.empId})
               </th>
             </tr>
@@ -90,7 +87,6 @@ function CompleteBusinessReportInfo() {
             <DfCard drafterName={bizRptInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             // if (apvl.length === 0) {
             //   setApvl(empData);
             // }
@@ -114,7 +110,6 @@ function CompleteBusinessReportInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleftpadding}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 {bizRptInfo.documentTitle}
                 {/* <form>
                   <TextField

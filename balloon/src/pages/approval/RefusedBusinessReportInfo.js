@@ -42,7 +42,6 @@ function RefusedBusinessReportInfo() {
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          {' '}
           <FcDocument /> 업무기안
         </p>
 
@@ -62,7 +61,6 @@ function RefusedBusinessReportInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
@@ -83,7 +81,6 @@ function RefusedBusinessReportInfo() {
             <DfCard drafterName={empInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             return (
               <Card
                 variant="outlined"
@@ -103,7 +100,6 @@ function RefusedBusinessReportInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 {inputData.documentTitle}
               </td>
             </tr>
@@ -169,7 +165,6 @@ function RefusedBusinessReportInfo() {
                   }
 
                   // approver.map((data, index) => {
-                  //   console.log(data);
                   //   return insertApproval(
                   //     params.docId,
                   //     1,

@@ -69,7 +69,6 @@ function RefusedPersonnelAppointmentInfo() {
 
   useEffect(() => {
     if (Object.keys(inputData).length !== 0) {
-      console.log(inputData);
       getApvlByDocId(params.docId, setApprover);
       setStartValue(inputData.personnelDate);
       setMEmp(inputData.movedEmpId);
@@ -134,8 +133,6 @@ function RefusedPersonnelAppointmentInfo() {
             {!!inputData && <DfCard drafterName={inputData.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
-
             return (
               <Card
                 key={index}
@@ -202,20 +199,16 @@ function RefusedPersonnelAppointmentInfo() {
                       // defaultValue={mEmp2}
                       placeholder="구성원을 선택하세요"
                       onChange={(e) => {
-                        console.log(e);
                         setMEmp2(e.target.value);
-                        // console.log(e.target.value);
                       }}
 
                       // className={styles.inputtext}
                     >
-                      {/* {console.log(mEmp.empId + ' (' + mEmp.empName + ')123')} */}
                       {mEmpInfo &&
                         mEmpInfo.map((mEmps, index) => (
                           <MenuItem
                             key={index}
                             value={mEmps.empName + ' (' + mEmps.empId + ')'}>
-                            {console.log(mEmps)}
                             {mEmps.empName} ({mEmps.empId})
                           </MenuItem>
                         ))}
@@ -233,9 +226,7 @@ function RefusedPersonnelAppointmentInfo() {
                       value={unit2}
                       placeholder=" 발령부서를 선택하세요"
                       onChange={(e) => {
-                        console.log(e);
                         setUnit2(e.target.value);
-                        // console.log(e.target.value);
                       }}
 
                       // className={styles.inputtext}
@@ -247,7 +238,6 @@ function RefusedPersonnelAppointmentInfo() {
                             value={
                               unitInfo.unitName + ' (' + unitInfo.unitCode + ')'
                             }>
-                            {console.log(unitInfo)}
                             {unitInfo.unitName} ({unitInfo.unitCode})
                           </MenuItem>
                         ))}
@@ -268,7 +258,6 @@ function RefusedPersonnelAppointmentInfo() {
                     defaultValue={inputData.position}
                     onChange={(e) => {
                       setPosi(e.target.value);
-                      // console.log(posi);
                     }}
 
                     // className={styles.inputtext}

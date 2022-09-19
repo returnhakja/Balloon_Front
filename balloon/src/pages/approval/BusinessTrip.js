@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import ModalApproval from './ModalApproval';
@@ -53,6 +53,7 @@ function BusinessTrip() {
   const [inputData, setInputData] = useState({});
   const [docNum, setDocNum] = useState(0);
   const [docId, setDocId] = useState('');
+  const [saveType, setSaveType] = useState('');
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
   const [mEmpInfo, setMEmpInfo] = useState('');
@@ -72,21 +73,21 @@ function BusinessTrip() {
   const position = empInfo.position;
   const approvalForm = '출장계획';
 
+  const approveRef = useRef();
+  const tempRef = useRef();
+
   //기안제목
   const approvalTitle =
     document.getElementById('bizTpTitle') &&
     document.getElementById('bizTpTitle').value;
-  console.log(approvalTitle);
   //방문처
   const visitPlace =
     document.getElementById('destination') &&
     document.getElementById('destination').value;
-  console.log(visitPlace);
   //방문목적
   const visitPurpose =
     document.getElementById('visitingPurpose') &&
     document.getElementById('visitingPurpose').value;
-  console.log(visitPurpose);
 
   //결재선설정empIdList
   {
@@ -197,25 +198,65 @@ function BusinessTrip() {
 
   let startDate = startValue && document.getElementById('startValue').value;
   let endDate = endValue && document.getElementById('endValue').value;
-  console.log(startDate);
-  console.log(endDate);
 
   useEffect(() => {
     if (mEmpInfo.length === 0) {
       getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
     }
-    if (docNum === 0) {
-      getLatestBizTP(setDocNum);
-      setDocId('출장계획-22-0000001');
-    } else {
-      setDocId('출장계획' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
-    }
+    // if (docNum === 0) {
+    //   getLatestBizTP(setDocNum);
+    //   setDocId('출장계획-22-0000001');
+    // } else {
+    //   setDocId('출장계획' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
+    // }
 
     if (noApprover.length === 0) {
       setNoApprover(noApprover);
     }
   }, [docNum, noApprover]);
-  console.log(mEmp);
+
+  const tempSaveAppr = async () => {
+    await insertBizTp(
+      docId,
+      3,
+      inputData,
+      empInfo,
+      startDate,
+      endDate,
+      setInputData
+    );
+    insertApproval(docId, 0, approver, inputData, empInfo);
+    insertBizTpEmp(docId, mEmp);
+    alert('문서가 임시저장되었습니다!');
+
+    tempRef.current.click();
+  };
+
+  const approveAppr = async () => {
+    await insertBizTp(
+      docId,
+      1,
+      inputData,
+      empInfo,
+      startDate,
+      endDate,
+      setInputData
+    );
+    insertApproval(docId, 1, approver, inputData, empInfo);
+    insertBizTpEmp(docId, mEmp);
+    sendChatHandle();
+    alert('문서가 상신되었습니다!');
+    approveRef.current.click();
+  };
+  useEffect(() => {
+    if (docId) {
+      if (saveType === 'approve') {
+        approveAppr();
+      } else if (saveType === 'temp') {
+        tempSaveAppr();
+      }
+    }
+  }, [docId]);
 
   return (
     <SideNavigation>
@@ -231,7 +272,7 @@ function BusinessTrip() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>출장계획서</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>{docId}</th>
+              <th className={styles.th}>{'-'}</th>
             </tr>
           </thead>
 
@@ -241,7 +282,6 @@ function BusinessTrip() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
@@ -300,7 +340,6 @@ function BusinessTrip() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 <form>
                   <input
                     id="bizTpTitle"
@@ -330,7 +369,6 @@ function BusinessTrip() {
             <tr align="center">
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
-                {' '}
                 <FormControl fullWidth>
                   <InputLabel>구성원을 설정해주세요</InputLabel>
                   <Select
@@ -468,56 +506,38 @@ function BusinessTrip() {
 
           <div className={styles.savebutton}>
             <Box sx={{ '& button': { m: 1 } }}>
-              <Link to={'/boxes/ds'}>
-                <Button
-                  variant="outlined"
-                  size="large"
-                  onClick={async () => {
-                    await insertBizTp(
-                      docId,
-                      3,
-                      inputData,
-                      empInfo,
-                      startDate,
-                      endDate,
-                      setInputData
-                    );
-
-                    // approver.map((data, index) => {
-                    //   console.log(data);
-                    //   return insertApproval(docId, 0, data, inputData, empInfo);
-                    // });
-                    insertApproval(docId, 0, approver, inputData, empInfo);
-                    insertBizTpEmp(docId, mEmp);
-                    alert('문서가 임시저장되었습니다!');
-                  }}>
+              <Link
+                to={'/boxes/ds'}
+                ref={tempRef}
+                onClick={async (e) => {
+                  if (!docId) {
+                    getLatestBizTP(setDocId);
+                    setSaveType('temp');
+                    e.preventDefault();
+                  }
+                }}>
+                <Button variant="outlined" size="large">
                   임시저장
                 </Button>
               </Link>
               <Link
                 to={'/boxes/dd'}
+                ref={approveRef}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
-                    await insertBizTp(
-                      docId,
-                      1,
-                      inputData,
-                      empInfo,
-                      startDate,
-                      endDate,
-                      setInputData
-                    );
-                    sendChatHandle();
-                    alert('문서가 상신되었습니다!');
+                    if (!docId) {
+                      getLatestBizTP(setDocId);
+                      setSaveType('approve');
+                      e.preventDefault();
+                    }
                   } else {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
                   // approver.map((data, index) => {
-                  //   console.log(data);
                   //   return insertApproval(docId, 1, data, inputData, empInfo);
                   // });
-                  insertApproval(docId, 1, approver, inputData, empInfo);
+                  // insertApproval(docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기

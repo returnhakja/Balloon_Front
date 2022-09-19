@@ -66,7 +66,12 @@ function MainPage() {
     datasets: [
       {
         label: '# of Votes',
-        data: [DDCount, DCCount, DSCount, DRCount],
+        data: [
+          DDCount ? DDCount : 1,
+          DCCount ? DCCount : 1,
+          DSCount ? DSCount : 1,
+          DRCount ? DRCount : 1,
+        ],
         backgroundColor: [
           'rgba(54, 162, 235, 0.2)',
           'rgba(75, 192, 192, 0.2)',
@@ -83,10 +88,10 @@ function MainPage() {
       },
     ],
     labels: [
-      `상신한 ${DDCount}`,
-      `완료된 ${DCCount}`,
-      `저장된 ${DSCount}`,
-      `반려된 ${DRCount}`,
+      `상신한 ${DDCount ? DDCount : '0'}`,
+      `완료된 ${DCCount ? DCCount : '0'}`,
+      `저장된 ${DSCount ? DSCount : '0'}`,
+      `반려된 ${DRCount ? DRCount : '0'}`,
     ],
   };
   const options = {
@@ -240,21 +245,37 @@ function MainPage() {
             )}
           </div>
         </div>
-        {empInfo.length !== 0 && (
-          <div
-            id="myChart"
-            style={{
-              width: '250px',
-              height: '350px',
-              marginTop: '12vh',
-              backgroundColor: '#EEEEEE',
-              boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
-            }}>
-            <p style={{ padding: '10px' }}>결재관리</p>
-            <p> 날짜들어갈꺼임 </p>
-            <Pie data={data} options={options} />
-          </div>
-        )}
+
+        {empInfo.length !== 0 &&
+          (JSON.stringify(countDArr) === JSON.stringify([0, 0, 0, 0]) ? (
+            <div
+              id="myChart"
+              style={{
+                width: '250px',
+                height: '350px',
+                marginTop: '12vh',
+                backgroundColor: '#EEEEEE',
+                boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
+              }}>
+              <p style={{ padding: '10px' }}>결재관리</p>
+              <p>아직 결재 정보가 없습니다.</p>
+            </div>
+          ) : (
+            <div
+              id="myChart"
+              style={{
+                width: '250px',
+                height: '350px',
+                marginTop: '12vh',
+                backgroundColor: '#EEEEEE',
+                boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
+              }}>
+              {console.log('countDArr', countDArr)}
+              <p style={{ padding: '10px' }}>결재관리</p>
+              <p> 날짜들어갈꺼임 </p>
+              <Pie data={data} options={options} />
+            </div>
+          ))}
       </div>
     </div>
   );
