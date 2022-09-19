@@ -26,7 +26,7 @@ function Organization() {
           {prior1.length !== 0 &&
             prior1.map((unit1) => {
               return (
-                <div className={'level-1-wrapper'}>
+                <div className={'level-1-wrapper'} key={unit1.unitName}>
                   <h1 className={`level-1-rectangle`}>{unit1.unitName}</h1>
                   <div
                     // className={`level-1-div`}
