@@ -77,6 +77,7 @@ export const onUserInvite = async (chatroomId, invite, client) => {
           };
         })
       )
+      .then(() => console.log('=================='))
       .catch((error) => console.log(error));
 };
 
@@ -122,6 +123,8 @@ export const empIdInfo = async (chatroomId, setChatempinfo) => {
 
 //이전에 채팅했던 기록보이게
 export const chatRecord = async (chatroomId, setChatting, empId) => {
+  console.log(chatroomId);
+  console.log(empId);
   axios
     .get(`/chat/chatrecord/${chatroomId}/${empId}`)
     .then((response) => {

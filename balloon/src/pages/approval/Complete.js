@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useOutletContext, Link } from 'react-router-dom';
+import moment from 'moment';
 import SideNavigation from '../../components/SideNavigation';
 import { getDocsByEmp } from '../../context/ApprovalAxios';
 import styles from '../../css/Component.module.css';
@@ -51,7 +52,13 @@ function Complete() {
       width: 350,
       renderCell: getdocId,
     },
-    { field: 'updateTime', headerName: '처리일자', width: 200 },
+    {
+      field: 'updateTime',
+      headerName: '처리일자',
+      width: 200,
+      valueFormatter: (params) =>
+        moment(params?.value).format('YYYY/MM/DD HH:mm:ss'),
+    },
   ];
 
   return (

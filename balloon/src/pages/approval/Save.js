@@ -5,8 +5,11 @@ import { getDocsByEmp } from '../../context/ApprovalAxios';
 import styles from '../../css/Component.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Container } from '@mui/system';
+
 import { DataGrid, GridToolbar, koKR } from '@mui/x-data-grid';
 import CustomToolbar from '../personnelManagement/CustomToolbar';
+
+import moment from 'moment';
 
 function Save() {
   const [empInfo] = useOutletContext();
@@ -51,7 +54,13 @@ function Save() {
       width: 350,
       renderCell: getdocId,
     },
-    { field: 'updateTime', headerName: '처리일자', width: 160 },
+    {
+      field: 'updateTime',
+      headerName: '처리일자',
+      width: 160,
+      valueFormatter: (params) =>
+        moment(params?.value).format('YYYY/MM/DD HH:mm:ss'),
+    },
   ];
 
   return (

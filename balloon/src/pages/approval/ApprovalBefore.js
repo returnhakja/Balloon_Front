@@ -9,7 +9,10 @@ import styles from '../../css/Component.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import { DataGrid, GridToolbar, koKR } from '@mui/x-data-grid';
 import { Container } from '@mui/system';
+
 import CustomToolbar from '../personnelManagement/CustomToolbar';
+
+import moment from 'moment';
 
 function ApprovalBefore() {
   const [empInfo] = useOutletContext();
@@ -52,7 +55,13 @@ function ApprovalBefore() {
       width: 350,
       renderCell: getdocId,
     },
-    { field: 'updateTime', headerName: '처리일자', width: 160 },
+    {
+      field: 'updateTime',
+      headerName: '처리일자',
+      width: 160,
+      valueFormatter: (params) =>
+        moment(params?.value).format('YYYY/MM/DD HH:mm:ss'),
+    },
   ];
 
   return (
