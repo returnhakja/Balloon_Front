@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import { getDCount } from '../context/ApprovalFunc';
+import { getDCountByDate } from '../context/ApprovalFunc';
 import {
   // endlessWork,
   endWork,
@@ -31,6 +31,22 @@ function MainPage() {
   const [DRCount, setDRCount] = useState('');
   const [countDArr, setCountDArr] = useState([]);
 
+  function getCurrentWeek() {
+    const day = new Date();
+    const sunday = day.getTime() - 86400000 * day.getDay();
+
+    day.setTime(sunday);
+
+    const result = [day.toISOString().slice(0, 10)];
+
+    for (let i = 1; i < 7; i++) {
+      day.setTime(day.getTime() + 86400000);
+      result.push(day.toISOString().slice(0, 10));
+    }
+
+    return result;
+  }
+
   useEffect(() => {
     if (empInfo.length !== 0) {
       if (!!empInfo) {
@@ -49,13 +65,16 @@ function MainPage() {
           setCountDArr([DDCount, DCCount, DSCount, DRCount]);
         }
       } else {
-        getDCount(
+        getDCountByDate(
           empInfo.empId,
           setDDCount,
           setDCCount,
           setDSCount,
-          setDRCount
+          setDRCount,
+          getCurrentWeek()[0],
+          getCurrentWeek()[6]
         );
+        alert('aaaaa');
       }
     }
   }, [empInfo.empId, rend, DDCount, DCCount, DSCount, DRCount, countDArr]);
@@ -66,12 +85,7 @@ function MainPage() {
     datasets: [
       {
         label: '# of Votes',
-        data: [
-          DDCount ? DDCount : 1,
-          DCCount ? DCCount : 1,
-          DSCount ? DSCount : 1,
-          DRCount ? DRCount : 1,
-        ],
+        data: [DDCount, DCCount, DSCount, DRCount],
         backgroundColor: [
           'rgba(54, 162, 235, 0.2)',
           'rgba(75, 192, 192, 0.2)',
@@ -258,6 +272,8 @@ function MainPage() {
                 boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
               }}>
               <p style={{ padding: '10px' }}>결재관리</p>
+
+              <p>{getCurrentWeek()[0] + ' ~ ' + getCurrentWeek()[6]}</p>
               <p>아직 결재 정보가 없습니다.</p>
             </div>
           ) : (
@@ -272,7 +288,7 @@ function MainPage() {
               }}>
               {console.log('countDArr', countDArr)}
               <p style={{ padding: '10px' }}>결재관리</p>
-              <p> 날짜들어갈꺼임 </p>
+              <p>{getCurrentWeek()[0] + ' ~ ' + getCurrentWeek()[6]}</p>
               <Pie data={data} options={options} />
             </div>
           ))}

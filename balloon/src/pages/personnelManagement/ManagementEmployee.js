@@ -160,7 +160,12 @@ function ManagementEmployee() {
           />
         </Box>
         {open && (
-          <EmployeeUpdate open={open} setOpen={setOpen} empId={rowData.empId} />
+          <EmployeeUpdate
+            open={open}
+            setOpen={setOpen}
+            empId={rowData.empId}
+            photo={rowData.photo}
+          />
         )}
       </Container>
     </div>
