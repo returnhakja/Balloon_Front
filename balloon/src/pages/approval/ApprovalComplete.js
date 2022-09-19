@@ -6,6 +6,7 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import 'react-datepicker/dist/react-datepicker.css';
 import { getApvlByApvrIdAnddocStatus } from '../../context/ApprovalAxios';
 import { Link, useOutletContext } from 'react-router-dom';
+import moment from 'moment';
 
 function ApprovalComplete() {
   const [empInfo] = useOutletContext();
@@ -61,7 +62,13 @@ function ApprovalComplete() {
       width: 350,
       renderCell: getdocId,
     },
-    { field: 'updateTime', headerName: '처리일자', width: 160 },
+    {
+      field: 'updateTime',
+      headerName: '처리일자',
+      width: 160,
+      valueFormatter: (params) =>
+        moment(params?.value).format('YYYY/MM/DD HH:mm:ss'),
+    },
   ];
 
   return (
