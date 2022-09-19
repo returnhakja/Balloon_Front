@@ -186,7 +186,7 @@ export const updateEmployee = async (updateData) => {
     .catch((error) => {
       console.log(error);
     });
-  // window.location.href = '/mypage'
+  window.location.href = '/mypage';
 };
 
 // 사번으로 사원 삭제
