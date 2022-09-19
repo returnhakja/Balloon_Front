@@ -37,6 +37,7 @@ function CalendarInsert({
 
   //socket연결
   const client = ChatStomp();
+  client.debug = null;
 
   let scheduletitle = '';
   let CalendarContent = '';

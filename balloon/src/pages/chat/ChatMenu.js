@@ -10,6 +10,7 @@ import ChatSide from './ChatSide';
 export default function ChatMenu({ open, setOpen, empInfo }) {
   const [chatStatus, setChatStatus] = useState('chatEmpList');
   const [roomId, setRoomId] = useState(0);
+  const [check, setCheck] = useState(false);
   const handleClose = () => setOpen(false);
 
   return (
@@ -36,7 +37,12 @@ export default function ChatMenu({ open, setOpen, empInfo }) {
         <hr />
         <div className={styles.side2}>
           <div className={styles.listcon}>
-            <ChatSide setChatStatus={setChatStatus} setRoomId={setRoomId} />
+            <ChatSide
+              setChatStatus={setChatStatus}
+              setRoomId={setRoomId}
+              check={check}
+              setCheck={setCheck}
+            />
             {chatStatus === 'chatEmpList' ? (
               <ChatEmpList
                 open={open}
@@ -52,6 +58,7 @@ export default function ChatMenu({ open, setOpen, empInfo }) {
                 setChatStatus={setChatStatus}
                 roomId={roomId}
                 setRoomId={setRoomId}
+                check={check}
               />
             ) : chatStatus === 'chatNotice' ? (
               <ChatNotice empInfo={empInfo} setChatStatus={setChatStatus} />
