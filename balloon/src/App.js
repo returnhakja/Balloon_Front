@@ -138,27 +138,36 @@ function App() {
 
           {/* 상세 정보 */}
 
-          {['/doc/br/:docId', '/apvl/aobr/:docId', '/apvl/acbr/:docId'].map(
-            (path) => (
-              <Route path={path} key={path} element={<BusinessReportInfo />} />
-            )
-          )}
+          {[
+            '/doc/br/:docId',
+            '/apvl/aobr/:docId',
+            '/apvl/acbr/:docId',
+            '/apvl/arbr/:docId',
+          ].map((path) => (
+            <Route path={path} key={path} element={<BusinessReportInfo />} />
+          ))}
 
-          {['/doc/tp/:docId', '/apvl/aotp/:docId', '/apvl/actp/:docId'].map(
-            (path) => (
-              <Route path={path} key={path} element={<BusinessTripInfo />} />
-            )
-          )}
+          {[
+            '/doc/tp/:docId',
+            '/apvl/aotp/:docId',
+            '/apvl/actp/:docId',
+            '/apvl/artp/:docId',
+          ].map((path) => (
+            <Route path={path} key={path} element={<BusinessTripInfo />} />
+          ))}
 
-          {['/doc/pa/:docId', '/apvl/aopa/:docId', '/apvl/acpa/:docId'].map(
-            (path) => (
-              <Route
-                path={path}
-                key={path}
-                element={<PersonnelAppointmentInfo />}
-              />
-            )
-          )}
+          {[
+            '/doc/pa/:docId',
+            '/apvl/aopa/:docId',
+            '/apvl/acpa/:docId',
+            '/apvl/arpa/:docId',
+          ].map((path) => (
+            <Route
+              path={path}
+              key={path}
+              element={<PersonnelAppointmentInfo />}
+            />
+          ))}
 
           {/* 문서대장 상세 정보 */}
           <Route
@@ -174,21 +183,30 @@ function App() {
             element={<CompletePersonnelAppointmentInfo />}
           />
 
-          {/* 상신기안 상세 정보 */}
-          <Route
-            path="/doc/ddbr/:docId"
-            element={<DeclaredBusinessReportInfo />}
-          />
-          <Route
-            path="/doc/ddtp/:docId"
-            element={<DeclaredBusinessTripInfo />}
-          />
-          <Route
-            path="/doc/ddpa/:docId"
-            element={<DeclaredPersonnelAppointmentInfo />}
-          />
+          {/* 상신기안 / (상신기준)반려된 상세 정보 */}
+          {['/doc/ddbr/:docId', '/doc/drbr/:docId'].map((path) => (
+            <Route
+              path={path}
+              key={path}
+              element={<DeclaredBusinessReportInfo />}
+            />
+          ))}
+          {['/doc/ddtp/:docId', '/doc/drtp/:docId'].map((path) => (
+            <Route
+              path={path}
+              key={path}
+              element={<DeclaredBusinessTripInfo />}
+            />
+          ))}
+          {['/doc/ddpa/:docId', '/doc/drpa/:docId'].map((path) => (
+            <Route
+              path={path}
+              key={path}
+              element={<DeclaredPersonnelAppointmentInfo />}
+            />
+          ))}
 
-          {/* 반려된 기안 상세 정보 */}
+          {/* 반려된 기안 상세 정보
           <Route
             path="/doc/drbr/:docId"
             element={<RefusedBusinessReportInfo />}
@@ -200,7 +218,7 @@ function App() {
           <Route
             path="/doc/drpa/:docId"
             element={<RefusedPersonnelAppointmentInfo />}
-          />
+          /> */}
 
           {/* 기안작성 */}
           <Route path="/draft/form" element={<Dashboard />} />

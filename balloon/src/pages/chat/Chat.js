@@ -123,6 +123,7 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
     if (!!chatroomId) {
       empIdInfo(chatroomId, setChatempinfo);
     }
+    console.log('chatrecode');
     chatRecord(chatroomId, setChatting, empId);
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
   }, [input, chatroomId, chatting.length]);

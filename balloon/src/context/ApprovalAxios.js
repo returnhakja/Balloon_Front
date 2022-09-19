@@ -97,6 +97,14 @@ export const insertBizTpEmp = async (bizTpId, mEmp) => {
   await axios.post(url, inputData, { headers });
 };
 
+// 동반 출장자 삭제
+export const deleteBizTpEmp = async (bizTpId) => {
+  console.log(bizTpId);
+  const url = '/api/biztpemp/';
+  const str = url + bizTpId;
+  await axios.delete(str);
+};
+
 // 인사 명령 기안 정보
 export const getPAByPAId = async (PAId, setPAInfo) => {
   const url = '/api/pa/';
@@ -333,12 +341,16 @@ export const insertPA = async (
     unitName: unit.unitName ? unit.unitName : unit.slice(0, -11),
     movedEmpName: mEmp.empName ? mEmp.empName : mEmp.slice(0, -11),
     empName: empInfo.empName,
-    movedEmp: mEmp.empId
+    movedEmp: !mEmp
+      ? null
+      : mEmp.empId
       ? mEmp
       : {
           empId: mEmp.slice(-9, -1),
         },
-    unit: unit.unitCode
+    unit: !unit
+      ? null
+      : unit.unitCode
       ? unit
       : {
           unitCode: unit.slice(-9, -1),
