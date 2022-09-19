@@ -327,6 +327,7 @@
 }
 
 .scheduleContent {
+  width: 200px;
   border: 1px solid navy;
   background-color: #e4f3fa;
   margin-right: 5px;

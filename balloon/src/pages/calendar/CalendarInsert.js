@@ -130,6 +130,8 @@ function CalendarInsert({
     inviteSchedule.push(empId);
   }, []);
 
+  console.log(inviteSchedule);
+
   const botroomExist = [];
   const botroomId = [];
   console.log(botRoom);

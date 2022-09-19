@@ -71,7 +71,7 @@ function BusinessTrip() {
   const approverBot = 'Y0000002';
   const empName = empInfo.empName;
   const position = empInfo.position;
-  const approvalForm = '출장계획서';
+  const approvalForm = '출장계획';
 
   const approveRef = useRef();
   const tempRef = useRef();
@@ -102,7 +102,7 @@ function BusinessTrip() {
   //결재봇정보가져오기
   useEffect(() => {
     getEmpByEmpId(approverBot, setBotInfo);
-    botApvlChatroom(apvlPeople, setBotApvlRoom);
+    botApvlChatroom(firstApvlPeople, setBotApvlRoom);
   }, [apvlPeople.length]);
 
   const botroomExist = [];
@@ -111,9 +111,6 @@ function BusinessTrip() {
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
-
-  let createdRoomId = [];
-  createdRoomId = botroomId.slice(0, 1);
 
   //새로운 채팅방이 생성되어야할 사람들
   let newApvlPeople;
@@ -168,7 +165,7 @@ function BusinessTrip() {
   // 이미생성된 채팅방에 알림보내기
   const AlreadyBotroomMsg = (client) => {
     let AlreadyChatApproval = [];
-    createdRoomId.map((id) => {
+    botroomId.map((id) => {
       const AchatApproval = BusinessTripForm(
         id,
         botInfo,
