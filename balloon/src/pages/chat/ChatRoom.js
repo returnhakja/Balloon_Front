@@ -44,7 +44,7 @@ export default function ChatRoom({
             {chatroom.map((chat, index) => {
               return (
                 <>
-                  <div className={styles.DeleteBtn} key={index}>
+                  <div className={styles.DeleteBtn}>
                     <Button
                       variant="text"
                       disableElevation

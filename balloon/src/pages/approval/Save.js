@@ -6,6 +6,7 @@ import styles from '../../css/Component.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Container } from '@mui/system';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import moment from 'moment';
 
 function Save() {
   const [empInfo] = useOutletContext();
@@ -50,7 +51,13 @@ function Save() {
       width: 350,
       renderCell: getdocId,
     },
-    { field: 'updateTime', headerName: '처리일자', width: 160 },
+    {
+      field: 'updateTime',
+      headerName: '처리일자',
+      width: 160,
+      valueFormatter: (params) =>
+        moment(params?.value).format('YYYY/MM/DD HH:mm:ss'),
+    },
   ];
 
   return (

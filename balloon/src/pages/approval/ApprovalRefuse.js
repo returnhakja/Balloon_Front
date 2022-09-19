@@ -18,6 +18,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { getApvlByApvrIdAnddocStatus } from '../../context/ApprovalAxios';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Link, useOutletContext } from 'react-router-dom';
+import moment from 'moment';
 
 function ApprovalRefuse() {
   const [empInfo] = useOutletContext();
@@ -38,19 +39,25 @@ function ApprovalRefuse() {
     let documentId = params.row.docId;
     if (documentId.includes('업무기안')) {
       return (
-        <Link to={`/doc/drbr/${params.row.docId}`}>
+        <Link
+          to={`/apvl/arbr/${params.row.docId}`}
+          state={{ path: '/boxes/ar' }}>
           {params.row && params.row.documentTitle}
         </Link>
       );
     } else if (documentId.includes('출장계획')) {
       return (
-        <Link to={`/doc/tp/${params.row.docId}`}>
+        <Link
+          to={`/apvl/artp/${params.row.docId}`}
+          state={{ path: '/boxes/ar' }}>
           {params.row && params.row.documentTitle}
         </Link>
       );
     } else if (documentId.includes('인사명령')) {
       return (
-        <Link to={`/doc/pa/${params.row.docId}`}>
+        <Link
+          to={`/apvl/arpa/${params.row.docId}`}
+          state={{ path: '/boxes/ar' }}>
           {params.row && params.row.documentTitle}
         </Link>
       );
@@ -67,7 +74,13 @@ function ApprovalRefuse() {
       width: 350,
       renderCell: getdocId,
     },
-    { field: 'updateTime', headerName: '처리일자', width: 160 },
+    {
+      field: 'updateTime',
+      headerName: '처리일자',
+      width: 160,
+      valueFormatter: (params) =>
+        moment(params?.value).format('YYYY/MM/DD HH:mm:ss'),
+    },
   ];
 
   return (

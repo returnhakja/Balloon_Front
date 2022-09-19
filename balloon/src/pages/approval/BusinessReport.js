@@ -46,6 +46,9 @@ function BusinessReport() {
   // 이미 결재봇과 채팅방이 존재하는 사원 찾기
   const [botApvlRoom, setBotApvlRoom] = useState([]);
 
+  //기안제목
+  const [approvalTitle, setApprovalTitle] = useState('');
+
   const approveRef = useRef();
   const tempRef = useRef();
   //결재선설정empId
@@ -57,10 +60,10 @@ function BusinessReport() {
   const botroomExist = [];
   const botroomId = [];
 
-  //기안제목
-  const approvalTitle =
-    document.getElementById('bizRptTitle') &&
-    document.getElementById('bizRptTitle').value;
+  // //기안제목
+  // const approvalTitle =
+  //   document.getElementById('bizRptTitle') &&
+  //   document.getElementById('bizRptTitle').value;
 
   //결재선설정empIdList
   {
@@ -305,6 +308,7 @@ function BusinessReport() {
                     name="title"
                     placeholder="기안제목을 입력하세요."
                     className={styles.inputtext}
+                    onChange={(e) => setApprovalTitle(e.target.value)}
                   />
                 </form>
               </td>
@@ -337,15 +341,14 @@ function BusinessReport() {
                 ref={tempRef}
                 onClick={(e) => {
                   if (!docId) {
-                    createDocId();
-                    setSaveType('temp');
-
-                    // insertBizRpt(docId, 3, inputData, empInfo, setInputData);
-
-                    // insertApproval(docId, 0, approver, inputData, empInfo);
-
-                    // alert('문서가 임시저장되었습니다!');
-                    e.preventDefault();
+                    if (approvalTitle) {
+                      createDocId();
+                      setSaveType('temp');
+                      e.preventDefault();
+                    } else {
+                      alert('문서 제목을 입력해주세요 !');
+                      e.preventDefault();
+                    }
                   }
                 }}>
                 <Button variant="outlined" size="large">
@@ -358,9 +361,14 @@ function BusinessReport() {
                 onClick={(e) => {
                   if (approver.length !== 0) {
                     if (!docId) {
-                      createDocId();
-                      setSaveType('approve');
-                      e.preventDefault();
+                      if (approvalTitle) {
+                        createDocId();
+                        setSaveType('approve');
+                        e.preventDefault();
+                      } else {
+                        alert('문서 제목을 입력해주세요 !');
+                        e.preventDefault();
+                      }
                     }
                     // insertBizRpt(docId, 1, inputData, empInfo, setInputData);
                     // sendChatHandle();

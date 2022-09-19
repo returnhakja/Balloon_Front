@@ -63,6 +63,9 @@ function PersonnelAppointment() {
   // 날짜 관련
   const [startValue, setStartValue] = useState(new Date());
 
+  //기안제목
+  const [approvalTitle, setApprovalTitle] = useState('');
+
   const approveRef = useRef();
   const tempRef = useRef();
 
@@ -82,10 +85,10 @@ function PersonnelAppointment() {
   const approvalForm = '인사명령';
   const botroomExist = [];
   const botroomId = [];
-  //기안제목
-  const approvalTitle =
-    document.getElementById('PATitle') &&
-    document.getElementById('PATitle').value;
+  // //기안제목
+  // const approvalTitle =
+  //   document.getElementById('PATitle') &&
+  //   document.getElementById('PATitle').value;
   const member = mEmp.empName;
   const appointDepartment = unit.unitName;
   const appointPosition = posi;
@@ -353,6 +356,7 @@ function PersonnelAppointment() {
                     name="title"
                     placeholder="기안제목을 입력하세요."
                     className={styles.inputtext}
+                    onChange={(e) => setApprovalTitle(e.target.value)}
                   />
                 </form>
               </td>
@@ -502,9 +506,14 @@ function PersonnelAppointment() {
                 ref={tempRef}
                 onClick={async (e) => {
                   if (!docId) {
-                    getLatestPA(setDocId);
-                    setSaveType('temp');
-                    e.preventDefault();
+                    if (approvalTitle && mEmp && unit) {
+                      getLatestPA(setDocId);
+                      setSaveType('temp');
+                      e.preventDefault();
+                    } else {
+                      alert('필수요소를 입력해주세요 !');
+                      e.preventDefault();
+                    }
                   }
                 }}>
                 <Button variant="outlined" size="large">
@@ -517,9 +526,14 @@ function PersonnelAppointment() {
                 onClick={async (e) => {
                   if (approver.length !== 0) {
                     if (!docId) {
-                      getLatestPA(setDocId);
-                      setSaveType('approve');
-                      e.preventDefault();
+                      if (approvalTitle && mEmp && unit) {
+                        getLatestPA(setDocId);
+                        setSaveType('approve');
+                        e.preventDefault();
+                      } else {
+                        alert('필수 요소를 입력해주세요 !');
+                        e.preventDefault();
+                      }
                     }
                   } else {
                     alert('결재선을 설정해주세요 !');

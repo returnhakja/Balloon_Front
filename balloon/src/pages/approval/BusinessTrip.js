@@ -49,8 +49,8 @@ const SaveButton = styled(Button)(({ theme }) => ({
 
 function BusinessTrip() {
   // 날짜 관련
-  const [startValue, setStartValue] = useState(null);
-  const [endValue, setEndValue] = useState(null);
+  const [startValue, setStartValue] = useState(new Date());
+  const [endValue, setEndValue] = useState(new Date());
   const [inputData, setInputData] = useState({});
   const [docNum, setDocNum] = useState(0);
   const [docId, setDocId] = useState('');
@@ -74,13 +74,16 @@ function BusinessTrip() {
   const position = empInfo.position;
   const approvalForm = '출장계획';
 
+  //기안제목
+  const [approvalTitle, setApprovalTitle] = useState('');
+
   const approveRef = useRef();
   const tempRef = useRef();
 
   //기안제목
-  const approvalTitle =
-    document.getElementById('bizTpTitle') &&
-    document.getElementById('bizTpTitle').value;
+  // const approvalTitle =
+  //   document.getElementById('bizTpTitle') &&
+  //   document.getElementById('bizTpTitle').value;
   //방문처
   const visitPlace =
     document.getElementById('destination') &&
@@ -199,8 +202,8 @@ function BusinessTrip() {
     chatScheduleSave(AlreadyChatApproval);
   };
 
-  let startDate = startValue && document.getElementById('startValue').value;
-  let endDate = endValue && document.getElementById('endValue').value;
+  // let startDate = startValue && document.getElementById('startValue').value;
+  // let endDate = endValue && document.getElementById('endValue').value;
 
   useEffect(() => {
     if (mEmpInfo.length === 0) {
@@ -224,12 +227,14 @@ function BusinessTrip() {
       3,
       inputData,
       empInfo,
-      startDate,
-      endDate,
+      startValue,
+      endValue,
       setInputData
     );
     insertApproval(docId, 0, approver, inputData, empInfo);
-    insertBizTpEmp(docId, mEmp);
+    if (mEmp) {
+      insertBizTpEmp(docId, mEmp);
+    }
     alert('문서가 임시저장되었습니다!');
 
     tempRef.current.click();
@@ -241,12 +246,14 @@ function BusinessTrip() {
       1,
       inputData,
       empInfo,
-      startDate,
-      endDate,
+      startValue,
+      endValue,
       setInputData
     );
     insertApproval(docId, 1, approver, inputData, empInfo);
-    insertBizTpEmp(docId, mEmp);
+    if (mEmp) {
+      insertBizTpEmp(docId, mEmp);
+    }
     sendChatHandle();
     alert('문서가 상신되었습니다!');
     approveRef.current.click();
@@ -350,6 +357,7 @@ function BusinessTrip() {
                     name="title"
                     placeholder="기안제목을 입력하세요."
                     className={styles.inputtext}
+                    onChange={(e) => setApprovalTitle(e.target.value)}
                   />
                 </form>
               </td>
@@ -514,9 +522,14 @@ function BusinessTrip() {
                 ref={tempRef}
                 onClick={async (e) => {
                   if (!docId) {
-                    getLatestBizTP(setDocId);
-                    setSaveType('temp');
-                    e.preventDefault();
+                    if (approvalTitle) {
+                      getLatestBizTP(setDocId);
+                      setSaveType('temp');
+                      e.preventDefault();
+                    } else {
+                      alert('문서 제목을 입력해주세요 !');
+                      e.preventDefault();
+                    }
                   }
                 }}>
                 <Button variant="outlined" size="large">
@@ -529,9 +542,14 @@ function BusinessTrip() {
                 onClick={async (e) => {
                   if (approver.length !== 0) {
                     if (!docId) {
-                      getLatestBizTP(setDocId);
-                      setSaveType('approve');
-                      e.preventDefault();
+                      if (approvalTitle) {
+                        getLatestBizTP(setDocId);
+                        setSaveType('approve');
+                        e.preventDefault();
+                      } else {
+                        alert('문서 제목을 입력해주세요 !');
+                        e.preventDefault();
+                      }
                     }
                   } else {
                     alert('결재선을 설정해주세요 !');
