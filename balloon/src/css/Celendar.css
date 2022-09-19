@@ -46,6 +46,11 @@ body {
   color: blue;
 }
 
+.fc-toolbar-chunk {
+  display: flex;
+  align-items: center;
+}
+
 /*  일정 등록창 날짜입력 크기 지정 */
 .MuiInputBase-adornedEnd {
   width: 200px;
