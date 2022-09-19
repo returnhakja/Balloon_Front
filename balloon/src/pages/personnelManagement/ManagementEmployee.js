@@ -174,7 +174,6 @@ function ManagementEmployee() {
             pageSize={10}
             rowsPerPageOptions={[10]}
             components={{ Toolbar: CustomToolbar }}
-            checkboxSelection
             onCellClick={(data) => {
               handleClick(data);
             }}

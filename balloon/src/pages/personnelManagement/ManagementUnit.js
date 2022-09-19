@@ -128,7 +128,6 @@ function ManagementUnit() {
             experimentalFeatures={{ newEditingApi: true }}
             pageSize={10}
             rowsPerPageOptions={[10]}
-            checkboxSelection
             onCellClick={(data) => {
               handleClick(data);
             }}
