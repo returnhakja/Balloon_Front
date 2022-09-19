@@ -71,12 +71,8 @@ function MainPage() {
     ],
     datasets: [
       {
-        data: [
-          DDCount ? DDCount : 1,
-          DCCount ? DCCount : 1,
-          DSCount ? DSCount : 1,
-          DRCount ? DRCount : 1,
-        ],
+        label: '# of Votes',
+        data: [DDCount, DCCount, DSCount, DRCount],
         backgroundColor: [
           'rgba(54, 162, 235, 0.2)',
           'rgba(75, 192, 192, 0.2)',
@@ -89,7 +85,7 @@ function MainPage() {
           'rgba(255, 206, 86, 0.2)',
           'rgba(255, 99, 132, 0.2)',
         ],
-        borderWidth: 1,
+        // borderWidth: 1,
       },
     ],
   };
@@ -102,6 +98,7 @@ function MainPage() {
         display: true,
         position: 'bottom',
       },
+      // outlabels,
     },
   };
 
