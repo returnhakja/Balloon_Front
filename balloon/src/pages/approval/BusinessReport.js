@@ -62,15 +62,23 @@ function BusinessReport() {
     approver.map((empId) => apvlPeople.push(empId.empId));
   }
 
+  console.log(apvlPeople);
   let firstApvlPeople;
   firstApvlPeople = apvlPeople.filter(
     (data, index) => data.indexOf(data[0]) === index
+  );
+  console.log(firstApvlPeople);
+
+  // 채팅방이 생성되어야할 사람들
+  let newApvlPeople;
+  newApvlPeople = firstApvlPeople.filter(
+    (people) => !botroomExist.includes(people)
   );
 
   //결재봇정보가져오기
   useEffect(() => {
     getEmpByEmpId(approverBot, setBotInfo);
-    botApvlChatroom(apvlPeople, setBotApvlRoom);
+    botApvlChatroom(firstApvlPeople, setBotApvlRoom);
   }, [apvlPeople.length]);
 
   //채팅방이 존재하는지 확인
@@ -79,14 +87,7 @@ function BusinessReport() {
     botroomId.push(data.chatroomId.chatroomId);
   });
 
-  let createdRoomId = [];
-  createdRoomId = botroomId.slice(0, 1);
-
-  // 채팅방이 생성되어야할 사람들
-  let newApvlPeople;
-  newApvlPeople = firstApvlPeople.filter(
-    (people) => !botroomExist.includes(people)
-  );
+  console.log(botroomId);
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(
@@ -134,7 +135,7 @@ function BusinessReport() {
   // 이미생성된 채팅방에 알림보내기
   const AlreadyBotroomMsg = (client) => {
     let AlreadyChatApproval = [];
-    createdRoomId.map((id) => {
+    botroomId.map((id) => {
       const chatApproval = BusinessReportForm(
         id,
         botInfo,

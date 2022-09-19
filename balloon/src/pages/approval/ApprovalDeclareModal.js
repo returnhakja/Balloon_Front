@@ -81,10 +81,18 @@ export default function ApprovalDeclareModal({
     });
   }
 
+  let ApvlPeople = [apvlId[1]];
+  console.log(ApvlPeople);
+
+  let apvlFormName = [];
+  {
+    apvlForm.map((data) => apvlFormName.push(data.slice(0, 4)));
+  }
+
   //결재봇정보가져오기
   useEffect(() => {
     getEmpByEmpId(approverBot, setBotInfo);
-    botApvlChatroom2(apvlId, setBotApvl);
+    botApvlChatroom2(ApvlPeople, setBotApvl);
   }, [apvlList.length]);
 
   //채팅방이 존재하는지 확인
@@ -94,12 +102,7 @@ export default function ApprovalDeclareModal({
     botroomId.push(data.chatroomId.chatroomId);
   });
 
-  let createdRoomId = [];
-  createdRoomId = botroomId.slice(1);
-  console.log(createdRoomId);
-
-  let ApvlPeople = [apvlId[1]];
-  console.log(ApvlPeople);
+  console.log(botroomId);
 
   // 채팅방이 생성되어야할 사람들
   let newApvlPeople;
@@ -127,7 +130,7 @@ export default function ApprovalDeclareModal({
             add.chatroomId,
             botInfo,
             apvlTitle[0],
-            apvlForm[0],
+            apvlFormName[0],
             empName[0],
             position[0]
           );
@@ -137,7 +140,7 @@ export default function ApprovalDeclareModal({
             add.chatroomId,
             botInfo,
             apvlTitle[0],
-            apvlForm[0],
+            apvlFormName[0],
             apvlvisitPlace[0],
             apvlvisitPurpose[0],
             empName[0],
@@ -149,7 +152,7 @@ export default function ApprovalDeclareModal({
             add.chatroomId,
             botInfo,
             apvlTitle[0],
-            apvlForm[0],
+            apvlFormName[0],
             apvlMember[0],
             apvlAppointDepart[0],
             apvlAppointPosi[0],
@@ -184,14 +187,14 @@ export default function ApprovalDeclareModal({
   const AlreadyBotroomMsg = (client) => {
     let AlreadyChatApproval = [];
     let chatApproval = [];
-    createdRoomId.map((id) => {
+    botroomId.map((id) => {
       apvlList.map((data) => {
         if (data && data.businessReport !== undefined) {
           chatApproval = BusinessReportForm(
             id,
             botInfo,
             apvlTitle[0],
-            apvlForm[0],
+            apvlFormName[0],
             empName[0],
             position[0]
           );
@@ -201,7 +204,7 @@ export default function ApprovalDeclareModal({
             id,
             botInfo,
             apvlTitle[0],
-            apvlForm[0],
+            apvlFormName[0],
             apvlvisitPlace[0],
             apvlvisitPurpose[0],
             empName[0],
@@ -213,7 +216,7 @@ export default function ApprovalDeclareModal({
             id,
             botInfo,
             apvlTitle[0],
-            apvlForm[0],
+            apvlFormName[0],
             apvlMember[0],
             apvlAppointDepart[0],
             apvlAppointPosi[0],

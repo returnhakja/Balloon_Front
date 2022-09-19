@@ -14,6 +14,7 @@ export default function ChatRoom({
   setRoomId,
 }) {
   const [chatroom, setChatroom] = useState([]);
+  const [selectChatroom, setSelectChatroom] = useState({});
   //채팅방 나가기 모달
   const [openExitChat, setOpenExitChat] = useState(false);
   const empId = empInfo.empId;
@@ -26,8 +27,9 @@ export default function ChatRoom({
   }, [empId]);
 
   //삭제모달창
-  const eventClickHandle = () => {
+  const eventClickHandle = (chat) => {
     setOpenExitChat(true);
+    setSelectChatroom(chat);
   };
 
   return (
@@ -48,23 +50,12 @@ export default function ChatRoom({
                       onClick={(e) => {
                         const eventExit = () => {
                           e.preventDefault();
-                          eventClickHandle();
+                          eventClickHandle(chat);
                         };
                         return eventExit();
                       }}>
                       <DeleteIcon />
                     </Button>
-                    {openExitChat && (
-                      <ExitChatroom
-                        openExitChat={openExitChat}
-                        setOpenExitChat={setOpenExitChat}
-                        chatroomId={chat.chatroom.chatroomId}
-                        chatroomName={chat.chatroom.chatroomName}
-                        headCount={chat.chatroom.headCount}
-                        empInfo={empInfo}
-                        setChatStatus={setChatStatus}
-                      />
-                    )}
                   </div>
                   <div
                     className={styles.roomcon}
@@ -112,6 +103,17 @@ export default function ChatRoom({
                 </>
               );
             })}
+            {selectChatroom.chatroom && (
+              <ExitChatroom
+                openExitChat={openExitChat}
+                setOpenExitChat={setOpenExitChat}
+                chatroomId={selectChatroom.chatroom.chatroomId}
+                chatroomName={selectChatroom.chatroom.chatroomName}
+                headCount={selectChatroom.chatroom.headCount}
+                empInfo={empInfo}
+                setChatStatus={setChatStatus}
+              />
+            )}
           </div>
         </>
       ) : (
