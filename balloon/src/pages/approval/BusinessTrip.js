@@ -37,6 +37,7 @@ import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
 
 //socket연결
 const client = ChatStomp();
+client.debug = null;
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -111,12 +112,14 @@ function BusinessTrip() {
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
+  console.log(botroomId);
 
   //새로운 채팅방이 생성되어야할 사람들
   let newApvlPeople;
   newApvlPeople = firstApvlPeople.filter(
     (people) => !botroomExist.includes(people)
   );
+  console.log(newApvlPeople);
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(

@@ -23,6 +23,7 @@ import BusinessReportForm from '../chat/BusinessReportForm';
 
 //socket연결
 const client = ChatStomp();
+client.debug = null;
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -65,19 +66,13 @@ function BusinessReport() {
   {
     approver.map((empId) => apvlPeople.push(empId.empId));
   }
-
   console.log(apvlPeople);
+
   let firstApvlPeople;
   firstApvlPeople = apvlPeople.filter(
     (data, index) => data.indexOf(data[0]) === index
   );
   console.log(firstApvlPeople);
-
-  // 채팅방이 생성되어야할 사람들
-  let newApvlPeople;
-  newApvlPeople = firstApvlPeople.filter(
-    (people) => !botroomExist.includes(people)
-  );
 
   //결재봇정보가져오기
   useEffect(() => {
@@ -91,7 +86,15 @@ function BusinessReport() {
     botroomId.push(data.chatroomId.chatroomId);
   });
 
+  console.log(botroomExist);
   console.log(botroomId);
+
+  // 채팅방이 생성되어야할 사람들
+  let newApvlPeople;
+  newApvlPeople = firstApvlPeople.filter(
+    (people) => !botroomExist.includes(people)
+  );
+  console.log(newApvlPeople);
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(

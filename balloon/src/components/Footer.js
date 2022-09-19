@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../css/Footer.module.css';
-
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 const Footer = () => {
   return (
     <footer className={styles.footer}>

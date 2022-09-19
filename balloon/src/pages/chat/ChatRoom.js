@@ -12,6 +12,7 @@ export default function ChatRoom({
   setChatStatus,
   roomId,
   setRoomId,
+  check,
 }) {
   const [chatroom, setChatroom] = useState([]);
   const [selectChatroom, setSelectChatroom] = useState({});
@@ -24,7 +25,7 @@ export default function ChatRoom({
     if (empId) {
       onChatroom(setChatroom, empId);
     }
-  }, [empId]);
+  }, [empId, check]);
 
   //삭제모달창
   const eventClickHandle = (chat) => {
@@ -43,18 +44,7 @@ export default function ChatRoom({
             {chatroom.map((chat, index) => {
               return (
                 <>
-                  <div className={styles.DeleteBtn}>
-                    {openExitChat && (
-                      <ExitChatroom
-                        openExitChat={openExitChat}
-                        setOpenExitChat={setOpenExitChat}
-                        chatroomId={chat.chatroom.chatroomId}
-                        chatroomName={chat.chatroom.chatroomName}
-                        headCount={chat.chatroom.headCount}
-                        empInfo={empInfo}
-                        setChatStatus={setChatStatus}
-                      />
-                    )}
+                  <div className={styles.DeleteBtn} key={index}>
                     <Button
                       variant="text"
                       disableElevation
@@ -70,7 +60,6 @@ export default function ChatRoom({
                   </div>
                   <div
                     className={styles.roomcon}
-                    key={index}
                     onClick={() => {
                       setRoomId(chat.chatroom.chatroomId);
                     }}>
