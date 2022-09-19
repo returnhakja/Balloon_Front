@@ -11,7 +11,7 @@ import {
 import Banner from './banner.svg';
 import styles from '../css/nav/Navbar.module.css';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Chart, Pie } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { Avatar, Box, Button } from '@mui/material';
