@@ -177,6 +177,7 @@ function Calendar({ clients, setClients }) {
               }}
               eventSources={list}
               eventBackgroundColor={'black'}
+              //테스트
               eventSourceSuccess={() => console.log('Success EventSource')}
               eventSourceFailure={() => console.log('Failure EventSource')}
               dateClick={(e) => handleDateClick(e)}
