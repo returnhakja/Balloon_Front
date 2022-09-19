@@ -1,6 +1,6 @@
-import { Container, margin } from '@mui/system';
+import { Container } from '@mui/system';
 import React, { useEffect, useState } from 'react';
-import { findUnitList, findUnitByUnitId } from '../context/UnitAxios';
+import { findUnitList } from '../context/UnitAxios';
 import '../css/Organization.css';
 
 function Organization() {
@@ -19,22 +19,21 @@ function Organization() {
     }
   }, [units.length]);
 
-  const str1 = 'level-';
-  let num = 1;
-  const str2 = ' rectangle';
   return (
     <>
       {units.length && (
         <Container className="con">
           {prior1.length !== 0 &&
-            prior1.map((unit1, index1) => {
+            prior1.map((unit1) => {
               return (
-                <div className={'level-1-wrapper'}>
+                <div className={'level-1-wrapper'} key={unit1.unitName}>
                   <h1 className={`level-1-rectangle`}>{unit1.unitName}</h1>
                   <div
+                    // className={`level-1-div`}
                     style={{
                       display: 'flex',
-                      // justifyContent: 'space-between',
+                      justifyContent: 'center',
+                      alignContent: 'center',
                       // width: '500px',
                     }}>
                     {prior2.length !== 0 &&
@@ -66,7 +65,9 @@ function Organization() {
                                         <li
                                           style={{
                                             marginTop: '25px',
-                                            width: '200px',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
                                           }}>
                                           <h3
                                             className={`level-${unit3.prior}-rectangle`}

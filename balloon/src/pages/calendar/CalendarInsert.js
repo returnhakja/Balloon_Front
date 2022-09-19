@@ -77,9 +77,6 @@ function CalendarInsert({
     Startvalue = document.getElementById('startvalue').value;
     endvalue = document.getElementById('endvalue').value;
 
-    console.log(inviteSchedule);
-    console.log(Startvalue);
-
     const inputdata = {
       scheduleTitle: scheduletitle,
       scheduleStart: Startvalue,
@@ -129,6 +126,8 @@ function CalendarInsert({
     getEmpByEmpId(calendarBot, setBotInfo);
     inviteSchedule.push(empId);
   }, []);
+
+  console.log(inviteSchedule);
 
   const botroomExist = [];
   const botroomId = [];

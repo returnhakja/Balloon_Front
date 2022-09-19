@@ -341,20 +341,22 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
                         : ''
                     }
                   />
-                  <div>{msg.employee.empName}</div>
-                  <div className={styles.contentContan}>
-                    <div className={styles.scheduleContent}>
-                      <div>일정제목 : {scheduleContent.scheduletitle}</div>
-                      <div>일정내용 : {scheduleContent.CalendarContent}</div>
-                      <div>장소 : {scheduleContent.CalendarLocation}</div>
-                      <div>시작일자 :{startValue}</div>
-                      <div>종료일자 :{endValue}</div>
-                      <div>
-                        보낸사람 : {scheduleContent.empName}
-                        {scheduleContent.position}
+                  <div>
+                    <div>{msg.employee.empName}</div>
+                    <div className={styles.contentContan}>
+                      <div className={styles.scheduleContent}>
+                        <p>일정제목 : {scheduleContent.scheduletitle}</p>
+                        <p>일정내용 : {scheduleContent.CalendarContent}</p>
+                        <p>장소 : {scheduleContent.CalendarLocation}</p>
+                        <p>시작일자 :{startValue}</p>
+                        <p>종료일자 :{endValue}</p>
+                        <div>
+                          보낸사람 : {scheduleContent.empName}
+                          {scheduleContent.position}
+                        </div>
                       </div>
+                      <div className={styles.time}>{chatTime}</div>
                     </div>
-                    <div className={styles.time}>{chatTime}</div>
                   </div>
                 </div>
               </>
@@ -376,17 +378,19 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
                         : ''
                     }
                   />
-                  <div>{msg.employee.empName}</div>
-                  <div className={styles.contentContan}>
-                    <div className={styles.scheduleContent}>
-                      <div>기안양식 : {approvalContent.approvalForm}</div>
-                      <div>기안제목 : {approvalContent.approvalTitle}</div>
-                      <div>
-                        기안자 : {approvalContent.empName}
-                        {approvalContent.position}
+                  <div>
+                    <div>{msg.employee.empName}</div>
+                    <div className={styles.contentContan}>
+                      <div className={styles.scheduleContent}>
+                        <div>기안양식 : {approvalContent.approvalForm}</div>
+                        <div>기안제목 : {approvalContent.approvalTitle}</div>
+                        <div>
+                          기안자 : {approvalContent.empName}
+                          {approvalContent.position}
+                        </div>
                       </div>
+                      <div className={styles.time}>{chatTime}</div>
                     </div>
-                    <div className={styles.time}>{chatTime}</div>
                   </div>
                 </div>
               </>
@@ -396,19 +400,35 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
             return (
               <>
                 <div key={index} className={styles.othermessage}>
-                  <div>{msg.employee.empName}</div>
-                  <div className={styles.contentContan}>
-                    <div className={styles.scheduleContent}>
-                      <div>기안양식 : {approvalTripContent.approvalForm}</div>
-                      <div>기안제목 : {approvalTripContent.approvalTitle}</div>
-                      <div>
-                        기안자 : {approvalTripContent.empName}
-                        {approvalTripContent.position}
+                  <Avatar
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      marginRight: 1,
+                    }}
+                    src={
+                      !!msg.employee.photo
+                        ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${msg.employee.photo}`
+                        : ''
+                    }
+                  />
+                  <div>
+                    <div>{msg.employee.empName}</div>
+                    <div className={styles.contentContan}>
+                      <div className={styles.scheduleContent}>
+                        <div>기안양식 : {approvalTripContent.approvalForm}</div>
+                        <div>
+                          기안제목 : {approvalTripContent.approvalTitle}
+                        </div>
+                        <div>
+                          기안자 : {approvalTripContent.empName}
+                          {approvalTripContent.position}
+                        </div>
+                        <div>방문처 : {approvalTripContent.visitPlace}</div>
+                        <div>방문목적 : {approvalTripContent.visitPurpose}</div>
                       </div>
-                      <div>방문처 : {approvalTripContent.visitPlace}</div>
-                      <div>방문목적 : {approvalTripContent.visitPurpose}</div>
+                      <div className={styles.time}>{chatTime}</div>
                     </div>
-                    <div className={styles.time}>{chatTime}</div>
                   </div>
                 </div>
               </>
@@ -418,24 +438,40 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
             return (
               <>
                 <div key={index} className={styles.othermessage}>
-                  <div>{msg.employee.empName}</div>
-                  <div className={styles.contentContan}>
-                    <div className={styles.scheduleContent}>
-                      <div>기안양식 : {approvalApmtContent.approvalForm}</div>
-                      <div>기안제목 : {approvalApmtContent.approvalTitle}</div>
-                      <div>
-                        기안자 : {approvalApmtContent.empName}
-                        {approvalApmtContent.position}
+                  <Avatar
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      marginRight: 1,
+                    }}
+                    src={
+                      !!msg.employee.photo
+                        ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${msg.employee.photo}`
+                        : ''
+                    }
+                  />
+                  <div>
+                    <div>{msg.employee.empName}</div>
+                    <div className={styles.contentContan}>
+                      <div className={styles.scheduleContent}>
+                        <div>기안양식 : {approvalApmtContent.approvalForm}</div>
+                        <div>
+                          기안제목 : {approvalApmtContent.approvalTitle}
+                        </div>
+                        <div>
+                          기안자 : {approvalApmtContent.empName}
+                          {approvalApmtContent.position}
+                        </div>
+                        <div>구성원명 : {approvalApmtContent.member}</div>
+                        <div>
+                          발령부서 : {approvalApmtContent.appointDepartment}
+                        </div>
+                        <div>
+                          발령직위 : {approvalApmtContent.appointPosition}
+                        </div>
                       </div>
-                      <div>구성원명 : {approvalApmtContent.member}</div>
-                      <div>
-                        발령부서 : {approvalApmtContent.appointDepartment}
-                      </div>
-                      <div>
-                        발령직위 : {approvalApmtContent.appointPosition}
-                      </div>
+                      <div className={styles.time}>{chatTime}</div>
                     </div>
-                    <div className={styles.time}>{chatTime}</div>
                   </div>
                 </div>
               </>
