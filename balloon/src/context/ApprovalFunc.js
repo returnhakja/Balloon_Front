@@ -26,7 +26,7 @@ export const getDCount = (
   getDRByEmp(empId, setDRCount);
 };
 
-export const getDCountByDate = (
+export const getDCountByDate = async (
   empId,
   setDDCount,
   setDCCount,
@@ -35,13 +35,13 @@ export const getDCountByDate = (
   sunDay,
   saturDay
 ) => {
-  getDDByEmpByDate(empId, setDDCount, 1, sunDay, saturDay);
+  await getDDByEmpByDate(empId, setDDCount, 1, sunDay, saturDay);
 
-  getDDByEmpByDate(empId, setDCCount, 2, sunDay, saturDay);
+  await getDDByEmpByDate(empId, setDCCount, 2, sunDay, saturDay);
 
-  getDDByEmpByDate(empId, setDSCount, 3, sunDay, saturDay);
+  await getDDByEmpByDate(empId, setDSCount, 3, sunDay, saturDay);
 
-  getDDByEmpByDate(empId, setDRCount, 4, sunDay, saturDay);
+  await getDDByEmpByDate(empId, setDRCount, 4, sunDay, saturDay);
 };
 
 export const getACount = (

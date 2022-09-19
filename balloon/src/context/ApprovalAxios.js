@@ -50,14 +50,15 @@ export const getDDByEmpByDate = async (
 ) => {
   const url = '/api/box/empdocs/date/';
   const str = url + empId + '/' + num;
-
-  console.log(str);
-  console.log(sunDay);
-  console.log(saturDay);
-  await axios.get(str, { sunDay: sunDay, saturDay: saturDay }).then((res) => {
-    setDCount(res.data.length);
-  });
+  const docDateVO = { sunDay: sunDay, saturDay: saturDay };
+  await axios
+    .post(str, docDateVO)
+    .then((res) => {
+      setDCount(res.data.length);
+    })
+    .catch((e) => console.log(e));
 };
+
 // ---------------------------------------
 
 // 완료된 문서(부서확인용)

@@ -47,6 +47,9 @@ function MainPage() {
     return result;
   }
 
+  const [sunDay, setSunDay] = useState(getCurrentWeek()[0]);
+  const [saturDay, setSaturDay] = useState(getCurrentWeek()[6]);
+
   useEffect(() => {
     if (empInfo.length !== 0) {
       if (!!empInfo) {
@@ -71,15 +74,12 @@ function MainPage() {
           setDCCount,
           setDSCount,
           setDRCount,
-          getCurrentWeek()[0],
-          getCurrentWeek()[6]
+          sunDay,
+          saturDay
         );
-        alert('aaaaa');
       }
     }
-  }, [empInfo.empId, rend, DDCount, DCCount, DSCount, DRCount, countDArr]);
-
-  console.log(DDCount, DCCount, DSCount, DRCount);
+  }, [empInfo.empId, rend, countDArr, sunDay]);
 
   const data = {
     datasets: [
@@ -155,6 +155,27 @@ function MainPage() {
   // const WorkEndless = () => {
   //   empInfo && endlessWork(empInfo.empId);
   // };
+
+  const prevWeek = () => {
+    const prevSun = new Date(sunDay);
+    const prevSatur = new Date(saturDay);
+
+    prevSun.setDate(prevSun.getDate() - 7);
+    prevSatur.setDate(prevSatur.getDate() - 7);
+
+    setSunDay(moment(prevSun).format('YYYY-MM-dd'));
+    setSaturDay(moment(prevSatur).format('YYYY-MM-dd'));
+  };
+
+  const nextWeek = () => {
+    const nextSun = new Date(sunDay);
+    const nextSatur = new Date(saturDay);
+    nextSun.setDate(nextSun.getDate + 7);
+    nextSatur.setDate(nextSatur.getDate + 7);
+
+    setSunDay(moment(nextSun).format('YYYY-MM-dd'));
+    setSaturDay(moment(nextSatur).format('YYYY-MM-dd'));
+  };
 
   return (
     <div>
@@ -273,7 +294,13 @@ function MainPage() {
               }}>
               <p style={{ padding: '10px' }}>결재관리</p>
 
-              <p>{getCurrentWeek()[0] + ' ~ ' + getCurrentWeek()[6]}</p>
+              <div style={{ display: 'flex' }}>
+                <button>이전</button>
+                <p style={{ textAlign: 'center' }}>
+                  {sunDay + ' ~ ' + saturDay}
+                </p>
+                <button>다음</button>
+              </div>
               <p>아직 결재 정보가 없습니다.</p>
             </div>
           ) : (
@@ -288,7 +315,13 @@ function MainPage() {
               }}>
               {console.log('countDArr', countDArr)}
               <p style={{ padding: '10px' }}>결재관리</p>
-              <p>{getCurrentWeek()[0] + ' ~ ' + getCurrentWeek()[6]}</p>
+              <div style={{ display: 'flex' }}>
+                <button onClick={prevWeek}>이전</button>
+                <p style={{ textAlign: 'center' }}>
+                  {sunDay + ' ~ ' + saturDay}
+                </p>
+                <button onClick={nextWeek}>다음</button>
+              </div>
               <Pie data={data} options={options} />
             </div>
           ))}
