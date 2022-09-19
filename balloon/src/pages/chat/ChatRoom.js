@@ -44,17 +44,16 @@ export default function ChatRoom({
               return (
                 <>
                   <div className={styles.DeleteBtn}>
-                    {openExitChat && (
-                      <ExitChatroom
-                        openExitChat={openExitChat}
-                        setOpenExitChat={setOpenExitChat}
-                        chatroomId={chat.chatroom.chatroomId}
-                        chatroomName={chat.chatroom.chatroomName}
-                        headCount={chat.chatroom.headCount}
-                        empInfo={empInfo}
-                        setChatStatus={setChatStatus}
-                      />
-                    )}
+                    <ExitChatroom
+                      openExitChat={openExitChat}
+                      setOpenExitChat={setOpenExitChat}
+                      chatroomId={chat.chatroom.chatroomId}
+                      chatroomName={chat.chatroom.chatroomName}
+                      headCount={chat.chatroom.headCount}
+                      empInfo={empInfo}
+                      setChatStatus={setChatStatus}
+                    />
+
                     <Button
                       variant="text"
                       disableElevation
