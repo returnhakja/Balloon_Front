@@ -103,7 +103,7 @@ function SavedPersonnelAppointmentInfo() {
   //결재봇정보가져오기
   useEffect(() => {
     getEmpByEmpId(approverBot, setBotInfo);
-    botApvlChatroom(apvlPeople, setBotApvlRoom);
+    botApvlChatroom(firstApvlPeople, setBotApvlRoom);
   }, [apvlPeople.length]);
 
   botApvlRoom.map((data) => {
@@ -111,10 +111,6 @@ function SavedPersonnelAppointmentInfo() {
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
-
-  let createdRoomId = [];
-  createdRoomId = botroomId.slice(0, 1);
-  console.log(createdRoomId);
 
   //새로운 채팅방이 생성되어야할 사람들
   let newApvlPeople;
@@ -170,7 +166,7 @@ function SavedPersonnelAppointmentInfo() {
   // 이미생성된 채팅방에 알림보내기
   const AlreadyBotroomMsg = (client) => {
     let AlreadyChatApproval = [];
-    createdRoomId.map((id) => {
+    botroomId.map((id) => {
       const AchatApproval = PersonnelAppointmentForm(
         id,
         botInfo,
@@ -234,8 +230,6 @@ function SavedPersonnelAppointmentInfo() {
     inputData.personnelAppointmentId,
     approver.length,
   ]);
-
-  console.log(unit);
 
   useEffect(() => {
     if (Object.keys(inputData).length !== 0) {
@@ -361,7 +355,6 @@ function SavedPersonnelAppointmentInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 <form>
                   <input
                     id="PATitle"
@@ -548,23 +541,26 @@ function SavedPersonnelAppointmentInfo() {
                   variant="outlined"
                   size="large"
                   onClick={async () => {
+                    svApprover.map((data) =>
+                      deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                    );
                     await insertPA(
                       params.docId,
                       3,
                       inputData,
                       empInfo,
                       startValue,
-                      mEmp,
+                      mEmp2,
                       unit2,
                       posi,
                       setInputData
                     );
                     {
-                      if (rmApprover.length !== 0) {
-                        rmApprover.map((data) =>
-                          deleteApvlByDocIdAndEmpId(params.docId, data.empId)
-                        );
-                      }
+                      // if (rmApprover.length !== 0) {
+                      //   rmApprover.map((data) =>
+                      //     deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                      //   );
+                      // }
                       insertApproval(
                         params.docId,
                         0,
@@ -604,7 +600,7 @@ function SavedPersonnelAppointmentInfo() {
                 </Button>
               </Link>
               <Link
-                to={'/boxes/ds'}
+                to={'/boxes/dd'}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
                     await insertPA(
@@ -613,7 +609,7 @@ function SavedPersonnelAppointmentInfo() {
                       inputData,
                       empInfo,
                       startValue,
-                      mEmp,
+                      mEmp2,
                       unit2,
                       posi,
                       setInputData
@@ -624,6 +620,9 @@ function SavedPersonnelAppointmentInfo() {
                     e.preventDefault();
                   }
                   {
+                    svApprover.map((data) =>
+                      deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                    );
                     insertApproval(
                       params.docId,
                       1,

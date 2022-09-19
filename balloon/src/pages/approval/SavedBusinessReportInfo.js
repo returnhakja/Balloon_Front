@@ -47,8 +47,6 @@ function SavedBusinessReportInfo() {
   const [botInfo, setBotInfo] = useState([]);
   // 이미 결재봇과 채팅방이 존재하는 사원 찾기
   const [botApvlRoom, setBotApvlRoom] = useState([]);
-  //기안제목
-  const [apvlTitle, setApvlTitle] = useState('');
   //결재선설정empId
   const apvlPeople = [];
   const approverBot = 'Y0000002';
@@ -78,18 +76,14 @@ function SavedBusinessReportInfo() {
   //결재봇정보가져오기
   useEffect(() => {
     getEmpByEmpId(approverBot, setBotInfo);
-    botApvlChatroom(apvlPeople, setBotApvlRoom);
-    setApvlTitle(approvalTitle);
-  }, [apvlPeople.length, apvlTitle]);
+    botApvlChatroom(firstApvlPeople, setBotApvlRoom);
+  }, [apvlPeople.length]);
 
   //채팅방이 존재하는지 확인
   botApvlRoom.map((data) => {
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
-
-  let createdRoomId = [];
-  createdRoomId = botroomId.slice(0, 1);
 
   // 채팅방이 생성되어야할 사람들
   let newApvlPeople;
@@ -143,7 +137,7 @@ function SavedBusinessReportInfo() {
   // 이미생성된 채팅방에 알림보내기
   const AlreadyBotroomMsg = (client) => {
     let AlreadyChatApproval = [];
-    createdRoomId.map((id) => {
+    botroomId.map((id) => {
       const chatApproval = BusinessReportForm(
         id,
         botInfo,
@@ -190,11 +184,11 @@ function SavedBusinessReportInfo() {
     });
     rmApprover = svApprover.filter((element) => !arr.includes(element.empId));
   }, [params, inputData, approver]);
+
   return (
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          {' '}
           <FcDocument /> 업무기안
         </p>
 
@@ -214,7 +208,6 @@ function SavedBusinessReportInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
@@ -278,7 +271,6 @@ function SavedBusinessReportInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 <form>
                   <input
                     id="bizRptTitle"
@@ -334,6 +326,9 @@ function SavedBusinessReportInfo() {
                   variant="outlined"
                   size="large"
                   onClick={async () => {
+                    svApprover.map((data) =>
+                      deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                    );
                     await insertBizRpt(
                       params.docId,
                       3,
@@ -342,11 +337,6 @@ function SavedBusinessReportInfo() {
                       setInputData
                     );
                     {
-                      if (rmApprover.length !== 0) {
-                        rmApprover.map((data) =>
-                          deleteApvlByDocIdAndEmpId(params.docId, data.empId)
-                        );
-                      }
                       insertApproval(
                         params.docId,
                         0,
@@ -363,9 +353,12 @@ function SavedBusinessReportInfo() {
                 </Button>
               </Link>
               <Link
-                to={'/boxes'}
+                to={'/boxes/dd'}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
+                    svApprover.map((data) =>
+                      deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                    );
                     await insertBizRpt(
                       params.docId,
                       1,
@@ -378,11 +371,11 @@ function SavedBusinessReportInfo() {
                     alert('결재선을 설정해주세요 !');
                   }
                   {
-                    if (rmApprover.length !== 0) {
-                      rmApprover.map((data) =>
-                        deleteApvlByDocIdAndEmpId(params.docId, data.empId)
-                      );
-                    }
+                    // if (rmApprover.length !== 0) {
+                    //   rmApprover.map((data) =>
+                    //     deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                    //   );
+                    // }
                     insertApproval(
                       params.docId,
                       1,

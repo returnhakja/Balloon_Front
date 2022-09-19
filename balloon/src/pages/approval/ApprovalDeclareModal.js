@@ -39,6 +39,16 @@ export default function ApprovalDeclareModal({
   const handleClose = () => {
     setOpenModal(false);
   };
+
+  const myIndex = approvalList.findIndex(
+    (apvl) => apvl.approvalId === apvlList[0].approvalId
+  );
+  let approvedList = [];
+
+  for (let index = myIndex; index > -1; index--) {
+    approvedList.push(approvalList[index]);
+  }
+
   const botroomExist = [];
   const botroomId = [];
   let apvlId = [];
@@ -53,7 +63,6 @@ export default function ApprovalDeclareModal({
   let apvlAppointPosi = [];
   {
     apvlList.map((data) => {
-      console.log(data);
       if (data && data.businessReport) {
         apvlId.push(data.approverEmp.id);
         apvlForm.push(data.businessReport.businessReportId);
@@ -81,10 +90,18 @@ export default function ApprovalDeclareModal({
     });
   }
 
+  let ApvlPeople = [apvlId[1]];
+  console.log(ApvlPeople);
+
+  let apvlFormName = [];
+  {
+    apvlForm.map((data) => apvlFormName.push(data.slice(0, 4)));
+  }
+
   //결재봇정보가져오기
   useEffect(() => {
     getEmpByEmpId(approverBot, setBotInfo);
-    botApvlChatroom2(apvlId, setBotApvl);
+    botApvlChatroom2(ApvlPeople, setBotApvl);
   }, [apvlList.length]);
 
   //채팅방이 존재하는지 확인
@@ -94,17 +111,11 @@ export default function ApprovalDeclareModal({
     botroomId.push(data.chatroomId.chatroomId);
   });
 
-  let createdRoomId = [];
-  createdRoomId = botroomId.slice(1);
-  console.log(createdRoomId);
-
-  let ApvlPeople = [apvlId[1]];
-  console.log(ApvlPeople);
+  console.log(botroomId);
 
   // 채팅방이 생성되어야할 사람들
   let newApvlPeople;
   newApvlPeople = ApvlPeople.filter((people) => !botroomExist.includes(people));
-  console.log(newApvlPeople);
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(
@@ -127,7 +138,7 @@ export default function ApprovalDeclareModal({
             add.chatroomId,
             botInfo,
             apvlTitle[0],
-            apvlForm[0],
+            apvlFormName[0],
             empName[0],
             position[0]
           );
@@ -137,7 +148,7 @@ export default function ApprovalDeclareModal({
             add.chatroomId,
             botInfo,
             apvlTitle[0],
-            apvlForm[0],
+            apvlFormName[0],
             apvlvisitPlace[0],
             apvlvisitPurpose[0],
             empName[0],
@@ -149,7 +160,7 @@ export default function ApprovalDeclareModal({
             add.chatroomId,
             botInfo,
             apvlTitle[0],
-            apvlForm[0],
+            apvlFormName[0],
             apvlMember[0],
             apvlAppointDepart[0],
             apvlAppointPosi[0],
@@ -184,14 +195,14 @@ export default function ApprovalDeclareModal({
   const AlreadyBotroomMsg = (client) => {
     let AlreadyChatApproval = [];
     let chatApproval = [];
-    createdRoomId.map((id) => {
+    botroomId.map((id) => {
       apvlList.map((data) => {
         if (data && data.businessReport !== undefined) {
           chatApproval = BusinessReportForm(
             id,
             botInfo,
             apvlTitle[0],
-            apvlForm[0],
+            apvlFormName[0],
             empName[0],
             position[0]
           );
@@ -201,7 +212,7 @@ export default function ApprovalDeclareModal({
             id,
             botInfo,
             apvlTitle[0],
-            apvlForm[0],
+            apvlFormName[0],
             apvlvisitPlace[0],
             apvlvisitPurpose[0],
             empName[0],
@@ -213,7 +224,7 @@ export default function ApprovalDeclareModal({
             id,
             botInfo,
             apvlTitle[0],
-            apvlForm[0],
+            apvlFormName[0],
             apvlMember[0],
             apvlAppointDepart[0],
             apvlAppointPosi[0],
@@ -273,7 +284,7 @@ export default function ApprovalDeclareModal({
               to={'/boxes/ar'}
               onClick={async () => {
                 updateApvlDoc([apvlList[0]], 4, paInfo);
-                updateApproval(apvlList, 4);
+                updateApproval(approvedList, 4);
 
                 alert('문서를 반려 하였습니다!');
               }}>
@@ -284,11 +295,11 @@ export default function ApprovalDeclareModal({
             <Link
               to={'/boxes/ac'}
               onClick={async () => {
-                console.log(!apvlList[1]);
                 if (!apvlList[1]) {
                   updateApvlDoc([apvlList[0]], 2, paInfo);
                   updateApproval(approvalList, 3);
                 } else {
+                  updateApvlDoc(apvlList, 5, paInfo);
                   updateApproval(apvlList, 2);
                   sendChatHandle();
                 }
@@ -317,7 +328,6 @@ export default function ApprovalDeclareModal({
                 approver &&
                   approver.map((apvl) => {
                     updateApvlDoc(apvl, 2, paInfo);
-                    console.log(apvl);
                     updateApproval(apvl, 3);
                   });
                 alert('문서를 결재 하였습니다!');

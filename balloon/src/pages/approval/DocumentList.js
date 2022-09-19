@@ -20,7 +20,6 @@ function DocList() {
 
   useEffect(() => {
     getDocsByUnit(empInfo.unit && empInfo.unit.unitCode, setDocList);
-    console.log(docList);
   }, [empInfo, docList.length]);
 
   // const [bottomcenter, setBottomCenter] = useState('bottomcenter');
@@ -123,7 +122,6 @@ function DocList() {
     { field: 'updateTime', headerName: '처리일자', width: 200 },
   ];
 
-  // console.log(columns[0].valueGetter.params);
   return (
     <>
       <SideNavigation>

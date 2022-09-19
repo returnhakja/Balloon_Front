@@ -79,7 +79,6 @@ function BizTpApprovalDeclare() {
       } else {
         setStartValue(inputData.startDate);
         setEndValue(inputData.endDate);
-        approver.length !== 0 && console.log(approver);
       }
     }
   }, [params, inputData, startValue, endValue, approver.length]);
@@ -134,7 +133,6 @@ function BizTpApprovalDeclare() {
             {!!empInfo && <DfCard drafterName={bizTpInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             if (apvl.length === 0) {
               setApvl(empData);
             }

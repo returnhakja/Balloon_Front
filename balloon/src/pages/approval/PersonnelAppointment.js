@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import ModalApproval from './ModalApproval';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
@@ -56,10 +56,15 @@ function PersonnelAppointment() {
   const [mEmp, setMEmp] = useState('');
   const [docNum, setDocNum] = useState(0);
   const [docId, setDocId] = useState('');
+  const [saveType, setSaveType] = useState('');
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
   // 날짜 관련
   const [startValue, setStartValue] = useState(new Date());
+
+  const approveRef = useRef();
+  const tempRef = useRef();
+
   // 모달
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
@@ -97,16 +102,13 @@ function PersonnelAppointment() {
   //결재봇정보가져오기
   useEffect(() => {
     getEmpByEmpId(approverBot, setBotInfo);
-    botApvlChatroom(apvlPeople, setBotApvlRoom);
+    botApvlChatroom(firstApvlPeople, setBotApvlRoom);
   }, [apvlPeople.length]);
 
   botApvlRoom.map((data) => {
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
-
-  let createdRoomId = [];
-  createdRoomId = botroomId.slice(0, 1);
 
   //새로운 채팅방이 생성되어야할 사람들
   let newApvlPeople;
@@ -162,7 +164,7 @@ function PersonnelAppointment() {
   // 이미생성된 채팅방에 알림보내기
   const AlreadyBotroomMsg = (client) => {
     let AlreadyChatApproval = [];
-    createdRoomId.map((id) => {
+    botroomId.map((id) => {
       const AchatApproval = PersonnelAppointmentForm(
         id,
         botInfo,
@@ -200,18 +202,63 @@ function PersonnelAppointment() {
         getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
       }
     } else {
-      if (docNum === 0) {
-        getLatestPA(setDocNum);
-        setDocId('인사명령-22-0000001');
-      } else {
-        setDocId('인사명령' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
-      }
+      // if (docNum === 0) {
+      //   getLatestPA(setDocNum);
+      //   setDocId('인사명령-22-0000001');
+      // } else {
+      //   setDocId('인사명령' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
+      // }
 
       noApprover.length === 0 && setNoApprover(noApprover);
-
-      mEmp && console.log('mEmp~~~', mEmp);
     }
   }, [units, empInfo, mEmpInfo, docNum, noApprover, mEmp]);
+
+  const tempSaveAppr = async () => {
+    await insertPA(
+      docId,
+      3,
+      inputData,
+      empInfo,
+      startValue,
+      mEmp,
+      unit,
+      posi,
+      setInputData
+    );
+
+    insertApproval(docId, 0, approver, inputData, empInfo);
+
+    alert('문서가 임시저장되었습니다!');
+    tempRef.current.click();
+  };
+
+  const approveAppr = async () => {
+    await insertPA(
+      docId,
+      1,
+      inputData,
+      empInfo,
+      startValue,
+      mEmp,
+      unit,
+      posi,
+      setInputData
+    );
+    insertApproval(docId, 1, approver, inputData, empInfo);
+    sendChatHandle();
+    alert('문서가 상신되었습니다!');
+    approveRef.current.click();
+  };
+
+  useEffect(() => {
+    if (docId) {
+      if (saveType === 'approve') {
+        approveAppr();
+      } else if (saveType === 'temp') {
+        tempSaveAppr();
+      }
+    }
+  }, [docId]);
 
   return (
     <SideNavigation>
@@ -227,7 +274,7 @@ function PersonnelAppointment() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>인사명령</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>{docId}</th>
+              <th className={styles.th}>{'-'}</th>
             </tr>
           </thead>
 
@@ -237,7 +284,6 @@ function PersonnelAppointment() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
@@ -279,8 +325,6 @@ function PersonnelAppointment() {
           </Card>
 
           {approver.map((empData, index) => {
-            console.log(empData);
-
             return (
               <Card
                 key={index}
@@ -301,7 +345,6 @@ function PersonnelAppointment() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 <form>
                   <input
                     id="PATitle"
@@ -453,61 +496,34 @@ function PersonnelAppointment() {
 
           <div className={styles.savebutton}>
             <Box sx={{ '& button': { m: 1 } }}>
-              <Link to={'/boxes/ds'}>
-                <Button
-                  variant="outlined"
-                  size="large"
-                  onClick={async () => {
-                    await insertPA(
-                      docId,
-                      3,
-                      inputData,
-                      empInfo,
-                      startValue,
-                      mEmp,
-                      unit,
-                      posi,
-                      setInputData
-                    );
-
-                    // approver.map((data, index) => {
-                    //   console.log(data);
-                    //   return insertApproval(docId, 0, data, inputData, empInfo);
-                    // });
-                    insertApproval(docId, 0, approver, inputData, empInfo);
-
-                    alert('문서가 임시저장되었습니다!');
-                  }}>
+              <Link
+                to={'/boxes/ds'}
+                ref={tempRef}
+                onClick={async (e) => {
+                  if (!docId) {
+                    getLatestPA(setDocId);
+                    setSaveType('temp');
+                    e.preventDefault();
+                  }
+                }}>
+                <Button variant="outlined" size="large">
                   임시저장
                 </Button>
               </Link>
               <Link
                 to={'/boxes/dd'}
+                ref={approveRef}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
-                    await insertPA(
-                      docId,
-                      1,
-                      inputData,
-                      empInfo,
-                      startValue,
-                      mEmp,
-                      unit,
-                      posi,
-                      setInputData
-                    );
-                    sendChatHandle();
-                    alert('문서가 상신되었습니다!');
+                    if (!docId) {
+                      getLatestPA(setDocId);
+                      setSaveType('approve');
+                      e.preventDefault();
+                    }
                   } else {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
-
-                  // approver.map((data, index) => {
-                  //   console.log(data);
-                  //   return insertApproval(docId, 1, data, inputData, empInfo);
-                  // });
-                  insertApproval(docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기

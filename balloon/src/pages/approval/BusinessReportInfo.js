@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useOutletContext, useParams } from 'react-router-dom';
+import {
+  Link,
+  useLocation,
+  useOutletContext,
+  useParams,
+} from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import {
@@ -39,7 +44,9 @@ function BizReportInfo() {
   const [apvl, setApvl] = useState({});
 
   const params = useParams();
-  console.log(bizRptInfo);
+  const location = useLocation();
+
+  const path = location.state?.path;
 
   useEffect(() => {
     if (!!params) {
@@ -52,7 +59,6 @@ function BizReportInfo() {
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          {' '}
           <FcDocument /> 업무기안
         </p>
 
@@ -72,7 +78,6 @@ function BizReportInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {bizRptInfo.empName}({bizRptInfo.emp && bizRptInfo.emp.empId})
               </th>
             </tr>
@@ -95,7 +100,6 @@ function BizReportInfo() {
             )}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData.approvalId);
             if (apvl.length === 0) {
               setApvl(empData);
             }
@@ -118,7 +122,6 @@ function BizReportInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleftpadding}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 {bizRptInfo.documentTitle}
                 {/* <form>
                   <TextField
@@ -161,7 +164,7 @@ function BizReportInfo() {
 
           <div className={styles.savebutton}>
             <Box sx={{ button: { m: 1 } }}>
-              <Link to="/boxes/dc">
+              <Link to={path}>
                 <SaveButton variant="contained" color="success" size="large">
                   목록으로
                 </SaveButton>

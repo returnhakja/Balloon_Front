@@ -88,15 +88,15 @@ export const botChatroom = async (inviteSchedule, setBotRoom) => {
 };
 
 // 이미 결재봇과 채팅방이 존재하는 사원 찾기
-export const botApvlChatroom = async (apvlPeople, setBotApvlRoom) => {
-  axios.post(`/cre/apvlbotchatroom`, apvlPeople).then((response) => {
+export const botApvlChatroom = async (firstApvlPeople, setBotApvlRoom) => {
+  axios.post(`/cre/apvlbotchatroom`, firstApvlPeople).then((response) => {
     setBotApvlRoom(response.data);
   });
 };
 
 // 이미 결재봇과 채팅방이 존재하는 사원 찾기
-export const botApvlChatroom2 = async (apvlId, setBotApvl) => {
-  axios.post(`/cre/apvlbotchatroom`, apvlId).then((response) => {
+export const botApvlChatroom2 = async (ApvlPeople, setBotApvl) => {
+  axios.post(`/cre/apvlbotchatroom`, ApvlPeople).then((response) => {
     setBotApvl(response.data);
   });
 };
