@@ -34,7 +34,6 @@ const SaveButton = styled(Button)(({ theme }) => ({
 function DeclaredBusinessReportInfo() {
   // 사원 정보 context
   const [empInfo] = useOutletContext();
-  // const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [bizRptInfo, setBizRptInfo] = useState({});
   const [approver, setApprover] = useState([]);
   const [apvl, setApvl] = useState({});
@@ -77,7 +76,6 @@ function DeclaredBusinessReportInfo() {
             <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
         </div>

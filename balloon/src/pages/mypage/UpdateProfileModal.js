@@ -33,6 +33,7 @@ const style = {
 export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
   const [file, setFile] = useState('');
   const [fileName, setFileName] = useState('첨부파일');
+  const [image, setImg] = useState(photo);
   const handleClose = () => setOpen(false);
 
   const upload = () => {
@@ -55,6 +56,18 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
     } else {
       alert('사진이 들어가지 않았습니다!!');
     }
+  };
+
+  // 파일 미리보기 로직
+  const encodeFileToBase64 = (fileBlob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(fileBlob);
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        // setImageSrc(reader.result);
+        resolve();
+      };
+    });
   };
 
   return (
@@ -107,7 +120,7 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
                         width: '100px',
                         height: '100px',
                       }}
-                      src={`${photo}`}
+                      src={`${image}`}
                     />
                     <p>사진을 변경해주세요</p>
                   </div>

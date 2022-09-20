@@ -164,15 +164,6 @@ function RefusedBusinessReportInfo() {
                     e.preventDefault();
                   }
 
-                  // approver.map((data, index) => {
-                  //   return insertApproval(
-                  //     params.docId,
-                  //     1,
-                  //     data,
-                  //     inputData,
-                  //     empInfo
-                  //   );
-                  // });
                   insertApproval(params.docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">

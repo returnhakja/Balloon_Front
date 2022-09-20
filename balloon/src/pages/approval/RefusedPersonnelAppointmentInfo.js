@@ -196,14 +196,10 @@ function RefusedPersonnelAppointmentInfo() {
                       id="mEmp"
                       label="구성원을 선택하세요"
                       value={mEmp2}
-                      // defaultValue={mEmp2}
                       placeholder="구성원을 선택하세요"
                       onChange={(e) => {
                         setMEmp2(e.target.value);
-                      }}
-
-                      // className={styles.inputtext}
-                    >
+                      }}>
                       {mEmpInfo &&
                         mEmpInfo.map((mEmps, index) => (
                           <MenuItem
@@ -227,10 +223,7 @@ function RefusedPersonnelAppointmentInfo() {
                       placeholder=" 발령부서를 선택하세요"
                       onChange={(e) => {
                         setUnit2(e.target.value);
-                      }}
-
-                      // className={styles.inputtext}
-                    >
+                      }}>
                       {units &&
                         units.map((unitInfo, index) => (
                           <MenuItem
@@ -258,10 +251,7 @@ function RefusedPersonnelAppointmentInfo() {
                     defaultValue={inputData.position}
                     onChange={(e) => {
                       setPosi(e.target.value);
-                    }}
-
-                    // className={styles.inputtext}
-                  >
+                    }}>
                     {positionArr.map((position, index) => (
                       <MenuItem key={index} value={position}>
                         {position}

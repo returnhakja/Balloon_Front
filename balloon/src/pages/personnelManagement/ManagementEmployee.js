@@ -11,6 +11,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAddAlt1';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
 import EmployeeUpdate from './EmployeeUpdate';
+import DeleteModal from '../../components/DeleteModal';
 
 function ManagementEmployee() {
   const [empList, setEmpList] = useState([]);
@@ -33,13 +34,8 @@ function ManagementEmployee() {
   useEffect(() => {
     if (empList.length === 0) {
       selectEmployees(setEmpList);
-    } else {
-      if (deleteChk === true) {
-        Object.keys(rowData).length !== 0 && deleteEmployee(rowData);
-        setDeleteChk(false);
-      }
     }
-  }, [empList, deleteChk, rowData]);
+  }, [empList, rowData]);
 
   const columns = [
     { field: 'empId', headerName: '사원번호', width: 100 },
@@ -160,7 +156,21 @@ function ManagementEmployee() {
           />
         </Box>
         {open && (
-          <EmployeeUpdate open={open} setOpen={setOpen} empId={rowData.empId} />
+          <EmployeeUpdate
+            open={open}
+            setOpen={setOpen}
+            empId={rowData.empId}
+            photo={rowData.photo}
+          />
+        )}
+        {deleteChk && (
+          <DeleteModal
+            open={deleteChk}
+            setOpen={setDeleteChk}
+            label={'사원'}
+            rowData={rowData}
+            deleteFunc={deleteEmployee}
+          />
         )}
       </Container>
     </div>
