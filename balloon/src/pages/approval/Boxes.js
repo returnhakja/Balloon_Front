@@ -34,7 +34,8 @@ function Boxes() {
     setValue(newValue);
   };
 
-  console.log(countAArr);
+  console.log(countDArr);
+  console.log(DDCount, DCCount, DSCount, DRCount);
   console.log(ABCount, AOCount, ACCount, ARCount);
   useEffect(() => {
     if (

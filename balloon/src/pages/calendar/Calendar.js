@@ -130,6 +130,7 @@ function Calendar({ clients, setClients }) {
 
         {list.length !== 0 ? (
           <FullCalendar
+            position="relative"
             initialView="dayGridMonth"
             height="70vh"
             handleWindowResize="50vw"
