@@ -13,10 +13,6 @@ import ChatStomp from '../pages/chat/ChatStomp';
 function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   const cookies = new Cookies();
   const [isMobile, setIsMobile] = useState(false);
-  // const client = ChatStomp();
-  // const disconnect = () => {
-  //   client.disconnect();
-  // };
 
   function activeStyle({ isActive }) {
     return {
@@ -101,7 +97,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
                 className={styles.btnnav}
                 onClick={() => {
                   logoutFunc(logout);
-                  // disconnect();
+                
                 }}>
                 Logout
               </Button>
@@ -116,7 +112,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
                 className={styles.btnnav}
                 onClick={() => {
                   logoutFunc(logout);
-                  // disconnect();
+           
                 }}>
                 Logout
               </Button>
