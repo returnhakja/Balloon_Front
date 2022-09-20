@@ -75,11 +75,7 @@ function App() {
 
   useEffect(() => {
     const logged = localStorage.getItem('logged');
-    if (logged && logged === 'true') {
-      setLogin(true);
-    } else {
-      setLogin(false);
-    }
+   logged && logged === 'true' ? setLogin(true) : setLogin(false);
   }, []);
 
   useEffect(() => {
