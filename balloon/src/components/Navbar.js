@@ -8,10 +8,15 @@ import '../css/nav/Navbar.css';
 import { Avatar, Button } from '@mui/material';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ClearIcon from '@mui/icons-material/Clear';
+import ChatStomp from '../pages/chat/ChatStomp';
 
 function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   const cookies = new Cookies();
   const [isMobile, setIsMobile] = useState(false);
+  // const client = ChatStomp();
+  // const disconnect = () => {
+  //   client.disconnect();
+  // };
 
   function activeStyle({ isActive }) {
     return {
@@ -94,7 +99,10 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
                 variant="outlined"
                 size="small"
                 className={styles.btnnav}
-                onClick={() => logoutFunc(logout)}>
+                onClick={() => {
+                  logoutFunc(logout);
+                  // disconnect();
+                }}>
                 Logout
               </Button>
             </div>
@@ -106,7 +114,10 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
                 variant="outlined"
                 size="small"
                 className={styles.btnnav}
-                onClick={() => logoutFunc(logout)}>
+                onClick={() => {
+                  logoutFunc(logout);
+                  // disconnect();
+                }}>
                 Logout
               </Button>
             </div>

@@ -23,7 +23,7 @@ import BusinessReportForm from '../chat/BusinessReportForm';
 
 //socket연결
 const client = ChatStomp();
-client.debug = null;
+// client.debug = null;
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),

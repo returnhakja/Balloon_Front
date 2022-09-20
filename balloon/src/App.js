@@ -66,17 +66,21 @@ import UpdateMine from './pages/mypage/UpdateMine';
 import NotFound from './pages/NotFound';
 import AdminRoutes from './components/AdminRoutes';
 import DeclareOn from './pages/approval/DeclareOn';
+// import SockJS from 'sockjs-client';
+// import Stomp from 'stompjs';
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
   const [isLogin, setLogin] = useState(null);
   const role = empInfo.userRoleGrade;
-  // 채팅방 초대하기
-  const [invite, setInvite] = useState([]);
 
   useEffect(() => {
     const logged = localStorage.getItem('logged');
-    logged && logged === 'true' ? setLogin(true) : setLogin(false);
+    if (logged && logged === 'true') {
+      setLogin(true);
+    } else {
+      setLogin(false);
+    }
   }, []);
 
   useEffect(() => {
