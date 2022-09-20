@@ -66,8 +66,7 @@ import UpdateMine from './pages/mypage/UpdateMine';
 import NotFound from './pages/NotFound';
 import AdminRoutes from './components/AdminRoutes';
 import DeclareOn from './pages/approval/DeclareOn';
-// import SockJS from 'sockjs-client';
-// import Stomp from 'stompjs';
+
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
