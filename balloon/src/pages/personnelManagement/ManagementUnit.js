@@ -79,6 +79,20 @@ function ManagementUnit() {
           }}
         />,
 
+        // <GridActionsCellItem
+        //   icon={<Delete />}
+        //   label="Delete"
+        //   onClick={() => {
+        //     handleDelete(setDeleteChk);
+        //   }}
+        // />,
+      ],
+    },
+    {
+      field: 'actions1',
+      type: 'actions',
+      width: 80,
+      getActions: () => [
         <GridActionsCellItem
           icon={<Delete />}
           label="Delete"

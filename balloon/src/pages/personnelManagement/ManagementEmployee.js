@@ -118,6 +118,20 @@ function ManagementEmployee() {
             handleUpdate();
           }}
         />,
+        // <GridActionsCellItem
+        //   icon={<Delete />}
+        //   label="Delete"
+        //   onClick={() => {
+        //     handleDelete(setDeleteChk);
+        //   }}
+        // />,
+      ],
+    },
+    {
+      field: 'actions1',
+      type: 'actions',
+      width: 80,
+      getActions: () => [
         <GridActionsCellItem
           icon={<Delete />}
           label="Delete"
@@ -127,20 +141,6 @@ function ManagementEmployee() {
         />,
       ],
     },
-    // {
-    //   field: 'actions1',
-    //   type: 'actions',
-    //   width: 80,
-    //   getActions: () => [
-    //     <GridActionsCellItem
-    //       icon={<Delete />}
-    //       label="Delete"
-    //       onClick={() => {
-    //         handleDelete(setDeleteChk);
-    //       }}
-    //     />,
-    //   ],
-    // },
   ];
 
   return (
