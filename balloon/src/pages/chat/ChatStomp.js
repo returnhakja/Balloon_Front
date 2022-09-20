@@ -7,7 +7,7 @@ function ChatStomp() {
 
   client.connect({}, () => {
     client.subscribe(`/topic/message`, () => {
-      disconnect();
+      // disconnect();
     });
   });
 

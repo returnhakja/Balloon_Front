@@ -36,6 +36,7 @@ import { blue } from '@mui/material/colors';
 
 import { botApvlChatroom, onApvlCreateChatroom } from '../../context/ChatAxios';
 import PersonnelAppointmentForm from '../chat/PersonnelAppointmentForm';
+import moment from 'moment';
 
 //socket연결
 const client = ChatStomp();
@@ -84,10 +85,6 @@ function PersonnelAppointment() {
   const approvalForm = '인사명령';
   const botroomExist = [];
   const botroomId = [];
-  // //기안제목
-  // const approvalTitle =
-  //   document.getElementById('PATitle') &&
-  //   document.getElementById('PATitle').value;
   const member = mEmp.empName;
   const appointDepartment = unit.unitName;
   const appointPosition = posi;
@@ -205,13 +202,6 @@ function PersonnelAppointment() {
         getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
       }
     } else {
-      // if (docNum === 0) {
-      //   getLatestPA(setDocNum);
-      //   setDocId('인사명령-22-0000001');
-      // } else {
-      //   setDocId('인사명령' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
-      // }
-
       noApprover.length === 0 && setNoApprover(noApprover);
     }
   }, [units, empInfo, mEmpInfo, docNum, noApprover, mEmp]);
@@ -232,7 +222,7 @@ function PersonnelAppointment() {
     insertApproval(docId, 0, approver, inputData, empInfo);
 
     alert('문서가 임시저장되었습니다!');
-    tempRef.current.click();
+    tempRef.current?.click();
   };
 
   const approveAppr = async () => {
@@ -250,7 +240,7 @@ function PersonnelAppointment() {
     insertApproval(docId, 1, approver, inputData, empInfo);
     sendChatHandle();
     alert('문서가 상신되었습니다!');
-    approveRef.current.click();
+    approveRef.current?.click();
   };
 
   useEffect(() => {
@@ -306,7 +296,6 @@ function PersonnelAppointment() {
             결재선설정
           </button>
         </div>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         {openapprovalModal && (
           <ModalApproval
             openapprovalModal={openapprovalModal}
@@ -370,25 +359,12 @@ function PersonnelAppointment() {
             <tr className={styles.trcon}>
               <td className={styles.titlename}>인사명령일</td>
               <td className={styles.titlename} colSpan={4}>
-                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    label="일자 선택"
-                    value={startValue}
-                    type=" date"
-                    inputFormat={'yyyy-MM-dd'}
-                    onChange={(newValue) => {
-                      setStartValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider> */}
-
                 <TextField
                   id="startvalue"
                   required
                   label="시작일"
                   type="date"
-                  value={startValue}
+                  value={moment(startValue).format('YYYY-MM-DD')}
                   onChange={(newValue) => {
                     setStartValue(newValue.target.value);
                   }}
@@ -418,10 +394,7 @@ function PersonnelAppointment() {
                     placeholder="구성원을 선택하세요"
                     onChange={(e) => {
                       setMEmp(e.target.value);
-                    }}
-
-                    // className={styles.inputtext}
-                  >
+                    }}>
                     {mEmpInfo.length !== 0 &&
                       mEmpInfo.map((mEmps, index) => (
                         <MenuItem key={index} value={mEmps}>
@@ -441,10 +414,7 @@ function PersonnelAppointment() {
                     placeholder=" 발령부서를 선택하세요"
                     onChange={(e) => {
                       setUnit(e.target.value);
-                    }}
-
-                    // className={styles.inputtext}
-                  >
+                    }}>
                     {units &&
                       units.map((unitInfo, index) => (
                         <MenuItem key={index} value={unitInfo}>
@@ -464,10 +434,7 @@ function PersonnelAppointment() {
                     placeholder=" 발령직위를 선택하세요"
                     onChange={(e) => {
                       setPosi(e.target.value);
-                    }}
-
-                    // className={styles.inputtext}
-                  >
+                    }}>
                     {positionArr.map((position, index) => (
                       <MenuItem key={index} value={position}>
                         {position}

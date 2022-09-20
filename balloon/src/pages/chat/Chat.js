@@ -88,7 +88,7 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
     client.subscribe(`/topic/message`, (data) => {
       const chat = JSON.parse(data.body);
       setInput([...input, chat]);
-      disconnect();
+      // disconnect();
     });
   });
 

@@ -12,10 +12,6 @@ function ApprovalOngoing() {
   const [empInfo] = useOutletContext();
   const [docList, setDocList] = useState([]);
 
-  // 날짜 관련
-  // const [startValue, setStartValue] = useState(null);
-  // const [endvalue, setEndValue] = useState(null);
-
   //기안양식
   const [form, setForm] = useState('');
 

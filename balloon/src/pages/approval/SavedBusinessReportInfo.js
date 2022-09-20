@@ -214,14 +214,12 @@ function SavedBusinessReportInfo() {
             <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
           <button
             type="button"
             className={styles.btnnav}
             onClick={() => {
-              // setOpenModal(true);
               setOpenapprovalModal(true);
             }}
             id="cancelBtn">
@@ -248,10 +246,6 @@ function SavedBusinessReportInfo() {
             <DfCard drafterName={empInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            // if (apvl.length === 0) {
-            //   setApvl(empData);
-            // }
-
             return (
               <Card
                 variant="outlined"
@@ -371,11 +365,6 @@ function SavedBusinessReportInfo() {
                     alert('결재선을 설정해주세요 !');
                   }
                   {
-                    // if (rmApprover.length !== 0) {
-                    //   rmApprover.map((data) =>
-                    //     deleteApvlByDocIdAndEmpId(params.docId, data.empId)
-                    //   );
-                    // }
                     insertApproval(
                       params.docId,
                       1,
