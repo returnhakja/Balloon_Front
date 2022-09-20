@@ -19,7 +19,6 @@ import EmployeeUpdate from './EmployeeUpdate';
 import CustomToolbar from './CustomToolbar';
 import DeleteModal from '../../components/DeleteModal';
 
-
 function ManagementEmployee() {
   const [empList, setEmpList] = useState([]);
   const [rowData, setRowData] = useState({});
@@ -46,28 +45,28 @@ function ManagementEmployee() {
 
   const columns = [
     { field: 'empId', headerName: '사원번호', width: 100 },
-    { field: 'empName', headerName: '이름', width: 80, editable: true },
+    { field: 'empName', headerName: '이름', width: 80 },
     {
       field: 'position',
       headerName: '직위',
-      type: 'singleSelect',
-      valueOptions: ({ empList }) => {
-        if (!empList) {
-          return positionArr;
-        }
-      },
+      // type: 'singleSelect',
+      // valueOptions: ({ empList }) => {
+      //   if (!empList) {
+      //     return positionArr;
+      //   }
+      // },
       width: 90,
       editable: true,
     },
     {
       field: 'responsibility',
       headerName: '직책',
-      type: 'singleSelect',
-      valueOptions: ({ empList }) => {
-        if (!empList) {
-          return responseArr;
-        }
-      },
+      // type: 'singleSelect',
+      // valueOptions: ({ empList }) => {
+      //   if (!empList) {
+      //     return responseArr;
+      //   }
+      // },
       width: 90,
       editable: true,
     },
@@ -93,6 +92,7 @@ function ManagementEmployee() {
         }
       },
       width: 130,
+      editable: true,
     },
     { field: 'birthday', headerName: '생일', width: 100 },
     { field: 'address', headerName: '집주소', width: 130, editable: true },

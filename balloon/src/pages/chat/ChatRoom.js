@@ -43,20 +43,32 @@ export default function ChatRoom({
           <div className={styles.roomContanar}>
             {chatroom.map((chat, index) => {
               return (
-                <>
+                <div>
                   <div className={styles.DeleteBtn}>
-                    <Button
-                      variant="text"
-                      disableElevation
+                    <DeleteIcon
+                      sx={{
+                        color: 'red',
+                      }}
                       onClick={(e) => {
                         const eventExit = () => {
                           e.preventDefault();
                           eventClickHandle(chat);
                         };
                         return eventExit();
-                      }}>
-                      <DeleteIcon />
-                    </Button>
+                      }}
+                    />
+
+                    {selectChatroom.chatroom && (
+                      <ExitChatroom
+                        openExitChat={openExitChat}
+                        setOpenExitChat={setOpenExitChat}
+                        chatroomId={selectChatroom.chatroom.chatroomId}
+                        chatroomName={selectChatroom.chatroom.chatroomName}
+                        headCount={selectChatroom.chatroom.headCount}
+                        empInfo={empInfo}
+                        setChatStatus={setChatStatus}
+                      />
+                    )}
                   </div>
                   <div
                     className={styles.roomcon}
@@ -83,11 +95,11 @@ export default function ChatRoom({
                         {chat.chatContent.length <= '15' ? (
                           <div className={styles.content}>
                             {chat.chatContent}
-                            <div className={styles.LastTimecon}>
-                              <div className={styles.LastTime}>
+                            <span className={styles.LastTimecon}>
+                              <span className={styles.LastTime}>
                                 {chat.chatTime.substr(11, 5)}
-                              </div>
-                            </div>
+                              </span>
+                            </span>
                           </div>
                         ) : (
                           <div className={styles.content}>
@@ -100,20 +112,9 @@ export default function ChatRoom({
                       </div>
                     </Box>
                   </div>
-                </>
+                </div>
               );
             })}
-            {selectChatroom.chatroom && (
-              <ExitChatroom
-                openExitChat={openExitChat}
-                setOpenExitChat={setOpenExitChat}
-                chatroomId={selectChatroom.chatroom.chatroomId}
-                chatroomName={selectChatroom.chatroom.chatroomName}
-                headCount={selectChatroom.chatroom.headCount}
-                empInfo={empInfo}
-                setChatStatus={setChatStatus}
-              />
-            )}
           </div>
         </>
       ) : (
