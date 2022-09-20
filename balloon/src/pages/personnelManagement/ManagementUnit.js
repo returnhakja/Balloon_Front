@@ -106,7 +106,7 @@ function ManagementUnit() {
 
   return (
     <div style={{ marginTop: 70, marginBottom: 50 }}>
-      <Container maxWidth="maxwidth">
+      <Container maxWidth="lg">
         <AddBoxIcon
           fontSize="large"
           color="action"
