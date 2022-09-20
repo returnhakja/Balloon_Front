@@ -20,10 +20,6 @@ const styleBox = {
 function DeleteModal({ open, setOpen, label, rowData, deleteFunc }) {
   const handleClose = () => setOpen(false);
 
-  // const handleDelete = (setOpen) => {
-  //   deleteCheck(setOpen);
-  // };
-
   return (
     <Modal open={open} close={handleClose}>
       <Box sx={styleBox}>
