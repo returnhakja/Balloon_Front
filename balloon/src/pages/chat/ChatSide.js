@@ -3,6 +3,7 @@ import styles from '../../css/chat/CS.module.css';
 import PersonIcon from '@mui/icons-material/Person';
 import ChatIcon from '@mui/icons-material/Chat';
 import SettingsIcon from '@mui/icons-material/Settings';
+import ChatStomp from './ChatStomp';
 
 export default function ChatSide({
   children,
@@ -11,6 +12,10 @@ export default function ChatSide({
   check,
   setCheck,
 }) {
+  const client = ChatStomp();
+  const disconnect = () => {
+    client.disconnect();
+  };
   return (
     <div className={styles.constainer}>
       <div className={styles.iconcon}>
@@ -26,6 +31,7 @@ export default function ChatSide({
               setChatStatus('chatList');
               setRoomId(0);
               setCheck(!check);
+              disconnect();
             }}>
             <ChatIcon fontSize="large" />
           </li>
