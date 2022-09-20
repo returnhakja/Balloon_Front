@@ -13,7 +13,6 @@ export default function ChatEmpList({
   chatStatus,
   setChatStatus,
   setRoomId,
-  client,
 }) {
   //사원이름
   const [chatEmpList, setCEList] = useState([]);
@@ -105,7 +104,7 @@ export default function ChatEmpList({
                       setChatStatus={setChatStatus}
                       setInvite={setInvite}
                       setRoomId={setRoomId}
-                      client={client}
+                 
                     />
                   )}
                 </Grid>
