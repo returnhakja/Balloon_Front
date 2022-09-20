@@ -85,13 +85,17 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
     p: 4,
     textAlign: 'center',
   };
-
   client.connect({}, () => {
     client.subscribe(`/topic/message`, (data) => {
       const chat = JSON.parse(data.body);
       setInput([...input, chat]);
+      disconnect();
     });
   });
+
+  const disconnect = () => {
+    client.disconnect();
+  };
 
   const send = () => {
     if (inputRef.current.value.trim() !== '') {
