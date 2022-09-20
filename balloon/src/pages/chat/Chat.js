@@ -119,7 +119,7 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
     }
     chatRecord(chatroomId, setChatting, empId);
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
-  }, [input.length, chatroomId, chatting.length]);
+  }, [input, chatroomId, chatting.length]);
 
   //채팅방 이름수정
   const onChangeTitle = (event) => {
