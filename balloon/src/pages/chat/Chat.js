@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import ScrollToBottom from 'react-scroll-to-bottom';
-import ChatStomp from './ChatStomp';
 import {
   chatRecord,
   chatroomInfo,
@@ -27,6 +26,8 @@ import GroupIcon from '@mui/icons-material/Group';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import ExitChatroom from './ExitChatroom';
 import InviteEmp from './InviteEmp';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 
 export default function Chat({ empInfo, roomId, setChatStatus }) {
   const empId = empInfo.empId;
@@ -35,9 +36,9 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
 
   const inputRef = useRef();
   // socket
-  const client = ChatStomp();
-
-  console.log(roomId);
+  const sock = new SockJS('http://localhost:8080/chatstart');
+  const client = Stomp.over(sock);
+  client.debug = null;
 
   //채팅방 사람 확인 state
   const [open, setOpen] = useState(false);
@@ -73,9 +74,9 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
 
   const styleBox = {
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    top: '90%',
+    left: '97%',
+    transform: 'translate(-90%, -90%)',
     width: 300,
     bgcolor: 'background.paper',
     border: '2px solid #000',
@@ -88,13 +89,8 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
     client.subscribe(`/topic/message`, (data) => {
       const chat = JSON.parse(data.body);
       setInput([...input, chat]);
-      disconnect();
     });
   });
-
-  const disconnect = () => {
-    client.disconnect();
-  };
 
   const send = () => {
     if (inputRef.current.value.trim() !== '') {
@@ -123,6 +119,7 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
     if (!!chatroomId) {
       empIdInfo(chatroomId, setChatempinfo);
     }
+    console.log('chatrecode');
     chatRecord(chatroomId, setChatting, empId);
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
   }, [input, chatroomId, chatting.length]);

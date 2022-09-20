@@ -6,11 +6,13 @@ import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import {
   deleteApvlByDocIdAndEmpId,
   deleteBizTp,
+  deleteBizTpEmp,
   getApvlByDocId,
   getBizTpByBizTpId,
   getBizTpEmpByBizTpId,
   insertApproval,
   insertBizTp,
+  insertBizTpEmp,
 } from '../../context/ApprovalAxios';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
@@ -40,6 +42,7 @@ import ChatStomp from '../chat/ChatStomp';
 
 //socket연결
 const client = ChatStomp();
+client.debug = null;
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -207,16 +210,10 @@ function SavedBusinessTripInfo() {
 
     setStartValue(inputData.startDate);
     setEndValue(inputData.endDate);
-    if (bizTpEmp && bizTpEmp.emp !== {}) {
-      if (bizTpEmp.length !== 0) {
-        setMEmp2(
-          bizTpEmp.emp &&
-            bizTpEmp[0].emp.empName + ' (' + bizTpEmp.emp &&
-            bizTpEmp[0].emp.empId + ')'
-        );
-      }
+    if (bizTpEmp[0]) {
+      setMEmp2(bizTpEmp[0].emp.empName + ' (' + bizTpEmp[0].emp.empId + ')');
     }
-  }, [inputData]);
+  }, [inputData, bizTpEmp.length]);
 
   useEffect(() => {
     if (!!params) {
@@ -529,6 +526,7 @@ function SavedBusinessTripInfo() {
                     svApprover.map((data) =>
                       deleteApvlByDocIdAndEmpId(params.docId, data.empId)
                     );
+                    deleteBizTpEmp(params.docId);
                     await insertBizTp(
                       params.docId,
                       3,
@@ -538,6 +536,7 @@ function SavedBusinessTripInfo() {
                       endValue,
                       setInputData
                     );
+                    insertBizTpEmp(params.docId, mEmp2);
                     {
                       insertApproval(
                         params.docId,
@@ -591,35 +590,37 @@ function SavedBusinessTripInfo() {
                       endValue,
                       setInputData
                     );
+                    deleteBizTpEmp(params.docId);
+                    insertBizTpEmp(params.docId, mEmp2);
+                    {
+                      svApprover.map((data) =>
+                        deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                      );
+                      insertApproval(
+                        params.docId,
+                        1,
+                        approver,
+                        inputData,
+                        empInfo,
+                        approvalList
+                      );
+                      sendChatHandle();
+                      // approver.map((data, index) => {
+                      //   const approvalId = getApvlId(params.docId, data.empId);
+                      //   insertApproval(
+                      //     params.docId,
+                      //     1,
+                      //     data,
+                      //     inputData,
+                      //     empInfo,
+                      //     approvalId
+                      //   );
+                      // });
+                    }
                     alert('문서가 상신되었습니다!');
                   } else {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
-                  }
-                  {
-                    svApprover.map((data) =>
-                      deleteApvlByDocIdAndEmpId(params.docId, data.empId)
-                    );
-                    insertApproval(
-                      params.docId,
-                      1,
-                      approver,
-                      inputData,
-                      empInfo,
-                      approvalList
-                    );
-                    sendChatHandle();
-                    // approver.map((data, index) => {
-                    //   const approvalId = getApvlId(params.docId, data.empId);
-                    //   insertApproval(
-                    //     params.docId,
-                    //     1,
-                    //     data,
-                    //     inputData,
-                    //     empInfo,
-                    //     approvalId
-                    //   );
-                    // });
                   }
                 }}>
                 <SaveButton variant="contained" color="success" size="large">

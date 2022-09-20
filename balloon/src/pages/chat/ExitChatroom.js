@@ -7,9 +7,9 @@ import { Box, Modal } from '@mui/material';
 
 const styleBox = {
   position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  top: '80%',
+  left: '97%',
+  transform: 'translate(-90%, -90%)',
   width: 300,
   bgcolor: 'background.paper',
   border: '2px solid #000',

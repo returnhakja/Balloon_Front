@@ -20,6 +20,7 @@ import PersonnelAppointmentForm from '../chat/PersonnelAppointmentForm';
 
 //socket연결
 const client = ChatStomp();
+client.debug = null;
 
 export default function ApprovalDeclareModal({
   style,

@@ -23,6 +23,7 @@ import BusinessReportForm from '../chat/BusinessReportForm';
 
 //socket연결
 const client = ChatStomp();
+client.debug = null;
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -45,6 +46,9 @@ function BusinessReport() {
   // 이미 결재봇과 채팅방이 존재하는 사원 찾기
   const [botApvlRoom, setBotApvlRoom] = useState([]);
 
+  //기안제목
+  const [approvalTitle, setApprovalTitle] = useState('');
+
   const approveRef = useRef();
   const tempRef = useRef();
   //결재선설정empId
@@ -56,28 +60,22 @@ function BusinessReport() {
   const botroomExist = [];
   const botroomId = [];
 
-  //기안제목
-  const approvalTitle =
-    document.getElementById('bizRptTitle') &&
-    document.getElementById('bizRptTitle').value;
+  // //기안제목
+  // const approvalTitle =
+  //   document.getElementById('bizRptTitle') &&
+  //   document.getElementById('bizRptTitle').value;
 
   //결재선설정empIdList
   {
     approver.map((empId) => apvlPeople.push(empId.empId));
   }
-
   console.log(apvlPeople);
+
   let firstApvlPeople;
   firstApvlPeople = apvlPeople.filter(
     (data, index) => data.indexOf(data[0]) === index
   );
   console.log(firstApvlPeople);
-
-  // 채팅방이 생성되어야할 사람들
-  let newApvlPeople;
-  newApvlPeople = firstApvlPeople.filter(
-    (people) => !botroomExist.includes(people)
-  );
 
   //결재봇정보가져오기
   useEffect(() => {
@@ -91,7 +89,15 @@ function BusinessReport() {
     botroomId.push(data.chatroomId.chatroomId);
   });
 
+  console.log(botroomExist);
   console.log(botroomId);
+
+  // 채팅방이 생성되어야할 사람들
+  let newApvlPeople;
+  newApvlPeople = firstApvlPeople.filter(
+    (people) => !botroomExist.includes(people)
+  );
+  console.log(newApvlPeople);
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(
@@ -302,6 +308,7 @@ function BusinessReport() {
                     name="title"
                     placeholder="기안제목을 입력하세요."
                     className={styles.inputtext}
+                    onChange={(e) => setApprovalTitle(e.target.value)}
                   />
                 </form>
               </td>
@@ -334,15 +341,14 @@ function BusinessReport() {
                 ref={tempRef}
                 onClick={(e) => {
                   if (!docId) {
-                    createDocId();
-                    setSaveType('temp');
-
-                    // insertBizRpt(docId, 3, inputData, empInfo, setInputData);
-
-                    // insertApproval(docId, 0, approver, inputData, empInfo);
-
-                    // alert('문서가 임시저장되었습니다!');
-                    e.preventDefault();
+                    if (approvalTitle) {
+                      createDocId();
+                      setSaveType('temp');
+                      e.preventDefault();
+                    } else {
+                      alert('문서 제목을 입력해주세요 !');
+                      e.preventDefault();
+                    }
                   }
                 }}>
                 <Button variant="outlined" size="large">
@@ -355,9 +361,14 @@ function BusinessReport() {
                 onClick={(e) => {
                   if (approver.length !== 0) {
                     if (!docId) {
-                      createDocId();
-                      setSaveType('approve');
-                      e.preventDefault();
+                      if (approvalTitle) {
+                        createDocId();
+                        setSaveType('approve');
+                        e.preventDefault();
+                      } else {
+                        alert('문서 제목을 입력해주세요 !');
+                        e.preventDefault();
+                      }
                     }
                     // insertBizRpt(docId, 1, inputData, empInfo, setInputData);
                     // sendChatHandle();
