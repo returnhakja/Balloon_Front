@@ -234,6 +234,7 @@ function EmpAddPage() {
           <TextField
             margin="normal"
             type="number"
+            inputProps={{ step: '10' }}
             required
             fullWidth
             id="salary"
@@ -243,6 +244,7 @@ function EmpAddPage() {
           <TextField
             margin="normal"
             type="number"
+            inputProps={{ step: '100' }}
             required
             fullWidth
             id="commission"

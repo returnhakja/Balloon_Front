@@ -11,6 +11,7 @@ import Delete from '@mui/icons-material/Delete';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import QueueIcon from '@mui/icons-material/Queue';
 import UnitAddpage from './UnitAddpage';
+import DeleteModal from '../../components/DeleteModal';
 
 function ManagementUnit() {
   const [unitList, setUnitList] = useState([]);
@@ -34,13 +35,8 @@ function ManagementUnit() {
   useEffect(() => {
     if (unitList.length === 0) {
       findUnitList(setUnitList);
-    } else {
-      if (deleteChk === true) {
-        deleteUnit(rowData);
-        setDeleteChk(false);
-      }
     }
-  }, [unitList, rowData, deleteChk]);
+  }, [unitList, rowData]);
 
   function GetParentUnit(data) {
     return data.row.parentUnit ? data.row.parentUnit.id : data.row.parentUnit;
@@ -90,55 +86,60 @@ function ManagementUnit() {
   ];
 
   return (
-    <div style={{ marginTop: 70, marginBottom: 50 }}>
-      <Container maxWidth="maxwidth">
-        <AddBoxIcon
-          fontSize="large"
-          color="action"
-          onClick={() => {
-            setOpenInsert(true);
+    // <div style={{ marginTop: 70, marginBottom: 50 }}>
+    <Container maxWidth="maxwidth">
+      <AddBoxIcon
+        fontSize="large"
+        color="action"
+        onClick={() => {
+          setOpenInsert(true);
+        }}
+      />
+      {openInsert && (
+        <UnitAddpage openInsert={openInsert} setOpenInsert={setOpenInsert} />
+      )}
+
+      <Link to={'/add/units'}>
+        <QueueIcon fontSize="large" color="action" />
+      </Link>
+
+      <Box sx={{ width: '100%', height: 700, display: 'flex' }}>
+        <DataGrid
+          sx={{
+            '	.MuiDataGrid-filterForm': {
+              color: 'red',
+            },
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}
+          rows={unitList}
+          columns={columns}
+          getRowId={(row) => row.unitCode}
+          editMode="row"
+          experimentalFeatures={{ newEditingApi: true }}
+          pageSize={10}
+          rowsPerPageOptions={[10]}
+          components={{ Toolbar: GridToolbar }}
+          checkboxSelection
+          onCellClick={(data) => {
+            handleClick(data);
           }}
         />
-        {openInsert && (
-          <UnitAddpage openInsert={openInsert} setOpenInsert={setOpenInsert} />
-        )}
 
-        <Link to={'/add/units'}>
-          <QueueIcon fontSize="large" color="action" />
-        </Link>
-
-        <Box sx={{ width: '100%', height: 700, display: 'flex' }}>
-          <DataGrid
-            sx={{
-              '	.MuiDataGrid-filterForm': {
-                color: 'red',
-              },
-              justifyContent: 'center',
-              alignContent: 'center',
-            }}
-            rows={unitList}
-            columns={columns}
-            getRowId={(row) => row.unitCode}
-            editMode="row"
-            experimentalFeatures={{ newEditingApi: true }}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
-            components={{ Toolbar: GridToolbar }}
-            checkboxSelection
-            onCellClick={(data) => {
-              handleClick(data);
-            }}
-          />
-        </Box>
-        {open && (
-          <UnitUpdate
-            open={open}
-            setOpen={setOpen}
-            unitCode={rowData.unitCode}
+        {deleteChk && (
+          <DeleteModal
+            open={deleteChk}
+            setOpen={setDeleteChk}
+            label={'조직'}
+            rowData={rowData}
+            deleteFunc={deleteUnit}
           />
         )}
-      </Container>
-    </div>
+      </Box>
+      {open && (
+        <UnitUpdate open={open} setOpen={setOpen} unitCode={rowData.unitCode} />
+      )}
+    </Container>
   );
 }
 
