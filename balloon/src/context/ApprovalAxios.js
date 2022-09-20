@@ -41,6 +41,27 @@ export const getDRByEmp = async (empId, setDRCount) => {
 };
 // ------------------------------------------------
 
+// 문서 수 가져오기 날짜로 ---------------------------------------
+export const getDDByEmpByDate = async (
+  empId,
+  setDCount,
+  num,
+  sunDay,
+  saturDay
+) => {
+  const url = '/api/box/empdocs/date/';
+  const str = url + empId + '/' + num;
+  const docDateVO = { sunDay: sunDay, saturDay: saturDay };
+  await axios
+    .post(str, docDateVO)
+    .then((res) => {
+      setDCount(res.data.length);
+    })
+    .catch((e) => console.log(e));
+};
+
+// ---------------------------------------
+
 // 완료된 문서(부서확인용)
 export const getDocsByUnit = async (unitCode, setdocList) => {
   const url = '/api/box/unitdocs/';

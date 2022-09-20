@@ -8,7 +8,7 @@ import {
 } from '../../context/EmployeeAxios';
 import { findUnitList } from '../../context/UnitAxios';
 import styles from '../../css/management/Employee.module.css';
-import { Box, Button, Modal } from '@mui/material';
+import { Avatar, Box, Button, Modal } from '@mui/material';
 
 const SelectUnit = React.forwardRef(
   ({ name, label, unitList, unit, setUnit }, ref) => {
@@ -79,7 +79,7 @@ const handleSubmit = (event) => {
   console.log('aa');
 };
 
-export default function EmployeeUpdate({ open, setOpen, empId }) {
+export default function EmployeeUpdate({ open, setOpen, empId, photo }) {
   const [id, setId] = useState('');
   const [intern, setIntern] = useState('');
   const [employee, setEmployee] = useState({});
@@ -109,7 +109,7 @@ export default function EmployeeUpdate({ open, setOpen, empId }) {
       salary: parseFloat(data.salary),
       commission: parseFloat(data.commission),
       empBell: data.empBell,
-      photo: !!data.photo ? data.photo : null,
+      photo: !!data.photo ? data.photo : photo,
       userRoleGrade: urg,
       unit: {
         unitCode: unit,
@@ -151,14 +151,20 @@ export default function EmployeeUpdate({ open, setOpen, empId }) {
                 display: 'flex',
                 alignItems: 'center',
               }}>
-              <div
-                style={{
-                  marginRight: '20px',
-                  width: '150px',
-                  height: '150px',
-                  border: '1px solid black',
-                }}>
-                <img src={employee.photo} alt="사진" />
+              <div>
+                <Avatar
+                  sx={{
+                    marginRight: '20px',
+                    width: '150px',
+                    height: '150px',
+                    border: '1px solid black',
+                  }}
+                  src={
+                    !!employee.photo
+                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${employee.photo}`
+                      : `${process.env.REACT_APP_AWS_S3_DEFAULT}`
+                  }
+                />
               </div>
               <div style={{ margin: '10px', width: '100%' }}>
                 <div
