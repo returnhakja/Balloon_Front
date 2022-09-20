@@ -199,7 +199,8 @@ export const signupValidation = (
   if (cnt === 4) {
     cnt--;
     if (!!birthday) {
-      birthday = Date.parse(birthday);
+      console.log(birthday);
+      // birthday = Date.parse(birthday);
     } else {
       birthday = null;
     }
@@ -262,7 +263,7 @@ export const signup = async (inputEmpData) => {
   axios.post(url, inputEmpData, header).catch((error) => {
     console.log(error);
   });
-  // window.location.href = '/management/employee';
+  window.location.href = '/management/employee';
 };
 
 // 엑셀로 회원가입
