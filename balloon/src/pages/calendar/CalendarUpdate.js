@@ -70,7 +70,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
           sx={{ mb: 2, mt: 2, color: '#00AAFF' }}>
           <BsCalendarWeek className={styles.icon} />
           <span>일정 보기</span>
-          <hr />
+          <div style={{ border: '1px solid black' }} />
         </Typography>
         <Typography
           id="modal-modal-title"

@@ -11,7 +11,7 @@ export const DfCard = ({ drafterName }) => (
         textAlign="center">
         기안자
       </Typography>
-      <hr />
+      <div style={{ border: '1px solid black' }} />
       <br />
       <Typography
         sx={{ fontSize: 20 }}
@@ -34,7 +34,7 @@ export const ApCard = ({ approverName }) => (
         textAlign="center">
         결재자
       </Typography>
-      <hr />
+      <div style={{ border: '1px solid black' }} />
       <br />
       <Typography
         sx={{ fontSize: 20 }}

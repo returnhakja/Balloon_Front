@@ -92,7 +92,7 @@ function ApprovalRefuse() {
         <Container>
           <p className={styles.sasinfont}>반려된</p>
           <br />
-          <hr />
+          <div style={{ border: '1px solid black' }} />
 
           <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
             <DataGrid

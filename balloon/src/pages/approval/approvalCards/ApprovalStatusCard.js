@@ -23,7 +23,7 @@ export const StatusCard = ({ status, count, link }) => (
               textAlign="center">
               {status}
             </Typography>
-            <hr />
+            <div style={{ border: '1px solid black' }} />
             <br />
             <Typography
               sx={{ fontSize: 20 }}
@@ -60,7 +60,7 @@ export const StatusApprovalCard = ({ status, count, link }) => (
               textAlign="center">
               {status}
             </Typography>
-            <hr />
+            <div style={{ border: '1px solid black' }} />
             <br />
             <Typography
               sx={{ fontSize: 20 }}
