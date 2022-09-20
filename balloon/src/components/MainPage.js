@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import { getDCount } from '../context/ApprovalFunc';
+import { getDCountByDate } from '../context/ApprovalFunc';
 import {
   // endlessWork,
   endWork,
@@ -36,6 +36,26 @@ function MainPage() {
   const [DSCount, setDSCount] = useState('');
   const [DRCount, setDRCount] = useState('');
   const [countDArr, setCountDArr] = useState([]);
+  const [chk, setChk] = useState(false);
+
+  function getCurrentWeek() {
+    const day = new Date();
+    const sunday = day.getTime() - 86400000 * day.getDay();
+
+    day.setTime(sunday);
+
+    const result = [day.toISOString().slice(0, 10)];
+
+    for (let i = 1; i < 7; i++) {
+      day.setTime(day.getTime() + 86400000);
+      result.push(day.toISOString().slice(0, 10));
+    }
+
+    return result;
+  }
+
+  const [sunDay, setSunDay] = useState(getCurrentWeek()[0]);
+  const [saturDay, setSaturDay] = useState(getCurrentWeek()[6]);
 
   useEffect(() => {
     if (empInfo.length !== 0) {
@@ -43,8 +63,6 @@ function MainPage() {
         findWorkOn(empInfo.empId, setInCnt);
         findWorkOff(empInfo.empId, setOutCnt);
       }
-      inCnt !== 0 && console.log('inCnt', inCnt);
-      outCnt !== 0 && console.log('outCnt', outCnt);
       if (
         DDCount.length !== 0 &&
         DCCount.length !== 0 &&
@@ -55,18 +73,54 @@ function MainPage() {
           setCountDArr([DDCount, DCCount, DSCount, DRCount]);
         }
       } else {
-        getDCount(
+        getDCountByDate(
           empInfo.empId,
           setDDCount,
           setDCCount,
           setDSCount,
-          setDRCount
+          setDRCount,
+          sunDay,
+          saturDay
         );
       }
     }
-  }, [empInfo.empId, rend, DDCount, DCCount, DSCount, DRCount, countDArr]);
+  }, [empInfo.empId, rend, countDArr]);
 
-  console.log(DDCount, DCCount, DSCount, DRCount);
+  useEffect(() => {
+    console.log('aaaaaaaaaaaaaa', sunDay);
+    getDCountByDate(
+      empInfo.empId,
+      setDDCount,
+      setDCCount,
+      setDSCount,
+      setDRCount,
+      sunDay,
+      saturDay
+    );
+
+    console.log('countDArr', countDArr);
+  }, [sunDay]);
+
+  useEffect(() => {
+    console.log('aaaaaadddddaa', DDCount, DCCount, DSCount, DRCount);
+    setCountDArr([DDCount, DCCount, DSCount, DRCount]);
+  }, [DDCount, DCCount, DSCount, DRCount]);
+
+  useEffect(() => {
+    console.log('aaa');
+  }, [countDArr]);
+  // useEffect(() => {
+  //   getDCountByDate(
+  //     empInfo.empId,
+  //     setDDCount,
+  //     setDCCount,
+  //     setDSCount,
+  //     setDRCount,
+  //     sunDay,
+  //     saturDay
+  //   );
+  //   console.log(countDArr);
+  // }, [countDArr]);
 
   const data = {
     labels: [
@@ -142,6 +196,43 @@ function MainPage() {
   // const WorkEndless = () => {
   //   empInfo && endlessWork(empInfo.empId);
   // };
+
+  const prevWeek = () => {
+    const prevSun = new Date(sunDay);
+    const prevSatur = new Date(saturDay);
+    if (
+      moment(prevSun).format('YYYYMMDD') -
+        7 -
+        moment(empInfo.hiredate).format('YYYYMMDD') >=
+      0
+    ) {
+      prevSun.setDate(prevSun.getDate() - 7);
+      prevSatur.setDate(prevSatur.getDate() - 7);
+      setSunDay(moment(prevSun).format('YYYY-MM-DD'));
+      setSaturDay(moment(prevSatur).format('YYYY-MM-DD'));
+      setChk(!chk);
+    } else {
+      alert('입사일 전입니다.');
+    }
+  };
+
+  const nextWeek = () => {
+    const day = new Date();
+    const nextSun = new Date(sunDay);
+    const nextSatur = new Date(saturDay);
+    if (
+      moment(day).format('YYYYMMDD') - moment(nextSatur).format('YYYYMMDD') >=
+      0
+    ) {
+      nextSun.setDate(nextSun.getDate() + 7);
+      nextSatur.setDate(nextSatur.getDate() + 7);
+      setSunDay(moment(nextSun).format('YYYY-MM-DD'));
+      setSaturDay(moment(nextSatur).format('YYYY-MM-DD'));
+      setChk(!chk);
+    } else {
+      alert('아직 기록이 없습니다.');
+    }
+  };
 
   return (
     <div>
@@ -264,6 +355,19 @@ function MainPage() {
                 boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
               }}>
               <p style={{ padding: '10px' }}>결재관리</p>
+
+              <div
+                style={{
+                  display: 'flex',
+                  textAlign: 'center',
+                  justifyContent: 'center',
+                }}>
+                <button>이전</button>
+                <p style={{ textAlign: 'center' }}>
+                  {sunDay + ' ~ ' + saturDay}
+                </p>
+                <button>다음</button>
+              </div>
               <p>아직 결재 정보가 없습니다.</p>
             </div>
           ) : (
@@ -277,15 +381,20 @@ function MainPage() {
                 position: 'relative',
                 boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
               }}>
-              {console.log('countDArr', countDArr)}
-              <p
+
+              <p style={{ padding: '10px' }}>결재관리</p>
+              <div
                 style={{
-                  padding: '10px',
+                  display: 'flex',
                   textAlign: 'center',
-                  fontSize: '24px',
+                  justifyContent: 'center',
                 }}>
-                결재관리
-              </p>
+                <button onClick={prevWeek}>이전</button>
+                <p style={{ textAlign: 'center' }}>
+                  {sunDay + ' ~ ' + saturDay}
+                </p>
+                <button onClick={nextWeek}>다음</button>
+              </div>
 
               <Pie data={data} options={options} />
             </Box>

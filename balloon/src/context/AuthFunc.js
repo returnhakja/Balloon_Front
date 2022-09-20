@@ -107,7 +107,11 @@ export const signupValidation = (
   if (cnt === 12) {
     if (!!salary) {
       salary = parseFloat(salary);
-      cnt--;
+      if (salary < 0) {
+        alert('월급이 0보다 작습니다!!');
+      } else {
+        cnt--;
+      }
     } else {
       alert('월급을 입력해주세요!!');
     }
@@ -116,7 +120,11 @@ export const signupValidation = (
   if (cnt === 11) {
     if (!!commission) {
       commission = parseFloat(commission);
-      cnt--;
+      if (commission < 0) {
+        alert('상여금이 0보다 작습니다!!');
+      } else {
+        cnt--;
+      }
     } else {
       alert('상여금을 입력해주세요!!');
     }
