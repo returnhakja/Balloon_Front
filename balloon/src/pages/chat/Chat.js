@@ -26,8 +26,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import ExitChatroom from './ExitChatroom';
 import InviteEmp from './InviteEmp';
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
+import ChatStomp from './ChatStomp';
 
 export default function Chat({ empInfo, roomId, setChatStatus }) {
   const empId = empInfo.empId;
@@ -36,9 +35,9 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
 
   const inputRef = useRef();
   // socket
-  const sock = new SockJS('http://54.180.148.125:8080/chatstart');
-  // const sock = new SockJS('http://localhost:8080/chatstart');
-  const client = Stomp.over(sock);
+
+  const client = ChatStomp();
+
   client.debug = null;
 
   //채팅방 사람 확인 state
@@ -85,21 +84,8 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
     p: 4,
     textAlign: 'center',
   };
-
-  // client.connect({}, () => {
-  //   client.subscribe(`/topic/message`, (data) => {
-  //     const chat = JSON.parse(data.body);
-  //     setInput([...input, chat]);
-  //     disconnect();
-  //   });
-  // });
-
-  // const disconnect = () => {
-  //   client.disconnect();
-  // };
-
   client.connect({}, () => {
-    client.subscribe(`/topic/message`, (data) => {
+    client.subscribe(`/topic/message/${chatroomId}`, (data) => {
       const chat = JSON.parse(data.body);
       setInput([...input, chat]);
     });
@@ -132,7 +118,6 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
     if (!!chatroomId) {
       empIdInfo(chatroomId, setChatempinfo);
     }
-    console.log('chatrecode');
     chatRecord(chatroomId, setChatting, empId);
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
   }, [input, chatroomId, chatting.length]);
@@ -299,7 +284,7 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
           if (msg.status === 1) {
             return (
               <div key={index}>
-                {msg.employee.empId === empInfo.empId ? (
+                {msg.employee && msg.employee.empId === empInfo.empId ? (
                   <div className={styles.message}>
                     <div className={styles.mytime}>{chatTime}</div>
                     <div className={styles.mycontent}>{msg.chatContent}</div>

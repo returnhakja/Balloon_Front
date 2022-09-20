@@ -13,6 +13,7 @@ export default function ChatRoom({
   roomId,
   setRoomId,
   check,
+  client,
 }) {
   const [chatroom, setChatroom] = useState([]);
   const [selectChatroom, setSelectChatroom] = useState({});
@@ -123,6 +124,7 @@ export default function ChatRoom({
           roomId={roomId}
           setChatStatus={setChatStatus}
           setRoomId={setRoomId}
+          client={client}
         />
       )}
     </div>

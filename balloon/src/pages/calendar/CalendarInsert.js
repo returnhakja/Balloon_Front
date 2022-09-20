@@ -128,7 +128,6 @@ function CalendarInsert({
   useEffect(() => {
     getEmpListInSameUnit(empId, setCEList);
     getEmpByEmpId(calendarBot, setBotInfo);
-    inviteSchedule.push(empId);
   }, []);
 
   console.log(inviteSchedule);

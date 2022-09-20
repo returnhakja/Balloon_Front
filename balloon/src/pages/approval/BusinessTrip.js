@@ -34,6 +34,7 @@ import { getEmpByEmpId } from '../../context/EmployeeAxios';
 import { botApvlChatroom, onApvlCreateChatroom } from '../../context/ChatAxios';
 import BusinessTripForm from '../chat/BusinessTripForm';
 import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
+import moment from 'moment';
 
 //socket연결
 const client = ChatStomp();
@@ -80,10 +81,6 @@ function BusinessTrip() {
   const approveRef = useRef();
   const tempRef = useRef();
 
-  //기안제목
-  // const approvalTitle =
-  //   document.getElementById('bizTpTitle') &&
-  //   document.getElementById('bizTpTitle').value;
   //방문처
   const visitPlace =
     document.getElementById('destination') &&
@@ -202,20 +199,10 @@ function BusinessTrip() {
     chatScheduleSave(AlreadyChatApproval);
   };
 
-  // let startDate = startValue && document.getElementById('startValue').value;
-  // let endDate = endValue && document.getElementById('endValue').value;
-
   useEffect(() => {
     if (mEmpInfo.length === 0) {
       getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
     }
-    // if (docNum === 0) {
-    //   getLatestBizTP(setDocNum);
-    //   setDocId('출장계획-22-0000001');
-    // } else {
-    //   setDocId('출장계획' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
-    // }
-
     if (noApprover.length === 0) {
       setNoApprover(noApprover);
     }
@@ -237,9 +224,8 @@ function BusinessTrip() {
     }
     alert('문서가 임시저장되었습니다!');
 
-    tempRef.current.click();
+    tempRef.current?.click();
   };
-
   const approveAppr = async () => {
     await insertBizTp(
       docId,
@@ -256,7 +242,7 @@ function BusinessTrip() {
     }
     sendChatHandle();
     alert('문서가 상신되었습니다!');
-    approveRef.current.click();
+    approveRef.current?.click();
   };
   useEffect(() => {
     if (docId) {
@@ -389,10 +375,7 @@ function BusinessTrip() {
                     placeholder="구성원을 선택하세요"
                     onChange={(e) => {
                       setMEmp(e.target.value);
-                    }}
-
-                    // className={styles.inputtext}
-                  >
+                    }}>
                     {mEmpInfo.length !== 0 &&
                       mEmpInfo.map((mEmps, index) => (
                         <MenuItem key={index} value={mEmps}>
@@ -423,9 +406,9 @@ function BusinessTrip() {
                     id="startValue"
                     label="시작일"
                     type="date"
-                    defaultValue={startValue}
+                    defaultValue={moment(startValue).format('yyyy-MM-DD')}
                     onChange={(newValue) => {
-                      setStartValue(newValue);
+                      setStartValue(newValue.target.value);
                     }}
                     sx={{ width: 250 }}
                     InputLabelProps={{
@@ -451,9 +434,9 @@ function BusinessTrip() {
                     id="endValue"
                     label="종료일"
                     type="date"
-                    defaultValue={endValue}
+                    defaultValue={moment(endValue).format('YYYY-MM-DD')}
                     onChange={(newValue) => {
-                      setEndValue(newValue);
+                      setEndValue(newValue.target.value);
                     }}
                     sx={{ width: 250 }}
                     InputLabelProps={{
@@ -555,10 +538,6 @@ function BusinessTrip() {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
-                  // approver.map((data, index) => {
-                  //   return insertApproval(docId, 1, data, inputData, empInfo);
-                  // });
-                  // insertApproval(docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기
