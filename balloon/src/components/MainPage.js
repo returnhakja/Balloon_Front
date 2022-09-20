@@ -30,6 +30,7 @@ function MainPage() {
   const [DSCount, setDSCount] = useState('');
   const [DRCount, setDRCount] = useState('');
   const [countDArr, setCountDArr] = useState([]);
+  const [chk, setChk] = useState(false);
 
   function getCurrentWeek() {
     const day = new Date();
@@ -56,8 +57,6 @@ function MainPage() {
         findWorkOn(empInfo.empId, setInCnt);
         findWorkOff(empInfo.empId, setOutCnt);
       }
-      inCnt !== 0 && console.log('inCnt', inCnt);
-      outCnt !== 0 && console.log('outCnt', outCnt);
       if (
         DDCount.length !== 0 &&
         DCCount.length !== 0 &&
@@ -79,7 +78,43 @@ function MainPage() {
         );
       }
     }
-  }, [empInfo.empId, rend, countDArr, sunDay]);
+  }, [empInfo.empId, rend, countDArr]);
+
+  useEffect(() => {
+    console.log('aaaaaaaaaaaaaa', sunDay);
+    getDCountByDate(
+      empInfo.empId,
+      setDDCount,
+      setDCCount,
+      setDSCount,
+      setDRCount,
+      sunDay,
+      saturDay
+    );
+
+    console.log('countDArr', countDArr);
+  }, [sunDay]);
+
+  useEffect(() => {
+    console.log('aaaaaadddddaa', DDCount, DCCount, DSCount, DRCount);
+    setCountDArr([DDCount, DCCount, DSCount, DRCount]);
+  }, [DDCount, DCCount, DSCount, DRCount]);
+
+  useEffect(() => {
+    console.log('aaa');
+  }, [countDArr]);
+  // useEffect(() => {
+  //   getDCountByDate(
+  //     empInfo.empId,
+  //     setDDCount,
+  //     setDCCount,
+  //     setDSCount,
+  //     setDRCount,
+  //     sunDay,
+  //     saturDay
+  //   );
+  //   console.log(countDArr);
+  // }, [countDArr]);
 
   const data = {
     datasets: [
@@ -159,22 +194,38 @@ function MainPage() {
   const prevWeek = () => {
     const prevSun = new Date(sunDay);
     const prevSatur = new Date(saturDay);
-
-    prevSun.setDate(prevSun.getDate() - 7);
-    prevSatur.setDate(prevSatur.getDate() - 7);
-
-    setSunDay(moment(prevSun).format('YYYY-MM-dd'));
-    setSaturDay(moment(prevSatur).format('YYYY-MM-dd'));
+    if (
+      moment(prevSun).format('YYYYMMDD') -
+        7 -
+        moment(empInfo.hiredate).format('YYYYMMDD') >=
+      0
+    ) {
+      prevSun.setDate(prevSun.getDate() - 7);
+      prevSatur.setDate(prevSatur.getDate() - 7);
+      setSunDay(moment(prevSun).format('YYYY-MM-DD'));
+      setSaturDay(moment(prevSatur).format('YYYY-MM-DD'));
+      setChk(!chk);
+    } else {
+      alert('입사일 전입니다.');
+    }
   };
 
   const nextWeek = () => {
+    const day = new Date();
     const nextSun = new Date(sunDay);
     const nextSatur = new Date(saturDay);
-    nextSun.setDate(nextSun.getDate + 7);
-    nextSatur.setDate(nextSatur.getDate + 7);
-
-    setSunDay(moment(nextSun).format('YYYY-MM-dd'));
-    setSaturDay(moment(nextSatur).format('YYYY-MM-dd'));
+    if (
+      moment(day).format('YYYYMMDD') - moment(nextSatur).format('YYYYMMDD') >=
+      0
+    ) {
+      nextSun.setDate(nextSun.getDate() + 7);
+      nextSatur.setDate(nextSatur.getDate() + 7);
+      setSunDay(moment(nextSun).format('YYYY-MM-DD'));
+      setSaturDay(moment(nextSatur).format('YYYY-MM-DD'));
+      setChk(!chk);
+    } else {
+      alert('아직 기록이 없습니다.');
+    }
   };
 
   return (
@@ -294,7 +345,12 @@ function MainPage() {
               }}>
               <p style={{ padding: '10px' }}>결재관리</p>
 
-              <div style={{ display: 'flex' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  textAlign: 'center',
+                  justifyContent: 'center',
+                }}>
                 <button>이전</button>
                 <p style={{ textAlign: 'center' }}>
                   {sunDay + ' ~ ' + saturDay}
@@ -313,9 +369,13 @@ function MainPage() {
                 backgroundColor: '#EEEEEE',
                 boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
               }}>
-              {console.log('countDArr', countDArr)}
               <p style={{ padding: '10px' }}>결재관리</p>
-              <div style={{ display: 'flex' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  textAlign: 'center',
+                  justifyContent: 'center',
+                }}>
                 <button onClick={prevWeek}>이전</button>
                 <p style={{ textAlign: 'center' }}>
                   {sunDay + ' ~ ' + saturDay}
