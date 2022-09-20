@@ -23,16 +23,6 @@ const SaveButton = styled(Button)(({ theme }) => ({
 }));
 
 function PersonnelAppointmentInfo() {
-  // 날짜 관련
-  // const [startValue, setStartValue] = useState(null);
-
-  // 모달
-  // const [openModal, setOpenModal] = useState(false);
-  // const [openapprovalModal, setOpenapprovalModal] = useState(false);
-
-  // 사원 정보 context
-  // const [empInfo] = useOutletContext();
-
   const [paInfo, setPaInfo] = useState({});
   const [approver, setApprover] = useState([]);
 
@@ -88,10 +78,6 @@ function PersonnelAppointmentInfo() {
             <DfCard drafterName={paInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            // if (apvl.length === 0) {
-            //   setApvl(empData);
-            // }
-
             return (
               <Card
                 variant="outlined"

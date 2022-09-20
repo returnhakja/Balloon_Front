@@ -219,10 +219,6 @@ function SavedBusinessTripInfo() {
     if (!!params) {
       if (Object.keys(inputData).length === 0) {
         getBizTpByBizTpId(params.docId, setInputData);
-        // getApvlByDocId(params.docId, setApprover);
-      } else {
-        // setStartValue(inputData.startDate);
-        // setEndValue(endValue);
       }
       if (noApprover.length === 0) {
         setNoApprover(noApprover);
@@ -272,14 +268,12 @@ function SavedBusinessTripInfo() {
             type="button"
             className={styles.btnnav}
             onClick={() => {
-              // setOpenModal(true);
               setOpenapprovalModal(true);
             }}
             id="cancelBtn">
             결재선설정
           </button>
         </div>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         {openapprovalModal && (
           <ModalApproval
             openapprovalModal={openapprovalModal}
@@ -300,10 +294,6 @@ function SavedBusinessTripInfo() {
             {!!empInfo && <DfCard drafterName={empInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            // if (apvl.length === 0) {
-            //   setApvl(empData);
-            // }
-
             return (
               <Card
                 key={index}
@@ -391,30 +381,6 @@ function SavedBusinessTripInfo() {
 
             <tr>
               <td className={styles.tdreaui}>
-                {/* <LocalizationProvider dateAdapter={AdapterDateFns}> */}
-                {/* <DatePicker
-                    label="시작일"
-                    value={startValue}
-                    type=" date"
-                    inputFormat={'yyyy-MM-dd'}
-                    onChange={(newValue) => {
-                      setStartValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  /> */}
-                {/* <TextField
-                  id="startValue"
-                  label="시작일"
-                  type="date"
-                  value={startValue}
-                  onChange={(e) => {
-                    setStartValue(e.target.value);
-                  }}
-                  sx={{ width: 250 }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                /> */}
                 <TextField
                   id="startValue"
                   label="시작일"
@@ -428,19 +394,8 @@ function SavedBusinessTripInfo() {
                     shrink: true,
                   }}
                 />
-                {/* </LocalizationProvider> */}
 
                 <span className={styles.centerfont}> : </span>
-                {/* <LocalizationProvider dateAdapter={AdapterDateFns}> */}
-                {/* <DatePicker
-                    label="끝나는일"
-                    value={endValue}
-                    inputFormat={'yyyy-MM-dd'}
-                    onChange={(newValue) => {
-                      setEndValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  /> */}
                 <TextField
                   id="endValue"
                   label="종료일"
@@ -454,7 +409,6 @@ function SavedBusinessTripInfo() {
                     shrink: true,
                   }}
                 />
-                {/* </LocalizationProvider> */}
               </td>
               <td className={styles.tdreaui}>
                 <form>
@@ -527,6 +481,9 @@ function SavedBusinessTripInfo() {
                       deleteApvlByDocIdAndEmpId(params.docId, data.empId)
                     );
                     deleteBizTpEmp(params.docId);
+                    if (mEmp2) {
+                      insertBizTpEmp(params.docId, mEmp2);
+                    }
                     await insertBizTp(
                       params.docId,
                       3,
@@ -536,7 +493,6 @@ function SavedBusinessTripInfo() {
                       endValue,
                       setInputData
                     );
-                    insertBizTpEmp(params.docId, mEmp2);
                     {
                       insertApproval(
                         params.docId,
@@ -546,30 +502,6 @@ function SavedBusinessTripInfo() {
                         empInfo,
                         approvalList
                       );
-                      // approver.map((data, index) => {
-                      //   const approvalId = getApvlId(params.docId, data.empId);
-
-                      //   if (approvalId !== null) {
-                      //     approvalId.then((apvlId) => {
-                      //       insertApproval(
-                      //         params.docId,
-                      //         0,
-                      //         data,
-                      //         inputData,
-                      //         empInfo,
-                      //         apvlId
-                      //       );
-                      //     });
-                      //   } else {
-                      //     insertApproval(
-                      //       params.docId,
-                      //       0,
-                      //       data,
-                      //       inputData,
-                      //       empInfo
-                      //     );
-                      //   }
-                      // });
                     }
                     alert('문서가 임시저장되었습니다!');
                   }}>
@@ -591,7 +523,9 @@ function SavedBusinessTripInfo() {
                       setInputData
                     );
                     deleteBizTpEmp(params.docId);
-                    insertBizTpEmp(params.docId, mEmp2);
+                    if (mEmp2) {
+                      insertBizTpEmp(params.docId, mEmp2);
+                    }
                     {
                       svApprover.map((data) =>
                         deleteApvlByDocIdAndEmpId(params.docId, data.empId)
@@ -605,17 +539,6 @@ function SavedBusinessTripInfo() {
                         approvalList
                       );
                       sendChatHandle();
-                      // approver.map((data, index) => {
-                      //   const approvalId = getApvlId(params.docId, data.empId);
-                      //   insertApproval(
-                      //     params.docId,
-                      //     1,
-                      //     data,
-                      //     inputData,
-                      //     empInfo,
-                      //     approvalId
-                      //   );
-                      // });
                     }
                     alert('문서가 상신되었습니다!');
                   } else {
