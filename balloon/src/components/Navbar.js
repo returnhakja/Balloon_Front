@@ -8,6 +8,7 @@ import '../css/nav/Navbar.css';
 import { Avatar, Button } from '@mui/material';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ClearIcon from '@mui/icons-material/Clear';
+import ChatStomp from '../pages/chat/ChatStomp';
 
 function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   const cookies = new Cookies();
@@ -94,7 +95,10 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
                 variant="outlined"
                 size="small"
                 className={styles.btnnav}
-                onClick={() => logoutFunc(logout)}>
+                onClick={() => {
+                  logoutFunc(logout);
+                
+                }}>
                 Logout
               </Button>
             </div>
@@ -106,7 +110,10 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
                 variant="outlined"
                 size="small"
                 className={styles.btnnav}
-                onClick={() => logoutFunc(logout)}>
+                onClick={() => {
+                  logoutFunc(logout);
+           
+                }}>
                 Logout
               </Button>
             </div>

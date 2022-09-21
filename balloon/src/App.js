@@ -67,16 +67,15 @@ import NotFound from './pages/NotFound';
 import AdminRoutes from './components/AdminRoutes';
 import DeclareOn from './pages/approval/DeclareOn';
 
+
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
   const [isLogin, setLogin] = useState(null);
   const role = empInfo.userRoleGrade;
-  // 채팅방 초대하기
-  const [invite, setInvite] = useState([]);
 
   useEffect(() => {
     const logged = localStorage.getItem('logged');
-    logged && logged === 'true' ? setLogin(true) : setLogin(false);
+   logged && logged === 'true' ? setLogin(true) : setLogin(false);
   }, []);
 
   useEffect(() => {

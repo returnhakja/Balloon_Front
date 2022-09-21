@@ -33,6 +33,7 @@ export default function CreateRoom({
   const empId = empInfo.empId;
   // socket
   const client = ChatStomp();
+  // client.debug = null;
 
   //enter
   const keyEnter = (e) => {
