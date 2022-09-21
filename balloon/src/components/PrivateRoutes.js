@@ -21,6 +21,7 @@ function PrivateRoutes({ empInfo, setEmpInfo, isLogin, setLogin }) {
       <>
         {cookies.remove('accessToken')}
         <Navigate to="/loginpage" />
+        {alert('로그인을 하세요!!')}
       </>
     ))
   );

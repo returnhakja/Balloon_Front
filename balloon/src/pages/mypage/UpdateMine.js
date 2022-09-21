@@ -72,14 +72,17 @@ function UpdateMine() {
                   flexWrap: 'wrap',
                 }}>
                 <Avatar
-                  alt="프로필"
                   style={{
                     width: '150px',
                     height: '150px',
                     marginTop: '5px',
                     marginBottom: '5px',
                   }}
-                  src={empInfo.photo}
+                  src={
+                    !!empInfo.photo
+                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
+                      : `${process.env.REACT_APP_AWS_S3_DEFAULT}`
+                  }
                   className="mypageavatar"
                 />
               </div>
@@ -206,7 +209,7 @@ function UpdateMine() {
                   open={emailOpen}
                   setOpen={setEmailOpen}
                   empId={empInfo.empId}
-                  photo={empInfo.email ? empInfo.email : ''}
+                  emial={empInfo.email ? empInfo.email : ''}
                 />
               )}
             </CardContent>

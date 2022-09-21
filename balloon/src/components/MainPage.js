@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import { getDCountByDate } from '../context/ApprovalFunc';
+import { getDCount, getDCountByDate } from '../context/ApprovalFunc';
 import {
   // endlessWork,
   endWork,
@@ -19,7 +19,8 @@ import { Avatar, Box, Button } from '@mui/material';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function MainPage() {
-  const [empInfo] = useOutletContext();
+  const [empInfo, sunDay, setSunDay, saturDay, setSaturDay] =
+    useOutletContext();
   const [inCnt, setInCnt] = useState(0);
   const [outCnt, setOutCnt] = useState(0);
   const [rend, setRend] = useState(false);
@@ -30,26 +31,12 @@ function MainPage() {
   const [DSCount, setDSCount] = useState('');
   const [DRCount, setDRCount] = useState('');
   const [countDArr, setCountDArr] = useState([]);
+  const [DDCount2, setDDCount2] = useState(0);
+  const [DCCount2, setDCCount2] = useState(0);
+  const [DSCount2, setDSCount2] = useState(0);
+  const [DRCount2, setDRCount2] = useState(0);
+  const [countDArr2, setCountDArr2] = useState([]);
   const [chk, setChk] = useState(false);
-
-  function getCurrentWeek() {
-    const day = new Date();
-    const sunday = day.getTime() - 86400000 * day.getDay();
-
-    day.setTime(sunday);
-
-    const result = [day.toISOString().slice(0, 10)];
-
-    for (let i = 1; i < 7; i++) {
-      day.setTime(day.getTime() + 86400000);
-      result.push(day.toISOString().slice(0, 10));
-    }
-
-    return result;
-  }
-
-  const [sunDay, setSunDay] = useState(getCurrentWeek()[0]);
-  const [saturDay, setSaturDay] = useState(getCurrentWeek()[6]);
 
   useEffect(() => {
     if (empInfo.length !== 0) {
@@ -65,14 +52,23 @@ function MainPage() {
       ) {
         if (countDArr.length === 0) {
           setCountDArr([DDCount, DCCount, DSCount, DRCount]);
+          setCountDArr2([DDCount2, DCCount2, DSCount2, DRCount2]);
         }
       } else {
-        getDCountByDate(
+        getDCount(
           empInfo.empId,
           setDDCount,
           setDCCount,
           setDSCount,
-          setDRCount,
+          setDRCount
+        );
+
+        getDCountByDate(
+          empInfo.empId,
+          setDDCount2,
+          setDCCount2,
+          setDSCount2,
+          setDRCount2,
           sunDay,
           saturDay
         );
@@ -81,28 +77,27 @@ function MainPage() {
   }, [empInfo.empId, rend, countDArr]);
 
   useEffect(() => {
-    console.log('aaaaaaaaaaaaaa', sunDay);
     getDCountByDate(
       empInfo.empId,
-      setDDCount,
-      setDCCount,
-      setDSCount,
-      setDRCount,
+      setDDCount2,
+      setDCCount2,
+      setDSCount2,
+      setDRCount2,
       sunDay,
       saturDay
     );
 
-    console.log('countDArr', countDArr);
+    console.log('Change sunDay', countDArr2);
   }, [sunDay]);
 
   useEffect(() => {
-    console.log('aaaaaadddddaa', DDCount, DCCount, DSCount, DRCount);
-    setCountDArr([DDCount, DCCount, DSCount, DRCount]);
-  }, [DDCount, DCCount, DSCount, DRCount]);
+    console.log('aaaaaadddddaa', DDCount2, DCCount2, DSCount2, DRCount2);
+    setCountDArr2([DDCount2, DCCount2, DSCount2, DRCount2]);
+  }, [DDCount2, DCCount2, DSCount2, DRCount2, chk]);
 
   useEffect(() => {
-    console.log('aaa');
-  }, [countDArr]);
+    console.log('Render countDArr2', countDArr2);
+  }, [countDArr2]);
   // useEffect(() => {
   //   getDCountByDate(
   //     empInfo.empId,
@@ -120,7 +115,7 @@ function MainPage() {
     datasets: [
       {
         label: '# of Votes',
-        data: [DDCount, DCCount, DSCount, DRCount],
+        data: [DDCount2, DCCount2, DSCount2, DRCount2],
         backgroundColor: [
           'rgba(54, 162, 235, 0.2)',
           'rgba(75, 192, 192, 0.2)',
@@ -137,10 +132,10 @@ function MainPage() {
       },
     ],
     labels: [
-      `상신한 ${DDCount ? DDCount : '0'}`,
-      `완료된 ${DCCount ? DCCount : '0'}`,
-      `저장된 ${DSCount ? DSCount : '0'}`,
-      `반려된 ${DRCount ? DRCount : '0'}`,
+      `상신한 ${DDCount2}`,
+      `완료된 ${DCCount2}`,
+      `저장된 ${DSCount2}`,
+      `반려된 ${DRCount2}`,
     ],
   };
   const options = {
