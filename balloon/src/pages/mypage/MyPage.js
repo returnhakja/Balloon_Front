@@ -82,6 +82,7 @@ function MyPage() {
                   }
                 />
               )}
+
               <div>
                 <Link to={'/mypage/update'}>
                   <Button style={{ float: 'right', marginBottom: '5px' }}>
