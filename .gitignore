@@ -68,6 +68,7 @@ ChatStomp.js
 
 node_modules
 bower_components
+ChatStomp.js
 
 *.sublime*
 
