@@ -138,7 +138,7 @@ function DocList() {
         <Container>
           <p className={styles.sasinfont}>문서대장</p>
           <br />
-          <hr />
+          <div style={{ border: '1px solid black' }} />
           <br />
           <br />
           <p> 총 : {docList.length} 건</p>

@@ -40,6 +40,7 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
     console.log('file', file);
     if (file.length !== 0) {
       uploadProfile(file, empId);
+      handleClose();
       window.location.href = '/mypage';
     } else {
       alert('사진을 넣어주세요!!');
@@ -53,21 +54,19 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
       const formData = new FormData();
       formData.append('file', e.target.files[0]);
       setFile(formData);
+
+      // 이미지 미리보기
+      const reader = new FileReader();
+      reader.readAsDataURL(e.target.files[0]);
+      return new Promise((resolve) => {
+        reader.onload = () => {
+          setImg(reader.result);
+          resolve();
+        };
+      });
     } else {
       alert('사진이 들어가지 않았습니다!!');
     }
-  };
-
-  // 파일 미리보기 로직
-  const encodeFileToBase64 = (fileBlob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileBlob);
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        // setImageSrc(reader.result);
-        resolve();
-      };
-    });
   };
 
   return (
@@ -97,7 +96,7 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
                   sx={{ mb: 2, mt: 2, color: '#00AAFF' }}>
                   <AddPhotoAlternateIcon className={styles.icon} />
                   <span>사진 수정</span>
-                  <div style={{ border: '1px solid black' }} />
+                  <hr />
                 </Typography>
               </div>
               <CardContent
@@ -120,7 +119,7 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
                         width: '100px',
                         height: '100px',
                       }}
-                      src={`${image}`}
+                      src={image}
                     />
                     <p>사진을 변경해주세요</p>
                   </div>
