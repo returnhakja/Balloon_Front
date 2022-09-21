@@ -42,7 +42,7 @@ function Home({ empInfo, setEmpInfo, logout, isLogin }) {
   const [saturDay, setSaturDay] = useState(getCurrentWeek()[6]);
 
   return (
-    <>
+    <div>
       <Navbar
         empInfo={empInfo}
         setEmpInfo={setEmpInfo}
@@ -75,7 +75,7 @@ function Home({ empInfo, setEmpInfo, logout, isLogin }) {
 
       <Outlet context={[empInfo, sunDay, setSunDay, saturDay, setSaturDay]} />
       <Footer />
-    </>
+    </div>
   );
 }
 

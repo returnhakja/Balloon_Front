@@ -186,6 +186,7 @@ export const updateEmployee = async (updateData) => {
     .catch((error) => {
       console.log(error);
     });
+
   window.location.href = '/mypage';
 };
 

@@ -31,6 +31,8 @@ export default function ApprovalDeclareModal({
   approvalList,
   paInfo,
 }) {
+  const [path, setPath] = useState('/boxes');
+
   const [botInfo, setBotInfo] = useState([]);
   // 이미 결재봇과 채팅방이 존재하는 사원 찾기
   const [botApvl, setBotApvl] = useState([]);
@@ -254,6 +256,14 @@ export default function ApprovalDeclareModal({
       chatScheduleSave(AlreadyChatApproval);
     });
   };
+  useEffect(() => {
+    console.log(apvlList);
+    if (!apvlList[1]) {
+      setPath('/boxes/ac');
+    } else {
+      setPath('/boxes/ao');
+    }
+  }, []);
 
   return (
     <div>
@@ -294,7 +304,7 @@ export default function ApprovalDeclareModal({
               </Button>
             </Link>
             <Link
-              to={'/boxes/ac'}
+              to={path}
               onClick={async () => {
                 if (!apvlList[1]) {
                   updateApvlDoc([apvlList[0]], 2, paInfo);

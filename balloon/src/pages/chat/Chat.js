@@ -26,8 +26,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import ExitChatroom from './ExitChatroom';
 import InviteEmp from './InviteEmp';
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
+import ChatStomp from './ChatStomp';
 
 export default function Chat({ empInfo, roomId, setChatStatus }) {
   const empId = empInfo.empId;
@@ -36,9 +35,10 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
 
   const inputRef = useRef();
   // socket
-  const sock = new SockJS('http://localhost:8080/chatstart');
-  const client = Stomp.over(sock);
-  client.debug = null;
+
+  const client = ChatStomp();
+
+  // client.debug = null;
 
   //채팅방 사람 확인 state
   const [open, setOpen] = useState(false);
@@ -86,9 +86,10 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
   };
 
   client.connect({}, () => {
-    client.subscribe(`/topic/message`, (data) => {
+    client.subscribe(`/topic/message/${chatroomId}`, (data) => {
       const chat = JSON.parse(data.body);
       setInput([...input, chat]);
+      client.disconnect();
     });
   });
 
@@ -119,7 +120,6 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
     if (!!chatroomId) {
       empIdInfo(chatroomId, setChatempinfo);
     }
-    console.log('chatrecode');
     chatRecord(chatroomId, setChatting, empId);
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
   }, [input, chatroomId, chatting.length]);
@@ -286,7 +286,7 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
           if (msg.status === 1) {
             return (
               <div key={index}>
-                {msg.employee.empId === empInfo.empId ? (
+                {msg.employee && msg.employee.empId === empInfo.empId ? (
                   <div className={styles.message}>
                     <div className={styles.mytime}>{chatTime}</div>
                     <div className={styles.mycontent}>{msg.chatContent}</div>

@@ -8,13 +8,11 @@ import {
 import styles from '../../css/Component.module.css';
 import { BsCalendarWeek } from 'react-icons/bs';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
   const handleClose = () => {
     setOpenUpdate(false);
-    window.location.href = '/calendar';
+    window.location.href = '/schudule';
   };
 
   const [list, setList] = useState([]);
@@ -72,7 +70,7 @@ function CalendarUpdate({ style, openUpdate, setOpenUpdate, scheduleId }) {
           sx={{ mb: 2, mt: 2, color: '#00AAFF' }}>
           <BsCalendarWeek className={styles.icon} />
           <span>일정 보기</span>
-          <hr />
+          <div style={{ border: '1px solid black' }} />
         </Typography>
         <Typography
           id="modal-modal-title"

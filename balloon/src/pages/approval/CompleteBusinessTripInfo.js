@@ -30,13 +30,10 @@ const SaveButton = styled(Button)(({ theme }) => ({
 function BizTripInfo() {
   const [empInfo] = useOutletContext();
   // 날짜 관련
-  // const [startValue, setStartValue] = useState(null);
-  // const [endvalue, setEndValue] = useState(null);
   const [bizTpInfo, setBizTpInfo] = useState({});
   const [bizTpEmp, setBizTpEmp] = useState({});
   const [approver, setApprover] = useState([]);
   // 모달
-  // const [openModal, setOpenModal] = useState(false);
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
 
@@ -84,14 +81,13 @@ function BizTripInfo() {
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
         </div>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         {openapprovalModal && (
           <ModalApproval
             openapprovalModal={openapprovalModal}
             setOpenapprovalModal={setOpenapprovalModal}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -101,10 +97,6 @@ function BizTripInfo() {
             <DfCard drafterName={bizTpInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            // if (apvl.length === 0) {
-            //   setApvl(empData);
-            // }
-
             return (
               <Card
                 variant="outlined"

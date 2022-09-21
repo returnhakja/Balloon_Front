@@ -91,7 +91,7 @@ function RefusedBusinessTripInfo() {
             setOpenapprovalModal={setOpenapprovalModal}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -276,9 +276,6 @@ function RefusedBusinessTripInfo() {
                     e.preventDefault();
                   }
                   {
-                    // approver.map((data, index) => {
-                    //   insertApproval(params.docId, 1, data, inputData, empInfo);
-                    // });
                     insertApproval(
                       params.docId,
                       1,

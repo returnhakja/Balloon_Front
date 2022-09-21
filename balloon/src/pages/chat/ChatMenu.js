@@ -34,7 +34,7 @@ export default function ChatMenu({ open, setOpen, empInfo }) {
             <ClearIcon />
           </div>
         </div>
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <div className={styles.side2}>
           <div className={styles.listcon}>
             <ChatSide

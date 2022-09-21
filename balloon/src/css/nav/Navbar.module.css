@@ -2,7 +2,7 @@
   left: 0;
   top: 0;
   width: 100%;
-  height: 10vw;
+  /* height: 10vw; */
   background-color: white;
 }
 
@@ -39,24 +39,21 @@
 .oofont {
   color: #00aaff;
 }
+.logo {
+  font-weight: bold;
+  font-size: 35px;
+}
 
 .img {
-  /* display: inline-block; */
   width: 100%;
-  /* height: 48vh; */
   min-width: 1200px;
 }
 
 .logingo {
-  /* position: relative; */
   display: inline-block;
   background-color: #cecece;
   width: 50%;
-  height: 25vw;
-
-  /* margin-left: 50%; */
-  margin-top: 8%;
-  /* transform: translateX(50%); */
+  height: 300px;
   min-width: 500px;
 }
 

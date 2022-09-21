@@ -23,6 +23,7 @@ asset/
 
 # env file
 .env
+.env.production
 
 ### macOS ###
 # General
@@ -64,8 +65,10 @@ logs
 **/*.backup.*
 **/*.back.*
 
+
 node_modules
 bower_components
+
 
 *.sublime*
 

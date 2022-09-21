@@ -213,6 +213,7 @@ function SavedPersonnelAppointmentInfo() {
     } else {
       setStartValue(inputData.personnelDate);
       setMEmp(inputData.movedEmp);
+
       setUnit(inputData.unit);
       setPosi(inputData.position);
     }
@@ -234,10 +235,6 @@ function SavedPersonnelAppointmentInfo() {
 
   useEffect(() => {
     if (Object.keys(inputData).length !== 0) {
-      // setStartValue(inputData.personnelDate);
-      // setMEmp(inputData.movedEmp);
-      // setUnit(inputData.unit);
-
       if (mEmp && mEmp !== {}) {
         if (Object.keys(mEmp).length !== 0) {
           setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
@@ -249,25 +246,7 @@ function SavedPersonnelAppointmentInfo() {
           setUnit2(unit.unitName + ' (' + unit.unitCode + ')');
       }
     }
-  }, [inputData]);
-
-  // useEffect(() => {
-  // }, []);
-
-  // useEffect(() => {
-  //   Object.keys(mEmp).length !== 0 &&
-  //     setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
-  // }, [Object.keys(mEmp).length]);
-
-  // useEffect(() => {
-  //   Object.keys(unit).length !== 0 &&
-  //     setUnit2(unit.unitName + ' (' + unit.unitCode + ')');
-  // }, [Object.keys(unit).length]);
-
-  // useEffect(() => {
-  // }, [units]);
-
-  // mEmpInfo.length !== 0;
+  }, [inputData.personnelAppointmentId, mEmp.empId]);
 
   return (
     <SideNavigation>
@@ -305,7 +284,6 @@ function SavedPersonnelAppointmentInfo() {
             type="button"
             className={styles.btnnav}
             onClick={() => {
-              // setOpenModal(true);
               setOpenapprovalModal(true);
             }}
             id="cancelBtn">
@@ -323,7 +301,7 @@ function SavedPersonnelAppointmentInfo() {
             noApprover={noApprover}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -333,10 +311,6 @@ function SavedPersonnelAppointmentInfo() {
             {!!empInfo && <DfCard drafterName={empInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            // if (apvl.length === 0) {
-            //   setApvl(empData);
-            // }
-
             return (
               <Card
                 key={index}
@@ -377,18 +351,6 @@ function SavedPersonnelAppointmentInfo() {
             <tr className={styles.trcon}>
               <td className={styles.titlename}>인사명령일</td>
               <td className={styles.titlename} colSpan={4}>
-                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    label="일자 선택"
-                    value={!!startValue && startValue}
-                    type=" date"
-                    inputFormat={'yyyy-MM-dd'}
-                    onChange={(newValue) => {
-                      setStartValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider> */}
                 <TextField
                   id="startvalue"
                   required
@@ -422,14 +384,10 @@ function SavedPersonnelAppointmentInfo() {
                       id="mEmp"
                       label="구성원을 선택하세요"
                       value={mEmp2}
-                      // defaultValue={mEmp2}
                       placeholder="구성원을 선택하세요"
                       onChange={(e) => {
                         setMEmp2(e.target.value);
-                      }}
-
-                      // className={styles.inputtext}
-                    >
+                      }}>
                       {mEmpInfo.length !== 0 &&
                         mEmpInfo.map((mEmps, index) => (
                           <MenuItem
@@ -454,10 +412,7 @@ function SavedPersonnelAppointmentInfo() {
                       defaultValue={unit}
                       onChange={(e) => {
                         setUnit2(e.target.value);
-                      }}
-
-                      // className={styles.inputtext}
-                    >
+                      }}>
                       {units &&
                         units.map((unitInfo, index) => (
                           <MenuItem
@@ -485,10 +440,7 @@ function SavedPersonnelAppointmentInfo() {
                     defaultValue={inputData.position}
                     onChange={(e) => {
                       setPosi(e.target.value);
-                    }}
-
-                    // className={styles.inputtext}
-                  >
+                    }}>
                     {positionArr.map((position, index) => (
                       <MenuItem key={index} value={position}>
                         {position}
@@ -557,11 +509,6 @@ function SavedPersonnelAppointmentInfo() {
                       setInputData
                     );
                     {
-                      // if (rmApprover.length !== 0) {
-                      //   rmApprover.map((data) =>
-                      //     deleteApvlByDocIdAndEmpId(params.docId, data.empId)
-                      //   );
-                      // }
                       insertApproval(
                         params.docId,
                         0,
@@ -570,30 +517,6 @@ function SavedPersonnelAppointmentInfo() {
                         empInfo,
                         approvalList
                       );
-                      // approver.map((data, index) => {
-                      //   const approvalId = getApvlId(params.docId, data.empId);
-
-                      //   if (approvalId !== null) {
-                      //     approvalId.then((apvlId) => {
-                      //       insertApproval(
-                      //         params.docId,
-                      //         0,
-                      //         data,
-                      //         inputData,
-                      //         empInfo,
-                      //         apvlId
-                      //       );
-                      //     });
-                      //   } else {
-                      //     insertApproval(
-                      //       params.docId,
-                      //       0,
-                      //       data,
-                      //       inputData,
-                      //       empInfo
-                      //     );
-                      //   }
-                      // });
                     }
                     alert('문서가 임시저장되었습니다!');
                   }}>
@@ -633,9 +556,6 @@ function SavedPersonnelAppointmentInfo() {
                       approvalList
                     );
                     sendChatHandle();
-                    // approver.map((data, index) => {
-                    //   insertApproval(params.docId, 1, data, inputData, empInfo);
-                    // });
                   }
                 }}>
                 <SaveButton variant="contained" color="success" size="large">

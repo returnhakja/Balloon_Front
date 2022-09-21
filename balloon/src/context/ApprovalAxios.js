@@ -39,6 +39,7 @@ export const getDRByEmp = async (empId, setDRCount) => {
     setDRCount(res.data.length);
   });
 };
+// ------------------------------------------------
 
 // 문서 수 가져오기 날짜로 ---------------------------------------
 export const getDDByEmpByDate = async (
@@ -98,7 +99,6 @@ export const getBizTpEmpByBizTpId = async (bizTpId, setBizTpEmp) => {
 };
 
 // 동반 출장자
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 export const insertBizTpEmp = async (bizTpId, mEmp) => {
   const url = '/api/biztpemp';
   let inputData = {};
@@ -131,6 +131,7 @@ export const getPAByPAId = async (PAId, setPAInfo) => {
   const url = '/api/pa/';
   const str = url + PAId;
   await axios.get(str).then((res) => {
+    console.log(res.data);
     setPAInfo(res.data);
   });
 };
@@ -151,30 +152,7 @@ export const getLatestBizRpt = async (setDocId) => {
   });
 };
 
-// // 가장 최근 업무기안 번호 가져옴
-// export const getLatestBizRpt = async (setDocNum) => {
-//   const url = '/api/bizrpt/wd';
-//   await axios.get(url).then((res) => {
-//     const docId = res.data.businessReportId;
-//     const docNum = docId.substr(8, 7);
-//     setDocNum(parseInt(docNum));
-//   });
-// };
-
 // 가장 최근 출장계획 번호 가져옴
-// export const getLatestBizTP = async (setDocNum) => {
-//   const url = '/api/biztp/wd';
-//   await axios
-//     .get(url)
-//     .then((res) => {
-//       const docId = res.data.businessTripId;
-//       const docNum = docId.substr(8, 7);
-//       setDocNum(parseInt(docNum));
-//     })
-//     .catch(() => {
-//       setDocNum(0);
-//     });
-// };
 export const getLatestBizTP = async (setDocId) => {
   const url = '/api/biztp/wd';
   await axios.get(url).then((res) => {
@@ -190,19 +168,6 @@ export const getLatestBizTP = async (setDocId) => {
 };
 
 // 가장 최근 인사명령 번호 가져옴
-// export const getLatestPA = async (setDocNum) => {
-//   const url = '/api/pa/wd';
-//   await axios
-//     .get(url)
-//     .then((res) => {
-//       const docId = res.data.personnelAppointmentId;
-//       const docNum = docId.substr(8, 7);
-//       setDocNum(parseInt(docNum));
-//     })
-//     .catch(() => {
-//       setDocNum(0);
-//     });
-// };
 export const getLatestPA = async (setDocId) => {
   const url = '/api/pa/wd';
   await axios.get(url).then((res) => {
@@ -253,37 +218,6 @@ export const insertBizRpt = async (
 
   await axios.post(url, inputData, { headers });
 };
-// export const insertBizRpt = async (
-//   docStatus,
-//   inputData,
-//   empInfo,
-//   setInputData
-// ) => {
-//   const bizRptTitle = document.getElementById('bizRptTitle');
-//   const bizRptContent = document.getElementById('bizRptContent');
-//   const url = '/api/bizrpt';
-
-//   const headers = {
-//     'Content-Type': 'application/json',
-//   };
-
-//   inputData = {
-//     documentTitle: bizRptTitle.value,
-//     documentContent: bizRptContent.value,
-//     documentStatus: docStatus,
-//     empName: empInfo.empName,
-//     position: empInfo.position,
-//     unitName: empInfo.unit && empInfo.unit.unitName,
-//     unit: {
-//       unitCode: empInfo.unit && empInfo.unit.unitCode,
-//     },
-//     emp: {
-//       empId: empInfo.empId,
-//     },
-//   };
-
-//   await axios.post(url, inputData, { headers });
-// };
 
 // 출장 계획 상신
 export const insertBizTp = async (
@@ -299,8 +233,6 @@ export const insertBizTp = async (
   const bizTpContent = document.getElementById('bizTpContent');
   const destination = document.getElementById('destination');
   const visitingPurpose = document.getElementById('visitingPurpose');
-  // const startValue = document.getElementById('startValue');
-  // const endValue = document.getElementById('endValue');
 
   const url = '/api/biztp';
 
@@ -436,15 +368,8 @@ export const insertApproval = async (
   };
 
   apvrList.map((apvr, index) => {
-    let approvalId = null;
-    // approvalList?.map((approval) => {
-    //   if (apvr.empId === approval.approverEmp.empId) {
-    //     approvalId = approval.approvalId;
-    //   }
-    // });
     if (docId.includes('업무기안')) {
       inputData = {
-        // approvalId: approvalId,
         approvalStatus: docStatus === 1 && index === 0 ? 1 : 0,
         approverName: apvr.empName,
         position: apvr.position,
@@ -461,7 +386,6 @@ export const insertApproval = async (
       };
     } else if (docId.includes('출장계획')) {
       inputData = {
-        // approvalId: approvalId,
         approvalStatus: docStatus === 1 && index === 0 ? 1 : 0,
         approverName: apvr.empName,
         position: apvr.position,
@@ -478,7 +402,6 @@ export const insertApproval = async (
       };
     } else if (docId.includes('인사명령')) {
       inputData = {
-        // approvalId: approvalId,
         approvalStatus: docStatus === 1 && index === 0 ? 1 : 0,
         approverName: apvr.empName,
         position: apvr.position,

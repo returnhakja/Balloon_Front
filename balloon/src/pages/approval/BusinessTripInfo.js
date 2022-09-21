@@ -28,12 +28,9 @@ const SaveButton = styled(Button)(({ theme }) => ({
 
 function BizTripInfo() {
   // 날짜 관련
-  // const [startValue, setStartValue] = useState(null);
-  // const [endvalue, setEndValue] = useState(null);
   const [bizTpInfo, setBizTpInfo] = useState({});
   const [bizTpEmp, setBizTpEmp] = useState({});
   // 모달
-  // const [openModal, setOpenModal] = useState(false);
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
   const [empInfo] = useOutletContext();
@@ -88,7 +85,7 @@ function BizTripInfo() {
             setOpenapprovalModal={setOpenapprovalModal}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <Card
           variant="outlined"

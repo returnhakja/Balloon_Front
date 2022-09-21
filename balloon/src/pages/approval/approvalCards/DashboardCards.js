@@ -18,7 +18,7 @@ export const DBCard = ({ link, title, content }) => (
               textAlign="center">
               {title}
             </Typography>
-            <hr />
+            <div style={{ border: '1px solid black' }} />
             <br />
             <Typography
               sx={{ fontSize: 20 }}

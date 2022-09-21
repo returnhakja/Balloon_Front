@@ -96,10 +96,6 @@ function DeclaredBusinessTripInfo() {
             {!!empInfo && <DfCard drafterName={bizTpInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            // if (apvl.length === 0) {
-            //   setApvl(empData);
-            // }
-
             return (
               <Card
                 key={index}
@@ -172,25 +168,10 @@ function DeclaredBusinessTripInfo() {
                       shrink: true,
                     }}
                   />
-                  {/* <DatePicker
-                    disabled
-                    label="시작일"
-                    value={bizTpInfo.startDate}
-                    type=" date"
-                    inputFormat={'yyyy-MM-dd'}
-                    renderInput={(params) => <TextField {...params} />}
-                  /> */}
                 </LocalizationProvider>
 
                 <span className={styles.centerfont}> : </span>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  {/* <DatePicker
-                    disabled
-                    label="끝나는일"
-                    value={bizTpInfo && bizTpInfo.endDate}
-                    inputFormat={'yyyy-MM-dd'}
-                    renderInput={(params) => <TextField {...params} />}
-                  /> */}
                   <TextField
                     disabled
                     id="endValue"
@@ -211,7 +192,7 @@ function DeclaredBusinessTripInfo() {
                     type="text"
                     name="title"
                     value={bizTpInfo.destination}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -225,7 +206,7 @@ function DeclaredBusinessTripInfo() {
                     type="text"
                     name="title"
                     value={bizTpInfo.visitingPurpose}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}

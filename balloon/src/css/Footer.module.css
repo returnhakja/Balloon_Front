@@ -11,9 +11,11 @@
   width: 100%;
   background-color: #00aaff;
   padding: 10px;
+  z-index: 50;
 }
 
 .contents {
+  background-color: #00aaff;
   max-width: 110vw;
   display: flex;
   justify-content: space-evenly;

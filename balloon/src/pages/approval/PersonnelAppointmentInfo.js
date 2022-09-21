@@ -23,16 +23,6 @@ const SaveButton = styled(Button)(({ theme }) => ({
 }));
 
 function PersonnelAppointmentInfo() {
-  // 날짜 관련
-  // const [startValue, setStartValue] = useState(null);
-
-  // 모달
-  // const [openModal, setOpenModal] = useState(false);
-  // const [openapprovalModal, setOpenapprovalModal] = useState(false);
-
-  // 사원 정보 context
-  // const [empInfo] = useOutletContext();
-
   const [paInfo, setPaInfo] = useState({});
   const [approver, setApprover] = useState([]);
 
@@ -78,7 +68,7 @@ function PersonnelAppointmentInfo() {
         </div>
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
 
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -88,10 +78,6 @@ function PersonnelAppointmentInfo() {
             <DfCard drafterName={paInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            // if (apvl.length === 0) {
-            //   setApvl(empData);
-            // }
-
             return (
               <Card
                 variant="outlined"
@@ -120,17 +106,15 @@ function PersonnelAppointmentInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>인사명령일</td>
               <td className={styles.titlename} colSpan={2}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    disabled
-                    label="명령 일자"
-                    value={paInfo.personnelDate}
-                    type=" date"
-                    inputFormat={'yyyy-MM-dd'}
-                    className={styles.datepicker}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
+                <DatePicker
+                  disabled
+                  label="명령 일자"
+                  value={paInfo.personnelDate}
+                  type=" date"
+                  inputFormat={'yyyy-MM-dd'}
+                  className={styles.datepicker}
+                  renderInput={(params) => <TextField {...params} />}
+                />
               </td>
             </tr>
           </thead>
@@ -156,32 +140,32 @@ function PersonnelAppointmentInfo() {
                 />
               </td>
               <td className={styles.tdreaui}>
-                <form>
-                  <TextField
-                    focused={false}
-                    type="text"
-                    name="title"
-                    value={paInfo.unit && paInfo.unit.unitName}
-                    className={styles.inputtext}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </form>
+                {/* <form> */}
+                <TextField
+                  focused={false}
+                  type="text"
+                  name="title"
+                  value={paInfo.unit && paInfo.unit.unitName}
+                  className={styles.inputtext}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+                {/* </form> */}
               </td>
               <td className={styles.tdreaui}>
-                <form>
-                  <TextField
-                    type="text"
-                    name="title"
-                    value={paInfo.position}
-                    className={styles.inputtext}
-                    focused={false}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </form>
+                {/* <form> */}
+                <TextField
+                  type="text"
+                  name="title"
+                  value={paInfo.position}
+                  className={styles.inputtext}
+                  focused={false}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+                {/* </form> */}
               </td>
             </tr>
           </tbody>

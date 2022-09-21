@@ -23,7 +23,7 @@ import BusinessReportForm from '../chat/BusinessReportForm';
 
 //socket연결
 const client = ChatStomp();
-client.debug = null;
+// client.debug = null;
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -59,11 +59,6 @@ function BusinessReport() {
   const approvalForm = '업무기안';
   const botroomExist = [];
   const botroomId = [];
-
-  // //기안제목
-  // const approvalTitle =
-  //   document.getElementById('bizRptTitle') &&
-  //   document.getElementById('bizRptTitle').value;
 
   //결재선설정empIdList
   {
@@ -175,13 +170,6 @@ function BusinessReport() {
   };
 
   useEffect(() => {
-    // if (docNum === 0) {
-    //   getLatestBizRpt(setDocNum);
-    //   setDocId('업무기안-22-0000001');
-    // } else {
-    //   setDocId('업무기안' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
-    // }
-
     if (noApprover.length === 0) {
       setNoApprover(noApprover);
     }
@@ -191,7 +179,7 @@ function BusinessReport() {
     await insertBizRpt(docId, 3, inputData, empInfo, setInputData);
     insertApproval(docId, 0, approver, inputData, empInfo);
     alert('문서가 임시저장되었습니다!');
-    tempRef.current.click();
+    tempRef.current?.click();
   };
 
   const approveAppr = async () => {
@@ -199,7 +187,7 @@ function BusinessReport() {
     insertApproval(docId, 1, approver, inputData, empInfo);
     sendChatHandle();
     alert('문서가 상신되었습니다!');
-    approveRef.current.click();
+    approveRef.current?.click();
   };
 
   useEffect(() => {
@@ -214,11 +202,6 @@ function BusinessReport() {
 
   const createDocId = () => {
     getLatestBizRpt(setDocId);
-    // if (docNum === 0) {
-    //   setDocId('업무기안-22-0000001');
-    // } else {
-    //   setDocId('업무기안' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
-    // }
   };
   console.log(docId);
   return (
@@ -271,7 +254,7 @@ function BusinessReport() {
             />
           )}
         </div>
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
