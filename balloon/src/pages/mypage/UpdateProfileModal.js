@@ -31,36 +31,17 @@ const style = {
 };
 
 export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
-  const [preView, setPreView] = useState(photo);
-  const [profile, setProfile] = useState('');
-  const [profileName, setProfileName] = useState('첨부파일');
+  const [file, setFile] = useState('');
+  const [fileName, setFileName] = useState('첨부파일');
+  const [image, setImg] = useState(photo);
   const handleClose = () => setOpen(false);
 
   const upload = () => {
-    console.log('file', profile);
-    if (profile.length !== 0) {
-      const pathPoint = profileName.lastIndexOf('.');
-      const filePoint = profileName.substring(
-        pathPoint + 1,
-        profileName.length
-      );
-      const fileType = filePoint.toLowerCase();
-      if (
-        fileType === 'jpg' ||
-        fileType === 'gif' ||
-        fileType === 'png' ||
-        fileType === 'jpeg' ||
-        fileType === 'bmp'
-      ) {
-        console.log('profile', profile);
-        console.log('profileName', profileName);
-        uploadProfile(profile, empId);
-        handleClose();
-        // window.location.href = '/mypage';
-      } else {
-        alert('이미지 파일만 선택할 수 있습니다!!');
-        return false;
-      }
+    console.log('file', file);
+    if (file.length !== 0) {
+      uploadProfile(file, empId);
+      handleClose();
+      window.location.href = '/mypage';
     } else {
       alert('사진을 넣어주세요!!');
     }
@@ -69,22 +50,22 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
   const handleFileInput = (e) => {
     const fileStr = e.target?.files[0]?.name;
     if (!!fileStr) {
-      setProfileName(e.target.files[0].name);
+      setFileName(e.target.files[0].name);
       const formData = new FormData();
       formData.append('file', e.target.files[0]);
-      setProfile(formData);
+      setFile(formData);
 
       // 이미지 미리보기
       const reader = new FileReader();
       reader.readAsDataURL(e.target.files[0]);
       return new Promise((resolve) => {
         reader.onload = () => {
-          setPreView(reader.result);
+          setImg(reader.result);
           resolve();
         };
       });
     } else {
-      alert('사진이 들어가지 않았습니다.');
+      alert('사진이 들어가지 않았습니다!!');
     }
   };
 
@@ -138,7 +119,7 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
                         width: '100px',
                         height: '100px',
                       }}
-                      src={preView}
+                      src={image}
                     />
                     <p>사진을 변경해주세요</p>
                   </div>
@@ -155,17 +136,12 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
                 <div className={styles.filebox}>
                   <input
                     className={styles.upload_name}
-                    value={profileName}
+                    value={fileName}
                     readOnly
                   />
                   <Button variant="outlined">
                     <label htmlFor="file">파일찾기</label>
-                    <input
-                      type="file"
-                      id="file"
-                      onChange={handleFileInput}
-                      accept="image/gif, image/jpeg, image/png"
-                    />
+                    <input type="file" id="file" onChange={handleFileInput} />
                   </Button>
                 </div>
               </div>
