@@ -199,7 +199,7 @@ function UpdateMine() {
                   open={emailOpen}
                   setOpen={setEmailOpen}
                   empId={empInfo.empId}
-                  emial={empInfo.email ? empInfo.email : ''}
+                  email={empInfo.email ? empInfo.email : ''}
                 />
               )}
             </CardContent>
