@@ -15,6 +15,10 @@ function ApprovalOngoing() {
   const [empInfo] = useOutletContext();
   const [docList, setDocList] = useState([]);
 
+  // 날짜 관련
+  // const [startValue, setStartValue] = useState(null);
+  // const [endvalue, setEndValue] = useState(null);
+
   //기안양식
   const [form, setForm] = useState('');
 
@@ -80,7 +84,7 @@ function ApprovalOngoing() {
         <Container>
           <p className={styles.sasinfont}>진행중</p>
           <br />
-          <hr />
+          <div style={{ border: '1px solid black' }} />
 
           <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
             <DataGrid

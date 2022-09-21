@@ -38,7 +38,7 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
 
   const client = ChatStomp();
 
-  client.debug = null;
+  // client.debug = null;
 
   //채팅방 사람 확인 state
   const [open, setOpen] = useState(false);
@@ -84,10 +84,12 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
     p: 4,
     textAlign: 'center',
   };
+
   client.connect({}, () => {
     client.subscribe(`/topic/message/${chatroomId}`, (data) => {
       const chat = JSON.parse(data.body);
       setInput([...input, chat]);
+      client.disconnect();
     });
   });
 
