@@ -39,7 +39,7 @@ function ApprovalOngoing() {
     } else if (documentId.includes('출장계획')) {
       return (
         <Link
-          to={`/doc/aotp/${params.row.docId}`}
+          to={`/apvl/aotp/${params.row.docId}`}
           state={{ path: '/boxes/ao' }}>
           {params.row && params.row.documentTitle}
         </Link>
@@ -47,7 +47,7 @@ function ApprovalOngoing() {
     } else if (documentId.includes('인사명령')) {
       return (
         <Link
-          to={`/doc/aopa/${params.row.docId}`}
+          to={`/apvl/aopa/${params.row.docId}`}
           state={{ path: '/boxes/ao' }}>
           {params.row && params.row.documentTitle}
         </Link>
