@@ -44,7 +44,7 @@ export default function ChatRoom({
             {chatroom.map((chat, index) => {
               return (
                 <>
-                  <div className={styles.DeleteBtn}>
+                  {/* <div className={styles.DeleteBtn}>
                     <Button
                       variant="text"
                       disableElevation
@@ -57,7 +57,7 @@ export default function ChatRoom({
                       }}>
                       <DeleteIcon />
                     </Button>
-                  </div>
+                  </div> */}
                   <div
                     className={styles.roomcon}
                     onClick={() => {

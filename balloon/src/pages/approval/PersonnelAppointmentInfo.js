@@ -106,15 +106,17 @@ function PersonnelAppointmentInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>인사명령일</td>
               <td className={styles.titlename} colSpan={2}>
-                <DatePicker
-                  disabled
-                  label="명령 일자"
-                  value={paInfo.personnelDate}
-                  type=" date"
-                  inputFormat={'yyyy-MM-dd'}
-                  className={styles.datepicker}
-                  renderInput={(params) => <TextField {...params} />}
-                />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    disabled
+                    label="명령 일자"
+                    value={paInfo.personnelDate}
+                    type=" date"
+                    inputFormat={'yyyy-MM-dd'}
+                    className={styles.datepicker}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
               </td>
             </tr>
           </thead>
@@ -133,7 +135,7 @@ function PersonnelAppointmentInfo() {
                   type="text"
                   name="title"
                   value={paInfo.movedEmpName}
-                  className={styles.inputtext}
+                  className={styles.inputtext1}
                   InputProps={{
                     readOnly: true,
                   }}
@@ -146,7 +148,7 @@ function PersonnelAppointmentInfo() {
                   type="text"
                   name="title"
                   value={paInfo.unit && paInfo.unit.unitName}
-                  className={styles.inputtext}
+                  className={styles.inputtext1}
                   InputProps={{
                     readOnly: true,
                   }}
@@ -159,7 +161,7 @@ function PersonnelAppointmentInfo() {
                   type="text"
                   name="title"
                   value={paInfo.position}
-                  className={styles.inputtext}
+                  className={styles.inputtext1}
                   focused={false}
                   InputProps={{
                     readOnly: true,
