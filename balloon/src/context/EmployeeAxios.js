@@ -197,8 +197,8 @@ export const deleteEmployee = async (data) => {
   window.location.href = '/management/employee';
 };
 
-export const uploadProfile = async (file, empId) => {
+export const uploadProfile = async (profile, empId) => {
   const url = '/file/upload/profile/' + empId;
 
-  await axios.post(url, file).catch((error) => console.log(error));
+  await axios.post(url, profile).catch((error) => console.log(error));
 };
