@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import UnitUpdate from './UnitUpdate';
 import { deleteCheck } from '../../context/MuiRenderFunc';
 import { findUnitList, deleteUnit } from '../../context/UnitAxios';
-import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, koKR } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/system';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -11,6 +11,7 @@ import Delete from '@mui/icons-material/Delete';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import QueueIcon from '@mui/icons-material/Queue';
 import UnitAddpage from './UnitAddpage';
+import CustomToolbar from './CustomToolbar';
 import DeleteModal from '../../components/DeleteModal';
 
 function ManagementUnit() {
@@ -73,7 +74,13 @@ function ManagementUnit() {
             handleUpdate();
           }}
         />,
-
+      ],
+    },
+    {
+      field: 'actions1',
+      type: 'actions',
+      width: 80,
+      getActions: () => [
         <GridActionsCellItem
           icon={<Delete />}
           label="Delete"
@@ -86,8 +93,7 @@ function ManagementUnit() {
   ];
 
   return (
-    // <div style={{ marginTop: 70, marginBottom: 50 }}>
-    <Container maxWidth="maxwidth">
+    <Container maxWidth="lg">
       <AddBoxIcon
         fontSize="large"
         color="action"
@@ -119,12 +125,19 @@ function ManagementUnit() {
           experimentalFeatures={{ newEditingApi: true }}
           pageSize={10}
           rowsPerPageOptions={[10]}
-          components={{ Toolbar: GridToolbar }}
+          components={{ Toolbar: CustomToolbar }}
           checkboxSelection
           onCellClick={(data) => {
             handleClick(data);
           }}
         />
+        {open && (
+          <UnitUpdate
+            open={open}
+            setOpen={setOpen}
+            unitCode={rowData.unitCode}
+          />
+        )}
 
         {deleteChk && (
           <DeleteModal
@@ -136,9 +149,6 @@ function ManagementUnit() {
           />
         )}
       </Box>
-      {open && (
-        <UnitUpdate open={open} setOpen={setOpen} unitCode={rowData.unitCode} />
-      )}
     </Container>
   );
 }

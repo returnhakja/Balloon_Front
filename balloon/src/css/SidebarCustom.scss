@@ -1,7 +1,7 @@
-$sidebar-bg-color: rgb(221, 220, 220) !default;
+$sidebar-bg-color: rgb(185, 227, 255) !default;
+$submenu-bg-color: rgb(204, 232, 250);
+$icon-bg-color: rgb(185, 227, 255) !default;
+$submenu-bg-color-collapsed: rgb(186, 186, 186) !default;
 $sidebar-color: black;
 $highlight-color: white !default;
-$submenu-bg-color: rgb(186, 186, 186);
-$submenu-bg-color-collapsed: rgb(186, 186, 186) !default;
-$icon-bg-color: rgb(221, 220, 220) !default;
 @import '~react-pro-sidebar/dist/scss/styles.scss';

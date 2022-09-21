@@ -70,7 +70,7 @@ function DeclaredPersonnelAppointmentInfo() {
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
         </div>
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -136,7 +136,7 @@ function DeclaredPersonnelAppointmentInfo() {
                   type="text"
                   name="title"
                   value={paInfo.movedEmpName}
-                  className={styles.inputtext}
+                  className={styles.DeclaredPersonelInput}
                   InputProps={{
                     readOnly: true,
                   }}
@@ -149,7 +149,7 @@ function DeclaredPersonnelAppointmentInfo() {
                     type="text"
                     name="title"
                     value={paInfo.unit && paInfo.unit.unitName}
-                    className={styles.inputtext}
+                    className={styles.DeclaredPersonelInput}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -162,7 +162,7 @@ function DeclaredPersonnelAppointmentInfo() {
                     type="text"
                     name="title"
                     value={paInfo.position}
-                    className={styles.inputtext}
+                    className={styles.DeclaredPersonelInput}
                     focused={false}
                     InputProps={{
                       readOnly: true,

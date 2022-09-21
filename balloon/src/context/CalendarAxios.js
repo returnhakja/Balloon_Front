@@ -75,14 +75,13 @@ export const updateSchedule = async (inputdata, headers, setOpenUpdate) => {
     })
     .catch((error) => console.log(error));
   setOpenUpdate(false);
-  window.location.href = '/calendar';
+  window.location.href = '/schudule';
 };
 
 // 일정 삭제
 export const deleteSchedule = async (scheduleId, handleClose) => {
   await axios
     .delete(`/cal/delete/${scheduleId}`)
-
     .then(() => {
       handleClose(false);
     })

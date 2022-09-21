@@ -61,7 +61,7 @@ export default function UpdateEmailModal({ open, setOpen, empId, email }) {
                   sx={{ mb: 2, mt: 2, color: '#00AAFF' }}>
                   {/* <AddPhotoAlternateIcon className={styles.icon} /> */}
                   <span>이메일 인증</span>
-                  <hr />
+                  <div style={{ border: '1px solid black' }} />
                 </Typography>
               </div>
               <CardContent

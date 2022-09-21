@@ -23,7 +23,7 @@ function Home({ empInfo, setEmpInfo, logout, isLogin }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <>
+    <div>
       <Navbar
         empInfo={empInfo}
         setEmpInfo={setEmpInfo}
@@ -56,7 +56,7 @@ function Home({ empInfo, setEmpInfo, logout, isLogin }) {
 
       <Outlet context={[empInfo]} />
       <Footer />
-    </>
+    </div>
   );
 }
 

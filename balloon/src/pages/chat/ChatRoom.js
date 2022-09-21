@@ -13,7 +13,6 @@ export default function ChatRoom({
   roomId,
   setRoomId,
   check,
-  client,
 }) {
   const [chatroom, setChatroom] = useState([]);
   const [selectChatroom, setSelectChatroom] = useState({});
@@ -45,7 +44,7 @@ export default function ChatRoom({
             {chatroom.map((chat, index) => {
               return (
                 <>
-                  <div className={styles.DeleteBtn}>
+                  {/* <div className={styles.DeleteBtn}>
                     <Button
                       variant="text"
                       disableElevation
@@ -58,7 +57,7 @@ export default function ChatRoom({
                       }}>
                       <DeleteIcon />
                     </Button>
-                  </div>
+                  </div> */}
                   <div
                     className={styles.roomcon}
                     onClick={() => {
@@ -123,7 +122,6 @@ export default function ChatRoom({
           roomId={roomId}
           setChatStatus={setChatStatus}
           setRoomId={setRoomId}
-          client={client}
         />
       )}
     </div>

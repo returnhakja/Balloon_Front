@@ -21,7 +21,7 @@ function LoginPage({ authenticate }) {
   };
 
   return (
-    <Container component="main" sx={{ marginBottom: 25 }}>
+    <Container sx={{ marginBottom: 50 }}>
       <Box
         sx={{
           marginTop: 9,
