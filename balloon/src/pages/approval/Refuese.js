@@ -5,7 +5,10 @@ import { getDocsByEmp } from '../../context/ApprovalAxios';
 import styles from '../../css/Component.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Container } from '@mui/system';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+
+import { DataGrid, GridToolbar, koKR } from '@mui/x-data-grid';
+import CustomToolbar from '../personnelManagement/CustomToolbar';
+
 import moment from 'moment';
 
 function Refuese() {
@@ -67,16 +70,17 @@ function Refuese() {
         <Container>
           <p className={styles.sasinfont}>반려된</p>
           <br />
-          <hr />
+          <div style={{ border: '1px solid black' }} />
 
           <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
             <DataGrid
+              localeText={koKR.components.MuiDataGrid.defaultProps.localeText}
               getRowId={(docList) => docList.docId}
               rows={docList}
               columns={columns}
               pageSize={10}
               rowsPerPageOptions={[10]}
-              components={{ Toolbar: GridToolbar }}
+              components={{ Toolbar: CustomToolbar }}
               initialState={{
                 sorting: {
                   sortModel: [{ field: 'updateTime', sort: 'desc' }],

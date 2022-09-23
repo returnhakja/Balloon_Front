@@ -112,14 +112,12 @@ function BusinessTrip() {
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
-  console.log(botroomId);
 
   //새로운 채팅방이 생성되어야할 사람들
   let newApvlPeople;
   newApvlPeople = firstApvlPeople.filter(
     (people) => !botroomExist.includes(people)
   );
-  console.log(newApvlPeople);
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(
@@ -307,7 +305,7 @@ function BusinessTrip() {
             noApprover={noApprover}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card

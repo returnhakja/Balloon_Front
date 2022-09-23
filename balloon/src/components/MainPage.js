@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import { getDCountByDate } from '../context/ApprovalFunc';
+import { getDCount } from '../context/ApprovalFunc';
 import {
   // endlessWork,
   endWork,
@@ -10,14 +10,18 @@ import {
 } from '../context/EmpTimeAxios';
 import Banner from './banner.svg';
 import styles from '../css/nav/Navbar.module.css';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  registerables,
+} from 'chart.js';
+import { Bar, Pie } from 'react-chartjs-2';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { Avatar, Box, Button } from '@mui/material';
-
-ChartJS.register(ArcElement, Tooltip, Legend);
-
+ChartJS.register(ArcElement, Tooltip, Legend, ...registerables);
 function MainPage() {
   const [empInfo] = useOutletContext();
   const [inCnt, setInCnt] = useState(0);
@@ -30,26 +34,6 @@ function MainPage() {
   const [DSCount, setDSCount] = useState('');
   const [DRCount, setDRCount] = useState('');
   const [countDArr, setCountDArr] = useState([]);
-  const [chk, setChk] = useState(false);
-
-  function getCurrentWeek() {
-    const day = new Date();
-    const sunday = day.getTime() - 86400000 * day.getDay();
-
-    day.setTime(sunday);
-
-    const result = [day.toISOString().slice(0, 10)];
-
-    for (let i = 1; i < 7; i++) {
-      day.setTime(day.getTime() + 86400000);
-      result.push(day.toISOString().slice(0, 10));
-    }
-
-    return result;
-  }
-
-  const [sunDay, setSunDay] = useState(getCurrentWeek()[0]);
-  const [saturDay, setSaturDay] = useState(getCurrentWeek()[6]);
 
   useEffect(() => {
     if (empInfo.length !== 0) {
@@ -57,6 +41,8 @@ function MainPage() {
         findWorkOn(empInfo.empId, setInCnt);
         findWorkOff(empInfo.empId, setOutCnt);
       }
+      inCnt !== 0 && console.log('inCnt', inCnt);
+      outCnt !== 0 && console.log('outCnt', outCnt);
       if (
         DDCount.length !== 0 &&
         DCCount.length !== 0 &&
@@ -67,56 +53,26 @@ function MainPage() {
           setCountDArr([DDCount, DCCount, DSCount, DRCount]);
         }
       } else {
-        getDCountByDate(
+        getDCount(
           empInfo.empId,
           setDDCount,
           setDCCount,
           setDSCount,
-          setDRCount,
-          sunDay,
-          saturDay
+          setDRCount
         );
       }
     }
-  }, [empInfo.empId, rend, countDArr]);
+  }, [empInfo.empId, rend, DDCount, DCCount, DSCount, DRCount, countDArr]);
 
-  useEffect(() => {
-    console.log('aaaaaaaaaaaaaa', sunDay);
-    getDCountByDate(
-      empInfo.empId,
-      setDDCount,
-      setDCCount,
-      setDSCount,
-      setDRCount,
-      sunDay,
-      saturDay
-    );
-
-    console.log('countDArr', countDArr);
-  }, [sunDay]);
-
-  useEffect(() => {
-    console.log('aaaaaadddddaa', DDCount, DCCount, DSCount, DRCount);
-    setCountDArr([DDCount, DCCount, DSCount, DRCount]);
-  }, [DDCount, DCCount, DSCount, DRCount]);
-
-  useEffect(() => {
-    console.log('aaa');
-  }, [countDArr]);
-  // useEffect(() => {
-  //   getDCountByDate(
-  //     empInfo.empId,
-  //     setDDCount,
-  //     setDCCount,
-  //     setDSCount,
-  //     setDRCount,
-  //     sunDay,
-  //     saturDay
-  //   );
-  //   console.log(countDArr);
-  // }, [countDArr]);
+  console.log(DDCount, DCCount, DSCount, DRCount);
 
   const data = {
+    labels: [
+      `상신한 ${DDCount}`,
+      `완료된 ${DCCount}`,
+      `저장된 ${DSCount}`,
+      `반려된 ${DRCount}`,
+    ],
     datasets: [
       {
         label: '# of Votes',
@@ -133,28 +89,21 @@ function MainPage() {
           'rgba(255, 206, 86, 0.2)',
           'rgba(255, 99, 132, 0.2)',
         ],
-        borderWidth: 1,
+        // borderWidth: 1,
       },
-    ],
-    labels: [
-      `상신한 ${DDCount ? DDCount : '0'}`,
-      `완료된 ${DCCount ? DCCount : '0'}`,
-      `저장된 ${DSCount ? DSCount : '0'}`,
-      `반려된 ${DRCount ? DRCount : '0'}`,
     ],
   };
   const options = {
     plugins: {
       legend: {
         labels: {
-          padding: 20, //default is 10
+          padding: 10,
         },
         display: true,
         position: 'bottom',
       },
     },
   };
-
   const WorkStart = () => {
     if (inCnt === 1) {
       alert('이미 출근 등록을 하였습니다!');
@@ -168,7 +117,6 @@ function MainPage() {
       }
     }
   };
-
   const WorkEnd = () => {
     if (inCnt === 0) {
       alert('오늘 출근 등록을 하지 않았습니다!');
@@ -186,47 +134,9 @@ function MainPage() {
       }
     }
   };
-
   // const WorkEndless = () => {
   //   empInfo && endlessWork(empInfo.empId);
   // };
-
-  const prevWeek = () => {
-    const prevSun = new Date(sunDay);
-    const prevSatur = new Date(saturDay);
-    if (
-      moment(prevSun).format('YYYYMMDD') -
-        7 -
-        moment(empInfo.hiredate).format('YYYYMMDD') >=
-      0
-    ) {
-      prevSun.setDate(prevSun.getDate() - 7);
-      prevSatur.setDate(prevSatur.getDate() - 7);
-      setSunDay(moment(prevSun).format('YYYY-MM-DD'));
-      setSaturDay(moment(prevSatur).format('YYYY-MM-DD'));
-      setChk(!chk);
-    } else {
-      alert('입사일 전입니다.');
-    }
-  };
-
-  const nextWeek = () => {
-    const day = new Date();
-    const nextSun = new Date(sunDay);
-    const nextSatur = new Date(saturDay);
-    if (
-      moment(day).format('YYYYMMDD') - moment(nextSatur).format('YYYYMMDD') >=
-      0
-    ) {
-      nextSun.setDate(nextSun.getDate() + 7);
-      nextSatur.setDate(nextSatur.getDate() + 7);
-      setSunDay(moment(nextSun).format('YYYY-MM-DD'));
-      setSaturDay(moment(nextSatur).format('YYYY-MM-DD'));
-      setChk(!chk);
-    } else {
-      alert('아직 기록이 없습니다.');
-    }
-  };
 
   return (
     <div>
@@ -243,20 +153,22 @@ function MainPage() {
           <Box
             sx={{
               backgroundColor: '#EEEEEE',
-              mt: 20,
+              // mt: 20,
               width: '250px',
               height: '200px',
               position: 'relative',
               boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
             }}>
             <p style={{ padding: '10px' }}>내 정보</p>
-
             <div
               style={{
                 display: 'grid',
                 justifyContent: 'center',
                 // alignItems: 'center',
               }}>
+              {console.log(
+                `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
+              )}
               <Avatar
                 sx={{
                   width: 70,
@@ -268,7 +180,6 @@ function MainPage() {
                     : `${process.env.REACT_APP_AWS_S3_DEFAULT}`
                 }
               />
-
               <p>{empInfo.empName + ' ' + empInfo.position}</p>
               <div
                 style={{
@@ -286,7 +197,6 @@ function MainPage() {
             </div>
           </Box>
         )}
-
         <div className={styles.logingo}>
           <div className={styles.logcon}>
             <h1 className={styles.h1}>BALLOON</h1>
@@ -331,7 +241,6 @@ function MainPage() {
             )}
           </div>
         </div>
-
         {empInfo.length !== 0 &&
           (JSON.stringify(countDArr) === JSON.stringify([0, 0, 0, 0]) ? (
             <div
@@ -339,55 +248,39 @@ function MainPage() {
               style={{
                 width: '250px',
                 height: '350px',
-                marginTop: '12vh',
+                // marginTop: '12vh',
                 backgroundColor: '#EEEEEE',
                 boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
               }}>
               <p style={{ padding: '10px' }}>결재관리</p>
-
-              <div
-                style={{
-                  display: 'flex',
-                  textAlign: 'center',
-                  justifyContent: 'center',
-                }}>
-                <button>이전</button>
-                <p style={{ textAlign: 'center' }}>
-                  {sunDay + ' ~ ' + saturDay}
-                </p>
-                <button>다음</button>
-              </div>
               <p>아직 결재 정보가 없습니다.</p>
             </div>
           ) : (
-            <div
+            <Box
               id="myChart"
-              style={{
+              sx={{
+                backgroundColor: '#EEEEEE',
+                // mt: 20,
                 width: '250px',
                 height: '350px',
-                marginTop: '12vh',
-                backgroundColor: '#EEEEEE',
+                position: 'relative',
                 boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
               }}>
-              <p style={{ padding: '10px' }}>결재관리</p>
-              <div
+              {console.log('countDArr', countDArr)}
+              <p
                 style={{
-                  display: 'flex',
+                  padding: '10px',
                   textAlign: 'center',
-                  justifyContent: 'center',
+                  fontSize: '24px',
                 }}>
-                <button onClick={prevWeek}>이전</button>
-                <p style={{ textAlign: 'center' }}>
-                  {sunDay + ' ~ ' + saturDay}
-                </p>
-                <button onClick={nextWeek}>다음</button>
-              </div>
+                결재관리
+              </p>
+
               <Pie data={data} options={options} />
-            </div>
+            </Box>
           ))}
       </div>
     </div>
   );
 }
-
 export default MainPage;

@@ -207,7 +207,8 @@ export const signupValidation = (
   if (cnt === 4) {
     cnt--;
     if (!!birthday) {
-      birthday = Date.parse(birthday);
+      console.log(birthday);
+      // birthday = Date.parse(birthday);
     } else {
       birthday = null;
     }

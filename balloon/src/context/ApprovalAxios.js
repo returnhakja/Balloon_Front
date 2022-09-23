@@ -131,6 +131,7 @@ export const getPAByPAId = async (PAId, setPAInfo) => {
   const url = '/api/pa/';
   const str = url + PAId;
   await axios.get(str).then((res) => {
+    console.log(res.data);
     setPAInfo(res.data);
   });
 };

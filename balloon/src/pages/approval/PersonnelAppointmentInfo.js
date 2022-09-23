@@ -68,7 +68,7 @@ function PersonnelAppointmentInfo() {
         </div>
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
 
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -135,39 +135,39 @@ function PersonnelAppointmentInfo() {
                   type="text"
                   name="title"
                   value={paInfo.movedEmpName}
-                  className={styles.inputtext}
+                  className={styles.inputtext1}
                   InputProps={{
                     readOnly: true,
                   }}
                 />
               </td>
               <td className={styles.tdreaui}>
-                <form>
-                  <TextField
-                    focused={false}
-                    type="text"
-                    name="title"
-                    value={paInfo.unit && paInfo.unit.unitName}
-                    className={styles.inputtext}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </form>
+                {/* <form> */}
+                <TextField
+                  focused={false}
+                  type="text"
+                  name="title"
+                  value={paInfo.unit && paInfo.unit.unitName}
+                  className={styles.inputtext1}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+                {/* </form> */}
               </td>
               <td className={styles.tdreaui}>
-                <form>
-                  <TextField
-                    type="text"
-                    name="title"
-                    value={paInfo.position}
-                    className={styles.inputtext}
-                    focused={false}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </form>
+                {/* <form> */}
+                <TextField
+                  type="text"
+                  name="title"
+                  value={paInfo.position}
+                  className={styles.inputtext1}
+                  focused={false}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+                {/* </form> */}
               </td>
             </tr>
           </tbody>

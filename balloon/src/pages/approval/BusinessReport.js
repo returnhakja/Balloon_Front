@@ -254,7 +254,7 @@ function BusinessReport() {
             />
           )}
         </div>
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card

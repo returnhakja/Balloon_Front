@@ -35,8 +35,10 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
   const [input, setInput] = useState([]);
   const inputRef = useRef();
   // socket
+
   const client = ChatStomp();
-  client.debug = null;
+
+  // client.debug = null;
 
   //채팅방 사람 확인 state
   const [open, setOpen] = useState(false);

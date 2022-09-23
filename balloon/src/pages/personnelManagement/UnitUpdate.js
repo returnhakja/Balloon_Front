@@ -38,7 +38,7 @@ const Select = React.forwardRef(
   ({ name, label, unit, higher, parentCode, setParentCode }, ref) => {
     useEffect(() => {}, [parentCode]);
     return (
-      <>
+      <div>
         <Typography
           id="modal-modal-title"
           variant="h6"
@@ -70,7 +70,7 @@ const Select = React.forwardRef(
             )
           )}
         </select>
-      </>
+      </div>
     );
   }
 );
@@ -122,7 +122,7 @@ export default function UnitUpdate({ open, setOpen, unitCode }) {
               sx={{ mb: 2, mt: 2, color: '#00AAFF' }}>
               <ApartmentIcon className={styles.icon} />
               <span>조직 정보</span>
-              <hr />
+              <div style={{ border: '1px solid black' }} />
             </Typography>
             <Typography
               id="modal-modal-title"

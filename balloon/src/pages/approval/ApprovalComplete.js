@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import SideNavigation from '../../components/SideNavigation';
 import styles from '../../css/Component.module.css';
 import { Container } from '@mui/system';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, koKR } from '@mui/x-data-grid';
 import 'react-datepicker/dist/react-datepicker.css';
 import { getApvlByApvrIdAnddocStatus } from '../../context/ApprovalAxios';
 import { Link, useOutletContext } from 'react-router-dom';
+
+import CustomToolbar from '../personnelManagement/CustomToolbar';
+
 import moment from 'moment';
 
 function ApprovalComplete() {
@@ -77,16 +80,17 @@ function ApprovalComplete() {
         <Container>
           <p className={styles.sasinfont}>완료된</p>
           <br />
-          <hr />
+          <div style={{ border: '1px solid black' }} />
 
           <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
             <DataGrid
+              localeText={koKR.components.MuiDataGrid.defaultProps.localeText}
               getRowId={(docList) => docList.docId}
               rows={docList}
               columns={columns}
               pageSize={10}
               rowsPerPageOptions={[10]}
-              components={{ Toolbar: GridToolbar }}
+              components={{ Toolbar: CustomToolbar }}
               initialState={{
                 sorting: {
                   sortModel: [{ field: 'updateTime', sort: 'desc' }],

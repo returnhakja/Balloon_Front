@@ -14,7 +14,7 @@ function Dashboard() {
       <Container maxWidth>
         <p style={{ fontSize: '2.1rem' }}>기본양식함</p>
         <br />
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <p style={{ fontSize: '1.5rem', marginTop: '2%' }}>기본양식 3</p>
         <br />
         <Box

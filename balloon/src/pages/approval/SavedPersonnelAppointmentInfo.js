@@ -212,10 +212,8 @@ function SavedPersonnelAppointmentInfo() {
       }
     } else {
       setStartValue(inputData.personnelDate);
-      async function getMEmp() {
-        await setMEmp(inputData.movedEmp);
-      }
-      getMEmp();
+      setMEmp(inputData.movedEmp);
+
       setUnit(inputData.unit);
       setPosi(inputData.position);
     }
@@ -236,22 +234,19 @@ function SavedPersonnelAppointmentInfo() {
   ]);
 
   useEffect(() => {
-    async function empUnitFormatter() {
-      if (Object.keys(inputData).length !== 0) {
-        if (mEmp && mEmp !== {}) {
-          if (Object.keys(mEmp).length !== 0) {
-            await setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
-          }
-        }
-
-        if (unit && unit !== {}) {
-          Object.keys(unit).length !== 0 &&
-            (await setUnit2(unit.unitName + ' (' + unit.unitCode + ')'));
+    if (Object.keys(inputData).length !== 0) {
+      if (mEmp && mEmp !== {}) {
+        if (Object.keys(mEmp).length !== 0) {
+          setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
         }
       }
+
+      if (unit && unit !== {}) {
+        Object.keys(unit).length !== 0 &&
+          setUnit2(unit.unitName + ' (' + unit.unitCode + ')');
+      }
     }
-    empUnitFormatter();
-  }, [inputData]);
+  }, [inputData.personnelAppointmentId, mEmp.empId]);
 
   return (
     <SideNavigation>
@@ -306,7 +301,7 @@ function SavedPersonnelAppointmentInfo() {
             noApprover={noApprover}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card

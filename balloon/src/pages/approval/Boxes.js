@@ -34,7 +34,8 @@ function Boxes() {
     setValue(newValue);
   };
 
-  console.log(countAArr);
+  console.log(countDArr);
+  console.log(DDCount, DCCount, DSCount, DRCount);
   console.log(ABCount, AOCount, ACCount, ARCount);
   useEffect(() => {
     if (
@@ -70,62 +71,64 @@ function Boxes() {
   ]);
 
   return (
-    <SideNavigation>
-      <Container maxWidth="maxWidth">
-        <p style={{ fontSize: '25px' }}>나의 현황</p>
-        <hr />
-        <p style={{ fontSize: '25px' }}>기안함</p>
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            height: 200,
-            justifyContent: 'space-around',
-            p: 1,
-            m: 1,
-            mt: 3,
-            bgcolor: 'background.paper',
-            borderRadius: 1,
-          }}>
-          {countDArr.length !== 0 &&
-            apprvoalStatus.map((status, index) => {
-              return (
-                <StatusCard
-                  key={index}
-                  status={status}
-                  count={countDArr[index]}
-                  link={linkArr[index]}
-                />
-              );
-            })}
-        </Box>
-        <p style={{ fontSize: '25px' }}>결재함</p>
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            height: 200,
-            justifyContent: 'space-around',
-            p: 1,
-            m: 1,
-            mt: 3,
-            bgcolor: 'background.paper',
-            borderRadius: 1,
-          }}>
-          {countDArr.length !== 0 &&
-            apprvoalStatus2.map((status, index) => {
-              return (
-                <StatusCard
-                  key={index}
-                  status={status}
-                  count={countAArr[index]}
-                  link={linkArr2[index]}
-                />
-              );
-            })}
-        </Box>
-      </Container>
-    </SideNavigation>
+    <div>
+      <SideNavigation>
+        <Container maxWidth="maxWidth">
+          <p style={{ fontSize: '25px', padding: 4 }}>나의 현황</p>
+          <div style={{ border: '1px solid black' }} />
+          <p style={{ fontSize: '25px' }}>기안함</p>
+          <Box
+            sx={{
+              display: 'flex',
+              // gridTemplateColumns: 'repeat(4, 1fr)',
+              height: 200,
+              justifyContent: 'space-around',
+              p: 1,
+              m: 1,
+              mt: 3,
+              bgcolor: 'background.paper',
+              borderRadius: 1,
+            }}>
+            {countDArr.length !== 0 &&
+              apprvoalStatus.map((status, index) => {
+                return (
+                  <StatusCard
+                    key={index}
+                    status={status}
+                    count={countDArr[index]}
+                    link={linkArr[index]}
+                  />
+                );
+              })}
+          </Box>
+          <p style={{ fontSize: '25px' }}>결재함</p>
+          <Box
+            sx={{
+              display: 'flex',
+              // gridTemplateColumns: 'repeat(4, 1fr)',
+              height: 200,
+              justifyContent: 'space-around',
+              p: 1,
+              m: 1,
+              mt: 3,
+              bgcolor: 'background.paper',
+              // borderRadius: 1,
+            }}>
+            {countDArr.length !== 0 &&
+              apprvoalStatus2.map((status, index) => {
+                return (
+                  <StatusCard
+                    key={index}
+                    status={status}
+                    count={countAArr[index]}
+                    link={linkArr2[index]}
+                  />
+                );
+              })}
+          </Box>
+        </Container>
+      </SideNavigation>
+    </div>
   );
 }
 
