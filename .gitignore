@@ -64,11 +64,11 @@ Temporary Items
 logs
 **/*.backup.*
 **/*.back.*
-ChatStomp.js
+
 
 node_modules
 bower_components
-ChatStomp.js
+
 
 *.sublime*
 
