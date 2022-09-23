@@ -198,9 +198,14 @@ export const deleteEmployee = async (data) => {
 };
 
 export const uploadProfile = async (profile, empId) => {
-  console.log('empId', empId);
-  console.log('profile', profile);
+  const cookie = await findCookieAccessToken();
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + cookie,
+      ContentType: 'multipart/form-data',
+    },
+  };
   const url = '/file/upload/profile/' + empId;
 
-  await axios.post(url, profile).catch((error) => console.log(error));
+  await axios.post(url, config, profile).catch((error) => console.log(error));
 };
