@@ -68,10 +68,10 @@ function MainPage() {
 
   const data = {
     labels: [
-      `상신한 ${DDCount ? DDCount : '0'}`,
-      `완료된 ${DCCount ? DCCount : '0'}`,
-      `저장된 ${DSCount ? DSCount : '0'}`,
-      `반려된 ${DRCount ? DRCount : '0'}`,
+      `상신한 ${DDCount}`,
+      `완료된 ${DCCount}`,
+      `저장된 ${DSCount}`,
+      `반려된 ${DRCount}`,
     ],
     datasets: [
       {
