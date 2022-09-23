@@ -26,13 +26,13 @@ import GroupIcon from '@mui/icons-material/Group';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import ExitChatroom from './ExitChatroom';
 import InviteEmp from './InviteEmp';
+
 import ChatStomp from './ChatStomp';
 
 export default function Chat({ empInfo, roomId, setChatStatus }) {
   const empId = empInfo.empId;
   const chatroomId = roomId;
   const [input, setInput] = useState([]);
-
   const inputRef = useRef();
   // socket
 

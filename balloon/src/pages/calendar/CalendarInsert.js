@@ -32,7 +32,7 @@ function CalendarInsert({
   const empId = empInfo.empId;
 
   const scheduleListAdd = [];
-  console.log(dateStr);
+
   const calendarBot = 'Y0000001';
 
   //socket연결
@@ -45,9 +45,6 @@ function CalendarInsert({
   let Startvalue = null;
   let endvalue = null;
 
-  console.log(botInfo);
-  console.log(botRoom);
-
   const handleClose = () => {
     setOpenInsert(false);
   };
@@ -57,6 +54,7 @@ function CalendarInsert({
   const handleOpen = () => {
     setOpen(true);
   };
+
   const handleListClose = () => {
     setInviteSchedule([]);
     setOpen(false);
@@ -131,25 +129,18 @@ function CalendarInsert({
     inviteSchedule.push(empId);
   }, []);
 
-  console.log(inviteSchedule);
-
   const botroomExist = [];
   const botroomId = [];
-  console.log(botRoom);
   botRoom.map((data) => {
-    console.log(data.empId.empId);
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
-  console.log(botroomExist);
-  console.log(botroomId);
-  console.log(inviteSchedule);
 
   //새로운 채팅방이 생성되어야할 사람들
+  let minusPeople;
+  minusPeople = inviteSchedule.filter((data) => !data.includes(empInfo.empId));
   let invitepeople;
-  invitepeople = inviteSchedule.filter(
-    (people) => !botroomExist.includes(people)
-  );
+  invitepeople = minusPeople.filter((people) => !botroomExist.includes(people));
 
   //처음생성될 채팅방에 알림보내기
   const botroomMsg = (add, client) => {
