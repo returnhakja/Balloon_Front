@@ -4,7 +4,7 @@ node_js:
 
 branches:
     only:
-        - feature/CICD
+        - Develop
 
 # Travis CI 서버의 Home
 cache:
