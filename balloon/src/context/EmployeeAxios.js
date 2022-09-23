@@ -198,11 +198,11 @@ export const deleteEmployee = async (data) => {
 };
 
 export const uploadProfile = async (profile, empId) => {
-const cookie = await findCookieAccessToken();
+  const cookie = await findCookieAccessToken();
   const config = {
     headers: {
       Authorization: 'Bearer ' + cookie,
-      ContentType: 'multipart/form-data'
+      ContentType: 'multipart/form-data',
     },
   };
   const url = '/file/upload/profile/' + empId;
