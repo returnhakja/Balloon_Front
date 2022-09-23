@@ -79,8 +79,8 @@ function Boxes() {
           <p style={{ fontSize: '25px' }}>기안함</p>
           <Box
             sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
+              display: 'flex',
+              // gridTemplateColumns: 'repeat(4, 1fr)',
               height: 200,
               justifyContent: 'space-around',
               p: 1,
@@ -104,8 +104,8 @@ function Boxes() {
           <p style={{ fontSize: '25px' }}>결재함</p>
           <Box
             sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
+              display: 'flex',
+              // gridTemplateColumns: 'repeat(4, 1fr)',
               height: 200,
               justifyContent: 'space-around',
               p: 1,
