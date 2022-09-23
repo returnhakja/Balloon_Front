@@ -73,7 +73,9 @@ function Home({ empInfo, setEmpInfo, logout, isLogin }) {
         </div>
       )}
 
+
       <Outlet context={[empInfo, sunDay, setSunDay, saturDay, setSaturDay]} />
+
       <Footer />
     </div>
   );
