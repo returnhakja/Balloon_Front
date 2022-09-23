@@ -46,9 +46,6 @@ function DeclaredBusinessTripInfo() {
     }
   }, [params]);
 
-  console.log(bizTpInfo);
-  console.log(bizTpEmp);
-
   return (
     <SideNavigation>
       <Container>
@@ -89,7 +86,7 @@ function DeclaredBusinessTripInfo() {
             setOpenapprovalModal={setOpenapprovalModal}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -99,7 +96,6 @@ function DeclaredBusinessTripInfo() {
             {!!empInfo && <DfCard drafterName={bizTpInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             // if (apvl.length === 0) {
             //   setApvl(empData);
             // }
@@ -215,7 +211,7 @@ function DeclaredBusinessTripInfo() {
                     type="text"
                     name="title"
                     value={bizTpInfo.destination}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -229,7 +225,7 @@ function DeclaredBusinessTripInfo() {
                     type="text"
                     name="title"
                     value={bizTpInfo.visitingPurpose}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}

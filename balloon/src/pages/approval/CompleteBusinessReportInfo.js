@@ -33,12 +33,10 @@ const SaveButton = styled(Button)(({ theme }) => ({
 function CompleteBusinessReportInfo() {
   // 사원 정보 context
   const [empInfo] = useOutletContext();
-  // const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [bizRptInfo, setBizRptInfo] = useState({});
   const [approver, setApprover] = useState([]);
 
   const params = useParams();
-  console.log(bizRptInfo);
 
   useEffect(() => {
     getBizRptByBizRptId(params.docId, setBizRptInfo);
@@ -49,7 +47,6 @@ function CompleteBusinessReportInfo() {
     <SideNavigation>
       <Container>
         <p className={styles.maintitle}>
-          {' '}
           <FcDocument /> 업무기안
         </p>
 
@@ -69,18 +66,16 @@ function CompleteBusinessReportInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {bizRptInfo.empName}({bizRptInfo.emp && bizRptInfo.emp.empId})
               </th>
             </tr>
             <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
         </div>
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -90,11 +85,6 @@ function CompleteBusinessReportInfo() {
             <DfCard drafterName={bizRptInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
-            // if (apvl.length === 0) {
-            //   setApvl(empData);
-            // }
-
             return (
               <Card
                 variant="outlined"
@@ -114,21 +104,7 @@ function CompleteBusinessReportInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleftpadding}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 {bizRptInfo.documentTitle}
-                {/* <form>
-                  <TextField
-                    type="text"
-                    name="title"
-                    value={bizRptInfo.documentTitle}
-                    className={styles.inputtext}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    focused={false}
-                  />
-                </form> */}
-                {/* <TextField />*/}
               </td>
             </tr>
           </thead>

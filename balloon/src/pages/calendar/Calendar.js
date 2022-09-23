@@ -130,15 +130,15 @@ function Calendar({ clients, setClients }) {
 
         {list.length !== 0 ? (
           <FullCalendar
-            locale="ko"
+            position="relative"
             initialView="dayGridMonth"
             height="70vh"
             handleWindowResize="50vw"
             plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
             headerToolbar={{
-              left: 'title',
-              center: 'dayGridDay dayGridWeek dayGridMonth',
-              right: 'today prevYear prev next nextYear',
+              left: 'today',
+              center: 'prevYear prev title next nextYear',
+              right: 'dayGridDay dayGridWeek dayGridMonth',
             }}
             googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
             moreLinkContent={(e) => (e.text = ` +${e.num} 더보기`)}
@@ -156,19 +156,19 @@ function Calendar({ clients, setClients }) {
             eventSourceFailure={() => console.log('Failure EventSource')}
             dateClick={(e) => handleDateClick(e)}
             eventClick={(e) => handleEventClick(e)}
+            locale="ko"
           />
         ) : (
           <>
             <FullCalendar
-              locale="ko"
               initialView="dayGridMonth"
               height="70vh"
               handleWindowResize="50vw"
               plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
               headerToolbar={{
-                left: 'title',
-                center: 'dayGridDay dayGridWeek dayGridMonth',
-                right: 'today prevYear prev next nextYear',
+                left: 'today',
+                center: 'prevYear prev title next nextYear',
+                right: 'dayGridDay dayGridWeek dayGridMonth',
               }}
               googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
               events={{
@@ -178,10 +178,12 @@ function Calendar({ clients, setClients }) {
               }}
               eventSources={list}
               eventBackgroundColor={'black'}
+              //테스트
               eventSourceSuccess={() => console.log('Success EventSource')}
               eventSourceFailure={() => console.log('Failure EventSource')}
               dateClick={(e) => handleDateClick(e)}
               eventClick={(e) => handleEventClick(e)}
+              locale="ko"
             />
           </>
         )}

@@ -65,17 +65,17 @@ import UpdateMine from './pages/mypage/UpdateMine';
 
 import NotFound from './pages/NotFound';
 import AdminRoutes from './components/AdminRoutes';
+import DeclareOn from './pages/approval/DeclareOn';
+
 
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
   const [isLogin, setLogin] = useState(null);
   const role = empInfo.userRoleGrade;
-  // 채팅방 초대하기
-  const [invite, setInvite] = useState([]);
 
   useEffect(() => {
     const logged = localStorage.getItem('logged');
-    logged && logged === 'true' ? setLogin(true) : setLogin(false);
+   logged && logged === 'true' ? setLogin(true) : setLogin(false);
   }, []);
 
   useEffect(() => {
@@ -125,6 +125,7 @@ function App() {
           {/* 결재관리 */}
           <Route path="/boxes" element={<Boxes />} />
           <Route path="/boxes/dd" element={<Declare />} />
+          <Route path="/boxes/do" element={<DeclareOn />} />
           <Route path="/boxes/dc" element={<Complete />} />
           <Route path="/boxes/ds" element={<Save />} />
           <Route path="/boxes/dr" element={<Refuese />} />
@@ -135,13 +136,37 @@ function App() {
           <Route path="/boxes/dl" element={<DocumentList />} />
 
           {/* 상세 정보 */}
-          {['/doc/br/:docId', '/apvl/br/:docId'].map((path) => {
-            <Route path={path} key={path} element={<BusinessReportInfo />} />;
-          })}
 
-          <Route path="/doc/br/:docId" element={<BusinessReportInfo />} />
-          <Route path="/doc/tp/:docId" element={<BusinessTripInfo />} />
-          <Route path="/doc/pa/:docId" element={<PersonnelAppointmentInfo />} />
+          {[
+            '/doc/br/:docId',
+            '/apvl/aobr/:docId',
+            '/apvl/acbr/:docId',
+            '/apvl/arbr/:docId',
+          ].map((path) => (
+            <Route path={path} key={path} element={<BusinessReportInfo />} />
+          ))}
+
+          {[
+            '/doc/tp/:docId',
+            '/apvl/aotp/:docId',
+            '/apvl/actp/:docId',
+            '/apvl/artp/:docId',
+          ].map((path) => (
+            <Route path={path} key={path} element={<BusinessTripInfo />} />
+          ))}
+
+          {[
+            '/doc/pa/:docId',
+            '/apvl/aopa/:docId',
+            '/apvl/acpa/:docId',
+            '/apvl/arpa/:docId',
+          ].map((path) => (
+            <Route
+              path={path}
+              key={path}
+              element={<PersonnelAppointmentInfo />}
+            />
+          ))}
 
           {/* 문서대장 상세 정보 */}
           <Route
@@ -157,21 +182,30 @@ function App() {
             element={<CompletePersonnelAppointmentInfo />}
           />
 
-          {/* 상신기안 상세 정보 */}
-          <Route
-            path="/doc/ddbr/:docId"
-            element={<DeclaredBusinessReportInfo />}
-          />
-          <Route
-            path="/doc/ddtp/:docId"
-            element={<DeclaredBusinessTripInfo />}
-          />
-          <Route
-            path="/doc/ddpa/:docId"
-            element={<DeclaredPersonnelAppointmentInfo />}
-          />
+          {/* 상신기안 / (상신기준)반려된 상세 정보 */}
+          {['/doc/ddbr/:docId', '/doc/drbr/:docId'].map((path) => (
+            <Route
+              path={path}
+              key={path}
+              element={<DeclaredBusinessReportInfo />}
+            />
+          ))}
+          {['/doc/ddtp/:docId', '/doc/drtp/:docId'].map((path) => (
+            <Route
+              path={path}
+              key={path}
+              element={<DeclaredBusinessTripInfo />}
+            />
+          ))}
+          {['/doc/ddpa/:docId', '/doc/drpa/:docId'].map((path) => (
+            <Route
+              path={path}
+              key={path}
+              element={<DeclaredPersonnelAppointmentInfo />}
+            />
+          ))}
 
-          {/* 반려된 기안 상세 정보 */}
+          {/* 반려된 기안 상세 정보
           <Route
             path="/doc/drbr/:docId"
             element={<RefusedBusinessReportInfo />}
@@ -183,7 +217,7 @@ function App() {
           <Route
             path="/doc/drpa/:docId"
             element={<RefusedPersonnelAppointmentInfo />}
-          />
+          /> */}
 
           {/* 기안작성 */}
           <Route path="/draft/form" element={<Dashboard />} />
@@ -192,14 +226,6 @@ function App() {
           <Route path="/draft/pa" element={<PersonnelAppointment />} />
 
           {/* 저장된 기안 */}
-          {['/draft/sdbr/:docId', '/i'].map((path) => (
-            <Route
-              path={path}
-              key={path}
-              element={<SavedBusinessReportInfo />}
-            />
-          ))}
-
           <Route
             path="/draft/sdbr/:docId"
             element={<SavedBusinessReportInfo />}
@@ -220,7 +246,7 @@ function App() {
 
           {/* 캘린더 */}
 
-          <Route element={<Calendar />} path="/calendar" exact />
+          <Route element={<Calendar />} path="/schudule" exact />
 
           <Route
             element={

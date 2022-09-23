@@ -39,6 +39,27 @@ export const getDRByEmp = async (empId, setDRCount) => {
     setDRCount(res.data.length);
   });
 };
+// ------------------------------------------------
+
+// 문서 수 가져오기 날짜로 ---------------------------------------
+export const getDDByEmpByDate = async (
+  empId,
+  setDCount,
+  num,
+  sunDay,
+  saturDay
+) => {
+  const url = '/api/box/empdocs/date/';
+  const str = url + empId + '/' + num;
+  const docDateVO = { sunDay: sunDay, saturDay: saturDay };
+  await axios
+    .post(str, docDateVO)
+    .then((res) => {
+      setDCount(res.data.length);
+    })
+    .catch((e) => console.log(e));
+};
+
 // ---------------------------------------
 
 // 완료된 문서(부서확인용)
@@ -72,18 +93,13 @@ export const getBizTpByBizTpId = async (bizTpId, setBizTpInfo) => {
 export const getBizTpEmpByBizTpId = async (bizTpId, setBizTpEmp) => {
   const url = '/api/biztpemp/';
   const str = url + bizTpId;
-  console.log(bizTpId);
   await axios.get(str).then((res) => {
-    console.log(res);
     setBizTpEmp(res.data);
   });
 };
 
 // 동반 출장자
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 export const insertBizTpEmp = async (bizTpId, mEmp) => {
-  console.log(bizTpId);
-  console.log(mEmp);
   const url = '/api/biztpemp';
   let inputData = {};
   const headers = {
@@ -93,9 +109,21 @@ export const insertBizTpEmp = async (bizTpId, mEmp) => {
     businessTrip: {
       businessTripId: bizTpId,
     },
-    emp: mEmp,
+    emp: mEmp.empId
+      ? mEmp
+      : {
+          empId: mEmp.slice(-9, -1),
+        },
   };
   await axios.post(url, inputData, { headers });
+};
+
+// 동반 출장자 삭제
+export const deleteBizTpEmp = async (bizTpId) => {
+  console.log(bizTpId);
+  const url = '/api/biztpemp/';
+  const str = url + bizTpId;
+  await axios.delete(str);
 };
 
 // 인사 명령 기안 정보
@@ -103,49 +131,55 @@ export const getPAByPAId = async (PAId, setPAInfo) => {
   const url = '/api/pa/';
   const str = url + PAId;
   await axios.get(str).then((res) => {
+    console.log(res.data);
     setPAInfo(res.data);
   });
 };
 
 // 최근 문서번호 가져오기 ------------------------------------------------
 // 가장 최근 업무기안 번호 가져옴
-export const getLatestBizRpt = async (setDocNum) => {
+export const getLatestBizRpt = async (setDocId) => {
   const url = '/api/bizrpt/wd';
   await axios.get(url).then((res) => {
     const docId = res.data.businessReportId;
-    const docNum = docId.substr(8, 7);
-    setDocNum(parseInt(docNum));
+    let docNum = 0;
+    if (docId != null) {
+      docNum = parseInt(docId.substr(8, 7));
+      setDocId('업무기안' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
+    } else {
+      setDocId('업무기안-22-0000001');
+    }
   });
 };
 
 // 가장 최근 출장계획 번호 가져옴
-export const getLatestBizTP = async (setDocNum) => {
+export const getLatestBizTP = async (setDocId) => {
   const url = '/api/biztp/wd';
-  await axios
-    .get(url)
-    .then((res) => {
-      const docId = res.data.businessTripId;
-      const docNum = docId.substr(8, 7);
-      setDocNum(parseInt(docNum));
-    })
-    .catch(() => {
-      setDocNum(0);
-    });
+  await axios.get(url).then((res) => {
+    const docId = res.data.businessTripId;
+    let docNum = 0;
+    if (docId != null) {
+      docNum = parseInt(docId.substr(8, 7));
+      setDocId('출장계획' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
+    } else {
+      setDocId('출장계획-22-0000001');
+    }
+  });
 };
 
 // 가장 최근 인사명령 번호 가져옴
-export const getLatestPA = async (setDocNum) => {
+export const getLatestPA = async (setDocId) => {
   const url = '/api/pa/wd';
-  await axios
-    .get(url)
-    .then((res) => {
-      const docId = res.data.personnelAppointmentId;
-      const docNum = docId.substr(8, 7);
-      setDocNum(parseInt(docNum));
-    })
-    .catch(() => {
-      setDocNum(0);
-    });
+  await axios.get(url).then((res) => {
+    const docId = res.data.personnelAppointmentId;
+    let docNum = 0;
+    if (docId != null) {
+      docNum = parseInt(docId.substr(8, 7));
+      setDocId('인사명령' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
+    } else {
+      setDocId('인사명령-22-0000001');
+    }
+  });
 };
 
 // ---------------------------------------
@@ -199,8 +233,6 @@ export const insertBizTp = async (
   const bizTpContent = document.getElementById('bizTpContent');
   const destination = document.getElementById('destination');
   const visitingPurpose = document.getElementById('visitingPurpose');
-  // const startValue = document.getElementById('startValue');
-  // const endValue = document.getElementById('endValue');
 
   const url = '/api/biztp';
 
@@ -252,8 +284,6 @@ export const insertPA = async (
     'Content-Type': 'application/json',
   };
 
-  console.log(unit.slice(-9, -1));
-
   inputData = {
     personnelAppointmentId: docId,
     documentTitle: pATitle.value,
@@ -262,12 +292,18 @@ export const insertPA = async (
     personnelDate: startDate,
     position: posi,
     unitName: unit.unitName ? unit.unitName : unit.slice(0, -11),
-    movedEmpName: mEmp.empName,
+    movedEmpName: mEmp.empName ? mEmp.empName : mEmp.slice(0, -11),
     empName: empInfo.empName,
-    movedEmp: {
-      empId: mEmp && mEmp.empId,
-    },
-    unit: unit.unitCode
+    movedEmp: !mEmp
+      ? null
+      : mEmp.empId
+      ? mEmp
+      : {
+          empId: mEmp.slice(-9, -1),
+        },
+    unit: !unit
+      ? null
+      : unit.unitCode
       ? unit
       : {
           unitCode: unit.slice(-9, -1),
@@ -332,15 +368,8 @@ export const insertApproval = async (
   };
 
   apvrList.map((apvr, index) => {
-    let approvalId = null;
-    approvalList?.map((approval) => {
-      if (apvr.empId === approval.approverEmp.empId) {
-        approvalId = approval.approvalId;
-      }
-    });
     if (docId.includes('업무기안')) {
       inputData = {
-        approvalId: approvalId,
         approvalStatus: docStatus === 1 && index === 0 ? 1 : 0,
         approverName: apvr.empName,
         position: apvr.position,
@@ -357,7 +386,6 @@ export const insertApproval = async (
       };
     } else if (docId.includes('출장계획')) {
       inputData = {
-        approvalId: approvalId,
         approvalStatus: docStatus === 1 && index === 0 ? 1 : 0,
         approverName: apvr.empName,
         position: apvr.position,
@@ -374,7 +402,6 @@ export const insertApproval = async (
       };
     } else if (docId.includes('인사명령')) {
       inputData = {
-        approvalId: approvalId,
         approvalStatus: docStatus === 1 && index === 0 ? 1 : 0,
         approverName: apvr.empName,
         position: apvr.position,
@@ -390,7 +417,7 @@ export const insertApproval = async (
         },
       };
     } else {
-      alert('문서가 잘못되었습니다.');
+      alert('문서가 잘못되었습니다.@@@@@@@@@@@@@@@@@@@');
     }
     inputDataList.push(inputData);
   });
@@ -471,25 +498,24 @@ export const updateApproval = async (approvalList, state) => {
   const headers = {
     'Content-Type': 'application/json',
   };
-  console.log(approvalList);
-  console.log(apvlCom.value);
   approvalList?.map((apvl, index) => {
     console.log(apvl);
-    if (apvl.businessReport != null) {
+    if (apvl && apvl.businessReport != null) {
       inputData = {
         approvalId: apvl.approvalId,
         approvalStatus:
           state === 3
             ? 3
+            : state === 4
+            ? 4
             : state !== 4 && index === 0
             ? 2
-            : state === 4 && index === 0
-            ? 4
             : state !== 4 && index !== 0
             ? 1
             : 0,
         approvalComment:
-          state === 3 && approvalList.length - 1 !== index
+          (state === 3 && approvalList.length - 1 !== index) ||
+          (state === 4 && index !== 0)
             ? apvl.approvalComment
             : index === 0 || (state === 3 && approvalList.length - 1 === index)
             ? apvlCom.value
@@ -503,7 +529,7 @@ export const updateApproval = async (approvalList, state) => {
           businessReportId: apvl && apvl.businessReport.businessReportId,
         },
       };
-    } else if (apvl.businessTrip != null) {
+    } else if (apvl && apvl.businessTrip != null) {
       inputData = {
         approvalId: apvl.approvalId,
         approvalStatus:
@@ -531,7 +557,7 @@ export const updateApproval = async (approvalList, state) => {
           businessTripId: apvl && apvl.businessTrip.businessTripId,
         },
       };
-    } else if (apvl.personnelAppointment != null) {
+    } else if (apvl && apvl.personnelAppointment != null) {
       inputData = {
         approvalId: apvl.approvalId,
         approvalStatus:
@@ -564,7 +590,6 @@ export const updateApproval = async (approvalList, state) => {
       alert('문서가 잘못되었습니다.');
     }
     inputDataList.push(inputData);
-    console.log(inputDataList);
   });
   await axios.post(url, inputDataList, { headers });
 };
@@ -576,12 +601,10 @@ export const updateApvlDoc = async (approvalList, state, paInfo) => {
   const headers = {
     'Content-Type': 'application/json',
   };
-  console.log(approvalList);
   approvalList?.map((apvl) => {
     if (apvl.businessReport != null) {
       url = '/api/bizrpt';
       const bizRpt = apvl.businessReport;
-      console.log(apvl);
       inputData = {
         businessReportId: bizRpt.businessReportId,
         documentTitle: bizRpt.documentTitle,

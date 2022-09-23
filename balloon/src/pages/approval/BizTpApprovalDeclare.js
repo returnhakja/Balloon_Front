@@ -79,7 +79,6 @@ function BizTpApprovalDeclare() {
       } else {
         setStartValue(inputData.startDate);
         setEndValue(inputData.endDate);
-        approver.length !== 0 && console.log(approver);
       }
     }
   }, [params, inputData, startValue, endValue, approver.length]);
@@ -124,7 +123,7 @@ function BizTpApprovalDeclare() {
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
         </div>
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -134,7 +133,6 @@ function BizTpApprovalDeclare() {
             {!!empInfo && <DfCard drafterName={bizTpInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             if (apvl.length === 0) {
               setApvl(empData);
             }

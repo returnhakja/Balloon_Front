@@ -7,8 +7,12 @@ import {
 } from '../../context/ApprovalAxios';
 import styles from '../../css/Component.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, koKR } from '@mui/x-data-grid';
 import { Container } from '@mui/system';
+
+import CustomToolbar from '../personnelManagement/CustomToolbar';
+
+import moment from 'moment';
 
 function ApprovalBefore() {
   const [empInfo] = useOutletContext();
@@ -51,7 +55,13 @@ function ApprovalBefore() {
       width: 350,
       renderCell: getdocId,
     },
-    { field: 'updateTime', headerName: '처리일자', width: 160 },
+    {
+      field: 'updateTime',
+      headerName: '처리일자',
+      width: 160,
+      valueFormatter: (params) =>
+        moment(params?.value).format('YYYY/MM/DD HH:mm:ss'),
+    },
   ];
 
   return (
@@ -60,16 +70,17 @@ function ApprovalBefore() {
         <Container>
           <p className={styles.sasinfont}>결재전</p>
           <br />
-          <hr />
+          <div style={{ border: '1px solid black' }} />
 
           <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
             <DataGrid
+              localeText={koKR.components.MuiDataGrid.defaultProps.localeText}
               getRowId={(docList) => docList.docId}
               rows={docList}
               columns={columns}
               pageSize={10}
               rowsPerPageOptions={[10]}
-              components={{ Toolbar: GridToolbar }}
+              components={{ Toolbar: CustomToolbar }}
               initialState={{
                 sorting: {
                   sortModel: [{ field: 'updateTime', sort: 'desc' }],

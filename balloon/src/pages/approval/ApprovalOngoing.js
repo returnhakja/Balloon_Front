@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 import SideNavigation from '../../components/SideNavigation';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from '../../css/Component.module.css';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, koKR } from '@mui/x-data-grid';
 import { Container } from '@mui/system';
 import { Link, useOutletContext } from 'react-router-dom';
 import { getApvlByApvrIdAnddocStatus } from '../../context/ApprovalAxios';
+
+import CustomToolbar from '../personnelManagement/CustomToolbar';
+
+import moment from 'moment';
 
 function ApprovalOngoing() {
   const [empInfo] = useOutletContext();
@@ -26,19 +30,25 @@ function ApprovalOngoing() {
     let documentId = params.row.docId;
     if (documentId.includes('업무기안')) {
       return (
-        <Link to={`/doc/br/${params.row.docId}`}>
+        <Link
+          to={`/apvl/aobr/${params.row.docId}`}
+          state={{ path: '/boxes/ao' }}>
           {params.row && params.row.documentTitle}
         </Link>
       );
     } else if (documentId.includes('출장계획')) {
       return (
-        <Link to={`/doc/tp/${params.row.docId}`}>
+        <Link
+          to={`/apvl/aotp/${params.row.docId}`}
+          state={{ path: '/boxes/ao' }}>
           {params.row && params.row.documentTitle}
         </Link>
       );
     } else if (documentId.includes('인사명령')) {
       return (
-        <Link to={`/doc/pa/${params.row.docId}`}>
+        <Link
+          to={`/apvl/aopa/${params.row.docId}`}
+          state={{ path: '/boxes/ao' }}>
           {params.row && params.row.documentTitle}
         </Link>
       );
@@ -55,7 +65,13 @@ function ApprovalOngoing() {
       width: 350,
       renderCell: getdocId,
     },
-    { field: 'updateTime', headerName: '처리일자', width: 160 },
+    {
+      field: 'updateTime',
+      headerName: '처리일자',
+      width: 160,
+      valueFormatter: (params) =>
+        moment(params?.value).format('YYYY/MM/DD HH:mm:ss'),
+    },
   ];
 
   useEffect(() => {
@@ -68,16 +84,17 @@ function ApprovalOngoing() {
         <Container>
           <p className={styles.sasinfont}>진행중</p>
           <br />
-          <hr />
+          <div style={{ border: '1px solid black' }} />
 
           <div style={{ height: 500, width: '100%', marginBottom: 70 }}>
             <DataGrid
+              localeText={koKR.components.MuiDataGrid.defaultProps.localeText}
               getRowId={(docList) => docList.docId}
               rows={docList}
               columns={columns}
               pageSize={10}
               rowsPerPageOptions={[10]}
-              components={{ Toolbar: GridToolbar }}
+              components={{ Toolbar: CustomToolbar }}
               initialState={{
                 sorting: {
                   sortModel: [{ field: 'updateTime', sort: 'desc' }],

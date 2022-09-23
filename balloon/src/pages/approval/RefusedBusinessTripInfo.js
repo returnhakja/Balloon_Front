@@ -46,7 +46,6 @@ function RefusedBusinessTripInfo() {
       } else {
         setStartValue(inputData.startDate);
         setEndValue(inputData.endDate);
-        approver.length !== 0 && console.log(approver);
       }
     }
   }, [params, inputData, startValue, endValue, approver.length]);
@@ -75,7 +74,6 @@ function RefusedBusinessTripInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {inputData.empName}({inputData.empId})
               </th>
             </tr>
@@ -93,7 +91,7 @@ function RefusedBusinessTripInfo() {
             setOpenapprovalModal={setOpenapprovalModal}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -103,8 +101,6 @@ function RefusedBusinessTripInfo() {
             {!!inputData && <DfCard drafterName={inputData.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
-
             return (
               <Card
                 key={index}
@@ -264,8 +260,6 @@ function RefusedBusinessTripInfo() {
               <Link
                 to="/boxes"
                 onClick={async (e) => {
-                  console.log(startValue);
-                  console.log(endValue);
                   if (approver.length !== 0) {
                     await insertBizTp(
                       params.docId,
@@ -282,10 +276,6 @@ function RefusedBusinessTripInfo() {
                     e.preventDefault();
                   }
                   {
-                    // approver.map((data, index) => {
-                    //   console.log(data);
-                    //   insertApproval(params.docId, 1, data, inputData, empInfo);
-                    // });
                     insertApproval(
                       params.docId,
                       1,

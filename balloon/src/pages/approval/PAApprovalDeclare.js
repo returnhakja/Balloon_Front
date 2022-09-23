@@ -102,7 +102,6 @@ function PAApprovalDeclare() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {paInfo.empName}({paInfo.emp && paInfo.emp.empId})
               </th>
             </tr>
@@ -114,7 +113,7 @@ function PAApprovalDeclare() {
         </div>
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
 
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -124,7 +123,6 @@ function PAApprovalDeclare() {
             {!!paInfo && <DfCard drafterName={paInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             if (apvl.length === 0) {
               setApvl(empData);
             }
@@ -149,7 +147,6 @@ function PAApprovalDeclare() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 {paInfo.documentTitle}
               </td>
             </tr>
@@ -191,7 +188,7 @@ function PAApprovalDeclare() {
                   type="text"
                   name="title"
                   value={paInfo.movedEmpName}
-                  className={styles.inputtext}
+                  className={styles.inputtext1}
                   InputProps={{
                     readOnly: true,
                   }}
@@ -204,7 +201,7 @@ function PAApprovalDeclare() {
                     type="text"
                     name="title"
                     value={paInfo.unit && paInfo.unit.unitName}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -217,7 +214,7 @@ function PAApprovalDeclare() {
                     type="text"
                     name="title"
                     value={paInfo.position}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     focused={false}
                     InputProps={{
                       readOnly: true,

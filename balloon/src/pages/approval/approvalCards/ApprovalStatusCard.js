@@ -6,13 +6,13 @@ export const StatusCard = ({ status, count, link }) => (
   <Link to={link}>
     <CardActionArea
       sx={{
-        height: 200,
+        width: 300,
         display: 'flex',
         justifyContent: 'space-around',
       }}>
       <Card
         variant="outlined"
-        sx={{ minWidth: 250, height: 200 }}
+        sx={{ minWidth: 300, height: 200 }}
         style={{ backgroundColor: '#F1F9FF' }}>
         <React.Fragment>
           <CardContent>
@@ -23,7 +23,7 @@ export const StatusCard = ({ status, count, link }) => (
               textAlign="center">
               {status}
             </Typography>
-            <hr />
+            <div style={{ border: '1px solid black' }} />
             <br />
             <Typography
               sx={{ fontSize: 20 }}
@@ -49,7 +49,7 @@ export const StatusApprovalCard = ({ status, count, link }) => (
       }}>
       <Card
         variant="outlined"
-        sx={{ minWidth: 250, height: 200 }}
+        sx={{ minWidth: 300, height: 200 }}
         style={{ backgroundColor: '#F1F9FF' }}>
         <React.Fragment>
           <CardContent>
@@ -60,7 +60,7 @@ export const StatusApprovalCard = ({ status, count, link }) => (
               textAlign="center">
               {status}
             </Typography>
-            <hr />
+            <div style={{ border: '1px solid black' }} />
             <br />
             <Typography
               sx={{ fontSize: 20 }}

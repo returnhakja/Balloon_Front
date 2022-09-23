@@ -29,6 +29,8 @@
   text-align: left;
   float: left;
   top: 50%;
+  display: flex;
+  align-items: center;
 }
 
 .time {
@@ -286,6 +288,8 @@
 
 .DeleteBtn {
   float: right;
+  top: 0;
+  right: 0;
 }
 
 .LastTimecon {
@@ -324,6 +328,7 @@
 }
 
 .scheduleContent {
+  width: 200px;
   border: 1px solid navy;
   background-color: #e4f3fa;
   margin-right: 5px;

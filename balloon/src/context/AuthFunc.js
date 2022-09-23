@@ -1,9 +1,9 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import Moment from 'moment';
 
 // 회원가입 유효성 검사
-export const signupValidation = async (
-  setDataChk,
+export const signupValidation = (
   idChk,
   empId,
   password,
@@ -26,14 +26,18 @@ export const signupValidation = async (
   let cnt = 17;
 
   if (cnt === 17) {
-    if (!empId) {
-      alert('아이디를 입력해주세요!!');
-    } else {
+    if (!!empId) {
       if (idChk === false) {
         alert('아이디 중복확인을 해주세요!!');
       } else {
-        cnt--;
+        if (empId.length > 8) {
+          alert('사원번호가 8글자를 넘었습니다.');
+        } else {
+          cnt--;
+        }
       }
+    } else {
+      alert('아이디를 입력해주세요!!');
     }
   }
 
@@ -42,9 +46,7 @@ export const signupValidation = async (
     const passwordRegEx = /^(?=.*[a-zA-Z0-9][!@#$%^*+=-][a-zA-Z0-9]).{8,20}$/;
     const passwordRegEx2 = /^(?=.*[a-zA-Z0-9][!@#$%^*+=-]).{8,20}$/;
     const passwordRegEx3 = /^(?=.*[!@#$%^*+=-][a-zA-Z0-9]).{8,20}$/;
-    if (!password) {
-      alert('비밀번호를 입력해주세요!!');
-    } else {
+    if (!!password) {
       //형식에 맞지 않을 경우 아래 콘솔 출력
       if (password.match(passwordRegEx) === null) {
         //형식에 맞지 않을 경우 아래 콘솔 출력
@@ -64,14 +66,14 @@ export const signupValidation = async (
         // 맞을 경우 출력
         cnt--;
       }
+    } else {
+      alert('비밀번호를 입력해주세요!!');
     }
   }
   if (cnt === 15) {
     const nameRegEx = /^[0-9]+$/;
     const nameRegEx2 = /^[a-zA-Z가-힣]+$/;
-    if (!empName) {
-      alert('이름을 입력해주세요!!');
-    } else {
+    if (!!empName) {
       if (empName.match(nameRegEx) === null) {
         if (empName.match(nameRegEx2) === null) {
           alert('한글과 영어 외에는 입력하지마세요2!!');
@@ -81,69 +83,88 @@ export const signupValidation = async (
       } else {
         alert('숫자를 입력하지마세요!!');
       }
+    } else {
+      alert('이름을 입력해주세요!!');
     }
   }
 
   if (cnt === 14) {
-    if (!position) {
-      alert('직위를 선택해주세요!!');
-    } else {
+    if (!!position) {
       cnt--;
+    } else {
+      alert('직위를 선택해주세요!!');
     }
   }
 
   if (cnt === 13) {
-    if (!responsibility) {
-      alert('직책를 선택해주세요!!');
-    } else {
+    if (!!responsibility) {
       cnt--;
+    } else {
+      alert('직책를 선택해주세요!!');
     }
   }
 
   if (cnt === 12) {
-    if (!salary) {
-      alert('월급을 입력해주세요!!');
-    } else {
+    if (!!salary) {
       salary = parseFloat(salary);
-      cnt--;
+      if (salary < 0) {
+        alert('월급이 0보다 작습니다!!');
+      } else {
+        cnt--;
+      }
+    } else {
+      alert('월급을 입력해주세요!!');
     }
   }
 
   if (cnt === 11) {
-    if (!commission) {
-      alert('상여금을 입력해주세요!!');
-    } else {
+    if (!!commission) {
       commission = parseFloat(commission);
-      cnt--;
+      if (commission < 0) {
+        alert('상여금이 0보다 작습니다!!');
+      } else {
+        cnt--;
+      }
+    } else {
+      alert('상여금을 입력해주세요!!');
     }
   }
 
   if (cnt === 10) {
-    if (!hiredate) {
-      alert('고용일자를 입력해주세요!!');
+    if (!!hiredate) {
+      const hire = new Date(hiredate);
+      const today = new Date(Date.now());
+      if (
+        Moment(hire).format('YYYYMMDD') - Moment(today).format('YYYYMMDD') <
+        0
+      ) {
+        alert('이미 일자가 지났습니다!!');
+      } else {
+        cnt--;
+      }
     } else {
-      cnt--;
+      alert('고용일자를 입력해주세요!!');
     }
   }
 
   if (cnt === 9) {
-    if (!unitcode) {
-      alert('조직코드를 선택해주세요!!');
-    } else {
+    if (!!unitcode) {
       cnt--;
+    } else {
+      alert('조직코드를 선택해주세요!!');
     }
   }
 
   if (cnt === 8) {
     const empBellRegEx = /^\d{3}-\d{3}-\d{4}$/;
-    if (!empBell) {
-      alert('사내전화를 입력해주세요!!');
-    } else {
+    if (!!empBell) {
       if (empBell.match(empBellRegEx) === null) {
         alert('사내 전화번호 형식을 맞춰주세요');
       } else {
         cnt--;
       }
+    } else {
+      alert('사내전화를 입력해주세요!!');
     }
   }
 
@@ -151,72 +172,66 @@ export const signupValidation = async (
     const emailRegEx =
       /^[A-Za-z0-9]([-]?[A-Za-z0-9])*@[A-Za-z0-9]([-]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
 
-    if (!empMail) {
-      alert('이메일을 입력해주세요!!');
-    } else {
+    if (!!empMail) {
       if (empMail.match(emailRegEx) === null) {
         alert('이메일 형식을 맞춰주세요');
       } else {
         cnt--;
       }
+    } else {
+      alert('이메일을 입력해주세요!!');
     }
   }
 
   if (cnt === 6) {
     const mobileRegEx = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/;
-    if (!mobile) {
-      alert('휴대폰 번호를 입력해주세요!!');
-    } else {
+    if (!!mobile) {
       if (mobile.match(mobileRegEx) === null) {
         alert('휴대폰 번호 형식에 맞춰주세요');
       } else {
         cnt--;
       }
+    } else {
+      alert('휴대폰 번호를 입력해주세요!!');
     }
   }
 
   if (cnt === 5) {
-    if (!userRoleGrade) {
-      alert('사원 권한을 선택해주세요!!');
-    } else {
+    if (!!userRoleGrade) {
       cnt--;
+    } else {
+      alert('사원 권한을 선택해주세요!!');
     }
   }
 
   if (cnt === 4) {
-    if (!birthday) {
-      birthday = null;
-      cnt--;
+    cnt--;
+    if (!!birthday) {
+      console.log(birthday);
+      // birthday = Date.parse(birthday);
     } else {
-      birthday = Date.parse(birthday);
-      cnt--;
+      birthday = null;
     }
   }
 
   if (cnt === 3) {
-    if (!address) {
+    cnt--;
+    if (!!address === false) {
       address = null;
-      cnt--;
-    } else {
-      cnt--;
     }
   }
 
   if (cnt === 2) {
-    if (!licensePlate) {
+    cnt--;
+    if (!!licensePlate === false) {
       licensePlate = null;
-      cnt--;
-    } else {
-      cnt--;
     }
   }
 
   if (cnt === 1) {
-    if (!photo) {
+    cnt--;
+    if (!!photo === false) {
       photo = null;
-      cnt--;
-    } else {
-      cnt--;
     }
   }
 
@@ -243,10 +258,9 @@ export const signupValidation = async (
       photo: photo,
     };
 
-    return setDataChk(true), inputData;
-  } else {
-    return null;
+    return inputData;
   }
+  return null;
 };
 
 // 회원가입
@@ -286,7 +300,7 @@ export const insertSignupList = async (rows) => {
       birthday: element[13],
       address: element[14],
       licensePlate: element[15],
-      photo: element[16],
+      photo: !!element[16] ? !!element[16] : 'default.png',
     })
   );
 

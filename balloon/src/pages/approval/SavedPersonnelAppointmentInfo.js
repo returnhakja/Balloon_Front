@@ -4,12 +4,14 @@ import SideNavigation from '../../components/SideNavigation';
 import ModalApproval from './ModalApproval';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import { findUnitList } from '../../context/UnitAxios';
-import { getEmpListInSameUnit } from '../../context/EmployeeAxios';
+import {
+  getEmpByEmpId,
+  getEmpListInSameUnit,
+} from '../../context/EmployeeAxios';
 import {
   deleteApvlByDocIdAndEmpId,
   deletePA,
   getApvlByDocId,
-  getApvlId,
   getPAByPAId,
   insertApproval,
   insertPA,
@@ -31,10 +33,15 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
+import ChatStomp from '../chat/ChatStomp';
+import PersonnelAppointmentForm from '../chat/PersonnelAppointmentForm';
+import axios from 'axios';
+import { botApvlChatroom, onApvlCreateChatroom } from '../../context/ChatAxios';
+
+//socket연결
+const client = ChatStomp();
+client.debug = null;
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -60,10 +67,138 @@ function SavedPersonnelAppointmentInfo() {
   const [noApprover, setNoApprover] = useState([]);
   const [svApprover, setSvApprover] = useState([]);
   const [approvalList, setApprovalList] = useState([]);
+  const [botInfo, setBotInfo] = useState([]);
+  //이미 존재하는 사람들
+  const [botApvlRoom, setBotApvlRoom] = useState([]);
+  //결재선설정empId
+  const apvlPeople = [];
+  const approverBot = 'Y0000002';
+  const empName = empInfo.empName;
+  const position = empInfo.position;
+  const approvalForm = '인사명령';
+  const botroomExist = [];
+  const botroomId = [];
+
+  //기안제목
+  const approvalTitle =
+    document.getElementById('PATitle') &&
+    document.getElementById('PATitle').value;
+
+  const member = mEmp.empName;
+  const appointDepartment = unit.unitName;
+  const appointPosition = posi;
 
   const params = useParams();
   let rmApprover = [];
 
+  //결재선설정empIdList
+  {
+    approver.map((empId) => apvlPeople.push(empId.empId));
+  }
+
+  let firstApvlPeople;
+  firstApvlPeople = apvlPeople.filter(
+    (data, index) => data.indexOf(data[0]) === index
+  );
+
+  //결재봇정보가져오기
+  useEffect(() => {
+    getEmpByEmpId(approverBot, setBotInfo);
+    botApvlChatroom(firstApvlPeople, setBotApvlRoom);
+  }, [apvlPeople.length]);
+
+  botApvlRoom.map((data) => {
+    console.log(data.empId.empId);
+    botroomExist.push(data.empId.empId);
+    botroomId.push(data.chatroomId.chatroomId);
+  });
+
+  //새로운 채팅방이 생성되어야할 사람들
+  let newApvlPeople;
+  newApvlPeople = firstApvlPeople.filter(
+    (people) => !botroomExist.includes(people)
+  );
+
+  const sendChatHandle = () => {
+    onApvlCreateChatroom(
+      newApvlPeople,
+      client,
+      approverBot,
+      AlreadyBotroomMsg,
+      botroomMsg
+    );
+  };
+
+  //생성될 채팅방에 알림보내기
+  const botroomMsg = (add, client) => {
+    let chatApprovalList = [];
+    add.map((add) => {
+      const chatApproval = PersonnelAppointmentForm(
+        add.chatroomId,
+        botInfo,
+        approvalTitle,
+        approvalForm,
+        member,
+        appointDepartment,
+        appointPosition,
+        empName,
+        position
+      );
+      const approvalChat = {
+        chatroomId: add.chatroomId,
+        writer: botInfo,
+        chatContent: '결재가 등록되었습니다.',
+      };
+
+      //실시간으로 chat이 오기위해
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(chatApproval));
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(approvalChat));
+
+      chatApprovalList.push(chatApproval);
+      chatApprovalList.push(approvalChat);
+    });
+
+    const chatApprovalSave = (chatApprovalList) => {
+      axios.post('/chat/messages', chatApprovalList);
+    };
+    chatApprovalSave(chatApprovalList);
+  };
+
+  // 이미생성된 채팅방에 알림보내기
+  const AlreadyBotroomMsg = (client) => {
+    let AlreadyChatApproval = [];
+    botroomId.map((id) => {
+      const AchatApproval = PersonnelAppointmentForm(
+        id,
+        botInfo,
+        approvalTitle,
+        approvalForm,
+        member,
+        appointDepartment,
+        appointPosition,
+        empName,
+        position
+      );
+      const chatNewApproval = {
+        chatroomId: id,
+        writer: botInfo,
+        chatContent: '새로운 결재가 생성되었습니다. 확인하세요',
+      };
+
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(AchatApproval));
+      client.send('/app/chat/schedulemsg', {}, JSON.stringify(chatNewApproval));
+
+      AlreadyChatApproval.push(AchatApproval);
+      AlreadyChatApproval.push(chatNewApproval);
+    });
+
+    const chatScheduleSave = (AlreadyChatApproval) => {
+      axios.post('/chat/messages', AlreadyChatApproval);
+    };
+    chatScheduleSave(AlreadyChatApproval);
+  };
+
+  /////////////////////////
   useEffect(() => {
     getApvlByDocId(params.docId, setApprover, setApprovalList, setSvApprover);
   }, []);
@@ -78,6 +213,7 @@ function SavedPersonnelAppointmentInfo() {
     } else {
       setStartValue(inputData.personnelDate);
       setMEmp(inputData.movedEmp);
+
       setUnit(inputData.unit);
       setPosi(inputData.position);
     }
@@ -97,14 +233,8 @@ function SavedPersonnelAppointmentInfo() {
     approver.length,
   ]);
 
-  console.log(unit);
-
   useEffect(() => {
     if (Object.keys(inputData).length !== 0) {
-      // setStartValue(inputData.personnelDate);
-      // setMEmp(inputData.movedEmp);
-      // setUnit(inputData.unit);
-
       if (mEmp && mEmp !== {}) {
         if (Object.keys(mEmp).length !== 0) {
           setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
@@ -116,25 +246,7 @@ function SavedPersonnelAppointmentInfo() {
           setUnit2(unit.unitName + ' (' + unit.unitCode + ')');
       }
     }
-  }, [inputData]);
-
-  // useEffect(() => {
-  // }, []);
-
-  // useEffect(() => {
-  //   Object.keys(mEmp).length !== 0 &&
-  //     setMEmp2(mEmp.empName + ' (' + mEmp.empId + ')');
-  // }, [Object.keys(mEmp).length]);
-
-  // useEffect(() => {
-  //   Object.keys(unit).length !== 0 &&
-  //     setUnit2(unit.unitName + ' (' + unit.unitCode + ')');
-  // }, [Object.keys(unit).length]);
-
-  // useEffect(() => {
-  // }, [units]);
-
-  // mEmpInfo.length !== 0;
+  }, [inputData.personnelAppointmentId, mEmp.empId]);
 
   return (
     <SideNavigation>
@@ -172,7 +284,6 @@ function SavedPersonnelAppointmentInfo() {
             type="button"
             className={styles.btnnav}
             onClick={() => {
-              // setOpenModal(true);
               setOpenapprovalModal(true);
             }}
             id="cancelBtn">
@@ -190,7 +301,7 @@ function SavedPersonnelAppointmentInfo() {
             noApprover={noApprover}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -200,10 +311,6 @@ function SavedPersonnelAppointmentInfo() {
             {!!empInfo && <DfCard drafterName={empInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            // if (apvl.length === 0) {
-            //   setApvl(empData);
-            // }
-
             return (
               <Card
                 key={index}
@@ -223,7 +330,6 @@ function SavedPersonnelAppointmentInfo() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 <form>
                   <input
                     id="PATitle"
@@ -245,18 +351,6 @@ function SavedPersonnelAppointmentInfo() {
             <tr className={styles.trcon}>
               <td className={styles.titlename}>인사명령일</td>
               <td className={styles.titlename} colSpan={4}>
-                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    label="일자 선택"
-                    value={!!startValue && startValue}
-                    type=" date"
-                    inputFormat={'yyyy-MM-dd'}
-                    onChange={(newValue) => {
-                      setStartValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider> */}
                 <TextField
                   id="startvalue"
                   required
@@ -290,14 +384,10 @@ function SavedPersonnelAppointmentInfo() {
                       id="mEmp"
                       label="구성원을 선택하세요"
                       value={mEmp2}
-                      // defaultValue={mEmp2}
                       placeholder="구성원을 선택하세요"
                       onChange={(e) => {
                         setMEmp2(e.target.value);
-                      }}
-
-                      // className={styles.inputtext}
-                    >
+                      }}>
                       {mEmpInfo.length !== 0 &&
                         mEmpInfo.map((mEmps, index) => (
                           <MenuItem
@@ -322,10 +412,7 @@ function SavedPersonnelAppointmentInfo() {
                       defaultValue={unit}
                       onChange={(e) => {
                         setUnit2(e.target.value);
-                      }}
-
-                      // className={styles.inputtext}
-                    >
+                      }}>
                       {units &&
                         units.map((unitInfo, index) => (
                           <MenuItem
@@ -353,10 +440,7 @@ function SavedPersonnelAppointmentInfo() {
                     defaultValue={inputData.position}
                     onChange={(e) => {
                       setPosi(e.target.value);
-                    }}
-
-                    // className={styles.inputtext}
-                  >
+                    }}>
                     {positionArr.map((position, index) => (
                       <MenuItem key={index} value={position}>
                         {position}
@@ -410,23 +494,21 @@ function SavedPersonnelAppointmentInfo() {
                   variant="outlined"
                   size="large"
                   onClick={async () => {
+                    svApprover.map((data) =>
+                      deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                    );
                     await insertPA(
                       params.docId,
                       3,
                       inputData,
                       empInfo,
                       startValue,
-                      mEmp,
+                      mEmp2,
                       unit2,
                       posi,
                       setInputData
                     );
                     {
-                      if (rmApprover.length !== 0) {
-                        rmApprover.map((data) =>
-                          deleteApvlByDocIdAndEmpId(params.docId, data.empId)
-                        );
-                      }
                       insertApproval(
                         params.docId,
                         0,
@@ -435,30 +517,6 @@ function SavedPersonnelAppointmentInfo() {
                         empInfo,
                         approvalList
                       );
-                      // approver.map((data, index) => {
-                      //   const approvalId = getApvlId(params.docId, data.empId);
-
-                      //   if (approvalId !== null) {
-                      //     approvalId.then((apvlId) => {
-                      //       insertApproval(
-                      //         params.docId,
-                      //         0,
-                      //         data,
-                      //         inputData,
-                      //         empInfo,
-                      //         apvlId
-                      //       );
-                      //     });
-                      //   } else {
-                      //     insertApproval(
-                      //       params.docId,
-                      //       0,
-                      //       data,
-                      //       inputData,
-                      //       empInfo
-                      //     );
-                      //   }
-                      // });
                     }
                     alert('문서가 임시저장되었습니다!');
                   }}>
@@ -466,7 +524,7 @@ function SavedPersonnelAppointmentInfo() {
                 </Button>
               </Link>
               <Link
-                to={'/boxes/ds'}
+                to={'/boxes/dd'}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
                     await insertPA(
@@ -475,7 +533,7 @@ function SavedPersonnelAppointmentInfo() {
                       inputData,
                       empInfo,
                       startValue,
-                      mEmp,
+                      mEmp2,
                       unit2,
                       posi,
                       setInputData
@@ -486,6 +544,9 @@ function SavedPersonnelAppointmentInfo() {
                     e.preventDefault();
                   }
                   {
+                    svApprover.map((data) =>
+                      deleteApvlByDocIdAndEmpId(params.docId, data.empId)
+                    );
                     insertApproval(
                       params.docId,
                       1,
@@ -494,9 +555,7 @@ function SavedPersonnelAppointmentInfo() {
                       empInfo,
                       approvalList
                     );
-                    // approver.map((data, index) => {
-                    //   insertApproval(params.docId, 1, data, inputData, empInfo);
-                    // });
+                    sendChatHandle();
                   }
                 }}>
                 <SaveButton variant="contained" color="success" size="large">

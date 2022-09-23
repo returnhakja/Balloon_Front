@@ -33,7 +33,8 @@ export const onCreateChatroom = async (
   invite,
   chatroomName,
   client,
-  setChatStatus
+  setChatStatus,
+  setRoomId
 ) => {
   invite.push(empInfo);
   axios
@@ -43,6 +44,7 @@ export const onCreateChatroom = async (
     })
     .then((response) => {
       onUserInvite(response.data, invite, client);
+      setRoomId(response.data);
       setChatStatus('chatList');
     })
     .catch((error) => console.log(error));
@@ -75,6 +77,7 @@ export const onUserInvite = async (chatroomId, invite, client) => {
           };
         })
       )
+      .then(() => console.log('=================='))
       .catch((error) => console.log(error));
 };
 
@@ -86,9 +89,16 @@ export const botChatroom = async (inviteSchedule, setBotRoom) => {
 };
 
 // 이미 결재봇과 채팅방이 존재하는 사원 찾기
-export const botApvlChatroom = async (apvlPeople, setBotApvlRoom) => {
-  axios.post(`/cre/apvlbotchatroom`, apvlPeople).then((response) => {
+export const botApvlChatroom = async (firstApvlPeople, setBotApvlRoom) => {
+  axios.post(`/cre/apvlbotchatroom`, firstApvlPeople).then((response) => {
     setBotApvlRoom(response.data);
+  });
+};
+
+// 이미 결재봇과 채팅방이 존재하는 사원 찾기
+export const botApvlChatroom2 = async (ApvlPeople, setBotApvl) => {
+  axios.post(`/cre/apvlbotchatroom`, ApvlPeople).then((response) => {
+    setBotApvl(response.data);
   });
 };
 
@@ -113,6 +123,8 @@ export const empIdInfo = async (chatroomId, setChatempinfo) => {
 
 //이전에 채팅했던 기록보이게
 export const chatRecord = async (chatroomId, setChatting, empId) => {
+  console.log(chatroomId);
+  console.log(empId);
   axios
     .get(`/chat/chatrecord/${chatroomId}/${empId}`)
     .then((response) => {

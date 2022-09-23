@@ -93,8 +93,12 @@ export const selectEmpByEmpId = async (empId, setIdChk) => {
       alert('이미사원번호가 있습니다.');
     })
     .catch((error) => {
-      console.log(error);
-      alert('생성 가능한 사원번호입니다.');
+      // console.log(error);
+      if (empId.length > 8) {
+        alert('사원번호가 8글자를 넘었습니다.');
+      } else {
+        alert('생성 가능한 사원번호입니다.');
+      }
     });
 };
 
@@ -142,12 +146,10 @@ export const getEmpListByUnitCode = async () => {
 export const getEmpListInSameUnit = async (empId, setCEList) => {
   const url = '/employee/unit/list/';
   const urlStr = url + empId;
-  console.log(empId);
   await axios
     .get(urlStr)
     .then((response) => response.data)
     .then((data) => {
-      console.log(data);
       setCEList(data);
     })
     .catch((error) => console.log(error));
@@ -178,14 +180,14 @@ export const updateEmpByAdmin = async (updateData) => {
 // 사원 수정
 export const updateEmployee = async (updateData) => {
   const url = `/employee/update/mypage`;
-  console.log(updateData);
 
   await axios
     .put(url, updateData, process.env.REACT_APP_HEADER)
     .catch((error) => {
       console.log(error);
     });
-  // window.location.href = '/mypage'
+
+  window.location.href = '/mypage';
 };
 
 // 사번으로 사원 삭제
@@ -195,15 +197,10 @@ export const deleteEmployee = async (data) => {
   window.location.href = '/management/employee';
 };
 
-export const uploadProfile = async (file, empId) => {
+export const uploadProfile = async (profile, empId) => {
   console.log('empId', empId);
-  console.log('file', file);
-
-  for (let value of file.values()) {
-    console.log('value', value);
-  }
-  // const url = `/file/upload/profile/${empId}`;
+  console.log('profile', profile);
   const url = '/file/upload/profile/' + empId;
 
-  await axios.post(url, file).catch((error) => console.log(error));
+  await axios.post(url, profile).catch((error) => console.log(error));
 };

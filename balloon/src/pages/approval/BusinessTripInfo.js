@@ -28,19 +28,14 @@ const SaveButton = styled(Button)(({ theme }) => ({
 
 function BizTripInfo() {
   // 날짜 관련
-  // const [startValue, setStartValue] = useState(null);
-  // const [endvalue, setEndValue] = useState(null);
   const [bizTpInfo, setBizTpInfo] = useState({});
   const [bizTpEmp, setBizTpEmp] = useState({});
   // 모달
-  // const [openModal, setOpenModal] = useState(false);
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
   const [empInfo] = useOutletContext();
 
   const params = useParams();
-  console.log(bizTpInfo);
-  console.log(bizTpEmp);
 
   useEffect(() => {
     if (!!params) {
@@ -73,7 +68,6 @@ function BizTripInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {bizTpInfo.empName}({bizTpInfo.emp && bizTpInfo.emp.empId})
               </th>
             </tr>
@@ -91,7 +85,7 @@ function BizTripInfo() {
             setOpenapprovalModal={setOpenapprovalModal}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <Card
           variant="outlined"
@@ -125,7 +119,6 @@ function BizTripInfo() {
             <tr align="center">
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
-                {' '}
                 {bizTpEmp[0] &&
                   bizTpEmp.map((data) => {
                     return (

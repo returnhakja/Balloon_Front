@@ -34,9 +34,9 @@ function UpdateMine() {
   const onSubmit = (value) => {
     const updateData = {
       empId: empInfo.empId,
-      mobile: !!value.mobile ? value.mobile : '미입력',
-      address: !!value.address ? value.address : '미입력',
-      licensePlate: !!value.licensePlate ? value.licensePlate : '미입력',
+      mobile: value.mobile,
+      address: value.address,
+      licensePlate: value.licensePlate,
     };
 
     console.log(updateData);
@@ -72,14 +72,17 @@ function UpdateMine() {
                   flexWrap: 'wrap',
                 }}>
                 <Avatar
-                  alt="프로필"
                   style={{
                     width: '150px',
                     height: '150px',
                     marginTop: '5px',
                     marginBottom: '5px',
                   }}
-                  src={empInfo.photo}
+                  src={
+                    !!empInfo.photo
+                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
+                      : `${process.env.REACT_APP_AWS_S3_DEFAULT}`
+                  }
                   className="mypageavatar"
                 />
               </div>
@@ -92,13 +95,13 @@ function UpdateMine() {
                     <TableCell className="nameCell" align="center">
                       사원명
                     </TableCell>
-                    <TableCell>{empInfo.empName}</TableCell>
+                    <TableCell align="center">{empInfo.empName}</TableCell>
                   </TableRow>
                   <TableRow className="tbrow">
                     <TableCell className="nameCell" align="center">
                       사원 이메일
                     </TableCell>
-                    <TableCell>
+                    <TableCell align="center">
                       <input
                         name="empMail"
                         defaultValue={email}
@@ -120,7 +123,7 @@ function UpdateMine() {
                     <TableCell className="nameCell" align="center">
                       핸드폰번호
                     </TableCell>
-                    <TableCell>
+                    <TableCell align="center">
                       <input
                         name="mobile"
                         defaultValue={empInfo.mobile}
@@ -142,7 +145,7 @@ function UpdateMine() {
                     <TableCell className="nameCell" align="center">
                       주소
                     </TableCell>
-                    <TableCell colSpan={3}>
+                    <TableCell colSpan={3} align="center">
                       <input
                         name="address"
                         defaultValue={empInfo.address}
@@ -161,7 +164,7 @@ function UpdateMine() {
                     <TableCell className="nameCell" align="center">
                       차량번호판
                     </TableCell>
-                    <TableCell colSpan={3}>
+                    <TableCell colSpan={3} align="center">
                       <input
                         name="licensePlate"
                         defaultValue={empInfo.licensePlate}
@@ -176,25 +179,15 @@ function UpdateMine() {
                       errors.licensePlate.type === 'maxLength' &&
                       alert('최대 글자 수를 초과했습니다.')}
                   </TableRow>
-                  <TableRow className="tbrow">
-                    <TableCell
-                      colSpan={4}
-                      rowSpan={4}
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        border: '0',
-                      }}>
-                      <Link to={'/mypage'}>
-                        <Button style={{ float: 'right', marginBottom: '5px' }}>
-                          마이페이지
-                        </Button>
-                      </Link>
 
-                      <Button
-                        type="submit"
-                        sx={{ fontSize: 30, border: 1, mt: 1 }}>
+                  <TableRow className="tbrow">
+                    <TableCell className="nameCell" align="center">
+                      <Link to={'/mypage'}>
+                        <Button sx={{ border: 1, mt: 1 }}>마이페이지</Button>
+                      </Link>
+                    </TableCell>
+                    <TableCell colSpan={3} align="center">
+                      <Button type="submit" sx={{ border: 1, mt: 1 }}>
                         수정
                       </Button>
                     </TableCell>
@@ -206,7 +199,7 @@ function UpdateMine() {
                   open={emailOpen}
                   setOpen={setEmailOpen}
                   empId={empInfo.empId}
-                  photo={empInfo.email ? empInfo.email : ''}
+                  email={empInfo.email ? empInfo.email : ''}
                 />
               )}
             </CardContent>

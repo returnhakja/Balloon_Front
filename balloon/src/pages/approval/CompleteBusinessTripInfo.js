@@ -30,19 +30,14 @@ const SaveButton = styled(Button)(({ theme }) => ({
 function BizTripInfo() {
   const [empInfo] = useOutletContext();
   // 날짜 관련
-  // const [startValue, setStartValue] = useState(null);
-  // const [endvalue, setEndValue] = useState(null);
   const [bizTpInfo, setBizTpInfo] = useState({});
   const [bizTpEmp, setBizTpEmp] = useState({});
   const [approver, setApprover] = useState([]);
   // 모달
-  // const [openModal, setOpenModal] = useState(false);
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
 
   const params = useParams();
-  console.log(bizTpInfo);
-  console.log(bizTpEmp);
 
   useEffect(() => {
     if (!!params) {
@@ -76,7 +71,6 @@ function BizTripInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {bizTpInfo.empName}({bizTpInfo.emp && bizTpInfo.emp.empId})
               </th>
             </tr>
@@ -87,14 +81,13 @@ function BizTripInfo() {
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
         </div>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         {openapprovalModal && (
           <ModalApproval
             openapprovalModal={openapprovalModal}
             setOpenapprovalModal={setOpenapprovalModal}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -104,11 +97,6 @@ function BizTripInfo() {
             <DfCard drafterName={bizTpInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
-            // if (apvl.length === 0) {
-            //   setApvl(empData);
-            // }
-
             return (
               <Card
                 variant="outlined"
@@ -146,7 +134,6 @@ function BizTripInfo() {
             <tr align="center">
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
-                {' '}
                 {bizTpEmp[0] &&
                   bizTpEmp.map((data) => {
                     return (

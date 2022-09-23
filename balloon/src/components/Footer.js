@@ -1,8 +1,10 @@
+import { Container } from '@mui/material';
 import React from 'react';
 import styles from '../css/Footer.module.css';
 
-const Footer = () => {
+function Footer() {
   return (
+    // <Container maxWidth="maxwidth">
     <footer className={styles.footer}>
       <div className={styles.contents}>
         <div className={styles.team_member}>
@@ -60,7 +62,8 @@ const Footer = () => {
         </h2>
       </div>
     </footer>
+    // </Container>
   );
-};
+}
 
 export default Footer;

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { uploadProfile } from '../../context/EmployeeAxios';
 import styles from '../../css/Component.module.css';
-// import { Avatar, Button, Card, Typography } from 'antd';
 import {
   Box,
   CardContent,
@@ -11,7 +11,6 @@ import {
   Typography,
 } from '@mui/material';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import { uploadProfile } from '../../context/EmployeeAxios';
 
 const style = {
   position: 'absolute',
@@ -32,22 +31,59 @@ const style = {
 };
 
 export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
-  const [file, setFile] = useState('');
+  const [preView, setPreView] = useState(photo);
+  const [profile, setProfile] = useState('');
+  const [profileName, setProfileName] = useState('첨부파일');
   const handleClose = () => setOpen(false);
 
   const upload = () => {
-    console.log('file', file);
-    if (file.length !== 0) {
-      uploadProfile(file, empId);
+    console.log('profile', profile);
+    if (profile.length !== 0) {
+      const pathPoint = profileName.lastIndexOf('.');
+      const filePoint = profileName.substring(
+        pathPoint + 1,
+        profileName.length
+      );
+      const fileType = filePoint.toLowerCase();
+      if (
+        fileType === 'jpg' ||
+        fileType === 'gif' ||
+        fileType === 'png' ||
+        fileType === 'jpeg' ||
+        fileType === 'bmp'
+      ) {
+        uploadProfile(profile, empId);
+        handleClose();
+//         window.location.href = '/mypage';
+      } else {
+        alert('이미지 파일만 선택할 수 있습니다!!');
+        return false;
+      }
     } else {
       alert('사진을 넣어주세요!!');
     }
   };
 
-  const handleFileInput = async (e) => {
-    const formData = new FormData();
-    formData.append('file', e.target.files[0]);
-    setFile(formData);
+  const handleFileInput = (e) => {
+    const fileStr = e.target?.files[0]?.name;
+    if (!!fileStr) {
+      setProfileName(e.target.files[0].name);
+      const formData = new FormData();
+      formData.append('file', e.target.files[0]);
+      setProfile(formData);
+
+      // 이미지 미리보기
+      const reader = new FileReader();
+      reader.readAsDataURL(e.target.files[0]);
+      return new Promise((resolve) => {
+        reader.onload = () => {
+          setPreView(reader.result);
+          resolve();
+        };
+      });
+    } else {
+      alert('사진이 들어가지 않았습니다.');
+    }
   };
 
   return (
@@ -59,7 +95,7 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description">
           <Box component="form" encType="multipart/form-data" sx={style}>
-            <Card>
+            <Card sx={{ width: '1000px' }}>
               <div
                 style={{
                   display: 'flex',
@@ -88,66 +124,57 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
                   justifyContent: 'center',
                   flexWrap: 'wrap',
                 }}>
-                {!!photo ? (
+                {!!photo && (
                   <div>
                     <Avatar
                       style={{
-                        margin: '10px 10px 20px 10px',
+                        margin: '10px 10px 10px 10px',
                         display: 'flex',
                         justifyContent: 'center',
                         alignContent: 'center',
-                        // textAlign: 'center',
                         borderRadius: '100px',
+                        width: '100px',
+                        height: '100px',
                       }}
-                      size={100}
-                      src={
-                        <img
-                          src={`${photo}`}
-                          style={{
-                            width: '100px',
-                            height: '100px',
-                            borderRadius: '100px',
-                          }}
-                        />
-                      }
+                      src={preView}
                     />
                     <p>사진을 변경해주세요</p>
-                  </div>
-                ) : (
-                  <div>
-                    <Avatar
-                      style={{
-                        margin: '10px 10px 20px 10px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignContent: 'center',
-                        // textAlign: 'center',
-                        // background: '#bdbdbd',
-                        // color: '#fff',
-                      }}
-                      src={
-                        <img
-                          src={`${process.env.PUBLIC_URL}/asset/none_profile.png`}
-                          style={{
-                            width: '100px',
-                            height: '100px',
-                            borderRadius: '100px',
-                          }}
-                        />
-                      }
-                    />
-                    <p>사진을 추가해주세요</p>
                   </div>
                 )}
               </CardContent>
 
-              <div>
-                <input
-                  id="getFile"
-                  type="file"
-                  onChange={handleFileInput}
-                  accept="image/*"
-                />
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  margin: '10px 0px 10px 0px',
+                }}>
+                <div className={styles.filebox}>
+                  <input
+                    className={styles.upload_name}
+                    value={profileName}
+                    readOnly
+                  />
+                  <Button variant="outlined">
+                    <label htmlFor="file">파일찾기</label>
+                    <input
+                      type="file"
+                      id="file"
+                      onChange={handleFileInput}
+                      accept="image/gif, image/jpeg, image/png"
+                    />
+                  </Button>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: '20px',
+                }}>
                 <Button
                   onClick={handleClose}
                   sx={{ fontSize: 30, mr: 3, border: 1, mt: 1 }}>

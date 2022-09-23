@@ -8,10 +8,10 @@ import ChatNotice from './ChatNotice';
 import ChatSide from './ChatSide';
 
 export default function ChatMenu({ open, setOpen, empInfo }) {
-  const handleClose = () => setOpen(false);
   const [chatStatus, setChatStatus] = useState('chatEmpList');
-
-  useEffect(() => {}, [chatStatus]);
+  const [roomId, setRoomId] = useState(0);
+  const [check, setCheck] = useState(false);
+  const handleClose = () => setOpen(false);
 
   return (
     <div>
@@ -34,23 +34,31 @@ export default function ChatMenu({ open, setOpen, empInfo }) {
             <ClearIcon />
           </div>
         </div>
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <div className={styles.side2}>
           <div className={styles.listcon}>
-            <ChatSide setChatStatus={setChatStatus} />
+            <ChatSide
+              setChatStatus={setChatStatus}
+              setRoomId={setRoomId}
+              check={check}
+              setCheck={setCheck}
+            />
             {chatStatus === 'chatEmpList' ? (
               <ChatEmpList
                 open={open}
-                setOpen={setOpen}
                 empInfo={empInfo}
                 chatStatus={chatStatus}
                 setChatStatus={setChatStatus}
+                setRoomId={setRoomId}
               />
             ) : chatStatus === 'chatList' ? (
               <ChatRoom
                 empInfo={empInfo}
                 chatStatus={chatStatus}
                 setChatStatus={setChatStatus}
+                roomId={roomId}
+                setRoomId={setRoomId}
+                check={check}
               />
             ) : chatStatus === 'chatNotice' ? (
               <ChatNotice empInfo={empInfo} setChatStatus={setChatStatus} />

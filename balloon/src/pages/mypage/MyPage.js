@@ -21,21 +21,18 @@ function MyPage() {
   const [profileOpen, setProfileOpen] = useState(false);
 
   return (
-    <Container>
+    <Container sx={{ height: '100%' }}>
       <h1 style={{ display: 'flex', justifyContent: 'center' }}>마이페이지</h1>
       <Box
         sx={{
           marginTop: '1%',
-          maxWidth: 'lg',
+          // maxWidth: 'lg',
+
           display: 'flex',
           justifyContent: 'center',
           alignContent: 'center',
           margin: '30px 0px 30px 0px',
         }}>
-        {console.log(
-          'adasddasdasd',
-          `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}`
-        )}
         <Card>
           {empInfo.length !== 0 && (
             <CardContent
@@ -57,7 +54,7 @@ function MyPage() {
                   src={
                     !!empInfo.photo
                       ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
-                      : ''
+                      : `${process.env.REACT_APP_AWS_S3_DEFAULT}`
                   }
                   className="mypageavatar"
                 />
@@ -80,11 +77,12 @@ function MyPage() {
                   empId={empInfo.empId}
                   photo={
                     empInfo.photo
-                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}/${empInfo.photo}`
-                      : ''
+                      ? `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
+                      : `${process.env.REACT_APP_AWS_S3_DEFAULT}`
                   }
                 />
               )}
+
               <div>
                 <Link to={'/mypage/update'}>
                   <Button style={{ float: 'right', marginBottom: '5px' }}>

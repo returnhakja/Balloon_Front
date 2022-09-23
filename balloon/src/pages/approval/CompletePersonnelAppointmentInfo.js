@@ -23,16 +23,6 @@ const SaveButton = styled(Button)(({ theme }) => ({
 }));
 
 function PersonnelAppointmentInfo() {
-  // 날짜 관련
-  // const [startValue, setStartValue] = useState(null);
-
-  // 모달
-  // const [openModal, setOpenModal] = useState(false);
-  // const [openapprovalModal, setOpenapprovalModal] = useState(false);
-
-  // 사원 정보 context
-  // const [empInfo] = useOutletContext();
-
   const [paInfo, setPaInfo] = useState({});
   const [approver, setApprover] = useState([]);
 
@@ -67,7 +57,6 @@ function PersonnelAppointmentInfo() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {paInfo.empName}({paInfo.emp && paInfo.emp.empId})
               </th>
             </tr>
@@ -77,9 +66,8 @@ function PersonnelAppointmentInfo() {
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
         </div>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
 
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -89,11 +77,6 @@ function PersonnelAppointmentInfo() {
             <DfCard drafterName={paInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
-            // if (apvl.length === 0) {
-            //   setApvl(empData);
-            // }
-
             return (
               <Card
                 variant="outlined"
@@ -109,16 +92,13 @@ function PersonnelAppointmentInfo() {
 
         <p className={styles.giantitle}>기안내용</p>
 
-        {/* 여기부터는 상세내용 */}
-
         <table className={styles.tableborder}>
           <thead>
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 {paInfo.documentTitle}
-              </td>{' '}
+              </td>
             </tr>
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>인사명령일</td>

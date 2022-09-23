@@ -34,13 +34,11 @@ const SaveButton = styled(Button)(({ theme }) => ({
 function DeclaredBusinessReportInfo() {
   // 사원 정보 context
   const [empInfo] = useOutletContext();
-  // const [openapprovalModal, setOpenapprovalModal] = useState(false);
   const [bizRptInfo, setBizRptInfo] = useState({});
   const [approver, setApprover] = useState([]);
   const [apvl, setApvl] = useState({});
 
   const params = useParams();
-  console.log(bizRptInfo);
 
   useEffect(() => {
     if (!!params) {
@@ -78,11 +76,10 @@ function DeclaredBusinessReportInfo() {
             <tr align="center" bgcolor="white"></tr>
           </tbody>
         </table>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
         </div>
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -92,7 +89,6 @@ function DeclaredBusinessReportInfo() {
             {!!bizRptInfo && <DfCard drafterName={bizRptInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             if (apvl.length === 0) {
               setApvl(empData);
             }

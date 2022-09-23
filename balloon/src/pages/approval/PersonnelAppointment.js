@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import ModalApproval from './ModalApproval';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
@@ -17,7 +17,6 @@ import { positionArr } from '../../context/EmpFunc';
 import styles from '../../css/Report.module.css';
 import '../../css/Modal.css';
 import axios from 'axios';
-import moment from 'moment';
 import ChatStomp from '../chat/ChatStomp';
 import { FcDocument } from 'react-icons/fc';
 import {
@@ -33,16 +32,15 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { blue } from '@mui/material/colors';
 
 import { botApvlChatroom, onApvlCreateChatroom } from '../../context/ChatAxios';
 import PersonnelAppointmentForm from '../chat/PersonnelAppointmentForm';
+import moment from 'moment';
 
 //socket연결
 const client = ChatStomp();
+client.debug = null;
 
 const SaveButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(blue[500]),
@@ -60,40 +58,34 @@ function PersonnelAppointment() {
   const [mEmp, setMEmp] = useState('');
   const [docNum, setDocNum] = useState(0);
   const [docId, setDocId] = useState('');
+  const [saveType, setSaveType] = useState('');
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
-
   // 날짜 관련
   const [startValue, setStartValue] = useState(new Date());
 
-  // 모달
-  // const [openModal, setOpenModal] = useState(false);
-  const [openapprovalModal, setOpenapprovalModal] = useState(false);
+  //기안제목
+  const [approvalTitle, setApprovalTitle] = useState('');
 
+  const approveRef = useRef();
+  const tempRef = useRef();
+
+  // 모달
+  const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
   const [empInfo] = useOutletContext();
   const [inputData, setInputData] = useState({});
-
-  console.log(empInfo);
-  console.log(mEmp);
-
   const [botInfo, setBotInfo] = useState([]);
   //이미 존재하는 사람들
   const [botApvlRoom, setBotApvlRoom] = useState([]);
   //결재선설정empId
   const apvlPeople = [];
   const approverBot = 'Y0000002';
-  console.log(botInfo);
   const empName = empInfo.empName;
   const position = empInfo.position;
   const approvalForm = '인사명령';
-
-  //기안제목
-  const approvalTitle =
-    document.getElementById('PATitle') &&
-    document.getElementById('PATitle').value;
-  console.log(approvalTitle);
-
+  const botroomExist = [];
+  const botroomId = [];
   const member = mEmp.empName;
   const appointDepartment = unit.unitName;
   const appointPosition = posi;
@@ -102,30 +94,28 @@ function PersonnelAppointment() {
   {
     approver.map((empId) => apvlPeople.push(empId.empId));
   }
-  console.log(apvlPeople);
-  console.log(botApvlRoom);
+
+  let firstApvlPeople;
+  firstApvlPeople = apvlPeople.filter(
+    (data, index) => data.indexOf(data[0]) === index
+  );
 
   //결재봇정보가져오기
   useEffect(() => {
     getEmpByEmpId(approverBot, setBotInfo);
-    botApvlChatroom(apvlPeople, setBotApvlRoom);
+    botApvlChatroom(firstApvlPeople, setBotApvlRoom);
   }, [apvlPeople.length]);
 
-  const botroomExist = [];
-  const botroomId = [];
-  console.log(botApvlRoom);
   botApvlRoom.map((data) => {
-    console.log(data.empId.empId);
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
-  console.log(botroomExist);
-  console.log(botroomId);
 
   //새로운 채팅방이 생성되어야할 사람들
   let newApvlPeople;
-  newApvlPeople = apvlPeople.filter((people) => !botroomExist.includes(people));
-  console.log(newApvlPeople);
+  newApvlPeople = firstApvlPeople.filter(
+    (people) => !botroomExist.includes(people)
+  );
 
   const sendChatHandle = () => {
     onApvlCreateChatroom(
@@ -166,7 +156,6 @@ function PersonnelAppointment() {
       chatApprovalList.push(approvalChat);
     });
 
-    console.log(chatApprovalList);
     const chatApprovalSave = (chatApprovalList) => {
       axios.post('/chat/messages', chatApprovalList);
     };
@@ -200,11 +189,9 @@ function PersonnelAppointment() {
       AlreadyChatApproval.push(AchatApproval);
       AlreadyChatApproval.push(chatNewApproval);
     });
-    console.log(AlreadyChatApproval);
     const chatScheduleSave = (AlreadyChatApproval) => {
       axios.post('/chat/messages', AlreadyChatApproval);
     };
-
     chatScheduleSave(AlreadyChatApproval);
   };
 
@@ -216,18 +203,56 @@ function PersonnelAppointment() {
         getEmpListInSameUnit(empInfo.empId, setMEmpInfo);
       }
     } else {
-      if (docNum === 0) {
-        getLatestPA(setDocNum);
-        setDocId('인사명령-22-0000001');
-      } else {
-        setDocId('인사명령' + '-22-' + ('0000000' + (docNum + 1)).slice(-7));
-      }
-
       noApprover.length === 0 && setNoApprover(noApprover);
-
-      mEmp && console.log('mEmp~~~', mEmp);
     }
   }, [units, empInfo, mEmpInfo, docNum, noApprover, mEmp]);
+
+  const tempSaveAppr = async () => {
+    await insertPA(
+      docId,
+      3,
+      inputData,
+      empInfo,
+      startValue,
+      mEmp,
+      unit,
+      posi,
+      setInputData
+    );
+
+    insertApproval(docId, 0, approver, inputData, empInfo);
+
+    alert('문서가 임시저장되었습니다!');
+    tempRef.current?.click();
+  };
+
+  const approveAppr = async () => {
+    await insertPA(
+      docId,
+      1,
+      inputData,
+      empInfo,
+      startValue,
+      mEmp,
+      unit,
+      posi,
+      setInputData
+    );
+    insertApproval(docId, 1, approver, inputData, empInfo);
+    sendChatHandle();
+    alert('문서가 상신되었습니다!');
+    approveRef.current?.click();
+  };
+
+  useEffect(() => {
+    if (docId) {
+      if (saveType === 'approve') {
+        approveAppr();
+      } else if (saveType === 'temp') {
+        tempSaveAppr();
+      }
+    }
+  }, [docId]);
 
   return (
     <SideNavigation>
@@ -243,7 +268,7 @@ function PersonnelAppointment() {
               <td className={styles.tdleft}>기안양식</td>
               <td className={styles.td}>인사명령</td>
               <td className={styles.tdright}>문서번호</td>
-              <th className={styles.th}>{docId}</th>
+              <th className={styles.th}>{'-'}</th>
             </tr>
           </thead>
 
@@ -253,7 +278,6 @@ function PersonnelAppointment() {
               <td className={styles.td}>5년</td>
               <td className={styles.tdleft}>기안자</td>
               <th className={styles.th}>
-                {' '}
                 {empInfo.empName}({empInfo.empId})
               </th>
             </tr>
@@ -273,7 +297,6 @@ function PersonnelAppointment() {
             결재선설정
           </button>
         </div>
-        {/* {openModal && <Modal closeModal={setOpenModal} />} */}
         {openapprovalModal && (
           <ModalApproval
             openapprovalModal={openapprovalModal}
@@ -284,7 +307,7 @@ function PersonnelAppointment() {
             noApprover={noApprover}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -295,8 +318,6 @@ function PersonnelAppointment() {
           </Card>
 
           {approver.map((empData, index) => {
-            console.log(empData);
-
             return (
               <Card
                 key={index}
@@ -317,7 +338,6 @@ function PersonnelAppointment() {
             <tr className={styles.trcon}>
               <td className={styles.tdleft}>기안제목</td>
               <td colSpan={2} className={styles.tdright}>
-                {' '}
                 <form>
                   <input
                     id="PATitle"
@@ -325,6 +345,7 @@ function PersonnelAppointment() {
                     name="title"
                     placeholder="기안제목을 입력하세요."
                     className={styles.inputtext}
+                    onChange={(e) => setApprovalTitle(e.target.value)}
                   />
                 </form>
               </td>
@@ -339,25 +360,12 @@ function PersonnelAppointment() {
             <tr className={styles.trcon}>
               <td className={styles.titlename}>인사명령일</td>
               <td className={styles.titlename} colSpan={4}>
-                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    label="일자 선택"
-                    value={startValue}
-                    type=" date"
-                    inputFormat={'yyyy-MM-dd'}
-                    onChange={(newValue) => {
-                      setStartValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider> */}
-
                 <TextField
                   id="startvalue"
                   required
                   label="시작일"
                   type="date"
-                  value={startValue}
+                  value={moment(startValue).format('YYYY-MM-DD')}
                   onChange={(newValue) => {
                     setStartValue(newValue.target.value);
                   }}
@@ -387,10 +395,7 @@ function PersonnelAppointment() {
                     placeholder="구성원을 선택하세요"
                     onChange={(e) => {
                       setMEmp(e.target.value);
-                    }}
-
-                    // className={styles.inputtext}
-                  >
+                    }}>
                     {mEmpInfo.length !== 0 &&
                       mEmpInfo.map((mEmps, index) => (
                         <MenuItem key={index} value={mEmps}>
@@ -410,10 +415,7 @@ function PersonnelAppointment() {
                     placeholder=" 발령부서를 선택하세요"
                     onChange={(e) => {
                       setUnit(e.target.value);
-                    }}
-
-                    // className={styles.inputtext}
-                  >
+                    }}>
                     {units &&
                       units.map((unitInfo, index) => (
                         <MenuItem key={index} value={unitInfo}>
@@ -433,10 +435,7 @@ function PersonnelAppointment() {
                     placeholder=" 발령직위를 선택하세요"
                     onChange={(e) => {
                       setPosi(e.target.value);
-                    }}
-
-                    // className={styles.inputtext}
-                  >
+                    }}>
                     {positionArr.map((position, index) => (
                       <MenuItem key={index} value={position}>
                         {position}
@@ -469,61 +468,44 @@ function PersonnelAppointment() {
 
           <div className={styles.savebutton}>
             <Box sx={{ '& button': { m: 1 } }}>
-              <Link to={'/boxes/ds'}>
-                <Button
-                  variant="outlined"
-                  size="large"
-                  onClick={async () => {
-                    await insertPA(
-                      docId,
-                      3,
-                      inputData,
-                      empInfo,
-                      startValue,
-                      mEmp,
-                      unit,
-                      posi,
-                      setInputData
-                    );
-
-                    // approver.map((data, index) => {
-                    //   console.log(data);
-                    //   return insertApproval(docId, 0, data, inputData, empInfo);
-                    // });
-                    insertApproval(docId, 0, approver, inputData, empInfo);
-
-                    alert('문서가 임시저장되었습니다!');
-                  }}>
+              <Link
+                to={'/boxes/ds'}
+                ref={tempRef}
+                onClick={async (e) => {
+                  if (!docId) {
+                    if (approvalTitle && mEmp && unit) {
+                      getLatestPA(setDocId);
+                      setSaveType('temp');
+                      e.preventDefault();
+                    } else {
+                      alert('필수요소를 입력해주세요 !');
+                      e.preventDefault();
+                    }
+                  }
+                }}>
+                <Button variant="outlined" size="large">
                   임시저장
                 </Button>
               </Link>
               <Link
                 to={'/boxes/dd'}
+                ref={approveRef}
                 onClick={async (e) => {
                   if (approver.length !== 0) {
-                    await insertPA(
-                      docId,
-                      1,
-                      inputData,
-                      empInfo,
-                      startValue,
-                      mEmp,
-                      unit,
-                      posi,
-                      setInputData
-                    );
-                    sendChatHandle();
-                    alert('문서가 상신되었습니다!');
+                    if (!docId) {
+                      if (approvalTitle && mEmp && unit) {
+                        getLatestPA(setDocId);
+                        setSaveType('approve');
+                        e.preventDefault();
+                      } else {
+                        alert('필수 요소를 입력해주세요 !');
+                        e.preventDefault();
+                      }
+                    }
                   } else {
                     alert('결재선을 설정해주세요 !');
                     e.preventDefault();
                   }
-
-                  // approver.map((data, index) => {
-                  //   console.log(data);
-                  //   return insertApproval(docId, 1, data, inputData, empInfo);
-                  // });
-                  insertApproval(docId, 1, approver, inputData, empInfo);
                 }}>
                 <SaveButton variant="contained" color="success" size="large">
                   상신하기

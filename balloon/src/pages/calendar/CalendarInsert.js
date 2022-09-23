@@ -37,12 +37,16 @@ function CalendarInsert({
 
   //socket연결
   const client = ChatStomp();
+  client.debug = null;
 
   let scheduletitle = '';
   let CalendarContent = '';
   let CalendarLocation = '';
   let Startvalue = null;
   let endvalue = null;
+
+  console.log(botInfo);
+  console.log(botRoom);
 
   const handleClose = () => {
     setOpenInsert(false);
@@ -74,7 +78,6 @@ function CalendarInsert({
     Startvalue = document.getElementById('startvalue').value;
     endvalue = document.getElementById('endvalue').value;
 
-    inviteSchedule.push(empId);
     console.log(inviteSchedule);
     console.log(Startvalue);
 
@@ -102,9 +105,9 @@ function CalendarInsert({
         employee: { empId: id },
       });
     });
-    if (scheduletitle == '') {
+    if (scheduletitle === '') {
       alert('제목을 입력해주세요.');
-    } else if (endvalue == '') {
+    } else if (endvalue === '') {
       alert('날짜를 선택해주세요.');
     } else if (Startvalue >= endvalue) {
       alert('날짜를 다시 설정해주세요.');
@@ -125,7 +128,10 @@ function CalendarInsert({
   useEffect(() => {
     getEmpListInSameUnit(empId, setCEList);
     getEmpByEmpId(calendarBot, setBotInfo);
+    inviteSchedule.push(empId);
   }, []);
+
+  console.log(inviteSchedule);
 
   const botroomExist = [];
   const botroomId = [];

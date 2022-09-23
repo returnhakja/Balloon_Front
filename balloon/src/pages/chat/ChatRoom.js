@@ -7,25 +7,30 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function ChatRoom({ empInfo, setChatStatus }) {
+export default function ChatRoom({
+  empInfo,
+  setChatStatus,
+  roomId,
+  setRoomId,
+  check,
+}) {
   const [chatroom, setChatroom] = useState([]);
+  const [selectChatroom, setSelectChatroom] = useState({});
   //채팅방 나가기 모달
   const [openExitChat, setOpenExitChat] = useState(false);
   const empId = empInfo.empId;
-  const [roomId, setRoomId] = useState(0);
 
   //마지막으로 보낸 채팅list가져오기
   useEffect(() => {
     if (empId) {
       onChatroom(setChatroom, empId);
     }
-  }, [empId]);
+  }, [empId, check]);
 
-  useEffect(() => {}, [roomId]);
-
-  //삭제확인알림창
-  const eventClickHandle = () => {
+  //삭제모달창
+  const eventClickHandle = (chat) => {
     setOpenExitChat(true);
+    setSelectChatroom(chat);
   };
 
   return (
@@ -39,34 +44,22 @@ export default function ChatRoom({ empInfo, setChatStatus }) {
             {chatroom.map((chat, index) => {
               return (
                 <>
-                  <div className={styles.DeleteBtn}>
+                  {/* <div className={styles.DeleteBtn}>
                     <Button
                       variant="text"
                       disableElevation
                       onClick={(e) => {
                         const eventExit = () => {
                           e.preventDefault();
-                          eventClickHandle();
+                          eventClickHandle(chat);
                         };
                         return eventExit();
                       }}>
                       <DeleteIcon />
                     </Button>
-                    {openExitChat && (
-                      <ExitChatroom
-                        openExitChat={openExitChat}
-                        setOpenExitChat={setOpenExitChat}
-                        chatroomId={chat.chatroom.chatroomId}
-                        chatroomName={chat.chatroom.chatroomName}
-                        headCount={chat.chatroom.headCount}
-                        empInfo={empInfo}
-                        setChatStatus={setChatStatus}
-                      />
-                    )}
-                  </div>
+                  </div> */}
                   <div
                     className={styles.roomcon}
-                    key={index}
                     onClick={() => {
                       setRoomId(chat.chatroom.chatroomId);
                     }}>
@@ -86,7 +79,6 @@ export default function ChatRoom({ empInfo, setChatStatus }) {
                           </span>
                         </div>
                       )}
-
                       <div className={styles.content}>
                         {chat.chatContent.length <= '15' ? (
                           <div className={styles.content}>
@@ -111,10 +103,26 @@ export default function ChatRoom({ empInfo, setChatStatus }) {
                 </>
               );
             })}
+            {selectChatroom.chatroom && (
+              <ExitChatroom
+                openExitChat={openExitChat}
+                setOpenExitChat={setOpenExitChat}
+                chatroomId={selectChatroom.chatroom.chatroomId}
+                chatroomName={selectChatroom.chatroom.chatroomName}
+                headCount={selectChatroom.chatroom.headCount}
+                empInfo={empInfo}
+                setChatStatus={setChatStatus}
+              />
+            )}
           </div>
         </>
       ) : (
-        <Chat empInfo={empInfo} roomId={roomId} setChatStatus={setChatStatus} />
+        <Chat
+          empInfo={empInfo}
+          roomId={roomId}
+          setChatStatus={setChatStatus}
+          setRoomId={setRoomId}
+        />
       )}
     </div>
   );
