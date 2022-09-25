@@ -97,7 +97,6 @@ function BizTripInfo() {
             <DfCard drafterName={bizTpInfo.empName} />
           </Card>
           {approver.map((empData, index) => {
-            console.log(empData);
             return (
               <Card
                 variant="outlined"
