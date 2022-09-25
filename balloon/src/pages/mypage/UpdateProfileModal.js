@@ -31,16 +31,33 @@ const style = {
 };
 
 export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
-  const [file, setFile] = useState('');
-  const [fileName, setFileName] = useState('첨부파일');
-  const [image, setImg] = useState(photo);
+  const [preView, setPreView] = useState(photo);
+  const [profile, setProfile] = useState('');
+  const [profileName, setProfileName] = useState('첨부파일');
   const handleClose = () => setOpen(false);
 
   const upload = () => {
-    console.log('file', file);
-    if (file.length !== 0) {
-      uploadProfile(file, empId);
-      window.location.href = '/mypage';
+    if (profile.length !== 0) {
+      const pathPoint = profileName.lastIndexOf('.');
+      const filePoint = profileName.substring(
+        pathPoint + 1,
+        profileName.length
+      );
+      const fileType = filePoint.toLowerCase();
+      if (
+        fileType === 'jpg' ||
+        fileType === 'gif' ||
+        fileType === 'png' ||
+        fileType === 'jpeg' ||
+        fileType === 'bmp'
+      ) {
+        uploadProfile(profile, empId);
+        handleClose();
+        //         window.location.href = '/mypage';
+      } else {
+        alert('이미지 파일만 선택할 수 있습니다!!');
+        return false;
+      }
     } else {
       alert('사진을 넣어주세요!!');
     }
@@ -49,25 +66,23 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
   const handleFileInput = (e) => {
     const fileStr = e.target?.files[0]?.name;
     if (!!fileStr) {
-      setFileName(e.target.files[0].name);
+      setProfileName(e.target.files[0].name);
       const formData = new FormData();
       formData.append('file', e.target.files[0]);
-      setFile(formData);
-    } else {
-      alert('사진이 들어가지 않았습니다!!');
-    }
-  };
+      setProfile(formData);
 
-  // 파일 미리보기 로직
-  const encodeFileToBase64 = (fileBlob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileBlob);
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        // setImageSrc(reader.result);
-        resolve();
-      };
-    });
+      // 이미지 미리보기
+      const reader = new FileReader();
+      reader.readAsDataURL(e.target.files[0]);
+      return new Promise((resolve) => {
+        reader.onload = () => {
+          setPreView(reader.result);
+          resolve();
+        };
+      });
+    } else {
+      alert('사진이 들어가지 않았습니다.');
+    }
   };
 
   return (
@@ -120,7 +135,7 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
                         width: '100px',
                         height: '100px',
                       }}
-                      src={`${image}`}
+                      src={preView}
                     />
                     <p>사진을 변경해주세요</p>
                   </div>
@@ -137,12 +152,17 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
                 <div className={styles.filebox}>
                   <input
                     className={styles.upload_name}
-                    value={fileName}
+                    value={profileName}
                     readOnly
                   />
                   <Button variant="outlined">
                     <label htmlFor="file">파일찾기</label>
-                    <input type="file" id="file" onChange={handleFileInput} />
+                    <input
+                      type="file"
+                      id="file"
+                      onChange={handleFileInput}
+                      accept="image/gif, image/jpeg, image/png"
+                    />
                   </Button>
                 </div>
               </div>

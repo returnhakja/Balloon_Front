@@ -94,7 +94,6 @@ export default function ApprovalDeclareModal({
   }
 
   let ApvlPeople = [apvlId[1]];
-  console.log(ApvlPeople);
 
   let apvlFormName = [];
   {
@@ -113,8 +112,6 @@ export default function ApprovalDeclareModal({
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
-
-  console.log(botroomId);
 
   // 채팅방이 생성되어야할 사람들
   let newApvlPeople;
@@ -257,7 +254,6 @@ export default function ApprovalDeclareModal({
     });
   };
   useEffect(() => {
-    console.log(apvlList);
     if (!apvlList[1]) {
       setPath('/boxes/ac');
     } else {

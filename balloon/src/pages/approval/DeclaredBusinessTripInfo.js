@@ -86,7 +86,7 @@ function DeclaredBusinessTripInfo() {
             setOpenapprovalModal={setOpenapprovalModal}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -96,6 +96,10 @@ function DeclaredBusinessTripInfo() {
             {!!empInfo && <DfCard drafterName={bizTpInfo.empName} />}
           </Card>
           {approver.map((empData, index) => {
+            // if (apvl.length === 0) {
+            //   setApvl(empData);
+            // }
+
             return (
               <Card
                 key={index}

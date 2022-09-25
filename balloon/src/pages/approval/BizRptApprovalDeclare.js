@@ -99,7 +99,7 @@ function ApprovalDeclare() {
         <div className={styles.body1}>
           <span className={styles.subtitle}>결재선</span>
         </div>
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card

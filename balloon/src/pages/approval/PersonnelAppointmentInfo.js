@@ -76,7 +76,7 @@ function PersonnelAppointmentInfo() {
         </div>
         {/* {openModal && <Modal closeModal={setOpenModal} />} */}
 
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card
@@ -150,32 +150,28 @@ function PersonnelAppointmentInfo() {
                 />
               </td>
               <td className={styles.tdreaui}>
-                <form>
-                  <TextField
-                    focused={false}
-                    type="text"
-                    name="title"
-                    value={paInfo.unit && paInfo.unit.unitName}
-                    className={styles.inputtext1}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </form>
+                <TextField
+                  focused={false}
+                  type="text"
+                  name="title"
+                  value={paInfo.unit && paInfo.unit.unitName}
+                  className={styles.inputtext1}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
               </td>
               <td className={styles.tdreaui}>
-                <form>
-                  <TextField
-                    type="text"
-                    name="title"
-                    value={paInfo.position}
-                    className={styles.inputtext1}
-                    focused={false}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </form>
+                <TextField
+                  type="text"
+                  name="title"
+                  value={paInfo.position}
+                  className={styles.inputtext1}
+                  focused={false}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
               </td>
             </tr>
           </tbody>

@@ -21,12 +21,13 @@ function MyPage() {
   const [profileOpen, setProfileOpen] = useState(false);
 
   return (
-    <Container>
+    <Container sx={{ height: '100%' }}>
       <h1 style={{ display: 'flex', justifyContent: 'center' }}>마이페이지</h1>
       <Box
         sx={{
           marginTop: '1%',
-          maxWidth: 'lg',
+          // maxWidth: 'lg',
+
           display: 'flex',
           justifyContent: 'center',
           alignContent: 'center',
@@ -81,6 +82,7 @@ function MyPage() {
                   }
                 />
               )}
+
               <div>
                 <Link to={'/mypage/update'}>
                   <Button style={{ float: 'right', marginBottom: '5px' }}>

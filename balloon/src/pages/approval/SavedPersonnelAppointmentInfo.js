@@ -108,7 +108,6 @@ function SavedPersonnelAppointmentInfo() {
   }, [apvlPeople.length]);
 
   botApvlRoom.map((data) => {
-    console.log(data.empId.empId);
     botroomExist.push(data.empId.empId);
     botroomId.push(data.chatroomId.chatroomId);
   });
@@ -301,7 +300,7 @@ function SavedPersonnelAppointmentInfo() {
             noApprover={noApprover}
           />
         )}
-        <hr />
+        <div style={{ border: '1px solid black' }} />
         <br />
         <div className={styles.approvalCard}>
           <Card

@@ -36,6 +36,7 @@ function EmpAddPage() {
   const [idChk, setIdChk] = useState(false);
   const [file, setFile] = useState('');
   const [fileName, setFileName] = useState('첨부파일');
+  // const [birt, setBirt] = useState('');
 
   const toggleHidePassword = (event) => {
     event.preventDefault();
@@ -112,8 +113,8 @@ function EmpAddPage() {
       licensePlate,
       photo
     );
-
     if (!!inputEmp) {
+      inputEmp.photo = 'default.png';
       signup(inputEmp);
     }
   };

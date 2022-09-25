@@ -4,7 +4,13 @@ import CalendarInsert from './CalendarInsert';
 import CalendarUpdate from './CalendarUpdate';
 import { getScheduleByEmp } from '../../context/CalendarAxios';
 import '../../css/Celendar.css';
-import { Button, Container, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Typography,
+} from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interaction from '@fullcalendar/interaction';
@@ -53,7 +59,6 @@ function Calendar({ clients, setClients }) {
         state: true,
         scheduleId: scheduleId,
       });
-      console.log(scheduleId);
     }
   };
 
@@ -89,7 +94,6 @@ function Calendar({ clients, setClients }) {
               type="checkbox"
               onClick={() => {
                 getScheduleByEmp(empInfo.empId);
-                console.log('dkdkddkk');
               }}
             />
             {emp.empName}
@@ -99,13 +103,6 @@ function Calendar({ clients, setClients }) {
       })}
       {/* <Container maxWidth="md" sx={{ zIndex: 2 }}> */}
       <Container maxWidth="lg" sx={{ zIndex: 2 }}>
-        <Button
-          onClick={() => {
-            setOpenInsert(true);
-          }}
-          sx={{ fontSize: 30 }}>
-          일정 등록
-        </Button>
         {/* 등록 */}
         {openInsert && (
           <CalendarInsert
@@ -127,62 +124,58 @@ function Calendar({ clients, setClients }) {
             empInfo={empInfo}
           />
         )}
-
         {list.length !== 0 ? (
-          <FullCalendar
-            locale="ko"
-            initialView="dayGridMonth"
-            height="70vh"
-            handleWindowResize="50vw"
-            plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
-            headerToolbar={{
-              left: 'title',
-              center: 'dayGridDay dayGridWeek dayGridMonth',
-              right: 'today prevYear prev next nextYear',
-            }}
-            googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
-            moreLinkContent={(e) => (e.text = ` +${e.num} 더보기`)}
-            dayMaxEvents={2}
-            eventSources={[
-              list,
-              {
-                googleCalendarId:
-                  'ko.south_korea#holiday@group.v.calendar.google.com',
-                color: 'red',
-              },
-            ]}
-            eventBackgroundColor={'#000000'}
-            eventSourceSuccess={() => console.log('Success EventSource')}
-            eventSourceFailure={() => console.log('Failure EventSource')}
-            dateClick={(e) => handleDateClick(e)}
-            eventClick={(e) => handleEventClick(e)}
-          />
-        ) : (
           <>
+            <Button
+              onClick={() => {
+                setOpenInsert(true);
+              }}
+              sx={{ fontSize: 30 }}>
+              일정 등록
+            </Button>
             <FullCalendar
-              locale="ko"
+              position="relative"
               initialView="dayGridMonth"
               height="70vh"
               handleWindowResize="50vw"
               plugins={[dayGridPlugin, interaction, googleCalendarPlugin]}
               headerToolbar={{
-                left: 'title',
-                center: 'dayGridDay dayGridWeek dayGridMonth',
-                right: 'today prevYear prev next nextYear',
+                left: 'today',
+                center: 'prevYear prev title next nextYear',
+                right: 'dayGridDay dayGridWeek dayGridMonth',
               }}
               googleCalendarApiKey={process.env.REACT_APP_CALENDAR_API}
-              events={{
-                googleCalendarId:
-                  'ko.south_korea#holiday@group.v.calendar.google.com',
-                color: 'red',
-              }}
-              eventSources={list}
-              eventBackgroundColor={'black'}
-              eventSourceSuccess={() => console.log('Success EventSource')}
-              eventSourceFailure={() => console.log('Failure EventSource')}
+              moreLinkContent={(e) => (e.text = ` +${e.num} 더보기`)}
+              dayMaxEvents={2}
+              eventSources={[
+                list,
+                {
+                  googleCalendarId:
+                    'ko.south_korea#holiday@group.v.calendar.google.com',
+                  color: 'red',
+                },
+              ]}
+              eventBackgroundColor={'#000000'}
+              // eventSourceSuccess={() => console.log('Success EventSource')}
+              // eventSourceFailure={() => console.log('Failure EventSource')}
               dateClick={(e) => handleDateClick(e)}
               eventClick={(e) => handleEventClick(e)}
+              locale="ko"
             />
+          </>
+        ) : (
+          <>
+            <Container maxWidth="sm">
+              <Box sx={{ display: 'flex', justifyContent: 'centerinp' }}>
+                <CircularProgress
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                />
+              </Box>
+            </Container>
           </>
         )}
       </Container>

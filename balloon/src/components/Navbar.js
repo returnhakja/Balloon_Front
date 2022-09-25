@@ -39,9 +39,9 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
   return (
     <nav className="navbar">
       <Link to={'/'} className={styles.Link}>
-        <h3 className="logo">
-          BALL<span className={styles.oofont}>OO</span>N{' '}
-        </h3>
+        <div className={styles.logo}>
+          BALL<span className={styles.oofont}>OO</span>N
+        </div>
       </Link>
       <ul
         className={isMobile ? 'nav-links-mobile' : 'nav-links'}
@@ -49,7 +49,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
         <NavLink to={'/boxes'} style={activeStyle}>
           <li className="approval">결재관리</li>
         </NavLink>
-        <NavLink to={'/calendar'} style={activeStyle}>
+        <NavLink to={'/schudule'} style={activeStyle}>
           <li className="celendar">캘린더</li>
         </NavLink>
         <NavLink to={'/organization'} style={activeStyle}>
@@ -97,7 +97,6 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
                 className={styles.btnnav}
                 onClick={() => {
                   logoutFunc(logout);
-                
                 }}>
                 Logout
               </Button>
@@ -112,7 +111,6 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
                 className={styles.btnnav}
                 onClick={() => {
                   logoutFunc(logout);
-           
                 }}>
                 Logout
               </Button>
@@ -123,7 +121,7 @@ function Navbar({ setEmpInfo, empInfo, logout, isLogin }) {
             <Link to={'/loginpage'}>
               <p className="login">
                 <Button
-                  className={styles.btnnav}
+                  // className={styles.btnnav}
                   variant="contained"
                   size="small">
                   Login

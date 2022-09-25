@@ -7,15 +7,20 @@
 .container1 {
   display: flex;
 }
-
+.pro-sidebar {
+  position: absolute;
+  height: 100%;
+}
 main {
   width: 100%;
 }
-
+.sideBarHeight {
+  height: 100%;
+}
 .sidebar {
   background: rgb(221, 220, 220);
   color: rgb(0, 0, 0);
-  height: 100vh;
+  height: 50vh;
   width: 200px;
 }
 

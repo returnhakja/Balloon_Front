@@ -67,7 +67,6 @@ import NotFound from './pages/NotFound';
 import AdminRoutes from './components/AdminRoutes';
 import DeclareOn from './pages/approval/DeclareOn';
 
-
 function App() {
   const [empInfo, setEmpInfo] = useState([]);
   const [isLogin, setLogin] = useState(null);
@@ -75,7 +74,7 @@ function App() {
 
   useEffect(() => {
     const logged = localStorage.getItem('logged');
-   logged && logged === 'true' ? setLogin(true) : setLogin(false);
+    logged && logged === 'true' ? setLogin(true) : setLogin(false);
   }, []);
 
   useEffect(() => {
@@ -246,7 +245,7 @@ function App() {
 
           {/* 캘린더 */}
 
-          <Route element={<Calendar />} path="/calendar" exact />
+          <Route element={<Calendar />} path="/schudule" exact />
 
           <Route
             element={
