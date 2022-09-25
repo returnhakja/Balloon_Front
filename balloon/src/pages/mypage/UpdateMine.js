@@ -39,8 +39,6 @@ function UpdateMine() {
       licensePlate: value.licensePlate,
     };
 
-    console.log(updateData);
-
     updateEmployee(updateData);
   };
 

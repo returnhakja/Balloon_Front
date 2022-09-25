@@ -76,9 +76,6 @@ function CalendarInsert({
     Startvalue = document.getElementById('startvalue').value;
     endvalue = document.getElementById('endvalue').value;
 
-    console.log(inviteSchedule);
-    console.log(Startvalue);
-
     const inputdata = {
       scheduleTitle: scheduletitle,
       scheduleStart: Startvalue,
@@ -91,7 +88,6 @@ function CalendarInsert({
     };
 
     const ids = inputdata.employeeIds;
-    console.log(inputdata.employeeIds);
     ids.map((id) => {
       scheduleListAdd.push({
         scheduleTitle: inputdata.scheduleTitle,
@@ -171,7 +167,6 @@ function CalendarInsert({
       newchatScheduleList.push(schduleChat);
     });
 
-    console.log(newchatScheduleList);
     const chatScheduleSave = (newchatScheduleList) => {
       axios.post('/chat/messages', newchatScheduleList);
     };
@@ -206,7 +201,6 @@ function CalendarInsert({
       chatScheduleList.push(chatSchedule);
       chatScheduleList.push(chatNewSchedule);
     });
-    console.log(chatScheduleList);
     const chatScheduleSave = (chatScheduleList) => {
       axios.post('/chat/messages', chatScheduleList);
     };

@@ -76,7 +76,7 @@ const style = {
 
 const handleSubmit = (event) => {
   event.preventDefault();
-  console.log('aa');
+  // console.log('aa');
 };
 
 export default function EmployeeUpdate({ open, setOpen, empId, photo }) {
@@ -116,7 +116,6 @@ export default function EmployeeUpdate({ open, setOpen, empId, photo }) {
       },
     };
 
-    console.log(updateData);
     updateEmpByAdmin(updateData);
     setOpen(false);
     window.location.href = '/management/employee';

@@ -45,7 +45,6 @@ export default function CreateRoom({
   //초대할 사원
   const InvitePeople = [];
   invite.map((vite) => {
-    console.log(vite);
     InvitePeople.push(vite.empId);
   });
 

@@ -17,7 +17,7 @@ import {
   Legend,
   registerables,
 } from 'chart.js';
-import { Bar, Pie } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { Avatar, Box, Button } from '@mui/material';
@@ -41,8 +41,7 @@ function MainPage() {
         findWorkOn(empInfo.empId, setInCnt);
         findWorkOff(empInfo.empId, setOutCnt);
       }
-      inCnt !== 0 && console.log('inCnt', inCnt);
-      outCnt !== 0 && console.log('outCnt', outCnt);
+
       if (
         DDCount.length !== 0 &&
         DCCount.length !== 0 &&
@@ -63,8 +62,6 @@ function MainPage() {
       }
     }
   }, [empInfo.empId, rend, DDCount, DCCount, DSCount, DRCount, countDArr]);
-
-  console.log(DDCount, DCCount, DSCount, DRCount);
 
   const data = {
     labels: [
@@ -166,9 +163,6 @@ function MainPage() {
                 justifyContent: 'center',
                 // alignItems: 'center',
               }}>
-              {console.log(
-                `${process.env.REACT_APP_AWS_S3_BUCKET_ADDRESS}${empInfo.photo}`
-              )}
               <Avatar
                 sx={{
                   width: 70,
@@ -266,7 +260,6 @@ function MainPage() {
                 position: 'relative',
                 boxShadow: '0px 0px 25px hsla(0, 0%, 71%, 1)',
               }}>
-              {console.log('countDArr', countDArr)}
               <p
                 style={{
                   padding: '10px',

@@ -120,7 +120,6 @@ export const insertBizTpEmp = async (bizTpId, mEmp) => {
 
 // 동반 출장자 삭제
 export const deleteBizTpEmp = async (bizTpId) => {
-  console.log(bizTpId);
   const url = '/api/biztpemp/';
   const str = url + bizTpId;
   await axios.delete(str);
@@ -131,7 +130,6 @@ export const getPAByPAId = async (PAId, setPAInfo) => {
   const url = '/api/pa/';
   const str = url + PAId;
   await axios.get(str).then((res) => {
-    console.log(res.data);
     setPAInfo(res.data);
   });
 };
@@ -499,7 +497,6 @@ export const updateApproval = async (approvalList, state) => {
     'Content-Type': 'application/json',
   };
   approvalList?.map((apvl, index) => {
-    console.log(apvl);
     if (apvl && apvl.businessReport != null) {
       inputData = {
         approvalId: apvl.approvalId,

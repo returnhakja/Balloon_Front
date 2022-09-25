@@ -115,7 +115,6 @@ function EmpAddPage() {
     );
     if (!!inputEmp) {
       inputEmp.photo = 'default.png';
-      console.log(inputEmp);
       signup(inputEmp);
     }
   };
