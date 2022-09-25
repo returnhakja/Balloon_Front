@@ -132,7 +132,7 @@ function PersonnelAppointmentInfo() {
                   type="text"
                   name="title"
                   value={paInfo.movedEmpName}
-                  className={styles.inputtext}
+                  className={styles.inputtext1}
                   InputProps={{
                     readOnly: true,
                   }}
@@ -145,7 +145,7 @@ function PersonnelAppointmentInfo() {
                     type="text"
                     name="title"
                     value={paInfo.unit && paInfo.unit.unitName}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -158,7 +158,7 @@ function PersonnelAppointmentInfo() {
                     type="text"
                     name="title"
                     value={paInfo.position}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     focused={false}
                     InputProps={{
                       readOnly: true,

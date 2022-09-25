@@ -602,6 +602,7 @@ export const updateApvlDoc = async (approvalList, state, paInfo) => {
     'Content-Type': 'application/json',
   };
   approvalList?.map((apvl) => {
+    console.log(apvl);
     if (apvl.businessReport != null) {
       url = '/api/bizrpt';
       const bizRpt = apvl.businessReport;
@@ -632,12 +633,15 @@ export const updateApvlDoc = async (approvalList, state, paInfo) => {
         empName: bizTp.empName,
         position: bizTp.position,
         unitName: bizTp.unitName,
-        unit: {
-          unitCode: apvl && apvl.emp.unit.unitCode,
-        },
-        emp: {
-          empId: apvl && apvl.emp.empId,
-        },
+        unit: apvl && apvl.drafterEmp.unit,
+
+        emp: apvl && apvl.drafterEmp,
+        // unit: {
+        //   unitCode: apvl && apvl.emp.unit.unitCode,
+        // },
+        // emp: {
+        //   empId: apvl && apvl.emp.empId,
+        // },
       };
     } else if (apvl.personnelAppointment != null) {
       url = '/api/pa';

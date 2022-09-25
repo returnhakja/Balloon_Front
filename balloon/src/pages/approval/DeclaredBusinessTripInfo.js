@@ -156,34 +156,30 @@ function DeclaredBusinessTripInfo() {
 
             <tr>
               <td className={styles.tdreaui}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <TextField
-                    disabled
-                    id="startValue"
-                    label="시작일"
-                    type="date"
-                    value={bizTpInfo.startDate}
-                    sx={{ width: 250 }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </LocalizationProvider>
+                <TextField
+                  disabled
+                  id="startValue"
+                  label="시작일"
+                  type="date"
+                  value={bizTpInfo.startDate}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
 
                 <span className={styles.centerfont}> : </span>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <TextField
-                    disabled
-                    id="endValue"
-                    label="종료일"
-                    type="date"
-                    value={bizTpInfo.endDate}
-                    sx={{ width: 250 }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </LocalizationProvider>
+                <TextField
+                  disabled
+                  id="endValue"
+                  label="종료일"
+                  type="date"
+                  value={bizTpInfo.endDate}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </td>
               <td className={styles.tdreaui}>
                 <form>
@@ -192,7 +188,7 @@ function DeclaredBusinessTripInfo() {
                     type="text"
                     name="title"
                     value={bizTpInfo.destination}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -206,7 +202,7 @@ function DeclaredBusinessTripInfo() {
                     type="text"
                     name="title"
                     value={bizTpInfo.visitingPurpose}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}
