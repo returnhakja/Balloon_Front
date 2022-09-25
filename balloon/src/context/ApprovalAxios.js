@@ -599,7 +599,6 @@ export const updateApvlDoc = async (approvalList, state, paInfo) => {
     'Content-Type': 'application/json',
   };
   approvalList?.map((apvl) => {
-    console.log(apvl);
     if (apvl.businessReport != null) {
       url = '/api/bizrpt';
       const bizRpt = apvl.businessReport;
