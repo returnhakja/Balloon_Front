@@ -24,6 +24,7 @@ import {
   getApvlByDocId,
   getBizRptByBizRptId,
   getBizTpByBizTpId,
+  getBizTpEmpByBizTpId,
 } from '../../context/ApprovalAxios';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -61,6 +62,7 @@ function BizTpApprovalDeclare() {
   const [approver, setApprover] = useState([]);
   const [noApprover, setNoApprover] = useState([]);
   const [apvl, setApvl] = useState({});
+  const [bizTpEmp, setBizTpEmp] = useState({});
 
   // 사원 정보 context
   const [empInfo] = useOutletContext();
@@ -76,6 +78,7 @@ function BizTpApprovalDeclare() {
       if (Object.keys(inputData).length === 0) {
         getBizTpByBizTpId(params.docId, setBizTpInfo);
         getApvlByDocId(params.docId, setApprover, setApprovalList);
+        getBizTpEmpByBizTpId(params.docId, setBizTpEmp);
       } else {
         setStartValue(inputData.startDate);
         setEndValue(inputData.endDate);
@@ -174,7 +177,14 @@ function BizTpApprovalDeclare() {
             <tr align="center">
               <td className={styles.titlename}>동반 출장자</td>
               <td className={styles.titlename} colSpan={2}>
-                이거 일단 없음
+                {bizTpEmp[0] &&
+                  bizTpEmp.map((data) => {
+                    return (
+                      <div>
+                        {data.emp.empName} ({data.emp.empId})
+                      </div>
+                    );
+                  })}
               </td>
               <td className={styles.titlename}></td>
             </tr>

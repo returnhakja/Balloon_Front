@@ -58,11 +58,6 @@ function BizTripInfo() {
     }
   }, [params]);
 
-  // useEffect(()=>{
-  //   setStartValue(inputData.startDate);
-  //   setEndValue(inputData.endDate);
-  // },[inputData.length])
-  console.log(bizTpInfo);
   return (
     <SideNavigation>
       <Container>

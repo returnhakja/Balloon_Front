@@ -97,14 +97,6 @@
 
 .inputtext {
   width: 90%;
-  height: 30px;
-  text-align: left;
-  border-radius: 10px;
-  /* background-color: #cac7c7; */
-  outline: none;
-}
-.DeclaredPersonelInput {
-  width: 90%;
   /* height: 30px; */
   text-align: left;
   border-radius: 10px;
