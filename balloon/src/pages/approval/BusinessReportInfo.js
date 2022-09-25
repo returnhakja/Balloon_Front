@@ -54,7 +54,6 @@ function BizReportInfo() {
       getApvlByDocId(params.docId, setApprover);
     }
   }, [params]);
-  console.log(bizRptInfo);
   return (
     <SideNavigation>
       <Container>
