@@ -109,7 +109,7 @@ function UpdateMine() {
                         //   pattern:
                         //     /^[A-Za-z0-9]([-]?[A-Za-z0-9])*@[A-Za-z0-9]([-]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/,
                         // })}
-                        readOnly
+                        // readOnly
                       />
                       <button onClick={() => setEmailOpen(true)}>변경</button>
                     </TableCell>

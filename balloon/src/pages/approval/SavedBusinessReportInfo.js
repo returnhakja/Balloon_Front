@@ -272,7 +272,7 @@ function SavedBusinessReportInfo() {
                     type="text"
                     name="title"
                     defaultValue={inputData.documentTitle}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                   />
                 </form>
               </td>

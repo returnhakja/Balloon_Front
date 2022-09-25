@@ -32,7 +32,7 @@ function ApprovalComplete() {
       return (
         <Link
           to={`/apvl/acbr/${params.row.docId}`}
-          state={{ path: '/boxes/ao' }}>
+          state={{ path: '/boxes/ac' }}>
           {params.row && params.row.documentTitle}
         </Link>
       );
@@ -40,7 +40,7 @@ function ApprovalComplete() {
       return (
         <Link
           to={`/apvl/actp/${params.row.docId}`}
-          state={{ path: '/boxes/ao' }}>
+          state={{ path: '/boxes/ac' }}>
           {params.row && params.row.documentTitle}
         </Link>
       );
@@ -48,7 +48,7 @@ function ApprovalComplete() {
       return (
         <Link
           to={`/apvl/acpa/${params.row.docId}`}
-          state={{ path: '/boxes/ao' }}>
+          state={{ path: '/boxes/ac' }}>
           {params.row && params.row.documentTitle}
         </Link>
       );

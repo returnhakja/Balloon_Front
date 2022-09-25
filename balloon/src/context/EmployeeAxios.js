@@ -130,7 +130,7 @@ export const setEmpInfoByEmpId = async (empId, setEmpInfo) => {
 // 결재선 사원들 출력
 export const getEmpListByUnitCode = async () => {
   const cookie = findCookieAccessToken();
-  console.log('getEmpCookie', cookie);
+  // console.log('getEmpCookie', cookie);
   const config = {
     headers: {
       'Content-Type': 'application/json',

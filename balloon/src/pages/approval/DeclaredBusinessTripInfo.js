@@ -160,49 +160,30 @@ function DeclaredBusinessTripInfo() {
 
             <tr>
               <td className={styles.tdreaui}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <TextField
-                    disabled
-                    id="startValue"
-                    label="시작일"
-                    type="date"
-                    value={bizTpInfo.startDate}
-                    sx={{ width: 250 }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                  {/* <DatePicker
-                    disabled
-                    label="시작일"
-                    value={bizTpInfo.startDate}
-                    type=" date"
-                    inputFormat={'yyyy-MM-dd'}
-                    renderInput={(params) => <TextField {...params} />}
-                  /> */}
-                </LocalizationProvider>
+                <TextField
+                  disabled
+                  id="startValue"
+                  label="시작일"
+                  type="date"
+                  value={bizTpInfo.startDate}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
 
                 <span className={styles.centerfont}> : </span>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  {/* <DatePicker
-                    disabled
-                    label="끝나는일"
-                    value={bizTpInfo && bizTpInfo.endDate}
-                    inputFormat={'yyyy-MM-dd'}
-                    renderInput={(params) => <TextField {...params} />}
-                  /> */}
-                  <TextField
-                    disabled
-                    id="endValue"
-                    label="종료일"
-                    type="date"
-                    value={bizTpInfo.endDate}
-                    sx={{ width: 250 }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </LocalizationProvider>
+                <TextField
+                  disabled
+                  id="endValue"
+                  label="종료일"
+                  type="date"
+                  value={bizTpInfo.endDate}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </td>
               <td className={styles.tdreaui}>
                 <form>

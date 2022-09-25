@@ -318,7 +318,7 @@ function SavedBusinessTripInfo() {
                     type="text"
                     name="title"
                     defaultValue={inputData.documentTitle}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                   />
                 </form>
               </td>
@@ -417,7 +417,7 @@ function SavedBusinessTripInfo() {
                     type="text"
                     name="destination"
                     defaultValue={inputData.destination}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                   />
                 </form>
               </td>
@@ -428,7 +428,7 @@ function SavedBusinessTripInfo() {
                     type="text"
                     name="visitingPurpose"
                     defaultValue={inputData.visitingPurpose}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                   />
                 </form>
               </td>
