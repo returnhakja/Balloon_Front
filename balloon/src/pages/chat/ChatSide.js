@@ -37,7 +37,8 @@ export default function ChatSide({
           </li>
           <li
             className={styles.listyle}
-            onClick={() => setChatStatus('chatNotice')}>
+            // onClick={() => setChatStatus('chatNotice')}
+          >
             <SettingsIcon fontSize="large" />
           </li>
         </ul>
