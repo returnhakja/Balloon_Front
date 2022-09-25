@@ -123,8 +123,6 @@ export const empIdInfo = async (chatroomId, setChatempinfo) => {
 
 //이전에 채팅했던 기록보이게
 export const chatRecord = async (chatroomId, setChatting, empId) => {
-  console.log(chatroomId);
-  console.log(empId);
   axios
     .get(`/chat/chatrecord/${chatroomId}/${empId}`)
     .then((response) => {
@@ -273,7 +271,6 @@ export const onApvlUserInvite = async (
   botroomMsg
 ) => {
   add.map((add, index) => {
-    console.log(add.chatroomId);
     axios
       .post(`/cre/insertchatemp/${add.chatroomId}`, [
         {

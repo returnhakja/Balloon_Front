@@ -5,7 +5,7 @@ function ChatStomp() {
 //   const sock = new SockJS('http://localhost:8080/chatstart');
   const sock = new SockJS('http://54.180.148.125:8080/chatstart');
   const client = Stomp.over(sock);
-//   client.debug = null;
+  //   client.debug = null;
 
   return client;
 }

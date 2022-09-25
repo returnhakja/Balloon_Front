@@ -37,7 +37,6 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
   const handleClose = () => setOpen(false);
 
   const upload = () => {
-    console.log('profile', profile);
     if (profile.length !== 0) {
       const pathPoint = profileName.lastIndexOf('.');
       const filePoint = profileName.substring(
@@ -54,7 +53,7 @@ export default function UpdateProfileModal({ open, setOpen, empId, photo }) {
       ) {
         uploadProfile(profile, empId);
         handleClose();
-//         window.location.href = '/mypage';
+        //         window.location.href = '/mypage';
       } else {
         alert('이미지 파일만 선택할 수 있습니다!!');
         return false;

@@ -60,7 +60,6 @@ export default function ChatEmpList({
   //초대할 사원을 담아두는 메소드
   const onInvite = (checked, data) => {
     if (checked) {
-      console.log(data);
       setInvite([...invite, data]);
     } else {
       setInvite(invite.filter((button) => button !== data));
@@ -104,7 +103,6 @@ export default function ChatEmpList({
                       setChatStatus={setChatStatus}
                       setInvite={setInvite}
                       setRoomId={setRoomId}
-                 
                     />
                   )}
                 </Grid>
