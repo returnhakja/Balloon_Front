@@ -103,7 +103,7 @@ function BizTripInfo() {
                 sx={{ maxWidth: 150 }}
                 style={{ backgroundColor: '#F1F9FF' }}
                 key={index}>
-                <ApCard approverName={empData.approverName} />
+                <ApCard approverName={empData.empName} />
               </Card>
             );
           })}
@@ -188,7 +188,7 @@ function BizTripInfo() {
                     type="text"
                     name="title"
                     value={bizTpInfo.destination}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -202,7 +202,7 @@ function BizTripInfo() {
                     type="text"
                     name="title"
                     value={bizTpInfo.visitingPurpose}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}

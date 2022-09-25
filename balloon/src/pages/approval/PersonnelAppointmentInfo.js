@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useOutletContext, useParams } from 'react-router-dom';
+import {
+  Link,
+  useLocation,
+  useOutletContext,
+  useParams,
+} from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import { getApvlByDocId, getPAByPAId } from '../../context/ApprovalAxios';
@@ -27,11 +32,14 @@ function PersonnelAppointmentInfo() {
   const [approver, setApprover] = useState([]);
 
   const params = useParams();
+  const location = useLocation();
 
   useEffect(() => {
     !!params && getPAByPAId(params.docId, setPaInfo);
     getApvlByDocId(params.docId, setApprover);
   }, [params]);
+
+  const path = location.state?.path;
 
   return (
     <SideNavigation>
@@ -142,7 +150,6 @@ function PersonnelAppointmentInfo() {
                 />
               </td>
               <td className={styles.tdreaui}>
-                {/* <form> */}
                 <TextField
                   focused={false}
                   type="text"
@@ -153,10 +160,8 @@ function PersonnelAppointmentInfo() {
                     readOnly: true,
                   }}
                 />
-                {/* </form> */}
               </td>
               <td className={styles.tdreaui}>
-                {/* <form> */}
                 <TextField
                   type="text"
                   name="title"
@@ -167,7 +172,6 @@ function PersonnelAppointmentInfo() {
                     readOnly: true,
                   }}
                 />
-                {/* </form> */}
               </td>
             </tr>
           </tbody>
@@ -196,7 +200,7 @@ function PersonnelAppointmentInfo() {
 
           <div className={styles.savebutton}>
             <Box sx={{ '& button': { m: 1 } }}>
-              <Link to="/boxes/dc">
+              <Link to={path}>
                 <SaveButton variant="contained" color="success" size="large">
                   목록으로
                 </SaveButton>

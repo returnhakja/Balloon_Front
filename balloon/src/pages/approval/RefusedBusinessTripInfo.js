@@ -192,7 +192,7 @@ function RefusedBusinessTripInfo() {
                     type="text"
                     name="title"
                     value={inputData.destination}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -206,7 +206,7 @@ function RefusedBusinessTripInfo() {
                     type="text"
                     name="title"
                     value={inputData.visitingPurpose}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}

@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useOutletContext, useParams } from 'react-router-dom';
+import {
+  Link,
+  useLocation,
+  useOutletContext,
+  useParams,
+} from 'react-router-dom';
 import SideNavigation from '../../components/SideNavigation';
 import ModalApproval from './ModalApproval';
 import { DfCard, ApCard } from './approvalCards/DrafterApproverCard';
 import {
+  getApvlByDocId,
   getBizTpByBizTpId,
   getBizTpEmpByBizTpId,
 } from '../../context/ApprovalAxios';
@@ -30,20 +36,33 @@ function BizTripInfo() {
   // 날짜 관련
   const [bizTpInfo, setBizTpInfo] = useState({});
   const [bizTpEmp, setBizTpEmp] = useState({});
+  const [startValue, setStartValue] = useState(null);
+  const [endValue, setEndValue] = useState(null);
+  const [approver, setApprover] = useState([]);
+  const [apvl, setApvl] = useState({});
   // 모달
   const [openapprovalModal, setOpenapprovalModal] = useState(false);
   // 사원 정보 context
   const [empInfo] = useOutletContext();
 
   const params = useParams();
+  const location = useLocation();
+
+  const path = location.state?.path;
 
   useEffect(() => {
     if (!!params) {
       getBizTpByBizTpId(params.docId, setBizTpInfo);
       getBizTpEmpByBizTpId(params.docId, setBizTpEmp);
+      getApvlByDocId(params.docId, setApprover);
     }
   }, [params]);
 
+  // useEffect(()=>{
+  //   setStartValue(inputData.startDate);
+  //   setEndValue(inputData.endDate);
+  // },[inputData.length])
+  console.log(bizTpInfo);
   return (
     <SideNavigation>
       <Container>
@@ -87,12 +106,30 @@ function BizTripInfo() {
         )}
         <div style={{ border: '1px solid black' }} />
         <br />
-        <Card
-          variant="outlined"
-          sx={{ maxWidth: 150 }}
-          style={{ backgroundColor: '#F1F9FF' }}>
-          {bizTpInfo.length !== 0 && <DfCard drafterName={bizTpInfo.empName} />}
-        </Card>
+        <div className={styles.approvalCard}>
+          <Card
+            variant="outlined"
+            sx={{ maxWidth: 150 }}
+            style={{ backgroundColor: '#F1F9FF' }}>
+            {bizTpInfo.length !== 0 && (
+              <DfCard drafterName={bizTpInfo.empName} />
+            )}
+          </Card>
+          {approver.map((empData, index) => {
+            if (apvl.length === 0) {
+              setApvl(empData);
+            }
+            return (
+              <Card
+                variant="outlined"
+                sx={{ maxWidth: 150 }}
+                style={{ backgroundColor: '#F1F9FF' }}
+                key={index}>
+                <ApCard approverName={empData.empName} />
+              </Card>
+            );
+          })}
+        </div>
         <hr className={styles.hrmargins} />
 
         <p className={styles.giantitle}>기안내용</p>
@@ -144,27 +181,30 @@ function BizTripInfo() {
 
             <tr>
               <td className={styles.tdreaui}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    disabled
-                    label="시작일"
-                    value={bizTpInfo.startValue}
-                    type=" date"
-                    inputFormat={'yyyy-MM-dd'}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
+                <TextField
+                  disabled
+                  id="startValue"
+                  label="시작일"
+                  type="date"
+                  value={bizTpInfo.startDate}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
 
                 <span className={styles.centerfont}> : </span>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    disabled
-                    label="끝나는일"
-                    value={bizTpInfo.endvalue}
-                    inputFormat={'yyyy-MM-dd'}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
+                <TextField
+                  disabled
+                  id="endValue"
+                  label="종료일"
+                  type="date"
+                  value={bizTpInfo.endDate}
+                  sx={{ width: 250 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </td>
               <td className={styles.tdreaui}>
                 <form>
@@ -173,7 +213,7 @@ function BizTripInfo() {
                     type="text"
                     name="title"
                     value={bizTpInfo.destination}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -187,7 +227,7 @@ function BizTripInfo() {
                     type="text"
                     name="title"
                     value={bizTpInfo.visitingPurpose}
-                    className={styles.inputtext}
+                    className={styles.inputtext1}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -221,7 +261,7 @@ function BizTripInfo() {
 
           <div className={styles.savebutton}>
             <Box sx={{ '& button': { m: 1 } }}>
-              <Link to="/boxes/dc">
+              <Link to={path}>
                 <SaveButton variant="contained" color="success" size="large">
                   목록으로
                 </SaveButton>
