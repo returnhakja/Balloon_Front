@@ -42,8 +42,8 @@ export const onCreateChatroom = async (
       chatroomName: chatroomName.value,
       headCount: invite.length,
     })
-    .then((response) => {
-      setRoomId(response.data);
+    .then( async (response) => {
+      await setRoomId(response.data);
       onUserInvite(response.data, invite, client);
       setChatStatus('chatList');
     })
