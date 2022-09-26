@@ -37,7 +37,7 @@ export const onCreateChatroom = async (
   setRoomId
 ) => {
   invite.push(empInfo);
-  axios
+  await axios
     .post('/chatroom/createchatroom', {
       chatroomName: chatroomName.value,
       headCount: invite.length,
