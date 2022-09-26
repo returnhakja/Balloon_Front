@@ -124,8 +124,6 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
   }, [input, chatroomId, chatting.length]);
   
-  useEffect(()=>{
-  },[chatting])
   
   //채팅방 이름수정
   const onChangeTitle = (event) => {
