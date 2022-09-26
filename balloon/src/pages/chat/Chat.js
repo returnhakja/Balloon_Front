@@ -123,7 +123,7 @@ export default function Chat({ empInfo, roomId, setChatStatus }) {
     chatRecord(chatroomId, setChatting, empId);
     chatroomInfo(chatroomId, setChatroomName, setHeadCount);
   }, [input, chatroomId, chatting.length]);
-  
+  console.log(chatting);
   
   //채팅방 이름수정
   const onChangeTitle = (event) => {
