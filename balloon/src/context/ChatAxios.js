@@ -122,11 +122,11 @@ export const empIdInfo = async (chatroomId, setChatempinfo) => {
 };
 
 //이전에 채팅했던 기록보이게
-export const chatRecord = async (chatroomId, setChatting, empId) => {
-  await axios
+export const chatRecord = (chatroomId, setChatting, empId) => {
+   axios
     .get(`/chat/chatrecord/${chatroomId}/${empId}`)
-    .then((response) => {
-      setChatting(response.data);
+    .then(async (response) => {
+      await setChatting(response.data);
     })
     .catch((error) => console.log(error));
 };
