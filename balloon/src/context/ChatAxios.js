@@ -43,8 +43,8 @@ export const onCreateChatroom = async (
       headCount: invite.length,
     })
     .then((response) => {
-      onUserInvite(response.data, invite, client);
       setRoomId(response.data);
+      onUserInvite(response.data, invite, client);
       setChatStatus('chatList');
     })
     .catch((error) => console.log(error));
