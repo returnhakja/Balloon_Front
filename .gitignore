@@ -22,8 +22,8 @@ asset/
 *.rar
 
 # env file
-.env
-.env.production
+# .env
+# .env.production
 
 ### macOS ###
 # General
